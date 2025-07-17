@@ -8,9 +8,11 @@ import './assets/tailwind.css'
 import fr from './locales/fr'
 import en from './locales/en'
 
+const savedLocale = localStorage.getItem('lang') || 'fr'
+
 const i18n = createI18n({
   legacy: false,
-  locale: 'fr',
+  locale: savedLocale,
   fallbackLocale: 'en',
   messages: {
     fr,

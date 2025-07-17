@@ -1,6 +1,11 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+</script>
+
 <template>
-    <div>
-      <h1 class="text-2xl font-bold">Tableau de bord Organisateur</h1>
-    </div>
-  </template>
-  
+  <div>
+    <h1 class="text-2xl font-bold">{{ t('organizer.dashboard') }}</h1>
+  </div>
+</template>
