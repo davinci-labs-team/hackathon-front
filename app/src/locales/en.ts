@@ -27,4 +27,10 @@ export default {
     required: 'This field is required',
     invalidEmail: 'Please enter a valid email address',
   },
+  footer: {
+    copyright: '© 2025 Hackathon - All rights reserved',
+    privacyPolicy: 'Privacy Policy',
+    terms: 'Terms and Conditions',
+    cookies: 'Cookies',
+  },
 }
