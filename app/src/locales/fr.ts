@@ -15,6 +15,13 @@ export default {
   },
   organizer: {
     dashboard: 'Tableau de bord Organisateur',
+    nav: {
+      dashboard: "Dashboard",
+      users: "Gestion des utilisateurs",
+      teams: "Gestion des équipes",
+      projects: "Gestion des dépôts",
+      settings: "Paramètres"
+    }
   },
   user: {
     dashboard: 'Tableau de bord Utilisateur',

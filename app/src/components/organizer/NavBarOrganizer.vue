@@ -3,8 +3,12 @@ import LanguageSelector from '../common/LanguageSelector.vue';
 import logo from '@/assets/images/basic.jpg'
 import { RouterLink, useRoute } from 'vue-router';
 import { VBtn, VIcon } from 'vuetify/components'
+import { useI18n } from 'vue-i18n'
 
+const { t, locale } = useI18n()
 const route = useRoute()
+
+console.log(locale.value)
 
 const getLinkClasses = (path: string) => {
   const base = 'rounded px-2 py-1 transition-transform transition-colors duration-200'
@@ -23,27 +27,34 @@ const getLinkClasses = (path: string) => {
       <img :src="logo" alt="Logo" class="h-12" />
     </div>
 
-    <!-- Onglets -->
     <nav class="flex gap-6">
       <RouterLink
         to="/organizer/dashboard"
         :class="getLinkClasses('/organizer/dashboard')"
-      >Dashboard</RouterLink>
+      >
+        {{ (t('organizer.nav.dashboard')) }}
+      </RouterLink>
 
       <RouterLink
         to="/organizer/users"
         :class="getLinkClasses('/organizer/users')"
-      >Gestion des utilisateurs</RouterLink>
+      >
+        {{ (t('organizer.nav.users')) }}
+      </RouterLink>
       
       <RouterLink
         to="/organizer/participants"
         :class="getLinkClasses('/organizer/participants')"
-      >Gestion des équipes</RouterLink>
+      >
+        {{ (t('organizer.nav.teams')) }}
+      </RouterLink>
     
       <RouterLink
         to="/organizer/settings"
         :class="getLinkClasses('/organizer/settings')"
-      >Gestion des dépôts</RouterLink>
+      >
+        {{ (t('organizer.nav.settings')) }}  
+      </RouterLink>
 
       <RouterLink
         to="/organizer/params"
