@@ -53,13 +53,15 @@ const getLinkClasses = (path: string) => {
         to="/organizer/settings"
         :class="getLinkClasses('/organizer/settings')"
       >
-        {{ (t('organizer.nav.settings')) }}  
+        {{ (t('organizer.nav.projects')) }}  
       </RouterLink>
 
       <RouterLink
         to="/organizer/params"
         :class="getLinkClasses('/organizer/params')"
-      >Paramètres</RouterLink>
+      >
+        {{ (t('organizer.nav.settings')) }}
+      </RouterLink>
 
     </nav>
 
