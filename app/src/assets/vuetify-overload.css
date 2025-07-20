@@ -1,0 +1,51 @@
+/* src/assets/vuetify-overrides.css */
+
+/* Bordures un peu arrondies globalement pour composants Vuetify courants */
+.v-input,
+.v-text-field,
+.v-textarea,
+.v-select,
+.v-btn,
+.v-card,
+.v-alert {
+  border-radius: 6px !important;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Input et textarea : bordure + légère ombre au focus */
+.v-input.v-input--is-focused .v-field__control,
+.v-text-field.v-input--is-focused .v-field__control,
+.v-textarea.v-input--is-focused .v-field__control {
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.6); /* vert léger */
+  border-color: #4caf50 !important;
+}
+
+/* Boutons : effet au survol */
+.v-btn {
+  box-shadow: none !important;
+  font-weight: 600;
+}
+
+.v-btn:hover {
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+}
+
+/* Cartes : bordure fine et légère ombre */
+.v-card {
+  border: 1px solid #e5e7eb; /* gris clair (tailwind gray-200) */
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.05);
+}
+
+/* Alertes : bordure colorée à gauche */
+.v-alert {
+  border-left: 4px solid #4caf50 !important;
+  background-color: #f0fdf4 !important; /* vert clair */
+  color: #256029 !important; /* vert foncé */
+  font-weight: 600;
+}
+
+/* Éliminer bord arrondi par défaut sur certains composants (optionnel) */
+.v-list-item,
+.v-chip {
+  border-radius: 6px !important;
+}

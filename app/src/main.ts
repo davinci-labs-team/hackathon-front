@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
 import { createVuetify } from 'vuetify'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
+import './assets/vuetify-overload.css'
 
 import App from './App.vue'
 import router from './router'
@@ -26,6 +27,7 @@ const i18n = createI18n({
 })
 
 // Vuetify
+// TODO : Add custom theme colors
 const vuetify = createVuetify({
   icons: {
     defaultSet: 'mdi',

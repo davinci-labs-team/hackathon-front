@@ -11,7 +11,6 @@ const password = ref('')
 const error = ref(false)
 const formRef = ref()
 
-// Règles de validation Vuetify
 const required = (v: string) => !!v || t('validation.required')
 const emailRule = (v: string) =>
   /.+@.+\..+/.test(v) || t('validation.invalidEmail')
@@ -19,8 +18,7 @@ const emailRule = (v: string) =>
 const login = () => {
   if (!formRef.value?.isValid) return
 
-  // Simule une authentification
-  if (email.value === 'admin@example.com' && password.value === 'adminpass') {
+  if (email.value === 'admin@example.com' && password.value === 'admin') {
     error.value = false
     router.push('/organizer/dashboard')
   } else {
@@ -30,9 +28,12 @@ const login = () => {
 </script>
 
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100">
-    <v-card class="w-full max-w-md p-6 space-y-4 shadow-lg">
-      <h2 class="text-2xl text-center font-semibold">
+  <div class="flex items-center justify-center min-h-screen bg-gray-50">
+    <v-card
+      class="w-full max-w-md p-10 space-y-8 shadow-md border border-gray-200"
+      elevation="1"
+    >
+      <h2 class="text-3xl font-semibold text-gray-900 text-center tracking-tight">
         {{ t('login.organizerTitle') }}
       </h2>
 
@@ -44,7 +45,8 @@ const login = () => {
           prepend-inner-icon="mdi-email"
           outlined
           dense
-          class="mb-4"
+          class="mb-6"
+          :style="{ borderRadius: '0' }"
         />
 
         <v-text-field
@@ -55,10 +57,19 @@ const login = () => {
           prepend-inner-icon="mdi-lock"
           outlined
           dense
-          class="mb-4"
+          class="mb-6"
+          :style="{ borderRadius: '0' }"
         />
 
-        <v-alert v-if="error" type="error" dense class="mb-4">
+        <v-alert
+          v-if="error"
+          type="error"
+          dense
+          colored-border
+          elevation="1"
+          class="mb-6"
+          :style="{ borderRadius: '0' }"
+        >
           {{ t('login.invalidCredentials') }}
         </v-alert>
 
@@ -67,7 +78,9 @@ const login = () => {
           :disabled="!isValid"
           color="green"
           block
-          class="text-white"
+          text
+          class="font-semibold text-gray-900 hover:bg-green-100 hover:text-green-700 transition"
+          :style="{ borderRadius: '0' }"
         >
           {{ t('login.organizer') }}
         </v-btn>
