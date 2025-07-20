@@ -13,5 +13,10 @@ export default defineConfig({
   },
   css: {
     postcss: './postcss.config.ts',
-  }
+  },
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
 })
