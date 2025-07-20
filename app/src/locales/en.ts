@@ -1,30 +1,30 @@
 export default {
   home: {
     title: 'Welcome to the showcase site',
-    loginLink: 'Go to the login page'
-  },
-  validation: {
-    required: 'This field is required.',
-    invalidEmail: 'Invalid email address.'
+    loginLink: 'Go to login page',
   },
   login: {
-    organizerTitle: 'Administrator Login',
     title: 'Login',
+    organizerTitle: 'Administrator Login',
     organizer: 'Organizer Area',
     user: 'User Area',
-    invalidCredentials: 'Invalid email or password.',
     email: 'Email',
     password: 'Password',
+    invalidCredentials: 'Invalid email or password',
   },
   organizer: {
-    dashboard: 'Organizer Dashboard'
+    dashboard: 'Organizer Dashboard',
   },
   user: {
-    dashboard: 'User Dashboard'
+    dashboard: 'User Dashboard',
   },
   header: {
     public: 'Public Header',
     organizer: 'Organizer Panel',
-    user: 'User Panel'
-  }
+    user: 'User Panel',
+  },
+  validation: {
+    required: 'This field is required',
+    invalidEmail: 'Please enter a valid email address',
+  },
 }
