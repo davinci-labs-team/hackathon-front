@@ -4,6 +4,7 @@ export default {
       loginLink: 'Go to the login page'
     },
     login: {
+      organizerTitle: "Administrator login",
       title: 'Login',
       organizer: 'Organizer Area',
       user: 'User Area'

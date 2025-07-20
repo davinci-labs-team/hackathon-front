@@ -4,6 +4,7 @@ export default {
       loginLink: 'Aller à la page de connexion'
     },
     login: {
+      organizerTitle: "Connexion administrateur",
       title: 'Connexion',
       organizer: 'Espace Organisateur',
       user: 'Espace Utilisateur'

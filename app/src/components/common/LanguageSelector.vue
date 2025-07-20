@@ -10,7 +10,7 @@ watch(locale, (newLocale) => {
 
 <template>
   <select v-model="locale" class="border p-2 rounded">
-    <option value="fr">Français</option>
-    <option value="en">English</option>
+    <option value="fr">🇫🇷</option>
+    <option value="en">🇺🇸</option>
   </select>
 </template>

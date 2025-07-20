@@ -11,5 +11,10 @@ export default [
         component: () => import('../../pages/organizer/Dashboard.vue')
       }
     ]
+  },
+  {
+    path: '/admin-login',
+    name: 'AdminLogin',
+    component: () => import('../../pages/organizer/AdminLogin.vue')
   }
 ]
