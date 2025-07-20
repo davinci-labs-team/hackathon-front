@@ -9,7 +9,7 @@ export default [
         path: 'dashboard',
         name: 'OrganizerDashboard',
         component: () => import('../../pages/organizer/Dashboard.vue')
-      }
+      },
     ]
   },
   {

@@ -14,7 +14,7 @@ import '@mdi/font/css/materialdesignicons.css'
 import fr from './locales/fr'
 import en from './locales/en'
 
-const savedLocale = localStorage.getItem('lang') || 'fr'
+const savedLocale = localStorage.getItem('lang') || navigator.language.split('-')[0] || 'en'
 
 const i18n = createI18n({
   legacy: false,

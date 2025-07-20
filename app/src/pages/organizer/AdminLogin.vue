@@ -82,7 +82,7 @@ const login = () => {
           class="font-semibold text-gray-900 hover:bg-green-100 hover:text-green-700 transition"
           :style="{ borderRadius: '0' }"
         >
-          {{ t('login.organizer') }}
+          {{ t('login.btn_login') }}
         </v-btn>
       </v-form>
     </v-card>

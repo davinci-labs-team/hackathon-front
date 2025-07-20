@@ -7,6 +7,7 @@ export default {
     title: 'Login',
     organizerTitle: 'Administrator Login',
     organizer: 'Organizer Area',
+    btn_login: 'Login',
     user: 'User Area',
     email: 'Email',
     password: 'Password',

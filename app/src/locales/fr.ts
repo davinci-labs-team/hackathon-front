@@ -6,6 +6,7 @@ export default {
   login: {
     title: 'Connexion',
     organizerTitle: 'Connexion administrateur',
+    btn_login: 'Se connecter',
     organizer: 'Espace Organisateur',
     user: 'Espace Utilisateur',
     email: 'Email',

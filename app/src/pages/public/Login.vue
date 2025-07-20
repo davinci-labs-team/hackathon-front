@@ -68,7 +68,7 @@ const login = () => {
           color="primary"
           class="text-white"
         >
-          {{ t('login.user') }}
+          {{ t('login.btn_login') }}
         </v-btn>
       </v-form>
     </v-card>
