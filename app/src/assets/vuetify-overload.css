@@ -49,10 +49,9 @@
 
 /* Cartes : bordure fine et légère ombre */
 .v-card {
-  border: 1px solid #e5e7ebf6;
-  box-shadow:
-    0 2px 4px rgb(0 0 0 / 0.08),
-    0 6px 12px rgb(0 0 0 / 0.12);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
 /* Alertes : bordure colorée à gauche */

@@ -35,16 +35,23 @@
   }
 </script>
 
+<style scoped>
+  .announcement-card:hover {
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.15);
+    cursor: pointer;
+  }
+</style>
+
 <template>
   <div>
     <h2 class="text-3xl font-semibold mt-2 mb-10">
       {{ t('announcements.title') }}
     </h2>
     <div v-if="paginatedAnnouncements.length > 0">
-      <div
+      <v-card
         v-for="(item, index) in paginatedAnnouncements"
         :key="index"
-        class="mb-4 p-4 rounded-lg shadow bg-white flex flex-col md:flex-row gap-4"
+        class="announcement-card mb-4 p-4 flex flex-col md:flex-row gap-4"
       >
         <div class="flex-1">
           <h3 class="text-lg font-bold">{{ item.title }}</h3>
@@ -82,7 +89,7 @@
             cover
           />
         </div>
-      </div>
+      </v-card>
 
       <!-- Pagination -->
       <div class="flex justify-center items-center gap-2 mt-6">

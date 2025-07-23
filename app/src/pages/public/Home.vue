@@ -4,7 +4,7 @@
   import HackathonExample from '@/assets/images/hackathon-example.jpg'
   import Partners from '../../components/public/Partners.vue'
   import Announcements from '../../components/public/Announcements.vue'
-  import { announcements } from '@/tests/data/announcements'
+  import { announcements } from '../../tests/data/announcements'
 </script>
 
 <template>
