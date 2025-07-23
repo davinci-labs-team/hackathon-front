@@ -1,12 +1,14 @@
-import { announcements } from "../tests/data/announcements";
+import { announcements } from '../tests/data/announcements'
 
 export default {
   hackathon: {
     title: 'Qubit or Not Qubit',
-    subtitle: "Le Hackathon Quantique",
-    description: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veritatis saepe nulla commodi totam necessitatibus expedita autem ipsum, deserunt repudiandae porro itaque, consectetur ipsa dolorum ex, nisi eveniet voluptas ut adipisci?",
+    subtitle: 'Le Hackathon Quantique',
+    description:
+      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veritatis saepe nulla commodi totam necessitatibus expedita autem ipsum, deserunt repudiandae porro itaque, consectetur ipsa dolorum ex, nisi eveniet voluptas ut adipisci?',
     inscriptionTitle: 'Inscription',
-    inscriptionMessage: "Bienvenue ! Pour rejoindre l'événement, veuillez vous inscrire ci-dessous.",
+    inscriptionMessage:
+      "Bienvenue ! Pour rejoindre l'événement, veuillez vous inscrire ci-dessous.",
     firstLoginBtn: 'Première connexion',
   },
   login: {
@@ -19,8 +21,8 @@ export default {
     password: 'Mot de passe',
     invalidCredentials: 'Email ou mot de passe invalide',
   },
-  partners : {
-    title: "PARTENAIRES",
+  partners: {
+    title: 'PARTENAIRES',
   },
   announcements: {
     title: 'Dernières Annonces',

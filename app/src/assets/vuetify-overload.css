@@ -49,8 +49,10 @@
 
 /* Cartes : bordure fine et légère ombre */
 .v-card {
-  border: 1px solid #e5e7eb; /* gris clair (tailwind gray-200) */
-  box-shadow: 0 2px 6px rgb(0 0 0 / 0.05);
+  border: 1px solid #e5e7ebf6;
+  box-shadow:
+    0 2px 4px rgb(0 0 0 / 0.08),
+    0 6px 12px rgb(0 0 0 / 0.12);
 }
 
 /* Alertes : bordure colorée à gauche */

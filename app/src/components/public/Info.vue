@@ -1,9 +1,7 @@
 <script setup lang="ts">
-  import { useRouter } from 'vue-router'
   import { useI18n } from 'vue-i18n'
 
   const { t } = useI18n()
-  const router = useRouter()
   const infos = [
     {
       icon: 'mdi-calendar',
@@ -20,8 +18,8 @@
 
 <template>
   <div class="flex flex-col h-full">
-    <h1 class="text-4xl font-bold mb-1">{{ t('hackathon.title') }}</h1>
-    <p class="text-xl italic text-gray-600 mb-8">
+    <h1 class="text-5xl font-bold mb-1">{{ t('hackathon.title') }}</h1>
+    <p class="text-2xl italic text-gray-600 mb-8">
       {{ t('hackathon.subtitle') }}
     </p>
     <p class="mb-6 text-gray-700 mb-8">
@@ -40,10 +38,10 @@
       </div>
 
       <v-card class="flex-1 p-4 self-start" outlined shaped>
-        <v-card-title class="bg-primary text-white rounded-t px-4 py-2"
-          style="font-size: 1.5rem; font-weight: 600;"
-          
-        > 
+        <v-card-title
+          class="bg-primary text-white rounded-t px-4 py-2"
+          style="font-size: 1.5rem; font-weight: 600"
+        >
           {{ t('hackathon.inscriptionTitle') }}
         </v-card-title>
 
