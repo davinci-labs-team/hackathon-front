@@ -4,7 +4,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <v-footer class="pa-4" color="grey lighten-4">
+  <v-footer class="pa-4">
     <v-container>
       
       <v-row justify="end" class="mb-2">

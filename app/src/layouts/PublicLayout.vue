@@ -10,7 +10,7 @@ const { t } = useI18n()
   <div class="min-h-screen flex flex-col bg-gray-50 justify-between">
     <NavBarPublic />
 
-    <main class="p-4">
+    <main class="p-0">
       <router-view />
     </main>
 

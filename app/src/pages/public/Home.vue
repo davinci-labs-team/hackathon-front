@@ -1,31 +1,26 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
 import HackathonPoster from '@/assets/images/hackathon-poster.png'
-
-// TODO: 
-// - Fetch hackathon data from API
+import Info from '../../components/public/Info.vue'
+import HackathonExample from '@/assets/images/hackathon-example.jpg'
 </script>
 
-
 <template>
-<v-container fluid class="h-screen px-2 py-4">
-      <div class="grid grid-cols-5 grid-rows-2 gap-4 h-full">
-      <div class="bg-blue-200 rounded flex items-center justify-center col-start-1 row-start-1">
-        <img :src="HackathonPoster" alt="Hackathon Poster" class="w-full h-full object-cover rounded" />
+  <v-container fluid class="py-6 px-4">
+    <div class="flex w-full gap-6" style="height: 600px;">
+      
+      <!-- Colonne image -->
+      <div class="w-1/4 flex items-center justify-center overflow-hidden" style="height: 100%;">
+        <img
+          :src="HackathonExample"
+          alt="Hackathon Poster"
+          class="max-h-full w-auto rounded"
+        />
       </div>
 
-      <div class="bg-blue-400 rounded flex items-center justify-center col-start-1 row-start-2">
-        Listing des partenaires
+      <div class="w-3/4 flex flex-col gap-6 rounded p-6" style="height: 100%;">
+        <Info />
       </div>
 
-      <div class="bg-green-200 rounded flex items-center justify-center col-start-2 col-span-4 row-start-1">
-        Block d'informations
-      </div>
-
-      <div class="bg-green-400 rounded flex items-center justify-center col-start-2 col-span-4 row-start-2">
-        Listing des annonces
-      </div>
     </div>
   </v-container>
 </template>
