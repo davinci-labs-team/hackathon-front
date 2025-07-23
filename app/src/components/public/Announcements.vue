@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface Announcement {
   title: string
@@ -36,6 +39,9 @@ const goToPage = (page: number) => {
 
 <template>
   <div>
+    <h2 class="text-3xl font-semibold mt-2 mb-10">
+      {{ t('announcements.title') }}
+    </h2>
     <div
       v-for="(item, index) in paginatedAnnouncements"
       :key="index"
@@ -45,7 +51,7 @@ const goToPage = (page: number) => {
         <h3 class="text-lg font-bold">{{ item.title }}</h3>
         <div class="flex items-center gap-2">
           <p class="text-sm text-gray-600">
-          Écrit par <span class="font-semibold">{{ item.author }}</span> le {{ item.date }}
+          {{ t(`announcements.writtenBy`) }} <span class="font-semibold">{{ item.author }}</span> {{ t(`announcements.on`) }} {{ item.date }}
         </p>
         <div class="flex gap-2">
           <v-chip

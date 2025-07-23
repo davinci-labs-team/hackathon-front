@@ -1,3 +1,5 @@
+import { announcements } from "../tests/data/announcements";
+
 export default {
   hackathon: {
     title: 'Qubit or Not Qubit',
@@ -19,6 +21,12 @@ export default {
   },
   partners : {
     title: "PARTNERS",
+  },
+  announcements: {
+    title: 'Last Announcements',
+    writtenBy: 'Written by',
+    on: 'on',
+    noContent: 'No announcements available',
   },
   organizer: {
     dashboard: 'Organizer Dashboard',
