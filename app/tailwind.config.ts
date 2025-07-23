@@ -2,10 +2,7 @@ import type { Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
 
 const config: Config = {
-  content: [
-    './index.html',
-    './src/**/*.{vue,js,ts}',
-  ],
+  content: ['./index.html', './src/**/*.{vue,js,ts}'],
   theme: {
     extend: {
       screens: {
