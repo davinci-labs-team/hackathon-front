@@ -17,6 +17,9 @@ export default {
     password: 'Password',
     invalidCredentials: 'Invalid email or password',
   },
+  partners : {
+    title: "PARTNERS",
+  },
   organizer: {
     dashboard: 'Organizer Dashboard',
     nav: {

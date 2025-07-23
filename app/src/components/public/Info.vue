@@ -31,16 +31,19 @@
     <div class="flex gap-6 items-center">
       <div class="flex-1 space-y-4">
         <div v-for="(info, index) in infos" :key="index" class="flex items-center gap-4">
-          <v-icon size="50">{{ info.icon }}</v-icon>
+          <v-icon size="55">{{ info.icon }}</v-icon>
           <div>
-            <div class="font-semibold">{{ info.title }}</div>
-            <div class="text-gray-600">{{ info.subtitle }}</div>
+            <div class="text-2xl font-semibold">{{ info.title }}</div>
+            <div class="text-xl text-gray-600">{{ info.subtitle }}</div>
           </div>
         </div>
       </div>
 
       <v-card class="flex-1 p-4 self-start" outlined shaped>
-        <v-card-title class="bg-primary text-white rounded-t px-4 py-2"> 
+        <v-card-title class="bg-primary text-white rounded-t px-4 py-2"
+          style="font-size: 1.5rem; font-weight: 600;"
+          
+        > 
           {{ t('hackathon.inscriptionTitle') }}
         </v-card-title>
 
