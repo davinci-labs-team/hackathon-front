@@ -1,9 +1,11 @@
 export default {
-  homepage: {
-    hackathonName: 'Qubit or not Qubit',
-    hackathonSubtitle: 'The Quantum Hackathon',
-    welcomeMessage:
-      'Bienvenue ! Pour rejoindre le hackathon, veuillez vous connecter ou vous inscrire.',
+  hackathon: {
+    title: 'Qubit or Not Qubit',
+    subtitle: "Le Hackathon Quantique",
+    description: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veritatis saepe nulla commodi totam necessitatibus expedita autem ipsum, deserunt repudiandae porro itaque, consectetur ipsa dolorum ex, nisi eveniet voluptas ut adipisci?",
+    inscriptionTitle: 'Inscription',
+    inscriptionMessage: "Bienvenue ! Pour rejoindre l'événement, veuillez vous inscrire ci-dessous.",
+    firstLoginBtn: 'Première connexion',
   },
   login: {
     title: 'Connexion',
