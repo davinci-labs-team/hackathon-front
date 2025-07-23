@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
+  import { useI18n } from 'vue-i18n'
+  const { t } = useI18n()
 </script>
 
 <template>
   <v-footer class="pa-4">
     <v-container>
-      
       <v-row justify="end" class="mb-2">
         <v-btn icon variant="text" size="small" href="https://facebook.com" target="_blank">
           <v-icon>mdi-facebook</v-icon>
@@ -33,7 +32,7 @@ const { t } = useI18n()
           <a
             href="/terms"
             class="text-caption grey--text text--darken-1 text-decoration-none"
-            style="cursor: pointer;"
+            style="cursor: pointer"
           >
             {{ t('footer.terms') }}
           </a>
@@ -41,13 +40,12 @@ const { t } = useI18n()
           <a
             href="/privacy-policy"
             class="text-caption grey--text text--darken-1 text-decoration-none"
-            style="cursor: pointer;"
+            style="cursor: pointer"
           >
             {{ t('footer.privacyPolicy') }}
           </a>
         </div>
       </v-row>
-
     </v-container>
   </v-footer>
 </template>

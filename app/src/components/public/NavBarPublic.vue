@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import LanguageSelector from '../common/LanguageSelector.vue'
-import logo from '@/assets/images/basic.jpg'
+  import { useI18n } from 'vue-i18n'
+  import LanguageSelector from '../common/LanguageSelector.vue'
+  import logo from '@/assets/images/basic.jpg'
 
-const { t } = useI18n()
+  const { t } = useI18n()
 </script>
 
 <template>

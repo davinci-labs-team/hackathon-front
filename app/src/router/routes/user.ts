@@ -8,8 +8,8 @@ export default [
       {
         path: 'dashboard',
         name: 'UserDashboard',
-        component: () => import('../../pages/user/Dashboard.vue')
-      }
-    ]
-  }
+        component: () => import('../../pages/user/Dashboard.vue'),
+      },
+    ],
+  },
 ]

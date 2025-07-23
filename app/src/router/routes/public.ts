@@ -6,7 +6,7 @@ export default [
     component: PublicLayout,
     children: [
       { path: '', name: 'Home', component: () => import('../../pages/public/Home.vue') },
-      { path: 'login', name: 'Login', component: () => import('../../pages/public/Login.vue') }
-    ]
-  }
+      { path: 'login', name: 'Login', component: () => import('../../pages/public/Login.vue') },
+    ],
+  },
 ]

@@ -1,38 +1,34 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
+  import { ref } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
-const router = useRouter()
+  const { t } = useI18n()
+  const router = useRouter()
 
-const email = ref('')
-const password = ref('')
-const error = ref(false)
-const formRef = ref()
+  const email = ref('')
+  const password = ref('')
+  const error = ref(false)
+  const formRef = ref()
 
-const required = (v: string) => !!v || t('validation.required')
-const emailRule = (v: string) =>
-  /.+@.+\..+/.test(v) || t('validation.invalidEmail')
+  const required = (v: string) => !!v || t('validation.required')
+  const emailRule = (v: string) => /.+@.+\..+/.test(v) || t('validation.invalidEmail')
 
-const login = () => {
-  if (!formRef.value?.isValid) return
+  const login = () => {
+    if (!formRef.value?.isValid) return
 
-  if (email.value === 'admin@example.com' && password.value === 'admin') {
-    error.value = false
-    router.push('/organizer/dashboard')
-  } else {
-    error.value = true
+    if (email.value === 'admin@example.com' && password.value === 'admin') {
+      error.value = false
+      router.push('/organizer/dashboard')
+    } else {
+      error.value = true
+    }
   }
-}
 </script>
 
 <template>
   <div class="flex items-center justify-center min-h-screen bg-gray-50">
-    <v-card
-      class="w-full max-w-md p-10 space-y-8 shadow-md border border-gray-200"
-      elevation="1"
-    >
+    <v-card class="w-full max-w-md p-10 space-y-8 shadow-md border border-gray-200" elevation="1">
       <h2 class="text-3xl font-semibold text-gray-900 text-center tracking-tight">
         {{ t('login.organizerTitle') }}
       </h2>

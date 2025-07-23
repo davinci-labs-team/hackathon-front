@@ -8,13 +8,13 @@ export default [
       {
         path: 'dashboard',
         name: 'OrganizerDashboard',
-        component: () => import('../../pages/organizer/Dashboard.vue')
+        component: () => import('../../pages/organizer/Dashboard.vue'),
       },
-    ]
+    ],
   },
   {
     path: '/admin-login',
     name: 'AdminLogin',
-    component: () => import('../../pages/organizer/AdminLogin.vue')
-  }
+    component: () => import('../../pages/organizer/AdminLogin.vue'),
+  },
 ]

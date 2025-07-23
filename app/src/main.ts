@@ -37,7 +37,8 @@ const vuetify = createVuetify({
   },
   defaults: {
     global: {
-      class: 'font-sans',
+      class: 'font-sans text-base',
+      style: 'font-size: 16px !important;',
     },
   },
 })

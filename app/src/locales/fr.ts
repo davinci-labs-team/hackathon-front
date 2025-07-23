@@ -2,7 +2,8 @@ export default {
   homepage: {
     hackathonName: 'Qubit or not Qubit',
     hackathonSubtitle: 'The Quantum Hackathon',
-    welcomeMessage: 'Bienvenue ! Pour rejoindre le hackathon, veuillez vous connecter ou vous inscrire.',
+    welcomeMessage:
+      'Bienvenue ! Pour rejoindre le hackathon, veuillez vous connecter ou vous inscrire.',
   },
   login: {
     title: 'Connexion',
@@ -17,12 +18,12 @@ export default {
   organizer: {
     dashboard: 'Tableau de bord Organisateur',
     nav: {
-      dashboard: "Dashboard",
-      users: "Gestion des utilisateurs",
-      teams: "Gestion des équipes",
-      projects: "Gestion des dépôts",
-      settings: "Paramètres"
-    }
+      dashboard: 'Dashboard',
+      users: 'Gestion des utilisateurs',
+      teams: 'Gestion des équipes',
+      projects: 'Gestion des dépôts',
+      settings: 'Paramètres',
+    },
   },
   user: {
     dashboard: 'Tableau de bord Utilisateur',

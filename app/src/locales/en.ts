@@ -17,12 +17,12 @@ export default {
   organizer: {
     dashboard: 'Organizer Dashboard',
     nav: {
-     dashboard: "Dashboard",
-     users: "User Management",
-     teams: "Team Management",
-     projects: "Projects Management",
-     settings: "Settings"
-    }
+      dashboard: 'Dashboard',
+      users: 'User Management',
+      teams: 'Team Management',
+      projects: 'Projects Management',
+      settings: 'Settings',
+    },
   },
   user: {
     dashboard: 'User Dashboard',

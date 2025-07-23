@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import LanguageSelector from '../common/LanguageSelector.vue';
-import logo from '@/assets/images/basic.jpg'
+  import LanguageSelector from '../common/LanguageSelector.vue'
+  import logo from '@/assets/images/basic.jpg'
 </script>
 
 <template>
@@ -9,7 +9,6 @@ import logo from '@/assets/images/basic.jpg'
       <img :src="logo" alt="Logo" class="h-12" />
     </div>
 
-      
     <div class="flex items-center gap-4">
       <LanguageSelector />
       <RouterLink to="/user/profile" class="text-white">

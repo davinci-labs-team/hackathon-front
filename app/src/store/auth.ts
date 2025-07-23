@@ -5,8 +5,8 @@ export const useAuthStore = defineStore('auth', {
     user: null as null | { name: string; role: 'organizer' | 'user' },
   }),
   getters: {
-    isAuthenticated: state => !!state.user,
-    userRole: state => state.user?.role,
+    isAuthenticated: (state) => !!state.user,
+    userRole: (state) => state.user?.role,
   },
   actions: {
     login(userData) {
@@ -14,6 +14,6 @@ export const useAuthStore = defineStore('auth', {
     },
     logout() {
       this.user = null
-    }
-  }
+    },
+  },
 })

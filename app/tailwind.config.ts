@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import defaultTheme from 'tailwindcss/defaultTheme'
 
 const config: Config = {
   content: [
@@ -8,7 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       screens: {
-        '16-9': '1536px', // support écran 1920x1080 (16:9)
+        '16-9': '1536px',
+      },
+      fontFamily: {
+        sans: ['Poppins', ...defaultTheme.fontFamily.sans],
       },
     },
   },

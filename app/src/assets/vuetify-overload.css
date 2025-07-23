@@ -1,8 +1,20 @@
 /* src/assets/vuetify-overrides.css */
 
-
 .v-application {
   font-family: 'Poppins', sans-serif !important;
+}
+
+.v-card,
+.v-btn,
+.v-alert,
+.v-input,
+.v-text-field,
+.v-label,
+.v-list-item,
+.v-toolbar-title,
+.v-card-title,
+.v-card-text {
+  font-size: 16px !important;
 }
 
 /* Bordures un peu arrondies globalement pour composants Vuetify courants */

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import Footer from '../components/common/Footer.vue'
-import NavBarUser from '../components/user/NavBarUser.vue'
+  import { useI18n } from 'vue-i18n'
+  import Footer from '../components/common/Footer.vue'
+  import NavBarUser from '../components/user/NavBarUser.vue'
 
-const { t } = useI18n()
+  const { t } = useI18n()
 </script>
 
 <template>

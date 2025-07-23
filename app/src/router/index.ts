@@ -5,11 +5,7 @@ import userRoutes from './routes/user'
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    ...publicRoutes,
-    ...organizerRoutes,
-    ...userRoutes,
-  ]
+  routes: [...publicRoutes, ...organizerRoutes, ...userRoutes],
 })
 
 export default router
