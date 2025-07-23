@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import LanguageSelector from '../common/LanguageSelector.vue'
+  import LanguageSelector from '@/components/common/LanguageSelector.vue'
   import logo from '@/assets/images/basic.jpg'
 </script>
 

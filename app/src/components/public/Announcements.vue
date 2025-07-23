@@ -1,17 +1,9 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
+  import { Announcement } from '@/types/announcement'
 
   const { t } = useI18n()
-
-  interface Announcement {
-    title: string
-    author: string
-    date: string
-    tags: string[]
-    description: string
-    images?: string[]
-  }
 
   const props = defineProps<{
     announcements: Announcement[]

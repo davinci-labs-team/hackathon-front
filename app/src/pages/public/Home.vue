@@ -1,10 +1,9 @@
 <script setup lang="ts">
-  import HackathonPoster from '@/assets/images/hackathon-poster.png'
-  import Info from '../../components/public/Info.vue'
   import HackathonExample from '@/assets/images/hackathon-example.jpg'
-  import Partners from '../../components/public/Partners.vue'
-  import Announcements from '../../components/public/Announcements.vue'
-  import { announcements } from '../../tests/data/announcements'
+  import Partners from '@/components/public/Partners.vue'
+  import Announcements from '@/components/public/Announcements.vue'
+  import { announcements } from '@/tests/data/announcements'
+  import Info from '@/components/public/Info.vue'
 </script>
 
 <template>

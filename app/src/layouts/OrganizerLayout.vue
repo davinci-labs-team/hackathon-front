@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Footer from '../components/common/Footer.vue'
-  import NavBarOrganizer from '../components/organizer/NavBarOrganizer.vue'
+  import Footer from '@/components/common/Footer.vue'
+  import NavBarOrganizer from '@/components/organizer/NavBarOrganizer.vue'
 </script>
 
 <template>

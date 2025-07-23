@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
-  import Footer from '../components/common/Footer.vue'
-  import NavBarPublic from '../components/public/NavBarPublic.vue'
+  import Footer from '@/components/common/Footer.vue'
+  import NavBarPublic from '@/components/public/NavBarPublic.vue'
 
   const { t } = useI18n()
 </script>
