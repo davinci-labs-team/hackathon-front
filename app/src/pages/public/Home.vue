@@ -1,8 +1,10 @@
 <script setup lang="ts">
-  import HackathonPoster from '@/assets/images/hackathon-poster.png'
-  import Info from '../../components/public/Info.vue'
-  import HackathonExample from '@/assets/images/hackathon-example.jpg'
-  import Partners from '../../components/public/Partners.vue'
+import HackathonPoster from '@/assets/images/hackathon-poster.png'
+import Info from '../../components/public/Info.vue'
+import HackathonExample from '@/assets/images/hackathon-example.jpg'
+import Partners from '../../components/public/Partners.vue'
+import Announcements from '../../components/public/Announcements.vue'
+import { announcements } from '@/tests/data/announcements'
 </script>
 
 <template>
@@ -28,10 +30,8 @@
 
       <div class="w-3/4 flex flex-col gap-6 rounded p-6 bg-white shadow" style="height: 100%">
         <h2 class="text-xl font-bold">Dernières annonces</h2>
-        <p class="text-gray-700">Contenu des annonces...</p>
+        <Announcements :announcements="announcements" :items-per-page="5" />
       </div>
     </div>
   </v-container>
 </template>
-
-
