@@ -1,7 +1,8 @@
 export default {
-  home: {
-    title: 'Bienvenue sur le site vitrine',
-    loginLink: 'Aller à la page de connexion',
+  homepage: {
+    hackathonName: 'Qubit or not Qubit',
+    hackathonSubtitle: 'The Quantum Hackathon',
+    welcomeMessage: 'Bienvenue ! Pour rejoindre le hackathon, veuillez vous connecter ou vous inscrire.',
   },
   login: {
     title: 'Connexion',

@@ -1,5 +1,10 @@
 /* src/assets/vuetify-overrides.css */
 
+
+.v-application {
+  font-family: 'Poppins', sans-serif !important;
+}
+
 /* Bordures un peu arrondies globalement pour composants Vuetify courants */
 .v-input,
 .v-text-field,

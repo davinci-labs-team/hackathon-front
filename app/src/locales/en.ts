@@ -1,7 +1,8 @@
 export default {
-  home: {
-    title: 'Welcome to the showcase site',
-    loginLink: 'Go to login page',
+  homepage: {
+    hackathonName: 'Qubit or not Qubit',
+    hackathonSubtitle: 'The Quantum Hackathon',
+    welcomeMessage: 'Welcome! To join the hackathon, please log in or sign up.',
   },
   login: {
     title: 'Login',

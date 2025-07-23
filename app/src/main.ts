@@ -35,6 +35,11 @@ const vuetify = createVuetify({
     aliases,
     sets: { mdi },
   },
+  defaults: {
+    global: {
+      class: 'font-sans',
+    },
+  },
 })
 
 const app = createApp(App)
