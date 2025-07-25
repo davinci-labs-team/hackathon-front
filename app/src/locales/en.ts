@@ -46,16 +46,16 @@ export default {
       settings: 'Settings',
     },
   },
-  jury : {
+  jury: {
     dashboard: 'Jury Dashboard',
     nav: {
       dashboard: 'Dashboard',
       teams: 'My Teams',
-      projects: 'Projects Evaluation', 
+      projects: 'Projects Evaluation',
       faq: 'FAQ',
     },
   },
-  mentor : {
+  mentor: {
     dashboard: 'Mentor Dashboard',
     nav: {
       dashboard: 'Dashboard',
@@ -64,7 +64,7 @@ export default {
       faq: 'FAQ',
     },
   },
-  participant : {
+  participant: {
     dashboard: 'Participant Dashboard',
     nav: {
       dashboard: 'Dashboard',

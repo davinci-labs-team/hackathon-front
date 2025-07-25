@@ -1,21 +1,21 @@
-import { UserRole } from "@/types/roles";
+import { UserRole } from '@/types/roles'
 
 export function getRole() {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  return user.role || UserRole.PARTICIPANT;
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  return user.role || UserRole.PARTICIPANT
 }
 
 export function getTPrefix(role: UserRole): string {
   switch (role) {
     case UserRole.ORGANIZER:
-      return 'organizer';
+      return 'organizer'
     case UserRole.JURY:
-      return 'jury';
+      return 'jury'
     case UserRole.PARTICIPANT:
-      return 'participant';
+      return 'participant'
     case UserRole.MENTOR:
-      return 'mentor';
+      return 'mentor'
     default:
-      return '';
+      return ''
   }
 }

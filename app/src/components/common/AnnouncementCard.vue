@@ -1,29 +1,26 @@
 <script setup lang="ts">
-import { Announcement } from '@/types/announcement'
-import { useI18n } from 'vue-i18n'
-import { timeAgo } from '@/utils/dateUtils';
+  import { Announcement } from '@/types/announcement'
+  import { useI18n } from 'vue-i18n'
+  import { timeAgo } from '@/utils/dateUtils'
 
-const { t } = useI18n()
-const locale = useI18n().locale
+  const { t } = useI18n()
+  const locale = useI18n().locale
 
-const props = defineProps<{
-  announcement: Announcement
-}>()
+  const props = defineProps<{
+    announcement: Announcement
+  }>()
 
-const emit = defineEmits<{
-  (e: 'click', announcement: Announcement): void
-}>()
+  const emit = defineEmits<{
+    (e: 'click', announcement: Announcement): void
+  }>()
 
-const handleClick = () => {
-  emit('click', props.announcement)
-}
+  const handleClick = () => {
+    emit('click', props.announcement)
+  }
 </script>
 
 <template>
-  <v-card
-    class="announcement-card mb-4 p-4 flex flex-col md:flex-row gap-4"
-    @click="handleClick"
-  >
+  <v-card class="announcement-card mb-4 p-4 flex flex-col md:flex-row gap-4" @click="handleClick">
     <div class="flex-1">
       <h3 class="text-lg font-bold">{{ announcement.title }}</h3>
       <div class="flex items-center gap-2">
@@ -64,8 +61,8 @@ const handleClick = () => {
 </template>
 
 <style scoped>
-.announcement-card:hover {
-  box-shadow: 0 6px 18px rgb(0 0 0 / 0.15);
-  cursor: pointer;
-}
+  .announcement-card:hover {
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.15);
+    cursor: pointer;
+  }
 </style>

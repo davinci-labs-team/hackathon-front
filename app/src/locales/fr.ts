@@ -36,7 +36,7 @@ export default {
     on: 'le',
     noContent: 'Aucune annonce disponible',
   },
-  
+
   // Roles sections
   organizer: {
     dashboard: 'Tableau de bord Organisateur',

@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
   const { t } = useI18n()
-  import { getRole, getTPrefix } from '@/utils/auth';
+  import { getRole, getTPrefix } from '@/utils/auth'
 
-  const role = getRole();
-  const tPrefix = getTPrefix(role);
+  const role = getRole()
+  const tPrefix = getTPrefix(role)
 </script>
 
 <template>
