@@ -1,6 +1,10 @@
-import { announcements } from '../tests/data/announcements'
-
 export default {
+  common: {
+    close: 'Fermer',
+    loading: 'Chargement...',
+    error: 'Une erreur est survenue, veuillez réessayer plus tard.',
+    success: 'Opération réussie avec succès.',
+  },
   hackathon: {
     title: 'Qubit or Not Qubit',
     subtitle: 'Le Hackathon Quantique',

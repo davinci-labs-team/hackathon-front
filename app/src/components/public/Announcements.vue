@@ -2,6 +2,7 @@
   import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { Announcement } from '@/types/announcement'
+  import AnnouncementPopup from '@/components/common/AnnouncementPopup.vue'
 
   const { t } = useI18n()
 
@@ -25,6 +26,14 @@
       currentPage.value = page
     }
   }
+
+  const showPopup = ref(false)
+  const selectedAnnouncement = ref<Announcement | null>(null)
+
+  const openPopup = (announcement: Announcement) => {
+    selectedAnnouncement.value = announcement
+    showPopup.value = true
+  }
 </script>
 
 <style scoped>
@@ -43,6 +52,7 @@
       <v-card
         v-for="(item, index) in paginatedAnnouncements"
         :key="index"
+        @click="openPopup(item)"
         class="announcement-card mb-4 p-4 flex flex-col md:flex-row gap-4"
       >
         <div class="flex-1">
@@ -82,6 +92,9 @@
           />
         </div>
       </v-card>
+
+      <!-- Popup -->
+      <AnnouncementPopup v-model:show="showPopup" :announcement="selectedAnnouncement" />
 
       <!-- Pagination -->
       <div class="flex justify-center items-center gap-2 mt-6">

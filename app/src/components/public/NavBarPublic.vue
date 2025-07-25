@@ -9,7 +9,9 @@
 <template>
   <header class="p-4 bg-white shadow flex justify-between items-center">
     <div class="flex items-center gap-4">
-      <img :src="logo" alt="Logo" class="h-12" />
+      <router-link to="/">
+        <img :src="logo" alt="Logo" class="h-12" />
+      </router-link>
     </div>
 
     <div class="flex items-center gap-4">
