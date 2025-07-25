@@ -3,6 +3,7 @@
   import { useI18n } from 'vue-i18n'
   import { Announcement } from '@/types/announcement'
   import AnnouncementPopup from '@/components/common/AnnouncementPopup.vue'
+  import AnnouncementCard from '@/components/common/AnnouncementCard.vue'
 
   const { t } = useI18n()
 
@@ -49,49 +50,12 @@
       {{ t('announcements.title') }}
     </h2>
     <div v-if="paginatedAnnouncements.length > 0">
-      <v-card
+      <AnnouncementCard
         v-for="(item, index) in paginatedAnnouncements"
         :key="index"
+        :announcement="item"
         @click="openPopup(item)"
-        class="announcement-card mb-4 p-4 flex flex-col md:flex-row gap-4"
-      >
-        <div class="flex-1">
-          <h3 class="text-lg font-bold">{{ item.title }}</h3>
-          <div class="flex items-center gap-2">
-            <p class="text-sm text-gray-600">
-              {{ t(`announcements.writtenBy`) }}
-              <span class="font-semibold">{{ item.author }}</span> {{ t(`announcements.on`) }}
-              {{ item.date }}
-            </p>
-            <div class="flex gap-2">
-              <v-chip
-                v-for="(tag, i) in item.tags"
-                :key="i"
-                color="orange lighten-3"
-                class="text-xs"
-              >
-                {{ tag }}
-              </v-chip>
-            </div>
-          </div>
-          <p class="mt-3 text-gray-700 line-clamp-2">
-            {{ item.description }}
-          </p>
-        </div>
-
-        <div
-          v-if="item.images && item.images.length > 0"
-          class="flex gap-2 overflow-x-auto items-center"
-        >
-          <v-img
-            v-for="(img, idx) in item.images"
-            :key="idx"
-            :src="img"
-            class="rounded-lg w-32 h-32 object-cover"
-            cover
-          />
-        </div>
-      </v-card>
+      />
 
       <!-- Popup -->
       <AnnouncementPopup v-model:show="showPopup" :announcement="selectedAnnouncement" />
