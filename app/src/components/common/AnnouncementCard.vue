@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { Announcement } from '@/types/announcement'
+import { useI18n } from 'vue-i18n'
+import { timeAgo } from '@/utils/dateUtils';
+
+const { t } = useI18n()
+const locale = useI18n().locale
 
 const props = defineProps<{
   announcement: Announcement
@@ -23,8 +28,9 @@ const handleClick = () => {
       <h3 class="text-lg font-bold">{{ announcement.title }}</h3>
       <div class="flex items-center gap-2">
         <p class="text-sm text-gray-600">
-          Écrit par <span class="font-semibold">{{ announcement.author }}</span> le
-          {{ announcement.date }}
+          {{ t('announcements.writtenBy') }}
+          <span class="font-semibold">{{ announcement.author }}</span>
+          {{ timeAgo(announcement.date, locale) }}
         </p>
         <div class="flex gap-2">
           <v-chip
