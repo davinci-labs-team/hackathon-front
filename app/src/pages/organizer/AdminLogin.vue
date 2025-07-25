@@ -11,8 +11,8 @@
   const error = ref(false)
   const formRef = ref()
 
-  const required = (v: string) => !!v || t('validation.required')
-  const emailRule = (v: string) => /.+@.+\..+/.test(v) || t('validation.invalidEmail')
+  const required = (v: string) => !!v || t('common.fieldRequired')
+  const emailRule = (v: string) => /.+@.+\..+/.test(v) || t('common.invalidEmail')
 
   const login = () => {
     if (!formRef.value?.isValid) return

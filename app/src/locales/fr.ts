@@ -4,6 +4,8 @@ export default {
     loading: 'Chargement...',
     error: 'Une erreur est survenue, veuillez réessayer plus tard.',
     success: 'Opération réussie avec succès.',
+    fieldRequired: 'Ce champ est obligatoire',
+    invalidEmail: 'Veuillez saisir une adresse email valide',
   },
   hackathon: {
     title: 'Qubit or Not Qubit',
@@ -34,6 +36,8 @@ export default {
     on: 'le',
     noContent: 'Aucune annonce disponible',
   },
+  
+  // Roles sections
   organizer: {
     dashboard: 'Tableau de bord Organisateur',
     nav: {
@@ -44,17 +48,39 @@ export default {
       settings: 'Paramètres',
     },
   },
-  user: {
-    dashboard: 'Tableau de bord Utilisateur',
+  jury: {
+    dashboard: 'Tableau de bord Jury',
+    nav: {
+      dashboard: 'Dashboard',
+      teams: 'Mes Équipes',
+      projects: 'Évaluation des Projets',
+      faq: 'FAQ',
+    },
   },
+  mentor: {
+    dashboard: 'Tableau de bord Mentor',
+    nav: {
+      dashboard: 'Dashboard',
+      teams: 'Mes Équipes',
+      projects: 'Feedback des Projets',
+      faq: 'FAQ',
+    },
+  },
+  participant: {
+    dashboard: 'Tableau de bord Participant',
+    nav: {
+      dashboard: 'Dashboard',
+      teams: 'Mon Équipe',
+      projects: 'Dépôt de Projet',
+      faq: 'FAQ',
+    },
+  },
+
+  // Header and Footer
   header: {
     public: 'En-tête Public',
     organizer: 'Panneau Organisateur',
     user: 'Panneau Utilisateur',
-  },
-  validation: {
-    required: 'Ce champ est obligatoire',
-    invalidEmail: 'Veuillez saisir une adresse email valide',
   },
   footer: {
     copyright: '© 2025 Hackathon - Tous droits réservés',

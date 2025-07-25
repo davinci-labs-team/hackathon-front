@@ -1,13 +1,17 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
   const { t } = useI18n()
+  import { getRole, getTPrefix } from '@/utils/auth';
+
+  const role = getRole();
+  const tPrefix = getTPrefix(role);
 </script>
 
 <template>
   <v-container>
     <v-row justify="center" class="mt-8">
       <v-col cols="12" md="8" lg="6">
-        <h1 class="text-3xl font-bold">{{ t('user.dashboard') }}</h1>
+        <h1 class="text-3xl font-bold">{{ t(`${tPrefix}.dashboard`) }}</h1>
       </v-col>
     </v-row>
   </v-container>

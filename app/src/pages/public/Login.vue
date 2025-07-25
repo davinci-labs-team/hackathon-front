@@ -12,8 +12,8 @@
   const formRef = ref()
 
   // Règles de validation Vuetify
-  const required = (v: string) => !!v || t('validation.required')
-  const emailRule = (v: string) => /.+@.+\..+/.test(v) || t('validation.invalidEmail')
+  const required = (v: string) => !!v || t('common.fieldRequired')
+  const emailRule = (v: string) => /.+@.+\..+/.test(v) || t('common.invalidEmail')
 
   const login = () => {
     if (!formRef.value?.validate()) return

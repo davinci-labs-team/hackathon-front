@@ -5,10 +5,8 @@
   import { VBtn, VIcon } from 'vuetify/components'
   import { useI18n } from 'vue-i18n'
 
-  const { t, locale } = useI18n()
+  const { t } = useI18n()
   const route = useRoute()
-
-  console.log(locale.value)
 
   const getLinkClasses = (path: string) => {
     const base = 'rounded px-2 py-1 transition-transform transition-colors duration-200'
