@@ -8,16 +8,16 @@
 
 <template>
   <v-container fluid class="py-8 px-6">
-    <div class="flex w-full gap-2 mb-6" style="height: 500px">
+    <div class="flex w-full gap-2 mb-6 min-h-[300px]">
       <div class="w-1/4 flex items-start justify-center overflow-hidden" style="height: 100%">
         <img
           :src="HackathonExample"
           alt="Hackathon Poster"
-          class="h-full w-auto object-contain object-top rounded"
+          class="h-auto max-h-[500px] w-auto object-contain object-top rounded"
         />
       </div>
 
-      <div class="w-3/4 flex flex-col gap-6 rounded p-6" style="height: 100%">
+      <div class="w-3/4 flex flex-col gap-6 rounded p-6 h-auto" style="height: 100%">
         <Info />
       </div>
     </div>

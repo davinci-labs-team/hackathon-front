@@ -2,8 +2,9 @@
   import { useI18n } from 'vue-i18n'
   import { Announcement } from '@/types/announcement'
   import { newTabImage } from '@/utils/imageUtils'
+  import { timeAgo } from '@/utils/dateUtils'
 
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const props = defineProps<{
     announcement: Announcement | null
     show: boolean
@@ -27,8 +28,7 @@
           <p class="text-sm text-gray-600">
             {{ t(`announcements.writtenBy`) }}
             <span class="font-semibold">{{ props.announcement.author }}</span>
-            {{ t(`announcements.on`) }}
-            {{ props.announcement.date }}
+            {{ timeAgo(props.announcement.date, locale) }}
           </p>
           <div class="flex gap-2">
             <v-chip

@@ -16,6 +16,8 @@ export default {
     inscriptionMessage:
       "Bienvenue ! Pour rejoindre l'événement, veuillez vous inscrire ci-dessous.",
     firstLoginBtn: 'Première connexion',
+    locationText: 'Inscrivez-vous pour connaître le lieu exact',
+    dateText: '2 jours intensifs de codage',
   },
   login: {
     title: 'Connexion',

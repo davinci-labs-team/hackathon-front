@@ -3,8 +3,7 @@
   import { useI18n } from 'vue-i18n'
   import { timeAgo } from '@/utils/dateUtils'
 
-  const { t } = useI18n()
-  const locale = useI18n().locale
+  const { t, locale } = useI18n()
 
   const props = defineProps<{
     announcement: Announcement

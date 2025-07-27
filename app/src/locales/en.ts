@@ -15,6 +15,8 @@ export default {
     inscriptionTitle: 'Registration',
     inscriptionMessage: 'Welcome! To join the event, please register below.',
     firstLoginBtn: 'First login',
+    locationText: 'Register to see the exact location',
+    dateText: '2 intensive days of coding',
   },
   login: {
     title: 'Login',

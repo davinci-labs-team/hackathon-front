@@ -1,19 +1,14 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
+  import { formatDate } from '@/utils/dateUtils'
 
-  const { t } = useI18n()
-  const infos = [
-    {
-      icon: 'mdi-calendar',
-      title: 'Mercredi 10 juin',
-      subtitle: '09h00 - Jeudi 11 juin 20h00',
-    },
-    {
-      icon: 'mdi-map-marker',
-      title: "Inscrivez-vous pour voir l'adresse",
-      subtitle: 'Paris, Île-de-France',
-    },
-  ]
+  const infos = {
+    location: "Paris, Île-de-France",
+    startDate: '2025-06-10T07:00:00.000Z',
+    endDate: '2025-06-11T18:00:00.000Z',
+  }
+
+  const { t, locale } = useI18n()
 </script>
 
 <template>
@@ -22,22 +17,29 @@
     <p class="text-2xl italic text-gray-600 mb-8">
       {{ t('hackathon.subtitle') }}
     </p>
-    <p class="mb-6 text-gray-700 mb-8">
+    <p class="mb-6 text-xl text-gray-700 mb-8">
       {{ t('hackathon.description') }}
     </p>
 
     <div class="flex gap-6 items-center">
       <div class="flex-1 space-y-4">
-        <div v-for="(info, index) in infos" :key="index" class="flex items-center gap-4">
-          <v-icon size="55">{{ info.icon }}</v-icon>
+        <div class="flex items-center gap-4 mb-10">
+          <v-icon size="55">mdi-calendar</v-icon>
           <div>
-            <div class="text-2xl font-semibold">{{ info.title }}</div>
-            <div class="text-xl text-gray-600">{{ info.subtitle }}</div>
+            <div class="text-2xl font-semibold">{{ t('hackathon.dateText') }}</div>
+            <div class="text-xl text-gray-600">{{ formatDate(infos.startDate, locale) }} - {{ formatDate(infos.endDate, locale)}}</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <v-icon size="55">mdi-map-marker</v-icon>
+          <div>
+            <div class="text-2xl font-semibold">{{ t('hackathon.locationText') }}</div>
+            <div class="text-xl text-gray-600">{{ infos.location }}</div>
           </div>
         </div>
       </div>
 
-      <v-card class="flex-1 p-4 self-start" outlined shaped>
+      <v-card class="flex-[0.5] p-4 self-start" outlined shaped>
         <v-card-title
           class="bg-primary text-white rounded-t px-4 py-2"
           style="font-size: 1.5rem; font-weight: 600"
