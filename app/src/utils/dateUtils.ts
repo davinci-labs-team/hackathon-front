@@ -56,31 +56,31 @@ export function timeAgo(date: Date | string, locale: string): string {
  *  - EN : "Saturday, July 27, 2025 at 09:00 AM"
  */
 export function formatDate(date: Date | string, locale: string): string {
-  const d = typeof date === 'string' ? new Date(date) : date;
+  const d = typeof date === 'string' ? new Date(date) : date
 
   if (locale === 'fr') {
     let dateStr = d.toLocaleDateString('fr-FR', {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
-      year: 'numeric'
-    });
-    dateStr = dateStr.charAt(0).toUpperCase() + dateStr.slice(1); // Capitaliser 1ère lettre
+      year: 'numeric',
+    })
+    dateStr = dateStr.charAt(0).toUpperCase() + dateStr.slice(1) // Capitaliser 1ère lettre
 
-    const timeStr = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }).replace(':', 'h');
+    const timeStr = d
+      .toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+      .replace(':', 'h')
 
-    return `${dateStr} à ${timeStr}`;
+    return `${dateStr} à ${timeStr}`
   }
 
   const dateStr = d.toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
-    year: 'numeric'
-  });
-  const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    year: 'numeric',
+  })
+  const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
 
-  return `${dateStr} at ${timeStr}`;
+  return `${dateStr} at ${timeStr}`
 }
-
-

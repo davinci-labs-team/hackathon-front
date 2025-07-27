@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
 import { createVuetify } from 'vuetify'
+import { createPinia } from 'pinia'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import './assets/vuetify-overload.css'
 
@@ -47,6 +48,7 @@ const app = createApp(App)
 
 app.use(router)
 app.use(i18n)
+app.use(createPinia())
 app.use(vuetify)
 
 app.mount('#app')

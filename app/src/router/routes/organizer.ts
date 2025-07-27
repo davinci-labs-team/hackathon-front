@@ -1,4 +1,5 @@
-import OrganizerLayout from '../../layouts/OrganizerLayout.vue'
+import OrganizerLayout from '@/layouts/OrganizerLayout.vue'
+import { UserRole } from '@/types/roles'
 
 export default [
   {
@@ -9,6 +10,7 @@ export default [
         path: 'dashboard',
         name: 'OrganizerDashboard',
         component: () => import('../../pages/organizer/Dashboard.vue'),
+        meta: { requiresAuth: true, role: UserRole.ORGANIZER },
       },
     ],
   },

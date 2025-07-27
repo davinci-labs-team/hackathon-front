@@ -3,7 +3,7 @@
   import { formatDate } from '@/utils/dateUtils'
 
   const infos = {
-    location: "Paris, Île-de-France",
+    location: 'Paris, Île-de-France',
     startDate: '2025-06-10T07:00:00.000Z',
     endDate: '2025-06-11T18:00:00.000Z',
   }
@@ -27,7 +27,9 @@
           <v-icon size="55">mdi-calendar</v-icon>
           <div>
             <div class="text-2xl font-semibold">{{ t('hackathon.dateText') }}</div>
-            <div class="text-xl text-gray-600">{{ formatDate(infos.startDate, locale) }} - {{ formatDate(infos.endDate, locale)}}</div>
+            <div class="text-xl text-gray-600">
+              {{ formatDate(infos.startDate, locale) }} - {{ formatDate(infos.endDate, locale) }}
+            </div>
           </div>
         </div>
         <div class="flex items-center gap-4">

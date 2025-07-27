@@ -1,8 +1,8 @@
 import { UserRole } from '@/types/roles'
 
-export function getRole() {
-  const user = JSON.parse(localStorage.getItem('user') || '{}')
-  return user.role || UserRole.PARTICIPANT
+export function getRole(): UserRole {
+  const authUser = JSON.parse(localStorage.getItem('authUser') || '{}')
+  return authUser.role || UserRole.PARTICIPANT
 }
 
 export function getTPrefix(role: UserRole): string {

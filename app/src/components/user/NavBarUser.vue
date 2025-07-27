@@ -5,7 +5,7 @@
   import { RouterLink, useRoute } from 'vue-router'
   import { VBtn, VIcon } from 'vuetify/components'
   import { useI18n } from 'vue-i18n'
-  import { getRole, getTPrefix } from '@/utils/auth'
+  import { getRole, getTPrefix } from '@/utils/user'
 
   const { t } = useI18n()
   const route = useRoute()

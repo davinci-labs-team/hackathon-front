@@ -2,10 +2,13 @@
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { useI18n } from 'vue-i18n'
+  import { useAuthStore } from '@/stores/auth'
 
   const { t } = useI18n()
   const router = useRouter()
+  const authStore = useAuthStore()
 
+  // Fields of the login form
   const email = ref('')
   const password = ref('')
   const error = ref(false)
@@ -15,12 +18,28 @@
   const required = (v: string) => !!v || t('common.fieldRequired')
   const emailRule = (v: string) => /.+@.+\..+/.test(v) || t('common.invalidEmail')
 
+  // Fonction de login
   const login = () => {
     if (!formRef.value?.validate()) return
 
-    // Simulation d'authentification simple
+    // Simulation d'authentification
     if (email.value === 'user@example.com' && password.value === 'user') {
       error.value = false
+
+      // Créons un faux utilisateur (mock) respectant SupabaseDecodedUser
+      const mockUser: SupabaseDecodedUser = {
+        sub: 'cc31ac03-58ef-4821-a445-61f289882e36',
+        email: email.value,
+        phone: '',
+        role: 'authenticated',
+        session_id: crypto.randomUUID(),
+        is_anonymous: false,
+      }
+
+      // Stockage de l'utilisateur dans le store (et localStorage via store)
+      authStore.login(mockUser)
+
+      // Redirection vers le dashboard
       router.push('/user/dashboard')
     } else {
       error.value = true
