@@ -11,7 +11,7 @@
   const route = useRoute()
 
   const role = getRole()
-  const tPrefix = getTPrefix(role)
+  const tPrefix = getTPrefix(role, true)
 
   const getLinkClasses = (path: string) => {
     const base = 'rounded px-2 py-1 transition-transform transition-colors duration-200'

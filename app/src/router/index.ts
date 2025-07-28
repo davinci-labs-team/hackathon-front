@@ -1,12 +1,30 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import publicRoutes from './routes/public'
 import organizerRoutes from './routes/organizer'
 import userRoutes from './routes/user'
 import { authGuard } from './authGuard'
+import TermsAndConditions from '@/pages/legal/TermsAndConditions.vue'
+import PrivacyPolicy from '@/pages/legal/PrivacyPolicy.vue'
+
+const routes: RouteRecordRaw[] = [
+  ...publicRoutes,
+  ...organizerRoutes,
+  ...userRoutes,
+  {
+    path: '/terms',
+    name: 'terms',
+    component: TermsAndConditions,
+  },
+  {
+    path: '/privacy',
+    name: 'privacy',
+    component: PrivacyPolicy,
+  },
+]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: [...publicRoutes, ...organizerRoutes, ...userRoutes],
+  routes,
 })
 
 router.beforeEach(authGuard)

@@ -3,6 +3,7 @@
   import { useRouter } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { useAuthStore } from '@/stores/auth'
+import { UserRole } from '@/types/roles'
 
   const { t } = useI18n()
   const router = useRouter()
@@ -31,7 +32,7 @@
         sub: 'cc31ac03-58ef-4821-a445-61f289882e36',
         email: email.value,
         phone: '',
-        role: 'authenticated',
+        role: UserRole.ORGANIZER,
         session_id: crypto.randomUUID(),
         is_anonymous: false,
       }

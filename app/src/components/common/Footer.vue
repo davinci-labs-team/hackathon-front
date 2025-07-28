@@ -1,11 +1,14 @@
 <script setup lang="ts">
-  import { useI18n } from 'vue-i18n'
-  const { t } = useI18n()
+import { useI18n } from 'vue-i18n'
+import { RouterLink } from 'vue-router'
+
+const { t } = useI18n()
 </script>
 
 <template>
   <v-footer class="pa-4">
     <v-container>
+      <!-- Réseaux sociaux -->
       <v-row justify="end" class="mb-2">
         <v-btn icon variant="text" size="small" href="https://facebook.com" target="_blank">
           <v-icon>mdi-facebook</v-icon>
@@ -21,29 +24,28 @@
         </v-btn>
       </v-row>
 
+      <!-- Mentions légales -->
       <v-row justify="space-between" align="center">
         <!-- Colonne gauche -->
-        <div class="text-caption grey--text text--darken-1">
+        <div class="text-caption text-grey-darken-1">
           {{ t('footer.copyright') }}
         </div>
 
         <!-- Colonne droite -->
-        <div class="d-flex align-center gap-4">
-          <a
-            href="/terms"
-            class="text-caption grey--text text--darken-1 text-decoration-none"
-            style="cursor: pointer"
+        <div class="d-flex align-center gap-2">
+          <RouterLink
+            to="/terms"
+            class="text-caption text-grey-darken-1 text-decoration-none"
           >
             {{ t('footer.terms') }}
-          </a>
+          </RouterLink>
           |
-          <a
-            href="/privacy-policy"
-            class="text-caption grey--text text--darken-1 text-decoration-none"
-            style="cursor: pointer"
+          <RouterLink
+            to="/privacy"
+            class="text-caption text-grey-darken-1 text-decoration-none"
           >
             {{ t('footer.privacyPolicy') }}
-          </a>
+          </RouterLink>
         </div>
       </v-row>
     </v-container>

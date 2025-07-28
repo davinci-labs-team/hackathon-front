@@ -5,10 +5,10 @@ export function getRole(): UserRole {
   return authUser.role || UserRole.PARTICIPANT
 }
 
-export function getTPrefix(role: UserRole): string {
+export function getTPrefix(role: UserRole, userPlateform: boolean): string {
   switch (role) {
     case UserRole.ORGANIZER:
-      return 'organizer'
+      return userPlateform ? 'participant' : 'organizer'
     case UserRole.JURY:
       return 'jury'
     case UserRole.PARTICIPANT:
