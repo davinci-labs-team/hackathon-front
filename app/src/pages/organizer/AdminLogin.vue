@@ -1,50 +1,49 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import { useAuthStore } from '@/stores/auth'
-import { UserRole } from '@/types/roles'
+  import { ref } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { useI18n } from 'vue-i18n'
+  import { useAuthStore } from '@/stores/auth'
+  import { UserRole } from '@/types/roles'
 
-const { t } = useI18n()
-const router = useRouter()
-const authStore = useAuthStore()
+  const { t } = useI18n()
+  const router = useRouter()
+  const authStore = useAuthStore()
 
-const email = ref('')
-const password = ref('')
-const error = ref(false)
-const formRef = ref()
+  const email = ref('')
+  const password = ref('')
+  const error = ref(false)
+  const formRef = ref()
 
-const required = (v: string) => !!v || t('common.fieldRequired')
-const emailRule = (v: string) => /.+@.+\..+/.test(v) || t('common.invalidEmail')
+  const required = (v: string) => !!v || t('common.fieldRequired')
+  const emailRule = (v: string) => /.+@.+\..+/.test(v) || t('common.invalidEmail')
 
-const login = () => {
-  if (!formRef.value?.isValid) return
+  const login = () => {
+    if (!formRef.value?.isValid) return
 
-  // Exemple simple : ici tu peux remplacer par appel API réel
-  if (email.value === 'admin@example.com' && password.value === 'admin') {
-    error.value = false
+    // Exemple simple : ici tu peux remplacer par appel API réel
+    if (email.value === 'admin@example.com' && password.value === 'admin') {
+      error.value = false
 
-    // Création d’un objet user simulé avec rôle admin
-    const user = {
-      sub: 'admin-uuid-1234',
-      email: email.value,
-      phone: '',
-      role: UserRole.ORGANIZER,
-      session_id: 'session-uuid-1234',
-      is_anonymous: false,
+      // Création d’un objet user simulé avec rôle admin
+      const user = {
+        sub: 'admin-uuid-1234',
+        email: email.value,
+        phone: '',
+        role: UserRole.ORGANIZER,
+        session_id: 'session-uuid-1234',
+        is_anonymous: false,
+      }
+
+      // On sauvegarde dans le store
+      authStore.login(user)
+
+      // Redirection vers le dashboard organizer
+      router.push('/organizer/dashboard')
+    } else {
+      error.value = true
     }
-
-    // On sauvegarde dans le store
-    authStore.login(user)
-
-    // Redirection vers le dashboard organizer
-    router.push('/organizer/dashboard')
-  } else {
-    error.value = true
   }
-}
 </script>
-
 
 <template>
   <div class="flex items-center justify-center min-h-screen bg-gray-50">

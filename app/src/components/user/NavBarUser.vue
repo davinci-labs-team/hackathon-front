@@ -1,9 +1,7 @@
 <script setup lang="ts">
   import LanguageSelector from '@/components/common/LanguageSelector.vue'
   import logo from '@/assets/images/basic.jpg'
-
   import { RouterLink, useRoute } from 'vue-router'
-  import { VBtn, VIcon } from 'vuetify/components'
   import { useI18n } from 'vue-i18n'
   import { getRole, getTPrefix } from '@/utils/user'
 
@@ -13,12 +11,18 @@
   const role = getRole()
   const tPrefix = getTPrefix(role, true)
 
+  const menuItems = [
+    { path: '/user/dashboard', label: `${tPrefix}.nav.dashboard` },
+    { path: '/user/team', label: `${tPrefix}.nav.teams` },
+    { path: '/user/project', label: `${tPrefix}.nav.projects` },
+    { path: '/user/faq', label: `${tPrefix}.nav.faq` },
+  ]
+
   const getLinkClasses = (path: string) => {
     const base = 'rounded px-2 py-1 transition-transform transition-colors duration-200'
-    const isActive = route.path === path
     return [
       base,
-      isActive ? 'font-bold bg-green-700 scale-102' : '',
+      route.path === path ? 'font-bold bg-green-700 scale-102' : '',
       'hover:bg-green-800 hover:scale-105',
     ].join(' ')
   }
@@ -26,34 +30,30 @@
 
 <template>
   <header class="p-4 bg-green-600 text-white flex justify-between items-center">
+    <!-- Logo -->
     <div class="flex items-center gap-4">
       <img :src="logo" alt="Logo" class="h-12" />
     </div>
 
+    <!-- Navigation -->
     <nav class="flex gap-6">
-      <RouterLink to="/user/dashboard" :class="getLinkClasses('/user/dashboard')">
-        {{ t(`${tPrefix}.nav.dashboard`) }}
-      </RouterLink>
-
-      <RouterLink to="/user/teams" :class="getLinkClasses('/user/teams')">
-        {{ t(`${tPrefix}.nav.teams`) }}
-      </RouterLink>
-
-      <RouterLink to="/user/projects" :class="getLinkClasses('/user/projects')">
-        {{ t(`${tPrefix}.nav.projects`) }}
-      </RouterLink>
-
-      <RouterLink to="/user/faq" :class="getLinkClasses('/user/faq')">
-        {{ t(`${tPrefix}.nav.faq`) }}
+      <RouterLink
+        v-for="item in menuItems"
+        :key="item.path"
+        :to="item.path"
+        :class="getLinkClasses(item.path)"
+      >
+        {{ t(item.label) }}
       </RouterLink>
     </nav>
 
+    <!-- Actions (Language + Profile) -->
     <div class="flex items-center gap-4">
       <LanguageSelector />
-      <RouterLink to="/user/profile" class="text-white">
-        <VBtn icon class="bg-transparent">
-          <VIcon size="36">mdi-account-circle</VIcon>
-        </VBtn>
+      <RouterLink to="/user/profile">
+        <v-btn icon class="bg-transparent">
+          <v-icon size="36">mdi-account-circle</v-icon>
+        </v-btn>
       </RouterLink>
     </div>
   </header>

@@ -6,6 +6,7 @@ export default {
     success: 'Opération réussie avec succès.',
     fieldRequired: 'Ce champ est obligatoire',
     invalidEmail: 'Veuillez saisir une adresse email valide',
+    profile: 'Profil',
   },
   hackathon: {
     title: 'Qubit or Not Qubit',

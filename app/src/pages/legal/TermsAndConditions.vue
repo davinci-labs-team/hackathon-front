@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
+  import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+  const { t } = useI18n()
 </script>
 
 <template>
@@ -10,22 +10,31 @@ const { t } = useI18n()
       {{ t('terms.title') || 'Terms and Conditions' }}
     </h1>
     <p class="mb-4">
-      {{ t('terms.intro') || 'Welcome to our application. By using our services, you agree to the following terms and conditions.' }}
+      {{
+        t('terms.intro') ||
+        'Welcome to our application. By using our services, you agree to the following terms and conditions.'
+      }}
     </p>
     <h2 class="text-xl font-semibold mt-6 mb-2">
       {{ t('terms.section1') || '1. Acceptance of Terms' }}
     </h2>
     <p>
-      {{ t('terms.section1_text') || 'By accessing our application, you agree to comply with these terms.' }}
+      {{
+        t('terms.section1_text') ||
+        'By accessing our application, you agree to comply with these terms.'
+      }}
     </p>
 
     <h2 class="text-xl font-semibold mt-6 mb-2">
       {{ t('terms.section2') || '2. Use of Service' }}
     </h2>
     <p>
-      {{ t('terms.section2_text') || 'You may not use the service for illegal purposes or in a way that causes harm.' }}
+      {{
+        t('terms.section2_text') ||
+        'You may not use the service for illegal purposes or in a way that causes harm.'
+      }}
     </p>
-    
+
     <h2 class="text-xl font-semibold mt-6 mb-2">
       {{ t('terms.section3') || '3. Modifications' }}
     </h2>

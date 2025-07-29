@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { RouterLink } from 'vue-router'
+  import { useI18n } from 'vue-i18n'
+  import { RouterLink } from 'vue-router'
 
-const { t } = useI18n()
+  const { t } = useI18n()
 </script>
 
 <template>
@@ -33,17 +33,11 @@ const { t } = useI18n()
 
         <!-- Colonne droite -->
         <div class="d-flex align-center gap-2">
-          <RouterLink
-            to="/terms"
-            class="text-caption text-grey-darken-1 text-decoration-none"
-          >
+          <RouterLink to="/terms" class="text-caption text-grey-darken-1 text-decoration-none">
             {{ t('footer.terms') }}
           </RouterLink>
           |
-          <RouterLink
-            to="/privacy"
-            class="text-caption text-grey-darken-1 text-decoration-none"
-          >
+          <RouterLink to="/privacy" class="text-caption text-grey-darken-1 text-decoration-none">
             {{ t('footer.privacyPolicy') }}
           </RouterLink>
         </div>
