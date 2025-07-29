@@ -91,4 +91,39 @@ export default {
     terms: 'Conditions générales',
     cookies: 'Cookies',
   },
+
+  // Settings
+  legalEditor: {
+    title: 'Éditeur des Mentions Légales',
+    documentType: 'Type de document',
+    privacyPolicy: 'Politique de Confidentialité',
+    termsConditions: 'Conditions Générales',
+    addSection: '+ Ajouter une section',
+    newSection: 'Nouvelle section',
+    exportJSON: 'Exporter en JSON',
+    save: 'Sauvegarder',
+    delete: 'Supprimer',
+    sections: {
+      privacy: [
+        { title: 'Introduction', content: 'Présentez votre politique de confidentialité.' },
+        { title: 'Données collectées', content: 'Indiquez quelles données personnelles vous collectez.' },
+        { title: 'Finalités du traitement', content: 'Expliquez pourquoi vous collectez ces données.' },
+        { title: 'Partage des données', content: 'Précisez si vous partagez les données avec des tiers.' },
+        { title: 'Conservation des données', content: 'Indiquez combien de temps les données sont conservées.' },
+        { title: 'Droits des utilisateurs', content: 'Expliquez les droits (accès, suppression, etc.).' },
+        { title: 'Cookies', content: 'Indiquez l’utilisation des cookies et comment les refuser.' },
+        { title: 'Contact', content: 'Précisez un email pour exercer les droits.' },
+      ],
+      terms: [
+        { title: 'Introduction', content: 'Décrivez le but des conditions générales d\'utilisation.' },
+        { title: 'Accès au site', content: 'Conditions d\'accès et utilisation du site.' },
+        { title: 'Propriété intellectuelle', content: 'Indiquez qui détient les droits d\'auteur et marques.' },
+        { title: 'Responsabilités', content: 'Précisez vos responsabilités et celles de l\'utilisateur.' },
+        { title: 'Limitation de responsabilité', content: 'Indiquez les limites de votre responsabilité.' },
+        { title: 'Loi applicable', content: 'Mentionnez le droit applicable et la juridiction compétente.' },
+        { title: 'Contact', content: 'Précisez comment contacter l\'équipe.' },
+      ],
+    },
+    alertExport: 'JSON généré dans la console.'
+  }
 }

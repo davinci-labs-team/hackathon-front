@@ -88,4 +88,39 @@ export default {
     terms: 'Terms and Conditions',
     cookies: 'Cookies',
   },
+
+  // Settings
+  legalEditor: {
+    title: 'Legal Editor',
+    documentType: 'Type of document',
+    privacyPolicy: 'Privacy Policy',
+    termsConditions: 'Terms & Conditions',
+    addSection: '+ Add Section',
+    newSection: 'New Section',
+    exportJSON: 'Export JSON',
+    save: 'Save',
+    delete: 'Delete',
+    sections: {
+      privacy: [
+        { title: 'Introduction', content: 'Present your privacy policy.' },
+        { title: 'Data Collected', content: 'Specify what personal data you collect.' },
+        { title: 'Purpose of Processing', content: 'Explain why you collect this data.' },
+        { title: 'Data Sharing', content: 'Specify if you share data with third parties.' },
+        { title: 'Data Retention', content: 'Indicate how long data is retained.' },
+        { title: 'User Rights', content: 'Explain rights (access, deletion, etc.).' },
+        { title: 'Cookies', content: 'Explain use of cookies and how to refuse them.' },
+        { title: 'Contact', content: 'Provide an email for exercising rights.' },
+      ],
+      terms: [
+        { title: 'Introduction', content: 'Describe the purpose of the terms and conditions.',},
+        { title: 'Site Access', content: 'Conditions for accessing and using the site.', },
+        { title: 'Intellectual Property', content: 'Specify who owns copyrights and trademarks.', },
+        { title: 'Responsibilities', content: 'Specify your responsibilities and those of the user.', },
+        { title: 'Limitation of Liability', content: 'Specify the limits of your liability.', },
+        { title: 'Applicable Law', content: 'Mention applicable law and jurisdiction.' },
+        { title: 'Contact', content: 'Explain how to contact the team.' },
+      ],
+    },
+    alertExport: 'JSON generated in the console.',
+  },
 }

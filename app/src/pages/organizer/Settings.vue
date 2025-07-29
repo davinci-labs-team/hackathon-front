@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
   const { t } = useI18n()
+  import LegalEditor from '@/components/organizer/LegalEditor.vue'
 </script>
 
 <template>
@@ -8,6 +9,7 @@
     <v-row justify="center" class="mt-8">
       <v-col cols="12" md="8" lg="6">
         <h1 class="text-3xl font-bold">{{ t('organizer.nav.settings') }}</h1>
+        <LegalEditor />
       </v-col>
     </v-row>
   </v-container>
