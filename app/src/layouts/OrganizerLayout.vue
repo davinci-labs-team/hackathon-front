@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-green-50">
+  <div class="min-h-screen flex flex-col bg-white">
     <NavBarOrganizer />
 
     <main class="p-4 flex-grow">

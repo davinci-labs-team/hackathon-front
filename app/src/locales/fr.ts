@@ -94,7 +94,7 @@ export default {
 
   // Settings
   legalEditor: {
-    title: 'Éditeur des Mentions Légales',
+    title: 'Mentions Légales',
     documentType: 'Type de document',
     privacyPolicy: 'Politique de Confidentialité',
     termsConditions: 'Conditions Générales',

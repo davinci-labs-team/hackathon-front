@@ -63,10 +63,10 @@ const exportJSON = () => {
 </script>
 
 <template>
-  <v-container class="py-10 max-w-4xl mx-auto">
+  <v-container class="py-10 max-w-7xl mx-auto">
     <h1 class="text-3xl font-bold mb-6">{{ t('legalEditor.title') }}</h1>
 
-    <!-- Choix type de document -->
+    <!-- Type of document toggle -->
     <div class="mb-6">
       <label class="mr-4 font-semibold">{{ t('legalEditor.documentType') }}</label>
       <select v-model="documentType" class="border px-3 py-2 rounded-lg">
@@ -75,7 +75,7 @@ const exportJSON = () => {
       </select>
     </div>
 
-    <!-- Liste des sections -->
+    <!-- List of sections -->
     <div v-for="section in sections" :key="section.id" class="mb-6 p-4 border rounded-lg shadow-sm">
       <div class="flex items-center justify-between mb-2">
         <input
@@ -97,7 +97,7 @@ const exportJSON = () => {
       ></textarea>
     </div>
 
-    <!-- Boutons -->
+    <!-- Buttons -->
     <div class="flex gap-4 mt-6">
       <button class="px-4 py-2 bg-blue-600 text-white rounded-lg" @click="addSection">
         {{ t('legalEditor.addSection') }}

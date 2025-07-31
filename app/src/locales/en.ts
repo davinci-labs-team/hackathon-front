@@ -91,7 +91,7 @@ export default {
 
   // Settings
   legalEditor: {
-    title: 'Legal Editor',
+    title: 'Legal Notice',
     documentType: 'Type of document',
     privacyPolicy: 'Privacy Policy',
     termsConditions: 'Terms & Conditions',

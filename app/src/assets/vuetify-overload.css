@@ -1,5 +1,5 @@
 /* src/assets/vuetify-overrides.css */
-
+body,
 .v-application {
   font-family: 'Poppins', sans-serif !important;
 }
@@ -11,8 +11,10 @@
 .v-text-field,
 .v-label,
 .v-list-item,
+.v-list-item__title,
 .v-toolbar-title,
 .v-card-title,
+.v-navigation-drawer,
 .v-card-text {
   font-size: 16px !important;
 }
