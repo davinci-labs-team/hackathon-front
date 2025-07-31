@@ -1,11 +1,11 @@
 import OrganizerLayout from '@/layouts/OrganizerLayout.vue'
 import { UserRole } from '@/types/roles'
-import Dashboard from '@/pages/organizer/Dashboard.vue'
 import UserManagement from '@/pages/organizer/UserManagement.vue'
 import TeamManagement from '@/pages/organizer/TeamManagement.vue'
 import ProjectsManagement from '@/pages/organizer/ProjectsManagement.vue'
 import Settings from '@/pages/organizer/Settings.vue'
 import Profile from '@/pages/common/Profile.vue'
+import Announcements from '@/pages/organizer/Announcements.vue'
 
 export default [
   {
@@ -13,9 +13,9 @@ export default [
     component: OrganizerLayout,
     children: [
       {
-        path: 'dashboard',
-        name: 'OrganizerDashboard',
-        component: Dashboard,
+        path: 'announcements',
+        name: 'Announcements',
+        component: Announcements,
         meta: { requiresAuth: true, role: UserRole.ORGANIZER },
       },
       {

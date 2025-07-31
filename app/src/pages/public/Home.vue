@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import HackathonExample from '@/assets/images/hackathon-example.jpg'
   import Partners from '@/components/public/Partners.vue'
-  import Announcements from '@/components/public/Announcements.vue'
+  import Announcements from '@/components/common/Announcements.vue'
   import { announcements } from '@/tests/data/announcements'
   import Info from '@/components/public/Info.vue'
 </script>
@@ -28,6 +28,9 @@
       </div>
 
       <div class="w-3/4 flex flex-col gap-6 rounded p-6 bg-white shadow" style="height: 100%">
+        <h2 class="text-3xl font-semibold mt-2 mb-3">
+          {{ $t('announcements.title') }}
+        </h2>
         <Announcements :announcements="announcements" :items-per-page="5" />
       </div>
     </div>

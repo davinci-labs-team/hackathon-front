@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import Communication from '@/components/organizer/settings/Communication.vue'
-import FAQ from '@/components/organizer/settings/FAQ.vue'
-import LegalEditor from '@/components/organizer/settings/LegalEditor.vue'
-import Matchmaking from '@/components/organizer/settings/Matchmaking.vue'
-import Partners from '@/components/organizer/settings/Partners.vue'
-import SocialMedia from '@/components/organizer/settings/SocialMedia.vue'
-import Texts from '@/components/organizer/settings/Texts.vue'
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
+  import Communication from '@/components/organizer/settings/Communication.vue'
+  import FAQ from '@/components/organizer/settings/FAQ.vue'
+  import LegalEditor from '@/components/organizer/settings/LegalEditor.vue'
+  import Matchmaking from '@/components/organizer/settings/Matchmaking.vue'
+  import Partners from '@/components/organizer/settings/Partners.vue'
+  import SocialMedia from '@/components/organizer/settings/SocialMedia.vue'
+  import Texts from '@/components/organizer/settings/Texts.vue'
+  import { ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
+  const { t } = useI18n()
 
-const currentSection = ref('social')
+  const currentSection = ref('social')
 </script>
 
 <template>
@@ -53,27 +53,27 @@ const currentSection = ref('social')
 </template>
 
 <script lang="ts">
-/**
- * Sélecteur de composants dynamiques en fonction de la section
- */
-function getComponent(section: string) {
-  switch (section) {
-    case 'social':
-      return SocialMedia
-    case 'texts':
-      return Texts
-    case 'partners':
-      return Partners
-    case 'matchmaking':
-      return Matchmaking
-    case 'communication':
-      return Communication
-    case 'legal':
-      return LegalEditor
-    case 'faq':
-      return FAQ
-    default:
-      return FAQ
+  /**
+   * Dynamically returns the component based on the current section.
+   */
+  function getComponent(section: string) {
+    switch (section) {
+      case 'social':
+        return SocialMedia
+      case 'texts':
+        return Texts
+      case 'partners':
+        return Partners
+      case 'matchmaking':
+        return Matchmaking
+      case 'communication':
+        return Communication
+      case 'legal':
+        return LegalEditor
+      case 'faq':
+        return FAQ
+      default:
+        return FAQ
+    }
   }
-}
 </script>

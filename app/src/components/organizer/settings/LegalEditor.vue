@@ -1,65 +1,69 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
+  import { ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
-type LegalSection = {
-  id: number
-  title: string
-  content: string
-  isDefault: boolean
-}
-
-const { t, getLocaleMessage , locale } = useI18n()
-
-function generateSectionsFromLocale(type: 'privacy' | 'terms'): LegalSection[] {
-  // Récupérer les messages complets de la locale active
-  const messages = getLocaleMessage(locale.value) as any
-  if (!messages.legalEditor?.sections?.[type]) {
-    return []
+  type LegalSection = {
+    id: number
+    title: string
+    content: string
+    isDefault: boolean
   }
 
-  const rawSections = messages.legalEditor.sections[type]
+  const { t, getLocaleMessage, locale } = useI18n()
 
-  if (!Array.isArray(rawSections)) return []
+  /* TODO
+- Add a way to import existing legal documents
+- Allow saving to a file instead of console logging
+*/
 
-  return rawSections.map((section: { title: string; content: string }, i: number) => ({
-    id: i + 1,
-    title: section.title,
-    content: section.content,
-    isDefault: true,
-  }))
-}
+  function generateSectionsFromLocale(type: 'privacy' | 'terms'): LegalSection[] {
+    const messages = getLocaleMessage(locale.value) as any
+    if (!messages.legalEditor?.sections?.[type]) {
+      return []
+    }
 
-const documentType = ref<'privacy' | 'terms'>('privacy')
-const sections = ref<LegalSection[]>(generateSectionsFromLocale(documentType.value))
-let nextId = sections.value.length + 1
+    const rawSections = messages.legalEditor.sections[type]
 
-watch(documentType, (newType) => {
-  sections.value = generateSectionsFromLocale(newType)
-  nextId = sections.value.length + 1
-})
+    if (!Array.isArray(rawSections)) return []
 
-const addSection = () => {
-  sections.value.push({
-    id: nextId++,
-    title: t('legalEditor.newSection'),
-    content: '',
-    isDefault: false,
+    return rawSections.map((section: { title: string; content: string }, i: number) => ({
+      id: i + 1,
+      title: section.title,
+      content: section.content,
+      isDefault: true,
+    }))
+  }
+
+  const documentType = ref<'privacy' | 'terms'>('privacy')
+  const sections = ref<LegalSection[]>(generateSectionsFromLocale(documentType.value))
+  let nextId = sections.value.length + 1
+
+  watch(documentType, (newType) => {
+    sections.value = generateSectionsFromLocale(newType)
+    nextId = sections.value.length + 1
   })
-}
 
-const removeSection = (id: number) => {
-  sections.value = sections.value.filter(section => section.id !== id)
-}
-
-const exportJSON = () => {
-  const data = {
-    type: documentType.value,
-    sections: sections.value.map(s => ({ title: s.title, content: s.content })),
+  const addSection = () => {
+    sections.value.push({
+      id: nextId++,
+      title: t('legalEditor.newSection'),
+      content: '',
+      isDefault: false,
+    })
   }
-  console.log(data)
-  alert(t('legalEditor.alertExport') || 'JSON généré dans la console.')
-}
+
+  const removeSection = (id: number) => {
+    sections.value = sections.value.filter((section) => section.id !== id)
+  }
+
+  const exportJSON = () => {
+    const data = {
+      type: documentType.value,
+      sections: sections.value.map((s) => ({ title: s.title, content: s.content })),
+    }
+    console.log(data)
+    alert(t('legalEditor.alertExport') || 'JSON généré dans la console.')
+  }
 </script>
 
 <template>
@@ -110,7 +114,7 @@ const exportJSON = () => {
 </template>
 
 <style scoped>
-textarea {
-  resize: vertical;
-}
+  textarea {
+    resize: vertical;
+  }
 </style>

@@ -8,7 +8,7 @@
   const route = useRoute()
 
   const menuItems = [
-    { path: '/organizer/dashboard', label: 'organizer.nav.dashboard' },
+    { path: '/organizer/announcements', label: 'organizer.nav.announcements' },
     { path: '/organizer/users', label: 'organizer.nav.users' },
     { path: '/organizer/teams', label: 'organizer.nav.teams' },
     { path: '/organizer/projects', label: 'organizer.nav.projects' },

@@ -1,3 +1,5 @@
+import { announcements } from '@/tests/data/announcements'
+
 export default {
   common: {
     close: 'Close',
@@ -7,6 +9,8 @@ export default {
     fieldRequired: 'This field is required',
     invalidEmail: 'Please enter a valid email address',
     profile: 'Profile',
+    cancel: 'Cancel',
+    delete: 'Delete',
   },
   hackathon: {
     title: 'Qubit or Not Qubit',
@@ -37,12 +41,19 @@ export default {
     writtenBy: 'Written by',
     on: 'on',
     noContent: 'No announcements available',
+    confirmTitle: 'Confirm Deletion',
+    confirmText: 'Are you sure you want to delete this announcement?',
   },
   // Roles sections
   organizer: {
     dashboard: 'Organizer Dashboard',
+    announcements: {
+      searchPlaceholder: 'Search',
+      addButton: 'Create Announcement',
+      addClicked: 'Add button clicked',
+    },
     nav: {
-      dashboard: 'Dashboard',
+      announcements: 'Announcements',
       users: 'User Management',
       teams: 'Team Management',
       projects: 'Projects Management',
@@ -112,11 +123,14 @@ export default {
         { title: 'Contact', content: 'Provide an email for exercising rights.' },
       ],
       terms: [
-        { title: 'Introduction', content: 'Describe the purpose of the terms and conditions.',},
-        { title: 'Site Access', content: 'Conditions for accessing and using the site.', },
-        { title: 'Intellectual Property', content: 'Specify who owns copyrights and trademarks.', },
-        { title: 'Responsibilities', content: 'Specify your responsibilities and those of the user.', },
-        { title: 'Limitation of Liability', content: 'Specify the limits of your liability.', },
+        { title: 'Introduction', content: 'Describe the purpose of the terms and conditions.' },
+        { title: 'Site Access', content: 'Conditions for accessing and using the site.' },
+        { title: 'Intellectual Property', content: 'Specify who owns copyrights and trademarks.' },
+        {
+          title: 'Responsibilities',
+          content: 'Specify your responsibilities and those of the user.',
+        },
+        { title: 'Limitation of Liability', content: 'Specify the limits of your liability.' },
         { title: 'Applicable Law', content: 'Mention applicable law and jurisdiction.' },
         { title: 'Contact', content: 'Explain how to contact the team.' },
       ],

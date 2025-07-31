@@ -5,8 +5,14 @@
   const { t } = useI18n()
 </script>
 
+<style scoped>
+  .footer-with-border {
+    border-top: 1px solid #e0e0e0;
+  }
+</style>
+
 <template>
-  <v-footer class="pa-4">
+  <v-footer class="pa-4 footer-with-border">
     <v-container>
       <!-- Réseaux sociaux -->
       <v-row justify="end" class="mb-2">

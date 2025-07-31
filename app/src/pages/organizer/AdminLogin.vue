@@ -37,8 +37,7 @@
       // On sauvegarde dans le store
       authStore.login(user)
 
-      // Redirection vers le dashboard organizer
-      router.push('/organizer/dashboard')
+      router.push('/organizer/announcements')
     } else {
       error.value = true
     }

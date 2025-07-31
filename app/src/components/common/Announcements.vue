@@ -10,7 +10,24 @@
   const props = defineProps<{
     announcements: Announcement[]
     itemsPerPage?: number
+    canDelete?: boolean
   }>()
+
+  const announcementToDelete = ref<Announcement | null>(null)
+  const showConfirmDialog = ref(false)
+
+  const confirmDelete = (announcement: Announcement) => {
+    announcementToDelete.value = announcement
+    showConfirmDialog.value = true
+  }
+
+  const deleteAnnouncement = () => {
+    if (!announcementToDelete.value) return
+    // TODO: logique de suppression réelle ici
+    console.log('Deleting:', announcementToDelete.value.title)
+    showConfirmDialog.value = false
+    announcementToDelete.value = null
+  }
 
   const itemsPerPage = props.itemsPerPage || 5
   const currentPage = ref(1)
@@ -46,21 +63,30 @@
 
 <template>
   <div>
-    <h2 class="text-3xl font-semibold mt-2 mb-10">
-      {{ t('announcements.title') }}
-    </h2>
     <div v-if="paginatedAnnouncements.length > 0">
-      <AnnouncementCard
+      <div
         v-for="(item, index) in paginatedAnnouncements"
         :key="index"
-        :announcement="item"
-        @click="openPopup(item)"
-      />
+        class="flex items-start gap-2 mb-4"
+      >
+        <div class="flex-grow" @click="openPopup(item)">
+          <AnnouncementCard :announcement="item" />
+        </div>
+
+        <!-- Delete button -->
+        <v-btn
+          v-if="canDelete"
+          icon="mdi-delete"
+          color="red"
+          variant="text"
+          @click.stop="confirmDelete(item)"
+        />
+      </div>
 
       <!-- Popup -->
       <AnnouncementPopup v-model:show="showPopup" :announcement="selectedAnnouncement" />
 
-      <!-- Pagination -->
+      <!-- Pagination (no ellipsis for now) -->
       <div class="flex justify-center items-center gap-2 mt-6">
         <v-btn
           icon="mdi-chevron-left"
@@ -88,4 +114,24 @@
       {{ t('announcements.noContent') }}
     </div>
   </div>
+
+  <v-dialog v-model="showConfirmDialog" max-width="500">
+    <v-card>
+      <v-card-title class="text-lg font-bold">
+        {{ t('announcements.confirmTitle') }}
+      </v-card-title>
+      <v-card-text>
+        {{ t('announcements.confirmText') }} <br />
+        <span class="font-semibold">{{ announcementToDelete?.title }}</span>
+      </v-card-text>
+      <v-card-actions class="justify-end">
+        <v-btn text @click="showConfirmDialog = false">
+          {{ t('common.cancel') }}
+        </v-btn>
+        <v-btn color="red" @click="deleteAnnouncement">
+          {{ t('common.delete') }}
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
