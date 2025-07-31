@@ -1,5 +1,3 @@
-import { announcements } from '@/tests/data/announcements'
-
 export default {
   common: {
     close: 'Fermer',
@@ -9,8 +7,10 @@ export default {
     fieldRequired: 'Ce champ est obligatoire',
     invalidEmail: 'Veuillez saisir une adresse email valide',
     profile: 'Profil',
+    save: 'Enregistrer',
     cancel: 'Annuler',
     delete: 'Supprimer',
+    create: 'Créer',
   },
   hackathon: {
     title: 'Qubit or Not Qubit',
@@ -38,9 +38,15 @@ export default {
     title: 'PARTENAIRES',
   },
   announcements: {
-    title: 'Dernières Annonces',
+    lastAnnouncements: 'Dernières Annonces',
+    title: "Titre de l'annonce",
+    content: "Contenu de l'annonce",
+    tags: 'Tags',
+    tagsHint: 'Séparés par des virgules',
+    private: 'Annonce Privée',
+    privateHint: 'Visible uniquement par les utilisateurs authentifiés',
+    addTitle: 'Créer une annonce',
     writtenBy: 'Écrit par',
-    on: 'le',
     noContent: 'Aucune annonce disponible',
     confirmTitle: 'Confirmer la Suppression',
     confirmText: 'Êtes-vous sûr de vouloir supprimer cette annonce ?',

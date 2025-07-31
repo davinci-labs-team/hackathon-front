@@ -23,7 +23,7 @@
 
   const deleteAnnouncement = () => {
     if (!announcementToDelete.value) return
-    // TODO: logique de suppression réelle ici
+    // TODO: Implement actual deletion logic here
     console.log('Deleting:', announcementToDelete.value.title)
     showConfirmDialog.value = false
     announcementToDelete.value = null

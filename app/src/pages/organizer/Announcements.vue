@@ -3,10 +3,13 @@
   import { useI18n } from 'vue-i18n'
   import Announcements from '@/components/common/Announcements.vue'
   import { announcements as allAnnouncements } from '@/tests/data/announcements'
+  import AnnouncementForm from '@/components/organizer/announcements/AnnouncementForm.vue'
+  import type { Announcement } from '@/types/announcement'
 
   const { t } = useI18n()
 
   const searchQuery = ref('')
+  const showAddPopup = ref(false)
 
   // Computed property to filter announcements based on search query
   const filteredAnnouncements = computed(() => {
@@ -22,7 +25,13 @@
 
   const onAddAnnouncement = () => {
     // TODO: gérer l'ajout d'une annonce (popup, navigation, etc.)
-    alert(t('organizer.announcements.addClicked'))
+    showAddPopup.value = true
+  }
+
+  const handleSave = (newAnnouncement: Announcement) => {
+    // Ici tu gères l'ajout réel (push dans une liste, appel API, etc)
+    console.log('Nouvelle annonce sauvegardée:', newAnnouncement)
+    showAddPopup.value = false
   }
 </script>
 
@@ -54,6 +63,8 @@
           :items-per-page="5"
           :can-delete="true"
         />
+
+        <AnnouncementForm v-model="showAddPopup" @save="handleSave" />
       </div>
     </v-row>
   </v-container>

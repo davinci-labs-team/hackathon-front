@@ -2,8 +2,10 @@ export interface Announcement {
   id?: string
   title: string
   author: string
-  date: string
+  publishedDate: string
+  lastModified?: string
   tags: string[]
   description: string
-  images?: string[]
+  images?: File[]
+  isPrivate: boolean
 }

@@ -28,7 +28,7 @@
           <p class="text-sm text-gray-600">
             {{ t(`announcements.writtenBy`) }}
             <span class="font-semibold">{{ props.announcement.author }}</span>
-            {{ timeAgo(props.announcement.date, locale) }}
+            {{ timeAgo(props.announcement.publishedDate, locale) }}
           </p>
           <div class="flex gap-2">
             <v-chip

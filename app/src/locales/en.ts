@@ -1,5 +1,3 @@
-import { announcements } from '@/tests/data/announcements'
-
 export default {
   common: {
     close: 'Close',
@@ -9,8 +7,10 @@ export default {
     fieldRequired: 'This field is required',
     invalidEmail: 'Please enter a valid email address',
     profile: 'Profile',
+    save: 'Save',
     cancel: 'Cancel',
     delete: 'Delete',
+    create: 'Create',
   },
   hackathon: {
     title: 'Qubit or Not Qubit',
@@ -37,9 +37,14 @@ export default {
     title: 'PARTNERS',
   },
   announcements: {
-    title: 'Last Announcements',
+    lastAnnouncements: 'Last Announcements',
+    title: "Announcement's title",
+    addTitle: 'Create Announcement',
+    tags: 'Tags',
+    tagsHint: 'Comma separated',
+    private: 'Private Announcement',
+    privateHint: 'Only visible to authenticated users',
     writtenBy: 'Written by',
-    on: 'on',
     noContent: 'No announcements available',
     confirmTitle: 'Confirm Deletion',
     confirmText: 'Are you sure you want to delete this announcement?',
