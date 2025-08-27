@@ -51,6 +51,7 @@
             density="comfortable"
             clearable
             class="flex-grow"
+            @click:clear="searchQuery = ''"
           />
           <v-btn color="primary" class="h-full" @click="onAddAnnouncement">
             {{ t('organizer.announcements.addButton') }}

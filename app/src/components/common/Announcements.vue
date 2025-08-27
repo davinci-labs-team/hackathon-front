@@ -4,17 +4,19 @@
   import { Announcement } from '@/types/announcement'
   import AnnouncementPopup from '@/components/common/AnnouncementPopup.vue'
   import AnnouncementCard from '@/components/common/AnnouncementCard.vue'
+  import AnnouncementForm from '@/components/organizer/announcements/AnnouncementForm.vue'
 
   const { t } = useI18n()
 
   const props = defineProps<{
     announcements: Announcement[]
     itemsPerPage?: number
-    canDelete?: boolean
+    canDelete?: boolean // or edit (is the user the author of the announcement)
   }>()
 
   const announcementToDelete = ref<Announcement | null>(null)
   const showConfirmDialog = ref(false)
+  const showEditForm = ref(false)
 
   const confirmDelete = (announcement: Announcement) => {
     announcementToDelete.value = announcement
@@ -27,6 +29,11 @@
     console.log('Deleting:', announcementToDelete.value.title)
     showConfirmDialog.value = false
     announcementToDelete.value = null
+  }
+
+  const editAnnouncement = (announcement: Announcement) => {
+    selectedAnnouncement.value = announcement
+    showEditForm.value = true
   }
 
   const itemsPerPage = props.itemsPerPage || 5
@@ -73,18 +80,37 @@
           <AnnouncementCard :announcement="item" />
         </div>
 
-        <!-- Delete button -->
-        <v-btn
-          v-if="canDelete"
-          icon="mdi-delete"
-          color="red"
-          variant="text"
-          @click.stop="confirmDelete(item)"
-        />
+        <div class="flex flex-col gap-1">
+          <!-- Delete button -->
+          <v-btn
+            v-if="canDelete"
+            icon="mdi-delete"
+            color="red"
+            variant="text"
+            size="small"
+            @click.stop="confirmDelete(item)"
+          />
+          <!-- Edit button -->
+          <v-btn
+            v-if="canDelete"
+            icon="mdi-pencil"
+            color="black"
+            variant="text"
+            size="small"
+            @click.stop="editAnnouncement(item)"
+          />
+        </div>
       </div>
 
       <!-- Popup -->
       <AnnouncementPopup v-model:show="showPopup" :announcement="selectedAnnouncement" />
+
+      <!-- Edit Form -->
+      <AnnouncementForm
+        v-model="showEditForm"
+        :editMode="true"
+        :announcement="selectedAnnouncement"
+      />
 
       <!-- Pagination (no ellipsis for now) -->
       <div class="flex justify-center items-center gap-2 mt-6">

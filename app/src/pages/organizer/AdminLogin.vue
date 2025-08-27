@@ -54,23 +54,25 @@
       <v-form ref="formRef" v-slot="{ isValid }" @submit.prevent="login">
         <v-text-field
           v-model="email"
-          :label="t('login.email')"
+          :placeholder="t('login.email')"
           :rules="[required, emailRule]"
           prepend-inner-icon="mdi-email"
           outlined
           dense
+          variant="solo"
           class="mb-6"
           :style="{ borderRadius: '0' }"
         />
 
         <v-text-field
           v-model="password"
-          :label="t('login.password')"
+          :placeholder="t('login.password')"
           :rules="[required]"
           type="password"
           prepend-inner-icon="mdi-lock"
           outlined
           dense
+          variant="solo"
           class="mb-6"
           :style="{ borderRadius: '0' }"
         />

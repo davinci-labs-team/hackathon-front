@@ -14,7 +14,7 @@ export const announcements: Announcement[] = [
     tags: ['2025', 'Public'],
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin id pharetra sem. Donec ut congue mauris, ut varius quam. Morbi eu nisl eu dolor elementum dapibus eu ac dolor. Mauris ultrices quis est at consequat. In hendrerit massa eu lorem mollis, sed malesuada nisi fermentum. Vivamus luctus euismod mi, in pulvinar ligula. In hac habitasse platea dictumst. Donec interdum nulla ac neque eleifend mattis. Suspendisse elementum est vel aliquet viverra.',
-    isPrivate: false,
+    isPrivate: true,
   },
   {
     title: "Cérémonie d'ouverture",
