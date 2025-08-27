@@ -21,7 +21,15 @@
 <template>
   <v-card class="announcement-card mb-4 p-4 flex flex-col md:flex-row gap-4" @click="handleClick">
     <div class="flex-1">
-      <h3 class="text-lg font-bold">{{ announcement.title }}</h3>
+      <div class="flex items-center gap-2 mb-2">
+        <h3 class="text-lg font-bold">{{ announcement.title }}</h3>
+        <v-icon 
+          v-if="announcement.isPrivate"
+          color="black"
+          size="18">
+            mdi-lock
+        </v-icon>
+      </div>
       <div class="flex items-center gap-2">
         <p class="text-sm text-gray-600">
           {{ t('announcements.writtenBy') }}

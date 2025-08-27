@@ -65,17 +65,17 @@
   }
 
   watch(
-  () => localModelValue.value,
-  (open) => {
-    if (open && props.editMode && props.announcement) {
-      title.value = props.announcement.title
-      description.value = props.announcement.description
-      tags.value = props.announcement.tags.join(', ')
-      isPrivate.value = props.announcement.isPrivate
-    }
-  },
-  { immediate: true } // <- Important !
-)
+    () => localModelValue.value,
+    (open) => {
+      if (open && props.editMode && props.announcement) {
+        title.value = props.announcement.title
+        description.value = props.announcement.description
+        tags.value = props.announcement.tags.join(', ')
+        isPrivate.value = props.announcement.isPrivate
+      }
+    },
+    { immediate: true } // <- Important !
+  )
 </script>
 
 <template>
@@ -116,6 +116,7 @@
             v-model="isPrivate"
             :label="isPrivate ? t('announcements.private') : t('announcements.public')"
             :hint="isPrivate ? t('announcements.privateHint') : t('announcements.publicHint')"
+            color="blue"
           />
 
           <v-card-actions class="justify-center">
