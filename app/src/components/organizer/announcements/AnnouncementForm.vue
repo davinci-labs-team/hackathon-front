@@ -2,41 +2,49 @@
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Announcement } from '@/types/announcement'
+import { supabase } from '@/services/supabase'
 
 const { t } = useI18n()
 
+// -----------------------------
+// Props & Emits
+// -----------------------------
 const props = defineProps({
   modelValue: Boolean,
-  editMode: {
-    type: Boolean,
-    default: false,
-  },
-  announcement: {
-    type: Object as () => Announcement | null,
-    default: null,
-  },
+  editMode: { type: Boolean, default: false },
+  announcement: { type: Object as () => Announcement | null, default: null },
 })
 const emit = defineEmits(['update:modelValue', 'save'])
 
+// -----------------------------
+// Dialog state
+// -----------------------------
 const localModelValue = ref(props.modelValue)
-watch(
-  () => props.modelValue,
-  (val) => (localModelValue.value = val)
-)
-watch(localModelValue, (val) => emit('update:modelValue', val))
+watch(() => props.modelValue, val => (localModelValue.value = val))
+watch(localModelValue, val => emit('update:modelValue', val))
 
-const formRef = ref()
+// -----------------------------
+// Form state
+// -----------------------------
 const title = ref('')
 const description = ref('')
 const tags = ref('')
 const isPrivate = ref(false)
-const images = ref<File[]>([]) // nouvelles images
 
+// -----------------------------
+// Images
+// -----------------------------
+const newImages = ref<File[]>([])       // fichiers locaux ajoutés
+const existingImages = ref<string[]>([]) // URLs existantes
+
+// -----------------------------
+// Validation
+// -----------------------------
 const required = (v: string | null | undefined) => !!v || t('common.fieldRequired')
 
 const validateImages = (files: File[] | null) => {
   if (!files) return true
-  if (files.length > 3) return t('announcements.max3Images')
+  if ((files.length + existingImages.value.length) > 3) return t('announcements.max3Images')
   for (const f of files) {
     if (f.size > 3 * 1024 * 1024) return t('announcements.max3MB')
     if (!f.type.startsWith('image/')) return t('announcements.onlyImages')
@@ -44,57 +52,97 @@ const validateImages = (files: File[] | null) => {
   return true
 }
 
-const close = () => {
-  localModelValue.value = false
+// -----------------------------
+// Image helpers
+// -----------------------------
+const getPreviewUrl = (file: File) => URL.createObjectURL(file)
+const removeNewImage = (i: number) => newImages.value.splice(i, 1)
+const removeExistingImage = (i: number) => existingImages.value.splice(i, 1)
+
+const onFileInputChange = (files: File | File[] | null) => {
+  if (!files) return
+  const newFiles = Array.isArray(files) ? files : [files]
+  const combined = [...newImages.value, ...newFiles]
+
+  if (combined.length + existingImages.value.length > 3) {
+    alert(t('announcements.max3Images'))
+    return
+  }
+
+  newImages.value = combined
+}
+
+// -----------------------------
+// Form actions
+// -----------------------------
+const resetForm = () => {
   title.value = ''
   description.value = ''
   tags.value = ''
   isPrivate.value = false
-  images.value = []
+  newImages.value = []
+  existingImages.value = []
 }
 
-const save = () => {
-  if (!title.value || !description.value) {
-    formRef.value?.validate()
-    return
+const close = () => {
+  localModelValue.value = false
+  resetForm()
+}
+
+// -----------------------------
+// Upload images to Supabase
+// -----------------------------
+const uploadImages = async (files: File[]): Promise<string[]> => {
+  const urls: string[] = []
+  for (const file of files) {
+    const filePath = `announcements/${Date.now()}-${file.name}`
+    const { error } = await supabase.storage.from('your-bucket').upload(filePath, file)
+    if (!error) {
+      const { data: publicUrlData } = supabase.storage.from('your-bucket').getPublicUrl(filePath)
+      if (publicUrlData?.publicUrl) urls.push(publicUrlData.publicUrl)
+    }
   }
+  return urls
+}
+
+// -----------------------------
+// Save announcement
+// -----------------------------
+const save = async () => {
+  if (!title.value || !description.value) return
+
+  const uploadedUrls = await uploadImages(newImages.value)
+  const allUrls = [...existingImages.value, ...uploadedUrls]
 
   const newAnnouncement: Announcement = {
+    id: props.announcement?.id,
     title: title.value,
     description: description.value,
-    tags: tags.value
-      .split(',')
-      .map((tag) => tag.trim())
-      .filter((tag) => tag.length > 0),
+    tags: tags.value.split(',').map(t => t.trim()).filter(t => t),
     isPrivate: isPrivate.value,
     publishedDate: props.announcement?.publishedDate || new Date().toISOString(),
     lastModified: new Date().toISOString(),
     author: 'Current User',
-    // tu peux inclure directement les fichiers ou les transformer en base64/URL
-    images: images.value, 
+    images: allUrls,
   }
 
   emit('save', newAnnouncement)
   close()
 }
 
-const getPreviewUrl = (file: File) => {
-  return URL.createObjectURL(file)
-}
-
-const removeImage = (index: number) => {
-  images.value.splice(index, 1)
-}
-
+// -----------------------------
+// Initialize form when dialog opens
+// -----------------------------
 watch(
   () => localModelValue.value,
-  (open) => {
+  open => {
     if (open && props.editMode && props.announcement) {
       title.value = props.announcement.title
       description.value = props.announcement.description
       tags.value = props.announcement.tags.join(', ')
       isPrivate.value = props.announcement.isPrivate
-      images.value = [] // si tu veux charger les anciennes images, gère-les ici
+      newImages.value = []
+      existingImages.value = props.announcement.images || []
     }
   },
   { immediate: true }
@@ -138,35 +186,48 @@ watch(
           />
 
           <v-file-input
-            v-model="images"
-            accept="image/*"
+            accept=".png, .jpg, .jpeg"
             multiple
-            counter
+            :counter-string="newImages.length + existingImages.length + ' / 3 ' + t('announcements.images')"
             :rules="[validateImages]"
-            prepend-icon="mdi-image"
             :label="t('announcements.images')"
-            hide-details="auto" 
+            prepend-icon="mdi-image"
             variant="solo"
             class="mb-4"
+            @update:modelValue="onFileInputChange"
           />
 
-          <!-- Preview des images sélectionnées -->
-          <div v-if="images.length" class="flex flex-wrap gap-4 mb-4">
+          <!-- Preview -->
+          <div class="flex flex-wrap gap-4 mb-4">
+            <!-- New local images -->
             <div
-              v-for="(file, index) in images"
-              :key="index"
-              class="relative w-40 h-40 border rounded-lg overflow-hidden"
+              v-for="(file, index) in newImages"
+              :key="file.name"
+              class="relative w-32 h-32 border rounded-lg overflow-hidden"
             >
-              <img
-                :src="getPreviewUrl(file)"
-                class="object-cover w-full h-full"
-                alt="preview"
-              />
+              <img :src="getPreviewUrl(file)" class="object-cover w-full h-full" />
               <v-btn
                 icon
                 small
                 class="absolute top-0 right-0 bg-white/60"
-                @click="removeImage(index)"
+                @click="removeNewImage(index)"
+              >
+                <v-icon small color="red">mdi-close</v-icon>
+              </v-btn>
+            </div>
+
+            <!-- Existing images -->
+            <div
+              v-for="(url, index) in existingImages"
+              :key="url"
+              class="relative w-32 h-32 border rounded-lg overflow-hidden"
+            >
+              <img :src="url" class="object-cover w-full h-full" />
+              <v-btn
+                icon
+                small
+                class="absolute top-0 right-0 bg-white/60"
+                @click="removeExistingImage(index)"
               >
                 <v-icon small color="red">mdi-close</v-icon>
               </v-btn>

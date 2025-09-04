@@ -21,18 +21,18 @@
   const emailRule = (v: string) => /.+@.+\..+/.test(v) || t('common.invalidEmail')
 
   const handleLogin = async () => {
-  if (!formRef.value?.isValid) return
+    if (!formRef.value?.isValid) return
 
-  try {
-    const user = await loginWithSupabase(email.value, password.value)
-    console.log('Logged in user:', user)
-    error.value = false
-    router.push('/user/dashboard')
-  } catch (err) {
-    console.error('Login error:', err)
-    error.value = true
+    try {
+      const user = await loginWithSupabase(email.value, password.value)
+      console.log('Logged in user:', user)
+      error.value = false
+      router.push('/user/dashboard')
+    } catch (err) {
+      console.error('Login error:', err)
+      error.value = true
+    }
   }
-}
 </script>
 
 <template>

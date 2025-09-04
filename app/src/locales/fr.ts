@@ -1,4 +1,4 @@
-import { logout } from "@/services/authService";
+import { logout } from '@/services/authService'
 
 export default {
   common: {

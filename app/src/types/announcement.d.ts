@@ -6,6 +6,6 @@ export interface Announcement {
   lastModified?: string
   tags: string[]
   description: string
-  images?: File[]
+  images?: string[]
   isPrivate: boolean
 }

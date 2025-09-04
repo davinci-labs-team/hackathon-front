@@ -20,18 +20,17 @@
   })
 
   const handleLogout = async () => {
-  try {
-    await logout()
-    if (isAdminPlatform.value) {
-      router.push('/admin-login')
-    } else {
-      router.push('/login')
+    try {
+      await logout()
+      if (isAdminPlatform.value) {
+        router.push('/admin-login')
+      } else {
+        router.push('/login')
+      }
+    } catch (err) {
+      console.error('Logout error:', err)
     }
-  } catch (err) {
-    console.error('Logout error:', err)
   }
-}
-  
 </script>
 
 <template>
@@ -42,7 +41,7 @@
         <p class="mt-4 text-lg">{{ userName }}</p>
       </v-col>
       <!-- Logout button -->
-       <v-col cols="12" md="8" lg="6" class="text-right">
+      <v-col cols="12" md="8" lg="6" class="text-right">
         <v-btn color="primary" @click="handleLogout">
           {{ t(`common.logout`) }}
         </v-btn>
