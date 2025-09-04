@@ -7,10 +7,10 @@
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-purple-50 justify-between">
+  <div class="min-h-screen flex flex-col bg-white">
     <NavBarUser />
 
-    <main class="p-4">
+    <main class="p-4 flex-grow">
       <router-view />
     </main>
 
