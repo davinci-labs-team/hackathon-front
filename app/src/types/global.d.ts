@@ -4,7 +4,7 @@ declare global {
   interface SupabaseDecodedUser {
     sub: string
     email: string
-    phone?: string
+    name: string
     role: UserRole
     session_id: string
     is_anonymous: boolean

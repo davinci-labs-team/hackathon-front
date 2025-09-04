@@ -1,3 +1,5 @@
+import { logout } from "@/services/authService";
+
 export default {
   common: {
     close: 'Fermer',
@@ -12,6 +14,7 @@ export default {
     delete: 'Supprimer',
     edit: 'Modifier',
     create: 'Créer',
+    logout: 'Se déconnecter',
   },
   hackathon: {
     title: 'Qubit or Not Qubit',

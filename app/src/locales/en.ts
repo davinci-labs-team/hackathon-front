@@ -12,6 +12,7 @@ export default {
     delete: 'Delete',
     edit: 'Edit',
     create: 'Create',
+    logout: 'Logout',
   },
   hackathon: {
     title: 'Qubit or Not Qubit',
