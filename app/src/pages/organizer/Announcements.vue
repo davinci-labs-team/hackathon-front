@@ -4,7 +4,7 @@
   import Announcements from '@/components/common/Announcements.vue'
   import { announcements as allAnnouncements } from '@/tests/data/announcements'
   import AnnouncementForm from '@/components/organizer/announcements/AnnouncementForm.vue'
-  import type { Announcement } from '@/types/announcement'
+  import type { AnnouncementDTO } from '@/types/announcement'
 
   const { t } = useI18n()
 
@@ -28,7 +28,7 @@
     showAddPopup.value = true
   }
 
-  const handleSave = (newAnnouncement: Announcement) => {
+  const handleSave = (newAnnouncement: AnnouncementDTO) => {
     // Ici tu gères l'ajout réel (push dans une liste, appel API, etc)
     console.log('Nouvelle annonce sauvegardée:', newAnnouncement)
     showAddPopup.value = false

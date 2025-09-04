@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { Announcement } from '@/types/announcement'
+  import { AnnouncementDTO } from '@/types/announcement'
   import AnnouncementPopup from '@/components/common/AnnouncementPopup.vue'
   import AnnouncementCard from '@/components/common/AnnouncementCard.vue'
   import AnnouncementForm from '@/components/organizer/announcements/AnnouncementForm.vue'
@@ -9,16 +9,16 @@
   const { t } = useI18n()
 
   const props = defineProps<{
-    announcements: Announcement[]
+    announcements: AnnouncementDTO[]
     itemsPerPage?: number
     canDelete?: boolean // or edit (is the user the author of the announcement)
   }>()
 
-  const announcementToDelete = ref<Announcement | null>(null)
+  const announcementToDelete = ref<AnnouncementDTO | null>(null)
   const showConfirmDialog = ref(false)
   const showEditForm = ref(false)
 
-  const confirmDelete = (announcement: Announcement) => {
+  const confirmDelete = (announcement: AnnouncementDTO) => {
     announcementToDelete.value = announcement
     showConfirmDialog.value = true
   }
@@ -31,7 +31,7 @@
     announcementToDelete.value = null
   }
 
-  const editAnnouncement = (announcement: Announcement) => {
+  const editAnnouncement = (announcement: AnnouncementDTO) => {
     selectedAnnouncement.value = announcement
     showEditForm.value = true
   }
@@ -53,9 +53,9 @@
   }
 
   const showPopup = ref(false)
-  const selectedAnnouncement = ref<Announcement | null>(null)
+  const selectedAnnouncement = ref<AnnouncementDTO | null>(null)
 
-  const openPopup = (announcement: Announcement) => {
+  const openPopup = (announcement: AnnouncementDTO) => {
     selectedAnnouncement.value = announcement
     showPopup.value = true
   }

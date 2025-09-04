@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import { Announcement } from '@/types/announcement'
+  import { AnnouncementDTO } from '@/types/announcement'
   import { useI18n } from 'vue-i18n'
   import { timeAgo } from '@/utils/dateUtils'
 
   const { t, locale } = useI18n()
 
   const props = defineProps<{
-    announcement: Announcement
+    announcement: AnnouncementDTO
   }>()
 
   const emit = defineEmits<{
-    (e: 'click', announcement: Announcement): void
+    (e: 'click', announcement: AnnouncementDTO): void
   }>()
 
   const handleClick = () => {
@@ -29,7 +29,7 @@
         <p class="text-sm text-gray-600">
           {{ t('announcements.writtenBy') }}
           <span class="font-semibold">{{ announcement.author }}</span>
-          {{ timeAgo(announcement.publishedDate, locale) }}
+          {{ timeAgo(announcement.createdAt, locale) }}
         </p>
         <div class="flex gap-2">
           <v-chip
@@ -48,11 +48,11 @@
     </div>
 
     <div
-      v-if="announcement.images && announcement.images?.length > 0"
+      v-if="announcement.existingImages && announcement.existingImages?.length > 0"
       class="flex gap-2 overflow-x-auto items-center"
     >
       <v-img
-        v-for="(img, idx) in announcement.images"
+        v-for="(img, idx) in announcement.existingImages"
         :key="idx"
         :src="img"
         class="rounded-lg w-32 h-32 object-cover"

@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
-  import { Announcement } from '@/types/announcement'
+  import { AnnouncementDTO } from '@/types/announcement'
   import { newTabImage } from '@/utils/imageUtils'
   import { timeAgo } from '@/utils/dateUtils'
 
   const { t, locale } = useI18n()
   const props = defineProps<{
-    announcement: Announcement | null
+    announcement: AnnouncementDTO | null
     show: boolean
   }>()
 
@@ -28,7 +28,7 @@
           <p class="text-sm text-gray-600">
             {{ t(`announcements.writtenBy`) }}
             <span class="font-semibold">{{ props.announcement.author }}</span>
-            {{ timeAgo(props.announcement.publishedDate, locale) }}
+            {{ timeAgo(props.announcement.createdAt, locale) }}
           </p>
           <div class="flex gap-2">
             <v-chip
@@ -48,9 +48,9 @@
           {{ props.announcement.description }}
         </p>
 
-        <div v-if="props.announcement.images?.length" class="flex gap-2 overflow-x-auto mt-4">
+        <div v-if="props.announcement.existingImages?.length" class="flex gap-2 overflow-x-auto mt-4">
           <v-img
-            v-for="(img, idx) in props.announcement.images"
+            v-for="(img, idx) in props.announcement.existingImages"
             :key="idx"
             :src="img"
             class="rounded-lg w-40 h-40 object-cover"
