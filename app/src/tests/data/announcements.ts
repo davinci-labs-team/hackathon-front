@@ -15,7 +15,7 @@ export const announcements: AnnouncementDTO[] = [
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin id pharetra sem. Donec ut congue mauris, ut varius quam. Morbi eu nisl eu dolor elementum dapibus eu ac dolor. Mauris ultrices quis est at consequat. In hendrerit massa eu lorem mollis, sed malesuada nisi fermentum. Vivamus luctus euismod mi, in pulvinar ligula. In hac habitasse platea dictumst. Donec interdum nulla ac neque eleifend mattis. Suspendisse elementum est vel aliquet viverra.',
     isPrivate: true,
-    existingImages: []
+    existingImages: [],
   },
   {
     title: "Cérémonie d'ouverture",
@@ -25,7 +25,7 @@ export const announcements: AnnouncementDTO[] = [
     description:
       'Sed pellentesque lacus in ullamcorper bibendum. Vestibulum sit amet ipsum semper lacus pharetra vulputate. Ut sed aliquam dui, ut ornare nisl. Vivamus pretium ligula in diam bibendum tincidunt ut eget quam.',
     isPrivate: false,
-    existingImages: []
+    existingImages: [],
   },
   {
     title: 'Ouverture des inscriptions',
@@ -35,7 +35,7 @@ export const announcements: AnnouncementDTO[] = [
     description:
       'Donec quam ligula, molestie ut vulputate nec, tincidunt nec tortor. Aliquam consequat eu mi sed cursus. Duis porttitor lorem vitae risus tincidunt sagittis. Nulla efficitur urna vel lacus fermentum, quis congue mi varius. Vivamus fringilla laoreet odio quis feugiat. Donec et massa suscipit, porttitor mi a, posuere erat.',
     isPrivate: false,
-    existingImages: []
+    existingImages: [],
   },
   {
     title: 'Nos partenaires',
@@ -55,7 +55,7 @@ export const announcements: AnnouncementDTO[] = [
     description:
       'Donec sollicitudin vestibulum sagittis. Curabitur sit amet faucibus tellus, vel vestibulum magna. Sed in tortor erat. Morbi bibendum purus vitae lacus faucibus cursus. Integer pellentesque quis metus in porta. Donec pharetra ultrices auctor.',
     isPrivate: false,
-    existingImages: []
+    existingImages: [],
   },
   {
     title: 'Annonce spéciale 2',
@@ -65,7 +65,7 @@ export const announcements: AnnouncementDTO[] = [
     description:
       'Suspendisse eu orci sed elit scelerisque pharetra et ut metus. Sed consequat tortor felis, sit amet egestas felis dignissim vitae. Sed consectetur eu ligula sit amet pulvinar. Nulla facilisis turpis a lacus posuere luctus.',
     isPrivate: false,
-    existingImages: []
+    existingImages: [],
   },
   {
     title: 'Annonce spéciale 3',
@@ -75,7 +75,7 @@ export const announcements: AnnouncementDTO[] = [
     description:
       'Morbi pretium luctus mattis. Integer tristique orci ut velit elementum egestas. Aliquam aliquam sit amet est in accumsan. Nam pretium quis felis ac rutrum. Vestibulum ut risus arcu. Mauris semper purus eu malesuada pellentesque. Integer non euismod quam. Sed sit amet massa lectus. Integer vehicula bibendum sapien eu vestibulum.',
     isPrivate: false,
-    existingImages: []
+    existingImages: [],
   },
   {
     title: 'Annonce spéciale 4',
@@ -85,6 +85,6 @@ export const announcements: AnnouncementDTO[] = [
     description:
       'Duis eget bibendum quam, at porttitor lectus. Fusce at ipsum sed lectus mollis facilisis vel in enim. Curabitur cursus, arcu et viverra porttitor, elit libero mattis augue, at lobortis erat tellus sit amet orci. Ut venenatis eleifend dui at dignissim.',
     isPrivate: false,
-    existingImages: []
+    existingImages: [],
   },
 ]

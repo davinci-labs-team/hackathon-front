@@ -48,7 +48,10 @@
           {{ props.announcement.description }}
         </p>
 
-        <div v-if="props.announcement.existingImages?.length" class="flex gap-2 overflow-x-auto mt-4">
+        <div
+          v-if="props.announcement.existingImages?.length"
+          class="flex gap-2 overflow-x-auto mt-4"
+        >
           <v-img
             v-for="(img, idx) in props.announcement.existingImages"
             :key="idx"
