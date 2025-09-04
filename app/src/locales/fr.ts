@@ -57,6 +57,8 @@ export default {
     noContent: 'Aucune annonce disponible',
     confirmTitle: 'Confirmer la Suppression',
     confirmText: 'Êtes-vous sûr de vouloir supprimer cette annonce ?',
+    images: 'Ajouter des images',
+    max3Images: 'Vous pouvez ajouter jusqu’à 3 images.',
   },
 
   // Roles sections

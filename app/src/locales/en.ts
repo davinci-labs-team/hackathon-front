@@ -53,6 +53,8 @@ export default {
     noContent: 'No announcements available',
     confirmTitle: 'Confirm Deletion',
     confirmText: 'Are you sure you want to delete this announcement?',
+    images: 'Upload Images',
+    max3Images: 'You can upload up to 3 images.',
   },
   // Roles sections
   organizer: {
