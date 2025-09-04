@@ -4,6 +4,7 @@
   import { useI18n } from 'vue-i18n'
   import { useAuthStore } from '@/stores/auth'
   import { UserRole } from '@/types/roles'
+  import { loginWithSupabase } from '@/services/authService'
 
   const { t } = useI18n()
   const router = useRouter()
@@ -17,28 +18,21 @@
   const required = (v: string) => !!v || t('common.fieldRequired')
   const emailRule = (v: string) => /.+@.+\..+/.test(v) || t('common.invalidEmail')
 
-  const login = () => {
+  const handleLogin = async () => {
     if (!formRef.value?.isValid) return
 
-    // Exemple simple : ici tu peux remplacer par appel API réel
-    if (email.value === 'admin@example.com' && password.value === 'admin') {
+    try {
+      const user = await loginWithSupabase(email.value, password.value, true)
+
       error.value = false
 
-      // Création d’un objet user simulé avec rôle admin
-      const user = {
-        sub: 'admin-uuid-1234',
-        email: email.value,
-        phone: '',
-        role: UserRole.ORGANIZER,
-        session_id: 'session-uuid-1234',
-        is_anonymous: false,
+      if (user.role === UserRole.ORGANIZER) {
+        router.push('/organizer/announcements')
+      } else {
+        router.push('/')
       }
-
-      // On sauvegarde dans le store
-      authStore.login(user)
-
-      router.push('/organizer/announcements')
-    } else {
+    } catch (err) {
+      console.error(err)
       error.value = true
     }
   }
@@ -51,7 +45,7 @@
         {{ t('login.organizerTitle') }}
       </h2>
 
-      <v-form ref="formRef" v-slot="{ isValid }" @submit.prevent="login">
+      <v-form ref="formRef" v-slot="{ isValid }" @submit.prevent="handleLogin">
         <v-text-field
           v-model="email"
           :placeholder="t('login.email')"

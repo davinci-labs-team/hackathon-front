@@ -23,12 +23,7 @@
     <div class="flex-1">
       <div class="flex items-center gap-2 mb-2">
         <h3 class="text-lg font-bold">{{ announcement.title }}</h3>
-        <v-icon 
-          v-if="announcement.isPrivate"
-          color="black"
-          size="18">
-            mdi-lock
-        </v-icon>
+        <v-icon v-if="announcement.isPrivate" color="black" size="18"> mdi-lock </v-icon>
       </div>
       <div class="flex items-center gap-2">
         <p class="text-sm text-gray-600">

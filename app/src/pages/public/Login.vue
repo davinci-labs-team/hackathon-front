@@ -4,6 +4,7 @@
   import { useI18n } from 'vue-i18n'
   import { useAuthStore } from '@/stores/auth'
   import { UserRole } from '@/types/roles'
+  import { loginWithSupabase } from '@/services/authService'
 
   const { t } = useI18n()
   const router = useRouter()
@@ -19,33 +20,19 @@
   const required = (v: string) => !!v || t('common.fieldRequired')
   const emailRule = (v: string) => /.+@.+\..+/.test(v) || t('common.invalidEmail')
 
-  // Fonction de login
-  const login = () => {
-    if (!formRef.value?.validate()) return
+  const handleLogin = async () => {
+  if (!formRef.value?.isValid) return
 
-    // Simulation d'authentification
-    if (email.value === 'user@example.com' && password.value === 'user') {
-      error.value = false
-
-      // Créons un faux utilisateur (mock) respectant SupabaseDecodedUser
-      const mockUser: SupabaseDecodedUser = {
-        sub: 'cc31ac03-58ef-4821-a445-61f289882e36',
-        email: email.value,
-        phone: '',
-        role: UserRole.ORGANIZER,
-        session_id: crypto.randomUUID(),
-        is_anonymous: false,
-      }
-
-      // Stockage de l'utilisateur dans le store (et localStorage via store)
-      authStore.login(mockUser)
-
-      // Redirection vers le dashboard
-      router.push('/user/dashboard')
-    } else {
-      error.value = true
-    }
+  try {
+    const user = await loginWithSupabase(email.value, password.value)
+    console.log('Logged in user:', user)
+    error.value = false
+    router.push('/user/dashboard')
+  } catch (err) {
+    console.error('Login error:', err)
+    error.value = true
   }
+}
 </script>
 
 <template>
@@ -53,7 +40,7 @@
     <v-card class="p-6 space-y-6" style="width: 500px">
       <h2 class="text-2xl font-semibold text-center">{{ t('login.title') }}</h2>
 
-      <v-form ref="formRef" @submit.prevent="login">
+      <v-form ref="formRef" @submit.prevent="handleLogin">
         <v-text-field
           v-model="email"
           :placeholder="t('login.email')"

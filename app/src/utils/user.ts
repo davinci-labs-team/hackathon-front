@@ -6,7 +6,7 @@ export function getRole(): UserRole {
 }
 
 export function getTPrefix(role: UserRole, userPlateform: boolean): string {
-  switch (role) {
+  switch (role.toLowerCase()) {
     case UserRole.ORGANIZER:
       return userPlateform ? 'participant' : 'organizer'
     case UserRole.JURY:
