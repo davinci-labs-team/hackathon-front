@@ -5,7 +5,7 @@
   import Partners from '@/components/organizer/settings/Partners.vue'
 import PlanningEditor from '@/components/organizer/settings/PlanningEditor.vue'
   import SocialMedia from '@/components/organizer/settings/SocialMedia.vue'
-  import Texts from '@/components/organizer/settings/Texts.vue'
+  import Texts from '@/components/organizer/settings/Texts_FAQ.vue'
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   const { t } = useI18n()
