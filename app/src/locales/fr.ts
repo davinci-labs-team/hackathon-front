@@ -238,7 +238,8 @@ export default {
     subtitle: "Gérez les questions fréquemment posées dans l'application",
     question: 'Question',
     answer: 'Réponse',
-    addQuestion: '+ Ajouter une question',
+    addQuestionBtn: '+ Ajouter une question',
+    addQuestion: 'Nouvelle Question',
     editQuestion: 'Modifier la question',
     deleteQuestion: 'Supprimer la question',
     confirmTitle: 'Confirmer la suppression',
@@ -262,5 +263,13 @@ export default {
   planningSettings: {
     title: 'Dates & Planning',
     subtitle: "Gérez le planning de l'événement et les sessions",
+  },
+
+  // FAQ Section
+  faq: {
+    title: 'Foire Aux Questions',
+    noQuestions: 'Aucune question disponible pour le moment.',
+    question: 'Question',
+    answer: 'Réponse',
   },
 }

@@ -2,6 +2,8 @@
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
+  import { FAQItemDTO } from '@/types/faq'
+  import FAQForm from '@/components/organizer/faq/FAQForm.vue'
   const { t } = useI18n()
 
   // TODO: Fetch infos from backend
@@ -30,6 +32,12 @@
     snackbar.value = true
     console.log('Saving changes...')
   }
+
+  const faqs = ref<FAQItemDTO[]>([])
+
+  // State of the FAQ form dialog
+  const showFAQForm = ref(false)
+  const editFAQItem = ref<FAQItemDTO | null>(null)
 </script>
 
 <template>
@@ -84,18 +92,61 @@
         class="mb-2"
       />
 
-      <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout"/>
-
+      <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" />
     </v-container>
 
     <h1 class="text-3xl font-bold mb-2">{{ t('faqSettings.title') }}</h1>
     <div class="flex-direction-row mb-5 flex items-center justify-between">
       <p class="mb-0 text-lg text-gray-600">{{ t('faqSettings.subtitle') }}</p>
-      <v-btn color="primary">{{ t('faqSettings.addQuestion') }}</v-btn>
+
+      <v-btn color="primary" @click="showFAQForm = true">
+        {{ t('faqSettings.addQuestionBtn') }}
+      </v-btn>
     </div>
     <!-- Content for managing FAQ will go here -->
-     <v-container>
-        <!-- List of QA cards-->
-     </v-container>
+    <div v-if="faqs.length === 0" class="text-center text-gray-600 my-10">
+      {{ t('faqSettings.noQuestions') }}
+    </div>
+    <v-container>
+      <div v-for="(faq, index) in faqs" :key="index" class="mb-4 p-4 border rounded">
+        <p class="font-bold">{{ faq.question }}</p>
+        <p>{{ faq.answer }}</p>
+        <v-btn
+          text
+          small
+          color="blue"
+          @click="
+            () => {
+                editFAQItem = faq
+                showFAQForm = true
+            }
+          "
+        >
+          {{ t('common.edit') }}
+        </v-btn>
+      </div>
+    </v-container>
+
+    <FAQForm
+      v-model="showFAQForm"
+      :editMode="!!editFAQItem"
+      :faqItem="editFAQItem"
+      @close="editFAQItem = null"
+      @save="
+        (faqItem: FAQItemDTO) => {
+          if (editFAQItem) {
+            // Edit existing FAQ item
+            const index = faqs.findIndex((item) => item.id === faqItem.id)
+            if (index !== -1) {
+              faqs[index] = faqItem
+            }
+          } else {
+            // Add new FAQ item
+            faqs.push(faqItem)
+          }
+          editFAQItem = null
+        }
+      "
+    />
   </v-container>
 </template>

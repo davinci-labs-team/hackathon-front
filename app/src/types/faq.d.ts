@@ -1,6 +1,6 @@
-export interface faqDTO {
+export interface FAQItemDTO {
   id?: string
   question: string
   answer: string
-  isPublic: boolean
+  isPrivate: boolean
 }

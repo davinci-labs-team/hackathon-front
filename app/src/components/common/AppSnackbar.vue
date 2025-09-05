@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+  import { ref } from 'vue'
 
-const model = defineModel<boolean>({ required: true })
-defineProps<{
-  message: string
-  color?: string
-  timeout?: number
-  error?: boolean
-}>()
+  const model = defineModel<boolean>({ required: true })
+  defineProps<{
+    message: string
+    color?: string
+    timeout?: number
+    error?: boolean
+  }>()
 </script>
 
 <template>

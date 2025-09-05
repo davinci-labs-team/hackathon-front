@@ -140,7 +140,7 @@
 <template>
   <v-dialog v-model="localModelValue" max-width="800">
     <v-card>
-      <v-card-title class="text-lg font-bold">
+      <v-card-title class="text-lg font-bold px-6 pt-6">
         {{ props.editMode ? t('announcements.editTitle') : t('announcements.addTitle') }}
         <v-btn icon class="absolute top-2 right-2" @click="close" aria-label="Close">
           <v-icon>mdi-close</v-icon>

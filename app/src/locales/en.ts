@@ -207,6 +207,7 @@ export default {
     question: 'Question',
     answer: 'Answer',
     addQuestion: '+ Add Question',
+    addQuestionBtn: 'New Question',
     editQuestion: 'Edit Question',
     deleteQuestion: 'Delete Question',
     confirmTitle: 'Confirm Deletion',
@@ -230,5 +231,13 @@ export default {
   planningSettings: {
     title: 'Dates & Schedule',
     subtitle: 'Manage the event schedule and sessions',
+  },
+
+  // FAQ Section
+  faq: {
+    title: 'Frequently Asked Questions',
+    noQuestions: 'No questions available at the moment.',
+    question: 'Question',
+    answer: 'Answer',
   },
 }
