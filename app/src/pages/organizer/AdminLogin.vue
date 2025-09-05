@@ -13,6 +13,7 @@
   const email = ref('')
   const password = ref('')
   const error = ref(false)
+  const accessDenied = ref(false)
   const formRef = ref()
 
   const required = (v: string) => !!v || t('common.fieldRequired')
@@ -31,9 +32,12 @@
       } else {
         router.push('/')
       }
-    } catch (err) {
-      console.error(err)
-      error.value = true
+    } catch (err: any) {
+      if (err.message.includes('Access denied')) {
+        accessDenied.value = true
+      } else {
+        error.value = true
+      }
     }
   }
 </script>
@@ -81,6 +85,18 @@
           :style="{ borderRadius: '0' }"
         >
           {{ t('login.invalidCredentials') }}
+        </v-alert>
+
+        <v-alert
+          v-if="accessDenied"
+          type="warning"
+          dense
+          colored-border
+          elevation="1"
+          class="mb-6"
+          :style="{ borderRadius: '0' }"
+        >
+          {{ t('login.accessDenied') }}
         </v-alert>
 
         <v-btn

@@ -1,2 +1,0 @@
-<template><div>FAQ</div></template>
-<script setup lang="ts"></script>

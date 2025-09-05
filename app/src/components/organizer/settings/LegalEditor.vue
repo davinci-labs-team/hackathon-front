@@ -68,7 +68,8 @@
 
 <template>
   <v-container class="py-10 max-w-7xl mx-auto">
-    <h1 class="text-3xl font-bold mb-6">{{ t('legalEditor.title') }}</h1>
+    <h1 class="text-3xl font-bold mb-2">{{ t('legalEditor.title') }}</h1>
+    <p class="mb-10 text-lg text-gray-600">{{ t('legalEditor.subtitle') }}</p>
 
     <!-- Type of document toggle -->
     <div class="mb-6">

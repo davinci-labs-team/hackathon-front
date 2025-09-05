@@ -59,6 +59,7 @@ export default {
     email: 'Email',
     password: 'Password',
     invalidCredentials: 'Invalid email or password',
+    accessDenied: 'Access denied. Organizer area only.',
   },
   partners: {
     title: 'PARTNERS',
@@ -140,6 +141,7 @@ export default {
   // Settings
   legalEditor: {
     title: 'Legal Notice',
+    subtitle: 'Manage the legal documents of your hackathon',
     documentType: 'Type of document',
     privacyPolicy: 'Privacy Policy',
     termsConditions: 'Terms & Conditions',
@@ -173,5 +175,49 @@ export default {
       ],
     },
     alertExport: 'JSON generated in the console.',
+  },
+  texts_faq_title:"Texts & FAQ",
+  textsSettings: {
+    title: 'Texts',
+    subtitle: 'Manage the texts displayed on the user interface',
+  },
+  mediaSettings: {
+    title: 'Media',
+    subtitle: 'Manage images and videos used in the application',
+    logo: 'Logo',
+  },
+  partnersSettings: {
+    title: 'Partners',
+    subtitle: 'Manage the partners displayed in the application',
+  },
+  faqSettings: {
+    title: 'FAQ',
+    subtitle: 'Manage the Frequently Asked Questions displayed in the application',
+    question: 'Question',
+    answer: 'Answer',
+    addQuestion: '+ Add Question',
+    editQuestion: 'Edit Question',
+    deleteQuestion: 'Delete Question',
+    confirmTitle: 'Confirm Deletion',
+    confirmText: 'Are you sure you want to delete this question?',
+    noQuestions: 'No questions available.',
+  },
+  matchmakingSettings: {
+    title: 'Matchmaking',
+    subtitle: 'Configure the matchmaking settings for the hackathon',
+    enable: 'Enable Matchmaking',
+    disable: 'Disable Matchmaking',
+    criteria: 'Matchmaking Criteria',
+    addCriterion: '+ Add Criterion',
+    editCriterion: 'Edit Criterion',
+    deleteCriterion: 'Delete Criterion',
+  },
+  communicationSettings: {
+    title: 'Communication',
+    subtitle: 'Manage communication settings for the hackathon',
+  },
+  planningSettings: {
+    title: 'Dates & Schedule',
+    subtitle: 'Manage the event schedule and sessions',
   },
 }

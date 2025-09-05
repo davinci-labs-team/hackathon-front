@@ -62,6 +62,7 @@ export default {
     email: 'Email',
     password: 'Mot de passe',
     invalidCredentials: 'Email ou mot de passe invalide',
+    accessDenied: "Accès refusé. Espace organisateur uniquement.",
   },
   partners: {
     title: 'PARTENAIRES',
@@ -146,6 +147,7 @@ export default {
   // Settings
   legalEditor: {
     title: 'Mentions Légales',
+    subtitle: 'Gérez les documents légaux de votre hackathon',
     documentType: 'Type de document',
     privacyPolicy: 'Politique de Confidentialité',
     termsConditions: 'Conditions Générales',
@@ -206,5 +208,48 @@ export default {
       ],
     },
     alertExport: 'JSON généré dans la console.',
+  },
+  texts_faq_title: 'Textes & FAQ',
+  textsSettings: {
+    title: 'Textes',
+    subtitle: 'Gérez les textes affichés sur l\'interface utilisateur',
+  },
+  mediaSettings: {
+    title: 'Médias',
+    subtitle: 'Gérez les images et logos utilisés dans l\'application',
+  },
+  partnersSettings: {
+    title: 'Partenaires',
+    subtitle: 'Gérez les partenaires affichés dans l\'application',
+  },
+  faqSettings: {
+    title: 'FAQ',
+    subtitle: 'Gérez les questions fréquemment posées dans l\'application',
+    question: 'Question',
+    answer: 'Réponse',
+    addQuestion: '+ Ajouter une question',
+    editQuestion: 'Modifier la question',
+    deleteQuestion: 'Supprimer la question',
+    confirmTitle: 'Confirmer la suppression',
+    confirmText: 'Êtes-vous sûr de vouloir supprimer cette question ?',
+    noQuestions: 'Aucune question disponible.',
+  },
+  matchmakingSettings: {
+    title: 'Matchmaking',
+    subtitle: 'Configurez les paramètres de matchmaking pour le hackathon',
+    enable: 'Activer le Matchmaking',
+    disable: 'Désactiver le Matchmaking',
+    criteria: 'Critères de Matchmaking',
+    addCriterion: '+ Ajouter un critère',
+    editCriterion: 'Modifier le critère',
+    deleteCriterion: 'Supprimer le critère',
+  },
+  communicationSettings: {
+    title: 'Communication',
+    subtitle: 'Gérez les paramètres de communication pour le hackathon',
+  },
+  planningSettings: {
+    title: 'Dates & Planning',
+    subtitle: 'Gérez le planning de l\'événement et les sessions',
   },
 }
