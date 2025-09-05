@@ -47,7 +47,7 @@
       <p class="mb-0 text-lg text-gray-600">{{ t('textsSettings.subtitle') }}</p>
       <v-btn color="primary" @click="handleSave">{{ t('common.saveChanges') }}</v-btn>
     </div>
-    <!-- Content for managing texts will go here -->
+
     <v-container>
       <p class="mb-2 text-lg text-600">{{ t('textsSettings.hackathonName') }}</p>
       <v-text-field
@@ -103,10 +103,12 @@
         {{ t('faqSettings.addQuestionBtn') }}
       </v-btn>
     </div>
-    <!-- Content for managing FAQ will go here -->
+
     <div v-if="faqs.length === 0" class="text-center text-gray-600 my-10">
       {{ t('faqSettings.noQuestions') }}
     </div>
+
+    <!-- Next will be a component FAQ Item Card -->
     <v-container>
       <div v-for="(faq, index) in faqs" :key="index" class="mb-4 p-4 border rounded">
         <p class="font-bold">{{ faq.question }}</p>
