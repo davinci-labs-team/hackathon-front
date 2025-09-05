@@ -3,7 +3,7 @@
   import LegalEditor from '@/components/organizer/settings/LegalEditor.vue'
   import Matchmaking from '@/components/organizer/settings/Matchmaking.vue'
   import Partners from '@/components/organizer/settings/Partners.vue'
-import PlanningEditor from '@/components/organizer/settings/PlanningEditor.vue'
+  import PlanningEditor from '@/components/organizer/settings/PlanningEditor.vue'
   import SocialMedia from '@/components/organizer/settings/SocialMedia.vue'
   import Texts from '@/components/organizer/settings/Texts_FAQ.vue'
   import { ref } from 'vue'
@@ -25,7 +25,7 @@ import PlanningEditor from '@/components/organizer/settings/PlanningEditor.vue'
       <v-list nav dense>
         <v-list-item
           v-for="(label, key) in {
-            media: t('mediaSettings.title'), 
+            media: t('mediaSettings.title'),
             texts: t('texts_faq_title'),
             partners: t('partnersSettings.title'),
             dates: t('planningSettings.title'),

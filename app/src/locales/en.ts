@@ -12,6 +12,8 @@ export default {
     edit: 'Edit',
     create: 'Create',
     logout: 'Logout',
+    saveChanges: 'Save Changes',
+    changesSaved: 'Changes saved successfully',
   },
   profile: {
     mainTitle: 'My Profile',
@@ -176,10 +178,19 @@ export default {
     },
     alertExport: 'JSON generated in the console.',
   },
-  texts_faq_title:"Texts & FAQ",
+  texts_faq_title: 'Texts & FAQ',
   textsSettings: {
     title: 'Texts',
     subtitle: 'Manage the texts displayed on the user interface',
+    slogan: 'Slogan',
+    hackathonDescription: 'Hackathon Description',
+    hackathonName: 'Hackathon Name',
+    errors: {
+      sloganRequired: 'Slogan is required',
+      descriptionRequired: 'Description is required',
+      nameRequired: 'Name is required',
+      maxLength: 'Maximum length reached',
+    },
   },
   mediaSettings: {
     title: 'Media',

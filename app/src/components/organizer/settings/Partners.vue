@@ -1,12 +1,11 @@
 <script setup lang="ts">
-    import { useI18n } from 'vue-i18n'
-    const { t } = useI18n()
+  import { useI18n } from 'vue-i18n'
+  const { t } = useI18n()
 </script>
 
-
 <template>
-    <v-container class="py-10 max-w-7xl mx-auto">
-        <h1 class="text-3xl font-bold mb-2">{{ t('partnersSettings.title') }}</h1>
-        <p class="mb-10 text-lg text-gray-600">{{ t('partnersSettings.subtitle') }}</p>
-    </v-container>
+  <v-container class="py-10 max-w-7xl mx-auto">
+    <h1 class="text-3xl font-bold mb-2">{{ t('partnersSettings.title') }}</h1>
+    <p class="mb-10 text-lg text-gray-600">{{ t('partnersSettings.subtitle') }}</p>
+  </v-container>
 </template>

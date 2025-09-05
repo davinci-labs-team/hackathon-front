@@ -14,6 +14,8 @@ export default {
     edit: 'Modifier',
     create: 'Créer',
     logout: 'Se déconnecter',
+    saveChanges: 'Enregistrer les Modifications',
+    changesSaved: 'Modifications enregistrées avec succès',
   },
   profile: {
     mainTitle: 'Mon Profil',
@@ -62,7 +64,7 @@ export default {
     email: 'Email',
     password: 'Mot de passe',
     invalidCredentials: 'Email ou mot de passe invalide',
-    accessDenied: "Accès refusé. Espace organisateur uniquement.",
+    accessDenied: 'Accès refusé. Espace organisateur uniquement.',
   },
   partners: {
     title: 'PARTENAIRES',
@@ -212,19 +214,28 @@ export default {
   texts_faq_title: 'Textes & FAQ',
   textsSettings: {
     title: 'Textes',
-    subtitle: 'Gérez les textes affichés sur l\'interface utilisateur',
+    subtitle: "Gérez les textes affichés sur l'interface utilisateur",
+    slogan: 'Slogan',
+    hackathonDescription: 'Description du Hackathon',
+    hackathonName: 'Nom du Hackathon',
+    errors: {
+      sloganRequired: 'Le slogan est obligatoire.',
+      descriptionRequired: 'La description du hackathon est obligatoire.',
+      nameRequired: 'Le nom du hackathon est obligatoire.',
+      maxLength: 'La longueur maximale est dépassée.',
+    },
   },
   mediaSettings: {
     title: 'Médias',
-    subtitle: 'Gérez les images et logos utilisés dans l\'application',
+    subtitle: "Gérez les images et logos utilisés dans l'application",
   },
   partnersSettings: {
     title: 'Partenaires',
-    subtitle: 'Gérez les partenaires affichés dans l\'application',
+    subtitle: "Gérez les partenaires affichés dans l'application",
   },
   faqSettings: {
     title: 'FAQ',
-    subtitle: 'Gérez les questions fréquemment posées dans l\'application',
+    subtitle: "Gérez les questions fréquemment posées dans l'application",
     question: 'Question',
     answer: 'Réponse',
     addQuestion: '+ Ajouter une question',
@@ -250,6 +261,6 @@ export default {
   },
   planningSettings: {
     title: 'Dates & Planning',
-    subtitle: 'Gérez le planning de l\'événement et les sessions',
+    subtitle: "Gérez le planning de l'événement et les sessions",
   },
 }
