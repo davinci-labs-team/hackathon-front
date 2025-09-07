@@ -4,6 +4,8 @@
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { FAQItemDTO } from '@/types/faq'
   import FAQForm from '@/components/organizer/faq/FAQForm.vue'
+  import FAQItemCard from '../faq/FAQItemCard.vue'
+  import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
   const { t } = useI18n()
 
   // TODO: Fetch infos from backend
@@ -38,6 +40,21 @@
   // State of the FAQ form dialog
   const showFAQForm = ref(false)
   const editFAQItem = ref<FAQItemDTO | null>(null)
+
+  const faqToDelete = ref<FAQItemDTO | null>(null)
+  const showConfirmDialog = ref(false)
+
+  const confirmDelete = (faq: FAQItemDTO) => {
+    faqToDelete.value = faq
+    showConfirmDialog.value = true
+  }
+
+  const deleteFAQ = () => {
+    if (!faqToDelete.value) return
+    faqs.value = faqs.value.filter((f) => f.id !== faqToDelete.value?.id)
+    showConfirmDialog.value = false
+    faqToDelete.value = null
+  }
 </script>
 
 <template>
@@ -108,26 +125,28 @@
       {{ t('faqSettings.noQuestions') }}
     </div>
 
-    <!-- Next will be a component FAQ Item Card -->
-    <v-container>
-      <div v-for="(faq, index) in faqs" :key="index" class="mb-4 p-4 border rounded">
-        <p class="font-bold">{{ faq.question }}</p>
-        <p>{{ faq.answer }}</p>
-        <v-btn
-          text
-          small
-          color="blue"
-          @click="
-            () => {
-                editFAQItem = faq
-                showFAQForm = true
-            }
-          "
-        >
-          {{ t('common.edit') }}
-        </v-btn>
-      </div>
-    </v-container>
+    <FAQItemCard
+      v-for="faq in faqs"
+      :key="faq.id"
+      :faqItem="faq"
+      @click="
+        (item: FAQItemDTO) => {
+          editFAQItem = item
+          showFAQForm = true
+        }
+      "
+      @delete="confirmDelete(faq)"
+    />
+
+    <ConfirmDialog
+      v-model="showConfirmDialog"
+      :title="t('faqSettings.confirmTitle')"
+      :text="`${t('faqSettings.confirmText')} : ${faqToDelete?.question}`"
+      :confirmLabel="t('common.delete')"
+      :cancelLabel="t('common.cancel')"
+      @confirm="deleteFAQ"
+      @cancel="faqToDelete = null"
+    />
 
     <FAQForm
       v-model="showFAQForm"

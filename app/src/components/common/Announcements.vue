@@ -5,6 +5,7 @@
   import AnnouncementPopup from '@/components/common/AnnouncementPopup.vue'
   import AnnouncementCard from '@/components/common/AnnouncementCard.vue'
   import AnnouncementForm from '@/components/organizer/announcements/AnnouncementForm.vue'
+  import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
   const { t } = useI18n()
 
@@ -141,23 +142,13 @@
     </div>
   </div>
 
-  <v-dialog v-model="showConfirmDialog" max-width="500">
-    <v-card>
-      <v-card-title class="text-lg font-bold">
-        {{ t('announcements.confirmTitle') }}
-      </v-card-title>
-      <v-card-text>
-        {{ t('announcements.confirmText') }} <br />
-        <span class="font-semibold">{{ announcementToDelete?.title }}</span>
-      </v-card-text>
-      <v-card-actions class="justify-end">
-        <v-btn text @click="showConfirmDialog = false">
-          {{ t('common.cancel') }}
-        </v-btn>
-        <v-btn color="red" @click="deleteAnnouncement">
-          {{ t('common.delete') }}
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+  <ConfirmDialog
+    v-model="showConfirmDialog"
+    :title="t('announcements.confirmTitle')"
+    :text="`${t('announcements.confirmText')} : ${announcementToDelete?.title}`"
+    :confirmLabel="t('common.delete')"
+    :cancelLabel="t('common.cancel')"
+    @confirm="deleteAnnouncement"
+    @cancel="announcementToDelete = null"
+  />
 </template>

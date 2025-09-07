@@ -59,17 +59,17 @@
   // Save FAQ item (via backend => TODO)
   // -----------------------------
   const save = async () => {
-  if (!question.value || !answer.value) return
+    if (!question.value || !answer.value) return
 
-  // Création d'un objet FAQItemDTO
-  const faqItem: FAQItemDTO = {
-    question: question.value,
-    answer: answer.value,
-    isPrivate: isPrivate.value
+    // Création d'un objet FAQItemDTO
+    const faqItem: FAQItemDTO = {
+      question: question.value,
+      answer: answer.value,
+      isPrivate: isPrivate.value,
+    }
+    emit('save', faqItem)
+    close()
   }
-  emit('save', faqItem)
-  close()
-}
 
   // -----------------------------
   // Initialize form when dialog opens
