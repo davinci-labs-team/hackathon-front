@@ -72,7 +72,7 @@
         :counter="hackathonNameMaxLength"
         :rules="[
           (v: string) =>
-            (v && v.length <= hackathonNameMaxLength) ||
+            (!v || v.length <= hackathonNameMaxLength) ||
             t('textsSettings.errors.maxLength', { max: hackathonNameMaxLength }),
         ]"
         variant="outlined"

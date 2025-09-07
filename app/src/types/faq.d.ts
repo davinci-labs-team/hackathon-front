@@ -3,4 +3,5 @@ export interface FAQItemDTO {
   question: string
   answer: string
   isPrivate: boolean
+  createdAt?: string
 }
