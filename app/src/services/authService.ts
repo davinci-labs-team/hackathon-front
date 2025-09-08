@@ -31,7 +31,10 @@ export async function loginWithSupabase(
   )
 
   // Données user renvoyées par ton backend
-  const user = response.data
+  const user = {
+    ...response.data,
+    accessToken,
+  }
 
   if (organizer && user.role !== UserRole.ORGANIZER) {
     await supabase.auth.signOut()

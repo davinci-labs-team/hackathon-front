@@ -8,6 +8,7 @@ declare global {
     role: UserRole
     session_id: string
     is_anonymous: boolean
+    accessToken: string
   }
 }
 

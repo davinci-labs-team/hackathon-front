@@ -6,9 +6,40 @@
   import FAQForm from '@/components/organizer/faq/FAQForm.vue'
   import FAQItemCard from '../faq/FAQItemCard.vue'
   import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
+  import { useFaq } from '@/composables/useFaq'
+
   const { t } = useI18n()
 
-  // TODO: Fetch infos from backend
+  /* FAQ */
+
+  // Composable
+  const { faqs, createFaq, updateFaq, deleteFaq } = useFaq()
+
+  const showFAQForm = ref(false)
+  const editFAQItem = ref<FAQItemDTO | null>(null)
+  const faqToDelete = ref<FAQItemDTO | null>(null)
+  const showConfirmDialog = ref(false)
+
+  const confirmDelete = (faq: FAQItemDTO) => {
+    faqToDelete.value = faq
+    showConfirmDialog.value = true
+  }
+
+  const handleDelete = async () => {
+    if (!faqToDelete.value?.id) return
+    await deleteFaq(faqToDelete.value.id)
+    showConfirmDialog.value = false
+    faqToDelete.value = null
+  }
+
+  const handleSaveFAQ = async (faqItem: FAQItemDTO) => {
+    if (editFAQItem.value?.id) {
+      await updateFaq(editFAQItem.value.id, faqItem)
+    } else {
+      await createFaq(faqItem)
+    }
+    editFAQItem.value = null
+  }
 
   const sloganMaxLength = 60
   const hackathonNameMaxLength = 60
@@ -34,27 +65,6 @@
     snackbar.value = true
     console.log('Saving changes...')
   }
-
-  const faqs = ref<FAQItemDTO[]>([])
-
-  // State of the FAQ form dialog
-  const showFAQForm = ref(false)
-  const editFAQItem = ref<FAQItemDTO | null>(null)
-
-  const faqToDelete = ref<FAQItemDTO | null>(null)
-  const showConfirmDialog = ref(false)
-
-  const confirmDelete = (faq: FAQItemDTO) => {
-    faqToDelete.value = faq
-    showConfirmDialog.value = true
-  }
-
-  const deleteFAQ = () => {
-    if (!faqToDelete.value) return
-    faqs.value = faqs.value.filter((f) => f.id !== faqToDelete.value?.id)
-    showConfirmDialog.value = false
-    faqToDelete.value = null
-  }
 </script>
 
 <template>
@@ -72,7 +82,8 @@
         :counter="hackathonNameMaxLength"
         :rules="[
           (v: string) =>
-            (!v || v.length <= hackathonNameMaxLength) ||
+            !v ||
+            v.length <= hackathonNameMaxLength ||
             t('textsSettings.errors.maxLength', { max: hackathonNameMaxLength }),
         ]"
         variant="outlined"
@@ -138,36 +149,22 @@
       @delete="confirmDelete(faq)"
     />
 
+    <FAQForm
+      v-model="showFAQForm"
+      :editMode="!!editFAQItem"
+      :faqItem="editFAQItem"
+      @close="editFAQItem = null"
+      @save="handleSaveFAQ"
+    />
+
     <ConfirmDialog
       v-model="showConfirmDialog"
       :title="t('faqSettings.confirmTitle')"
       :text="`${t('faqSettings.confirmText')} : ${faqToDelete?.question}`"
       :confirmLabel="t('common.delete')"
       :cancelLabel="t('common.cancel')"
-      @confirm="deleteFAQ"
+      @confirm="handleDelete"
       @cancel="faqToDelete = null"
-    />
-
-    <FAQForm
-      v-model="showFAQForm"
-      :editMode="!!editFAQItem"
-      :faqItem="editFAQItem"
-      @close="editFAQItem = null"
-      @save="
-        (faqItem: FAQItemDTO) => {
-          if (editFAQItem) {
-            // Edit existing FAQ item
-            const index = faqs.findIndex((item) => item.id === faqItem.id)
-            if (index !== -1) {
-              faqs[index] = faqItem
-            }
-          } else {
-            // Add new FAQ item
-            faqs.push(faqItem)
-          }
-          editFAQItem = null
-        }
-      "
     />
   </v-container>
 </template>
