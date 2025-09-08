@@ -1,3 +1,5 @@
+import fr from './fr'
+
 export default {
   common: {
     close: 'Close',
@@ -14,6 +16,9 @@ export default {
     logout: 'Logout',
     saveChanges: 'Save Changes',
     changesSaved: 'Changes saved successfully',
+    from: 'From',
+    to: 'To',
+    toBis: 'to',
   },
   profile: {
     mainTitle: 'My Profile',
@@ -259,6 +264,7 @@ export default {
   planningSettings: {
     title: 'Dates & Schedule',
     subtitle: 'Manage the event schedule and sessions',
+    selectDateAndTime: 'Select date & time',
   },
 
   // FAQ Section

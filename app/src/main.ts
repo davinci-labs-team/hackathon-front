@@ -5,6 +5,9 @@ import { createPinia } from 'pinia'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import './assets/vuetify-overload.css'
 
+import VueDatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
+
 import App from './App.vue'
 import router from './router'
 
@@ -45,6 +48,7 @@ const vuetify = createVuetify({
 })
 
 const app = createApp(App)
+app.component('VueDatePicker', VueDatePicker)
 
 app.use(router)
 app.use(i18n)

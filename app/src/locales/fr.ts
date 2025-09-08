@@ -16,6 +16,9 @@ export default {
     logout: 'Se déconnecter',
     saveChanges: 'Enregistrer les Modifications',
     changesSaved: 'Modifications enregistrées avec succès',
+    from: 'De',
+    to: 'À',
+    toBis: 'au',
   },
   profile: {
     mainTitle: 'Mon Profil',
@@ -292,6 +295,7 @@ export default {
   planningSettings: {
     title: 'Dates & Planning',
     subtitle: "Gérez le planning de l'événement et les sessions",
+    selectDateAndTime: "Sélectionner la date & l'heure",
   },
 
   // FAQ Section
