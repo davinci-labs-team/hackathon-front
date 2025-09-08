@@ -51,6 +51,34 @@ export default {
     firstLoginBtn: 'First login',
     locationText: 'Register to see the exact location',
     dateText: '2 intensive days of coding',
+    phases: {
+      1: {
+        name: 'Publication of themes and topics',
+        description:
+          'Kick-off phase of the hackathon. Participants discover the proposed themes and topics. They must choose 3 that interest them the most to guide their project ideas.',
+      },
+      2: {
+        name: 'Team formation',
+        description: 'Optional phase if automatic matchmaking is enabled.',
+      },
+      3: {
+        name: 'Hackathon',
+        description: 'Phase during which teams work intensively on their projects.',
+      },
+      4: {
+        name: 'Project submission and presentation',
+        description: 'Closing phase of the development period.',
+      },
+      5: {
+        name: 'Project evaluation',
+        description:
+          'Phase where the jury evaluates submitted projects based on predefined criteria.',
+      },
+      6: {
+        name: 'Results announcement',
+        description: 'Final phase where the results are announced.',
+      },
+    },
   },
   login: {
     title: 'Login',
