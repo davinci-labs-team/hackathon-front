@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { HackathonPhaseDTO } from '@/types/hackathon'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
@@ -14,6 +14,8 @@
   const text = ref(t('common.changesSaved'))
   const timeout = ref(1500)
 
+  // TODO: validation des dates (ex: start < end, pas de chevauchement, etc.)
+
   // Données venant de la DB
   const phasesFromDB: HackathonPhaseDTO[] = [
     { order: 1, startDate: '2024-01-01T09:00:00Z', endDate: '2024-01-10T17:00:00Z' },
@@ -24,15 +26,18 @@
     { order: 6, startDate: '2024-01-21T00:00:00Z', endDate: '2024-01-31T23:59:59Z' },
   ]
 
+  const basePhases = phasesFromDB.map((phase) => ({
+    ...phase,
+    startDateObj: new Date(phase.startDate),
+    endDateObj: new Date(phase.endDate),
+  }))
+
   // Transforme les ISO en objets Date pour les inputs
-  const hackathonPhases = ref(
-    phasesFromDB.map((phase) => ({
+  const hackathonPhases = computed(() =>
+    basePhases.map((phase) => ({
       ...phase,
       name: t(`hackathon.phases.${phase.order}.name`),
       description: t(`hackathon.phases.${phase.order}.description`),
-      startDateObj: new Date(phase.startDate),
-      endDateObj: new Date(phase.endDate),
-      formatLocale: locale.value === 'fr' ? fr : enUS,
     }))
   )
 
