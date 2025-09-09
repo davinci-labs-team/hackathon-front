@@ -44,7 +44,7 @@
     for (let i = 0; i < phases.length; i++) {
       const phase = phases[i]
 
-      if (phase.order === 2 && (!phase.startDateObj || !phase.endDateObj)) {
+      if (phase.order === 2 && (!phase.startDateObj && !phase.endDateObj)) {
         continue
       }
 
@@ -52,28 +52,23 @@
         return false
       }
 
-      // Check that start is before end
-      if (phase.startDateObj && phase.endDateObj && phase.startDateObj >= phase.endDateObj) {
+      if (phase.startDateObj >= phase.endDateObj) {
+      return false
+    }
+
+    // Check for overlap with next phase
+    if (i < phases.length - 1) {
+      const nextPhase = phases[i + 1]
+
+      // Skip next phase if it's order 2 and dates not set
+      if (nextPhase.order === 2 && (!nextPhase.startDateObj && !nextPhase.endDateObj)) {
+        continue
+      }
+
+      if (phase.endDateObj && nextPhase.startDateObj && phase.endDateObj > nextPhase.startDateObj) {
         return false
       }
-
-      // Check for overlap with next phase
-      if (i < phases.length - 1) {
-        const nextPhase = phases[i + 1]
-
-        // Skip next phase if it's order 2 and dates not set
-        if (nextPhase.order === 2 && (!nextPhase.startDateObj || !nextPhase.endDateObj)) {
-          continue
-        }
-
-        if (
-          phase.endDateObj &&
-          nextPhase.startDateObj &&
-          phase.endDateObj > nextPhase.startDateObj
-        ) {
-          return false
-        }
-      }
+    }
     }
     return true
   }
