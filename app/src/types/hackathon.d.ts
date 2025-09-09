@@ -6,6 +6,6 @@ export interface HackathonGeneralInfoDTO {
 
 export interface HackathonPhaseDTO {
   order: number
-  startDate: string
-  endDate: string
+  startDate: string | null
+  endDate: string | null
 }

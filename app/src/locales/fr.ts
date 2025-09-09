@@ -1,4 +1,5 @@
 import { logout } from '@/services/authService'
+import en from './en'
 
 export default {
   common: {
@@ -296,6 +297,9 @@ export default {
     title: 'Dates & Planning',
     subtitle: "Gérez le planning de l'événement et les sessions",
     selectDateAndTime: "Sélectionner la date & l'heure",
+    endAfterStart: 'La date de fin doit être postérieure à la date de début',
+    invalidPhases: 'Veuillez corriger les erreurs dans les phases avant de sauvegarder.',
+    mustNotOverlap: 'Les phases ne doivent pas se chevaucher.',
   },
 
   // FAQ Section

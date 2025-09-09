@@ -265,6 +265,9 @@ export default {
     title: 'Dates & Schedule',
     subtitle: 'Manage the event schedule and sessions',
     selectDateAndTime: 'Select date & time',
+    endAfterStart: 'End date must be after start date',
+    invalidPhases: 'Please correct the errors in the phases before saving.',
+    mustNotOverlap: 'Phases must not overlap.',
   },
 
   // FAQ Section
