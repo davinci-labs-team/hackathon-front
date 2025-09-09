@@ -262,8 +262,15 @@ export default {
     subtitle: "Gérez les images et logos utilisés dans l'application",
   },
   partnersSettings: {
-    title: 'Partenaires',
-    subtitle: "Gérez les partenaires affichés dans l'application",
+    title: 'Partenaires & Écoles',
+    subtitle: "Gérez les partenaires affichés dans l'application et les écoles participantes",
+    namePlaceholder: 'Nom du partenaire',
+    urlPlaceholder: 'https://www.exemple.com',
+    addPartner: '+ Ajouter un partenaire',
+    participatingSchool: 'École Participante',
+    confirmTitle: 'Confirmer la Suppression',
+    confirmText: 'Êtes-vous sûr de vouloir supprimer ce partenaire ?',
+    noPartners: 'Aucun partenaire disponible.',
   },
   faqSettings: {
     title: 'FAQ',

@@ -49,37 +49,11 @@
   const hackathonName = ref('Qubit or not Qubit')
   const hackathonDescription = ref('Hello World')
 
-  // Snackbar to inform user of successful save
+  // Snackbar
   const snackbar = ref(false)
   const text = ref(t('common.changesSaved'))
   const timeout = ref(1500)
   const error = ref(false)
-
-  const hackathonNameRules = computed(() => [
-    (v: string) => {
-      if (!v) return t('textsSettings.errors.requiredField')
-      if (v.length > hackathonNameMaxLength)
-        return t('textsSettings.errors.maxLength', { max: hackathonNameMaxLength })
-      return true
-    },
-  ])
-
-  const sloganRules = computed(() => [
-    (v: string) => {
-      if (v && v.length > sloganMaxLength)
-        return t('textsSettings.errors.maxLength', { max: sloganMaxLength })
-      return true
-    },
-  ])
-
-  const hackathonDescriptionRules = computed(() => [
-    (v: string) => {
-      if (!v) return t('textsSettings.errors.requiredField')
-      if (v.length > hackathonDescriptionMaxLength)
-        return t('textsSettings.errors.maxLength', { max: hackathonDescriptionMaxLength })
-      return true
-    },
-  ])
 
   const validateTexts = () => {
     if (!hackathonName.value || hackathonName.value.length > hackathonNameMaxLength) return false

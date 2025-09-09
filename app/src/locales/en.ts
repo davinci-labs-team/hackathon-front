@@ -230,8 +230,16 @@ export default {
     logo: 'Logo',
   },
   partnersSettings: {
-    title: 'Partners',
-    subtitle: 'Manage the partners displayed in the application',
+    title: 'Partners & Schools',
+    subtitle: 'Manage the partners displayed in the application and participating schools',
+    namePlaceholder: 'Partner Name',
+    websitePlaceholder: 'Partner Website',
+    logo: 'Partner Logo',
+    addPartner: '+ Add Partner',
+    participatingSchool: 'Participating School',
+    confirmTitle: 'Confirm Deletion',
+    confirmText: 'Are you sure you want to delete this partner?',
+    noPartners: 'No partners available.',
   },
   faqSettings: {
     title: 'FAQ',

@@ -93,7 +93,7 @@
       <v-btn color="primary" @click="handleSave">{{ t('common.saveChanges') }}</v-btn>
     </div>
 
-    <p class="text-m text-red-500 italic mb-5">
+    <p class="text-m text-grey-500 italic mb-5">
       {{ t('planningSettings.mustNotOverlap') }}
     </p>
 
