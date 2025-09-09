@@ -219,10 +219,9 @@ export default {
     hackathonDescription: 'Hackathon Description',
     hackathonName: 'Hackathon Name',
     errors: {
-      sloganRequired: 'Slogan is required',
-      descriptionRequired: 'Description is required',
-      nameRequired: 'Name is required',
+      requiredField: 'This field is required',
       maxLength: 'Maximum length reached',
+      fixErrors: 'Please fix the errors before saving.',
     },
   },
   mediaSettings: {

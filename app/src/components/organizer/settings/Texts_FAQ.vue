@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { FAQItemDTO } from '@/types/faq'
@@ -47,23 +47,72 @@
 
   const slogan = ref('Build the future with us!')
   const hackathonName = ref('Qubit or not Qubit')
-  const hackathonDescription = ref('')
+  const hackathonDescription = ref('Hello World')
 
   // Snackbar to inform user of successful save
   const snackbar = ref(false)
   const text = ref(t('common.changesSaved'))
   const timeout = ref(1500)
+  const error = ref(false)
 
-  // TODO: Save changes to backend if needed
+  const hackathonNameRules = computed(() => [
+    (v: string) => {
+      if (!v) return t('textsSettings.errors.requiredField')
+      if (v.length > hackathonNameMaxLength)
+        return t('textsSettings.errors.maxLength', { max: hackathonNameMaxLength })
+      return true
+    },
+  ])
+
+  const sloganRules = computed(() => [
+    (v: string) => {
+      if (v && v.length > sloganMaxLength)
+        return t('textsSettings.errors.maxLength', { max: sloganMaxLength })
+      return true
+    },
+  ])
+
+  const hackathonDescriptionRules = computed(() => [
+    (v: string) => {
+      if (!v) return t('textsSettings.errors.requiredField')
+      if (v.length > hackathonDescriptionMaxLength)
+        return t('textsSettings.errors.maxLength', { max: hackathonDescriptionMaxLength })
+      return true
+    },
+  ])
+
+  const validateTexts = () => {
+    if (!hackathonName.value || hackathonName.value.length > hackathonNameMaxLength) return false
+    if (slogan.value && slogan.value.length > sloganMaxLength) return false
+    if (
+      !hackathonDescription.value ||
+      hackathonDescription.value.length > hackathonDescriptionMaxLength
+    )
+      return false
+    return true
+  }
+
+  // TODO: replace console.log by actual API call
   const handleSave = () => {
-    // Implement save logic here
-    // Compare with original values to detect changes
-    // if (changesDetected) {
-    //   // Save to backend
-    // }
-    // Snackbar to inform user of successful save
+    if (!validateTexts()) {
+      text.value = t('textsSettings.errors.fixErrors')
+      error.value = true
+      snackbar.value = true
+      return
+    }
+
     snackbar.value = true
-    console.log('Saving changes...')
+    error.value = false
+
+    const payload = {
+      texts: {
+        hackathonName: hackathonName.value,
+        slogan: slogan.value,
+        hackathonDescription: hackathonDescription.value,
+      },
+    }
+
+    console.log('Payload à envoyer:', JSON.stringify(payload))
   }
 </script>
 
@@ -76,51 +125,56 @@
     </div>
 
     <v-container>
-      <p class="mb-2 text-lg text-600">{{ t('textsSettings.hackathonName') }}</p>
+      <p class="mb-2 text-lg text-600">
+        {{ t('textsSettings.hackathonName') }} <span class="text-red-500">*</span>
+      </p>
       <v-text-field
         v-model="hackathonName"
         :counter="hackathonNameMaxLength"
-        :rules="[
-          (v: string) =>
-            !v ||
-            v.length <= hackathonNameMaxLength ||
-            t('textsSettings.errors.maxLength', { max: hackathonNameMaxLength }),
-        ]"
         variant="outlined"
-        dense
-        class="mb-2"
+        class="mb-0"
       />
+      <p class="text-red-500 italic mb-5" v-if="!hackathonName">
+        {{ t('textsSettings.errors.requiredField') }}
+      </p>
+      <p class="text-red-500 italic mb-5" v-if="hackathonName.length > hackathonNameMaxLength">
+        {{ t('textsSettings.errors.maxLength', { max: hackathonNameMaxLength }) }}
+      </p>
 
       <p class="mb-2 text-lg text-600">{{ t('textsSettings.slogan') }}</p>
       <v-text-field
         v-model="slogan"
         :counter="sloganMaxLength"
-        :rules="[
-          (v: string) =>
-            (v && v.length <= sloganMaxLength) ||
-            t('textsSettings.errors.maxLength', { max: sloganMaxLength }),
-        ]"
         variant="outlined"
         dense
         class="mb-2"
       />
+      <p class="text-red-500 italic mb-5" v-if="slogan.length > sloganMaxLength">
+        {{ t('textsSettings.errors.maxLength', { max: sloganMaxLength }) }}
+      </p>
 
-      <p class="mb-2 text-lg text-600">{{ t('textsSettings.hackathonDescription') }}</p>
+      <p class="mb-2 text-lg text-600">
+        {{ t('textsSettings.hackathonDescription') }} <span class="text-red-500">*</span>
+      </p>
       <v-textarea
         v-model="hackathonDescription"
         :counter="hackathonDescriptionMaxLength"
-        :rules="[
-          (v: string) =>
-            (v && v.length <= hackathonDescriptionMaxLength) ||
-            t('textsSettings.errors.maxLength', { max: hackathonDescriptionMaxLength }),
-        ]"
         variant="outlined"
         auto-grow
         rows="3"
-        class="mb-2"
+        class="mb-0"
       />
+      <p class="text-red-500 italic mb-5" v-if="!hackathonDescription">
+        {{ t('textsSettings.errors.requiredField') }}
+      </p>
+      <p
+        class="text-red-500 italic mb-5"
+        v-if="hackathonDescription.length > hackathonDescriptionMaxLength"
+      >
+        {{ t('textsSettings.errors.maxLength', { max: hackathonDescriptionMaxLength }) }}
+      </p>
 
-      <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" />
+      <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
     </v-container>
 
     <h1 class="text-3xl font-bold mb-2">{{ t('faqSettings.title') }}</h1>

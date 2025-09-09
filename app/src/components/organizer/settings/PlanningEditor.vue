@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { HackathonPhaseDTO } from '@/types/hackathon'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
@@ -15,7 +15,7 @@
   const timeout = ref(1500)
   const error = ref(false)
 
-  // Données venant de la DB
+  // Example data for testing purposes
   const phasesFromDB: HackathonPhaseDTO[] = [
     { order: 1, startDate: '2024-01-01T09:00:00Z', endDate: '2024-01-10T17:00:00Z' },
     { order: 2, startDate: null, endDate: null }, // Optional
@@ -25,18 +25,19 @@
     { order: 6, startDate: '2024-01-21T00:00:00Z', endDate: '2024-01-31T23:59:59Z' },
   ]
 
-  const basePhases = phasesFromDB.map((phase) => ({
-    ...phase,
-    startDateObj: phase.startDate ? new Date(phase.startDate) : null,
-    endDateObj: phase.endDate ? new Date(phase.endDate) : null,
-  }))
-
-  // Transforme les ISO en objets Date pour les inputs
   const hackathonPhases = ref(
-    basePhases.map((phase) => ({
-      ...phase,
+    phasesFromDB.map((phase) => ({
+      order: phase.order,
+      startDateObj: phase.startDate ? new Date(phase.startDate) : null,
+      endDateObj: phase.endDate ? new Date(phase.endDate) : null,
     }))
   )
+
+  const validatePhase = (phase: (typeof hackathonPhases.value)[0]) => {
+    if (phase.order === 2 && !phase.startDateObj && !phase.endDateObj) return true
+    if (!phase.startDateObj || !phase.endDateObj) return false
+    return phase.startDateObj < phase.endDateObj
+  }
 
   const validatePhases = () => {
     const phases = hackathonPhases.value
@@ -44,54 +45,54 @@
     for (let i = 0; i < phases.length; i++) {
       const phase = phases[i]
 
-      if (phase.order === 2 && (!phase.startDateObj && !phase.endDateObj)) {
-        continue
-      }
+      if (!validatePhase(phase)) return false
 
-      if (!phase.startDateObj || !phase.endDateObj) {
-        return false
-      }
+      if (i < phases.length - 1) {
+        const nextPhase = phases[i + 1]
 
-      if (phase.startDateObj >= phase.endDateObj) {
-      return false
-    }
+        // Skip next phase if optional and empty
+        if (nextPhase.order === 2 && !nextPhase.startDateObj && !nextPhase.endDateObj) continue
 
-    // Check for overlap with next phase
-    if (i < phases.length - 1) {
-      const nextPhase = phases[i + 1]
-
-      // Skip next phase if it's order 2 and dates not set
-      if (nextPhase.order === 2 && (!nextPhase.startDateObj && !nextPhase.endDateObj)) {
-        continue
-      }
-
-      if (phase.endDateObj && nextPhase.startDateObj && phase.endDateObj > nextPhase.startDateObj) {
-        return false
+        if (phase.endDateObj! > nextPhase.startDateObj!) return false
       }
     }
-    }
+
     return true
   }
 
-  // TODO: transformer les objets en json
-
+  // TODO: replace console.log by actual API call
   const handleSave = () => {
-    snackbar.value = true
     if (!validatePhases()) {
       text.value = t('planningSettings.invalidPhases')
       error.value = true
+      snackbar.value = true
       return
     }
+
+    snackbar.value = true
+    error.value = false
+
+    const payload = {
+      phases: hackathonPhases.value.map((phase) => ({
+        order: phase.order,
+        startDate: phase.startDateObj?.toISOString() ?? null,
+        endDate: phase.endDateObj?.toISOString() ?? null,
+      })),
+    }
+
+    console.log('Payload à envoyer:', JSON.stringify(payload))
   }
 </script>
 
 <template>
   <v-container class="py-10 max-w-7xl mx-auto">
     <h1 class="text-3xl font-bold mb-2">{{ t('planningSettings.title') }}</h1>
+
     <div class="flex justify-between items-center mb-0">
       <p class="text-lg text-gray-600 mb-0">{{ t('planningSettings.subtitle') }}</p>
       <v-btn color="primary" @click="handleSave">{{ t('common.saveChanges') }}</v-btn>
     </div>
+
     <p class="text-m text-red-500 italic mb-5">
       {{ t('planningSettings.mustNotOverlap') }}
     </p>
