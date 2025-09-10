@@ -1,28 +1,59 @@
 <script setup lang="ts">
-  import { PartnersDTO } from '@/types/hackathon';
-import { useI18n } from 'vue-i18n'
-import PartnerCard from '../partners/PartnerCard.vue';
+  import { ref } from 'vue'
+  import { PartnersDTO } from '@/types/hackathon'
+  import { useI18n } from 'vue-i18n'
+  import PartnerCard from '../partners/PartnerCard.vue'
   const { t } = useI18n()
 
-  const partners: PartnersDTO[] = [
+  /* TODO in this file
+    - check if pictures have changed, if yes upload them to backend and get their urls
+    - fetch partners from backend instead of using hardcoded data
+    - call API to update partners object in backend when deleting or updating a partner
+  */
+
+  const partners = ref<PartnersDTO[]>([
     // Example partner data
     {
-      name: 'Tech Corp',
-      websiteUrl: 'https://techcorp.com',
-      logoId: 'https://via.placeholder.com/150',
+      name: 'EPITA',
+      websiteUrl: 'https://epita.fr',
+      logoId: 'https://upload.wikimedia.org/wikipedia/fr/d/d8/Epita.png',
       isParticipatingSchool: false,
     },
     {
-      name: 'Innovate Inc',
-      websiteUrl: 'https://innovateinc.com',
-      logoId: 'https://via.placeholder.com/150',
+      name: 'Université de Tours',
+      websiteUrl: 'https://www.univ-tours.fr/',
+      logoId:
+        'https://upload.wikimedia.org/wikipedia/fr/c/c9/Logo_Universit%C3%A9_Tours_-_2017.svg',
       isParticipatingSchool: true,
     },
-  ];
+  ])
+
+  function onDeletePartner(partner: PartnersDTO) {
+    const index = partners.value.findIndex((p) => p === partner)
+    if (index !== -1) partners.value.splice(index, 1)
+
+    // TODO: call API to update partners object in backend
+  }
+
+  function onUpdatePartner(updatedPartner: PartnersDTO) {
+    const index = partners.value.findIndex((p) => p.name === updatedPartner.name)
+    if (index !== -1) {
+      partners.value[index] = { ...updatedPartner }
+    }
+
+    // TODO: call API to update partners object in backend
+  }
 
   // TODO: fetch all images from backend to display logos
-  const addPartner = () => {}
 
+  const addPartner = () => {
+    partners.value.push({
+      name: '',
+      websiteUrl: '',
+      logoId: '',
+      isParticipatingSchool: false,
+    })
+  }
 </script>
 
 <template>
@@ -44,6 +75,8 @@ import PartnerCard from '../partners/PartnerCard.vue';
       :key="index"
       :partner="partner"
       class="mb-4"
+      @delete="onDeletePartner"
+      @update="onUpdatePartner"
     />
   </v-container>
 </template>
