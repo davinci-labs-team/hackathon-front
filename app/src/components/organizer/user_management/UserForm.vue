@@ -58,7 +58,7 @@
     firstname.value = ''
     lastname.value = ''
     email.value = ''
-    role.value = ''
+    role.value = 'PARTICIPANT'
     school.value = ''
   }
 
@@ -165,15 +165,26 @@
             </div>
           </v-radio-group>
 
+          <!-- TODO: Get the right naming for this field -->
           <label class="block mb-1 text-m">{{ t('users.school') }}</label>
-          <v-select
-            v-model="school"
-            :items="schools"
-            variant="solo"
-            hide-details
-            density="comfortable"
-            class="w-full mb-4"
-          />
+          <template v-if="role === 'PARTICIPANT'">
+            <v-select
+              v-model="school"
+              :items="schools"
+              variant="solo"
+              hide-details
+              density="comfortable"
+              class="w-full mb-4"
+            />
+          </template>
+          <template v-else>
+            <v-text-field
+              v-model="school"
+              :placeholder="t('users.school')"
+              variant="solo"
+              class="mb-4"
+            />
+          </template>
 
           <v-card-actions class="justify-center">
             <v-btn color="primary" type="submit" variant="elevated" class="px-8 mb-3">
