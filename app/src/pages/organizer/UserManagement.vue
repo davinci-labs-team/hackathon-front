@@ -4,10 +4,11 @@ import { ref, computed } from 'vue'
   import Users from '@/components/common/Users.vue'
   import { useUser } from '@/composables/useUser'
   import UserForm from '@/components/organizer/user_management/UserForm.vue'
+import { UserDTO } from '@/types/user'
 
   const { t } = useI18n()
 
-  const { users } = useUser()
+  const { users, createUser, updateUser, deleteUser } = useUser()
 
   const roles = [
     { title: t('organizer.userManagement.roleAll'), value: '' },
@@ -35,7 +36,7 @@ import { ref, computed } from 'vue'
       return (
         (selectedRole.value === '' || user.role === selectedRole.value) &&
         (selectedSchool.value === '' || user.school === selectedSchool.value) &&
-        (filterName.value === '' || user.name.toLowerCase().includes(filterName.value.toLowerCase()))
+        (filterName.value === '' || (user.firstname + ' ' + user.lastname).toLowerCase().includes(filterName.value.toLowerCase()))
       )
     })
   })
@@ -45,22 +46,24 @@ import { ref, computed } from 'vue'
     editMode.value = false
   }
 
-  const handleSave = (newUser: UserDTO) => {
-    // TODO: Implémenter la logique d'ajout réelle ici
-    console.log('Utilisateur sauvegardé:', newUser)
+  const handleSave = (user: UserDTO) => {
+    if (editMode.value) {
+      updateUser(user.id, user)
+    } else {
+      createUser(user)
+    }
     showUserForm.value = false
     selectedUser.value = null
   }
 
-  const editUser = (user: UserDTO) => {
+  const onEditUser = (user: UserDTO) => {
     selectedUser.value = user
     showUserForm.value = true
     editMode.value = true
   }
 
-  const deleteUser = (user: UserDTO) => {
-    // TODO: Implémenter la logique de suppression réelle ici
-    console.log('Suppression utilisateur:', user)
+  const onDeleteUser = (user: UserDTO) => {
+    deleteUser(user.id)
   }
 
   const selectedUser = ref<UserDTO | null>(null)
@@ -120,8 +123,8 @@ import { ref, computed } from 'vue'
         <Users
           :users="filteredUsers"
           :items-per-page="30"
-          @delete="deleteUser"
-          @edit="editUser"
+          @delete="onDeleteUser"
+          @edit="onEditUser"
         />
 
         <UserForm v-model="showUserForm" @save="handleSave" :edit-mode="editMode" :user="selectedUser" />

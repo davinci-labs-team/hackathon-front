@@ -29,4 +29,18 @@ export const userService = {
     })
     return res.data
   },
+
+  async create(userData: Partial<UserDTO>): Promise<UserDTO> {
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/user`, userData, {
+      headers: getAuthHeaders(),
+    })
+    return res.data
+  },
+
+  async update(userId: string, userData: Partial<UserDTO>): Promise<UserDTO> {
+    const res = await axios.patch(`${import.meta.env.VITE_API_URL}/api/user/${userId}`, userData, {
+      headers: getAuthHeaders(),
+    })
+    return res.data
+  }
 }

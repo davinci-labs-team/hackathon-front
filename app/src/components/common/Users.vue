@@ -42,7 +42,7 @@
       </thead>
       <tbody>
         <tr v-for="user in paginatedUsers" :key="user.id" class="border-b">
-          <td class="px-4 py-2">{{ user.name }}</td>
+          <td class="px-4 py-2">{{ user.firstname + ' ' + user.lastname }}</td>
           <td class="px-4 py-2">{{ user.email }}</td>
           <td class="px-4 py-2">{{ user.role }}</td>
           <td class="px-4 py-2">{{ user.school }}</td>

@@ -49,6 +49,7 @@
   // Validation
   // -----------------------------
   const required = (v: string | null | undefined) => !!v || t('common.fieldRequired')
+  const emailRule = (v: string) => /.+@.+\..+/.test(v) || t('common.invalidEmail')
 
   // -----------------------------
   // Form actions
@@ -75,7 +76,7 @@
     // Création de FormData pour envoyer au backend
     const userData = {
       id: props.user?.id,
-      name: firstname.value,
+      firstname: firstname.value,
       lastname: lastname.value,
       email: email.value,
       role: role.value,
@@ -94,11 +95,11 @@
     (open) => {
       if (!open) return
       if (props.editMode && props.user) {
-        firstname.value = props.user.name
+        firstname.value = props.user.firstname
         lastname.value = props.user.lastname
         email.value = props.user.email
         role.value = props.user.role
-        school.value = props.user.school
+        school.value = props.user.school ?? ''
       } else {
         resetForm()
       }
@@ -143,7 +144,7 @@
           <label class="block mb-1 text-m">{{ t('organizer.userManagement.email') }}</label>
           <v-text-field
             v-model="email"
-            :rules="[required]"
+            :rules="[required, emailRule]"
             required
             variant="solo"
             class="mb-4"

@@ -27,6 +27,27 @@ export function useUser() {
     }
   }
 
+  const createUser = async (userData: Partial<UserDTO>) => {
+    try {
+      const newUser = await userService.create(userData)
+      users.value.push(newUser)
+    } catch (e: any) {
+      error.value = e.message
+    }
+  }
+
+  const updateUser = async (id: string, userData: Partial<UserDTO>) => {
+    try {
+      const updatedUser = await userService.update(id, userData)
+      const index = users.value.findIndex((u) => u.id === id)
+      if (index !== -1) {
+        users.value[index] = updatedUser
+      }
+    } catch (e: any) {
+      error.value = e.message
+    }
+  }
+
   // Charger au montage
   onMounted(fetchUsers)
 
@@ -36,5 +57,7 @@ export function useUser() {
     error,
     fetchUsers,
     deleteUser,
+    createUser,
+    updateUser,
   }
 }
