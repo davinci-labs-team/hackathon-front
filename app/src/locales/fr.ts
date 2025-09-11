@@ -17,6 +17,7 @@ export default {
     from: 'De',
     to: 'À',
     toBis: 'au',
+    fullname: '{firstname} {lastname}',
   },
   profile: {
     mainTitle: 'Mon Profil',
@@ -124,6 +125,8 @@ export default {
     firstname: 'Prénom',
     lastname: 'Nom de famille',
     school: 'École associée',
+    confirmTitle: 'Confirmer la Suppression',
+    confirmText: 'Vous allez supprimer cet utilisateur : {firstname} {lastname}',
   },
   // Roles sections
   organizer: {

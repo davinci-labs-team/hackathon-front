@@ -1,34 +1,41 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+  import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import Users from '@/components/common/Users.vue'
   import { useUser } from '@/composables/useUser'
   import UserForm from '@/components/organizer/user_management/UserForm.vue'
-import { UserDTO } from '@/types/user'
+  import { UserDTO } from '@/types/user'
+  import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
   const { t } = useI18n()
 
   const { users, createUser, updateUser, deleteUser } = useUser()
 
-  const roles = [
+  const roles = computed(() => [
     { title: t('organizer.userManagement.roleAll'), value: '' },
     { title: t('roles.organizer'), value: 'ORGANIZER' },
     { title: t('roles.jury'), value: 'JURY' },
     { title: t('roles.mentor'), value: 'MENTOR' },
     { title: t('roles.participant'), value: 'PARTICIPANT' }
-  ]
+  ])
 
   // TODO: récupérer dynamiquement les écoles
-  const schools = [
+  const schools = computed(() => [
     { title: t('organizer.userManagement.schoolAll'), value: '' },
-    { title: 'Polytech', value: 'polytech' },
-    { title: 'INSA', value: 'insa' }
-  ]
+    { title: 'Polytech' },
+    { title: 'INSA' }
+  ])
+
   const selectedRole = ref('')
   const selectedSchool = ref('')
   const filterName = ref('')
 
+  
   const showUserForm = ref(false)
+  
+  const userToDelete = ref<UserDTO | null>(null)
+  const showConfirmDialog = ref(false)
+
   const editMode = ref(false)
 
   const filteredUsers = computed(() => {
@@ -62,8 +69,15 @@ import { UserDTO } from '@/types/user'
     editMode.value = true
   }
 
+  const confirmDelete = (user: UserDTO) => {
+    userToDelete.value = user
+    showConfirmDialog.value = true
+  }
+
   const onDeleteUser = (user: UserDTO) => {
     deleteUser(user.id)
+    showConfirmDialog.value = false
+    userToDelete.value = null
   }
 
   const selectedUser = ref<UserDTO | null>(null)
@@ -123,11 +137,20 @@ import { UserDTO } from '@/types/user'
         <Users
           :users="filteredUsers"
           :items-per-page="30"
-          @delete="onDeleteUser"
+          @delete="confirmDelete"
           @edit="onEditUser"
         />
 
         <UserForm v-model="showUserForm" @save="handleSave" :edit-mode="editMode" :user="selectedUser" />
+        <ConfirmDialog
+          v-model="showConfirmDialog"
+          :title="t('users.confirmTitle')"
+          :text="t('users.confirmText', { firstname: userToDelete?.firstname, lastname: userToDelete?.lastname })"
+          :confirmLabel="t('common.delete')"
+          :cancelLabel="t('common.cancel')"
+          @confirm="onDeleteUser(userToDelete!)"
+          @cancel="userToDelete = null"
+        />
 
       </div>
     </v-row>

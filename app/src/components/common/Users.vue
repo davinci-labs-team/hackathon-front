@@ -42,9 +42,9 @@
       </thead>
       <tbody>
         <tr v-for="user in paginatedUsers" :key="user.id" class="border-b">
-          <td class="px-4 py-2">{{ user.firstname + ' ' + user.lastname }}</td>
+          <td class="px-4 py-2">{{ t('common.fullname', { firstname: user.firstname, lastname: user.lastname }) }}</td>
           <td class="px-4 py-2">{{ user.email }}</td>
-          <td class="px-4 py-2">{{ user.role }}</td>
+          <td class="px-4 py-2">{{ t(`roles.${user.role.toLowerCase()}`) }}</td>
           <td class="px-4 py-2">{{ user.school }}</td>
           <td class="px-4 py-2 text-center">
             <v-icon small class="mr-2" color="primary" @click="$emit('edit', user)">mdi-pencil</v-icon>

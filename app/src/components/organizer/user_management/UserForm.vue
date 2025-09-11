@@ -41,8 +41,8 @@
 
   // TODO: récupérer dynamiquement les écoles
   const schools = [
-    { title: 'Polytech', value: 'polytech' },
-    { title: 'INSA', value: 'insa' }
+    { title: 'Polytech' },
+    { title: 'INSA' }
   ]
 
   // -----------------------------
@@ -71,7 +71,7 @@
   // Save user (via backend => TODO)
   // -----------------------------
   const save = async () => {
-    if (!firstname.value || !lastname.value || !email.value || !role.value) return
+    if (!firstname.value || !lastname.value || !email.value || !role.value || (role.value === 'PARTICIPANT' && !school.value)) return
 
     // Création de FormData pour envoyer au backend
     const userData = {
@@ -171,10 +171,11 @@
             <v-select
               v-model="school"
               :items="schools"
+              :rules="[required]"
+              required
               variant="solo"
-              hide-details
               density="comfortable"
-              class="w-full mb-4"
+              class="w-full mb-8"
             />
           </template>
           <template v-else>

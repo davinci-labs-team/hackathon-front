@@ -17,6 +17,7 @@ export default {
     from: 'From',
     to: 'To',
     toBis: 'to',
+    fullname: '{firstname} {lastname}',
   },
   profile: {
     mainTitle: 'My Profile',
@@ -121,6 +122,8 @@ export default {
     firstname: 'First name',
     lastname: 'Last name',
     school: 'Associated school',
+    confirmTitle: 'Confirm Deletion',
+    confirmText: `You are about to delete this user: {firstname} {lastname}`,
   },
   // Roles sections
   organizer: {
