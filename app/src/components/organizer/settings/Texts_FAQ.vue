@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { FAQItemDTO } from '@/types/faq'
@@ -7,8 +7,28 @@
   import FAQItemCard from '../faq/FAQItemCard.vue'
   import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
   import { useFaq } from '@/composables/useFaq'
+  import { settingsService } from '@/services/settingsService'
+  import { UpdateSettingDTO } from '@/types/hackathon'
 
   const { t } = useI18n()
+
+  const slogan = ref('')
+  const hackathonName = ref('')
+  const hackathonDescription = ref('')
+  const saveAttempted = ref(false)
+
+  onMounted(async () => {
+    try {
+      const response = await settingsService.findWithKey('1', 'texts')
+      if (response && response.value) {
+        slogan.value = response.value.slogan || ''
+        hackathonName.value = response.value.hackathon_name || ''
+        hackathonDescription.value = response.value.hackathon_description || ''
+      }
+    } catch (error) {
+      console.error('Error fetching settings:', error)
+    }
+  })
 
   /* FAQ */
 
@@ -45,25 +65,52 @@
   const hackathonNameMaxLength = 60
   const hackathonDescriptionMaxLength = 500
 
-  const slogan = ref('Build the future with us!')
-  const hackathonName = ref('Qubit or not Qubit')
-  const hackathonDescription = ref('')
-
-  // Snackbar to inform user of successful save
+  // Snackbar
   const snackbar = ref(false)
   const text = ref(t('common.changesSaved'))
   const timeout = ref(1500)
+  const error = ref(false)
 
-  // TODO: Save changes to backend if needed
-  const handleSave = () => {
-    // Implement save logic here
-    // Compare with original values to detect changes
-    // if (changesDetected) {
-    //   // Save to backend
-    // }
-    // Snackbar to inform user of successful save
-    snackbar.value = true
-    console.log('Saving changes...')
+  const validateTexts = () => {
+    if (!hackathonName.value || hackathonName.value.length > hackathonNameMaxLength) return false
+    if (slogan.value && slogan.value.length > sloganMaxLength) return false
+    if (
+      !hackathonDescription.value ||
+      hackathonDescription.value.length > hackathonDescriptionMaxLength
+    )
+      return false
+    return true
+  }
+
+  const handleSaveTexts = async () => {
+    saveAttempted.value = true
+
+    if (!validateTexts()) {
+      text.value = t('textsSettings.errors.fixErrors')
+      error.value = true
+      snackbar.value = true
+      return
+    }
+
+    const payload: UpdateSettingDTO = {
+      key: 'texts',
+      value: {
+        slogan: slogan.value,
+        hackathon_name: hackathonName.value,
+        hackathon_description: hackathonDescription.value,
+      },
+    }
+
+    try {
+      await settingsService.update('1', payload)
+      text.value = t('common.changesSaved')
+      error.value = false
+      snackbar.value = true
+    } catch (e) {
+      text.value = t('common.error')
+      error.value = true
+      snackbar.value = true
+    }
   }
 </script>
 
@@ -72,55 +119,60 @@
     <h1 class="text-3xl font-bold mb-2">{{ t('textsSettings.title') }}</h1>
     <div class="flex-direction-row mb-5 flex items-center justify-between">
       <p class="mb-0 text-lg text-gray-600">{{ t('textsSettings.subtitle') }}</p>
-      <v-btn color="primary" @click="handleSave">{{ t('common.saveChanges') }}</v-btn>
+      <v-btn color="primary" @click="handleSaveTexts">{{ t('common.saveChanges') }}</v-btn>
     </div>
 
     <v-container>
-      <p class="mb-2 text-lg text-600">{{ t('textsSettings.hackathonName') }}</p>
+      <p class="mb-2 text-lg text-600">
+        {{ t('textsSettings.hackathonName') }} <span class="text-red-500">*</span>
+      </p>
       <v-text-field
         v-model="hackathonName"
         :counter="hackathonNameMaxLength"
-        :rules="[
-          (v: string) =>
-            !v ||
-            v.length <= hackathonNameMaxLength ||
-            t('textsSettings.errors.maxLength', { max: hackathonNameMaxLength }),
-        ]"
         variant="outlined"
-        dense
-        class="mb-2"
+        class="mb-0"
       />
+      <p class="text-red-500 italic mb-5" v-if="!hackathonName && saveAttempted">
+        {{ t('textsSettings.errors.requiredField') }}
+      </p>
+      <p class="text-red-500 italic mb-5" v-if="hackathonName.length > hackathonNameMaxLength">
+        {{ t('textsSettings.errors.maxLength', { max: hackathonNameMaxLength }) }}
+      </p>
 
       <p class="mb-2 text-lg text-600">{{ t('textsSettings.slogan') }}</p>
       <v-text-field
         v-model="slogan"
         :counter="sloganMaxLength"
-        :rules="[
-          (v: string) =>
-            (v && v.length <= sloganMaxLength) ||
-            t('textsSettings.errors.maxLength', { max: sloganMaxLength }),
-        ]"
         variant="outlined"
         dense
         class="mb-2"
       />
+      <p class="text-red-500 italic mb-5" v-if="slogan.length > sloganMaxLength">
+        {{ t('textsSettings.errors.maxLength', { max: sloganMaxLength }) }}
+      </p>
 
-      <p class="mb-2 text-lg text-600">{{ t('textsSettings.hackathonDescription') }}</p>
+      <p class="mb-2 text-lg text-600">
+        {{ t('textsSettings.hackathonDescription') }} <span class="text-red-500">*</span>
+      </p>
       <v-textarea
         v-model="hackathonDescription"
         :counter="hackathonDescriptionMaxLength"
-        :rules="[
-          (v: string) =>
-            (v && v.length <= hackathonDescriptionMaxLength) ||
-            t('textsSettings.errors.maxLength', { max: hackathonDescriptionMaxLength }),
-        ]"
         variant="outlined"
         auto-grow
         rows="3"
-        class="mb-2"
+        class="mb-0"
       />
+      <p class="text-red-500 italic mb-5" v-if="!hackathonDescription && saveAttempted">
+        {{ t('textsSettings.errors.requiredField') }}
+      </p>
+      <p
+        class="text-red-500 italic mb-5"
+        v-if="hackathonDescription.length > hackathonDescriptionMaxLength"
+      >
+        {{ t('textsSettings.errors.maxLength', { max: hackathonDescriptionMaxLength }) }}
+      </p>
 
-      <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" />
+      <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
     </v-container>
 
     <h1 class="text-3xl font-bold mb-2">{{ t('faqSettings.title') }}</h1>
