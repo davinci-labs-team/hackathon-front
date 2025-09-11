@@ -18,7 +18,6 @@
   const saveAttempted = ref(false)
 
   onMounted(async () => {
-
     try {
       const response = await settingsService.findWithKey('1', 'texts')
       if (response && response.value) {

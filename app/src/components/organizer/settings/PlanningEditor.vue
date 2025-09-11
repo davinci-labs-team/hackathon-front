@@ -1,104 +1,103 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { HackathonPhaseDTO } from '@/types/hackathon'
-import AppSnackbar from '@/components/common/AppSnackbar.vue'
-import VueDatePicker from '@vuepic/vue-datepicker'
-import '@vuepic/vue-datepicker/dist/main.css'
-import { enUS, fr } from 'date-fns/locale'
-import { settingsService } from '@/services/settingsService'
+  import { ref, onMounted, computed } from 'vue'
+  import { useI18n } from 'vue-i18n'
+  import { HackathonPhaseDTO } from '@/types/hackathon'
+  import AppSnackbar from '@/components/common/AppSnackbar.vue'
+  import VueDatePicker from '@vuepic/vue-datepicker'
+  import '@vuepic/vue-datepicker/dist/main.css'
+  import { enUS, fr } from 'date-fns/locale'
+  import { settingsService } from '@/services/settingsService'
 
-const { t, locale } = useI18n()
+  const { t, locale } = useI18n()
 
-// Snackbar
-const snackbar = ref(false)
-const text = ref('')
-const timeout = ref(1500)
-const error = ref(false)
+  // Snackbar
+  const snackbar = ref(false)
+  const text = ref('')
+  const timeout = ref(1500)
+  const error = ref(false)
 
-const snackbarMessage = computed(() => text.value)
+  const snackbarMessage = computed(() => text.value)
 
-// Phases
-const phasesFromDB = ref<HackathonPhaseDTO[]>([])
-const hackathonPhases = ref<
-  { order: number; startDateObj: Date | null; endDateObj: Date | null }[]
->([])
+  // Phases
+  const phasesFromDB = ref<HackathonPhaseDTO[]>([])
+  const hackathonPhases = ref<
+    { order: number; startDateObj: Date | null; endDateObj: Date | null }[]
+  >([])
 
-onMounted(async () => {
-  try {
-    const response = await settingsService.findWithKey('1', 'phases')
-    phasesFromDB.value = response.value.map((phase: any) => ({
-      order: phase.order,
-      startDate: phase.startDate,
-      endDate: phase.endDate,
-    }))
+  onMounted(async () => {
+    try {
+      const response = await settingsService.findWithKey('1', 'phases')
+      phasesFromDB.value = response.value.map((phase: any) => ({
+        order: phase.order,
+        startDate: phase.startDate,
+        endDate: phase.endDate,
+      }))
 
-    hackathonPhases.value = phasesFromDB.value.map((phase) => ({
-      order: phase.order,
-      startDateObj: phase.startDate ? new Date(phase.startDate) : null,
-      endDateObj: phase.endDate ? new Date(phase.endDate) : null,
-    }))
-  } catch (e) {
-    text.value = t('planningSettings.fetchError')
-    error.value = true
-    snackbar.value = true
+      hackathonPhases.value = phasesFromDB.value.map((phase) => ({
+        order: phase.order,
+        startDateObj: phase.startDate ? new Date(phase.startDate) : null,
+        endDateObj: phase.endDate ? new Date(phase.endDate) : null,
+      }))
+    } catch (e) {
+      text.value = t('planningSettings.fetchError')
+      error.value = true
+      snackbar.value = true
+    }
+  })
+
+  // Validation d'une phase
+  const validatePhase = (phase: (typeof hackathonPhases.value)[0]) => {
+    // Phase optionnelle vide
+    if (phase.order === 2 && !phase.startDateObj && !phase.endDateObj) return true
+    // Dates obligatoires
+    if (!phase.startDateObj || !phase.endDateObj) return false
+    return phase.startDateObj < phase.endDateObj
   }
-})
 
-// Validation d'une phase
-const validatePhase = (phase: typeof hackathonPhases.value[0]) => {
-  // Phase optionnelle vide
-  if (phase.order === 2 && !phase.startDateObj && !phase.endDateObj) return true
-  // Dates obligatoires
-  if (!phase.startDateObj || !phase.endDateObj) return false
-  return phase.startDateObj < phase.endDateObj
-}
+  // Validation de toutes les phases
+  const validatePhases = () => {
+    const phases = hackathonPhases.value
+    for (let i = 0; i < phases.length; i++) {
+      const phase = phases[i]
+      if (!validatePhase(phase)) return false
 
-// Validation de toutes les phases
-const validatePhases = () => {
-  const phases = hackathonPhases.value
-  for (let i = 0; i < phases.length; i++) {
-    const phase = phases[i]
-    if (!validatePhase(phase)) return false
+      if (i < phases.length - 1) {
+        const nextPhase = phases[i + 1]
+        if (nextPhase.order === 2 && !nextPhase.startDateObj && !nextPhase.endDateObj) continue
+        if (phase.endDateObj! > nextPhase.startDateObj!) return false
+      }
+    }
+    return true
+  }
 
-    if (i < phases.length - 1) {
-      const nextPhase = phases[i + 1]
-      if (nextPhase.order === 2 && !nextPhase.startDateObj && !nextPhase.endDateObj)
-        continue
-      if (phase.endDateObj! > nextPhase.startDateObj!) return false
+  // Sauvegarde
+  const handleSave = async () => {
+    if (!validatePhases()) {
+      text.value = t('planningSettings.invalidPhases')
+      error.value = true
+      snackbar.value = true
+      return
+    }
+
+    const payload = hackathonPhases.value.map((phase) => ({
+      order: phase.order,
+      startDate: phase.startDateObj?.toISOString() ?? null,
+      endDate: phase.endDateObj?.toISOString() ?? null,
+    }))
+
+    console.log('Saving phases:', payload)
+
+    try {
+      await settingsService.update('1', { key: 'phases', value: payload })
+      text.value = t('common.changesSaved')
+      error.value = false
+      snackbar.value = true
+    } catch (e) {
+      text.value = t('planningSettings.saveError')
+      error.value = true
+      snackbar.value = true
     }
   }
-  return true
-}
-
-// Sauvegarde
-const handleSave = async () => {
-  if (!validatePhases()) {
-    text.value = t('planningSettings.invalidPhases')
-    error.value = true
-    snackbar.value = true
-    return
-  }
-
-  const payload = hackathonPhases.value.map((phase) => ({
-    order: phase.order,
-    startDate: phase.startDateObj?.toISOString() ?? null,
-    endDate: phase.endDateObj?.toISOString() ?? null,
-  }))
-
-  console.log('Saving phases:', payload)
-
-  try {
-    await settingsService.update('1', { key: 'phases', value: payload })
-    text.value = t('common.changesSaved')
-    error.value = false
-    snackbar.value = true
-  } catch (e) {
-    text.value = t('planningSettings.saveError')
-    error.value = true
-    snackbar.value = true
-  }
-}
 </script>
 
 <template>
