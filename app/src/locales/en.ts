@@ -228,6 +228,12 @@ export default {
     title: 'Media',
     subtitle: 'Manage images and videos used in the application',
     logo: 'Logo',
+    socialMediaLinks: 'Social Media Links',
+    linkedin: 'LinkedIn',
+    facebook: 'Facebook',
+    instagram: 'Instagram',
+    x: 'X (formerly Twitter)',
+    youtube: 'YouTube',
   },
   partnersSettings: {
     title: 'Partners & Schools',

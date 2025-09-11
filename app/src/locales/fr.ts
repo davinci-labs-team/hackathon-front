@@ -260,6 +260,13 @@ export default {
   mediaSettings: {
     title: 'Médias',
     subtitle: "Gérez les images et logos utilisés dans l'application",
+    logo: 'Logo',
+    socialMediaLinks: 'Liens des Réseaux Sociaux',
+    linkedin: 'LinkedIn',
+    facebook: 'Facebook',
+    instagram: 'Instagram',
+    x: 'X (anciennement Twitter)',
+    youtube: 'YouTube',
   },
   partnersSettings: {
     title: 'Partenaires & Écoles',

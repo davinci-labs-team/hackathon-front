@@ -27,7 +27,7 @@
       const response = await settingsService.findWithKey('1', 'legal')
       if (response && response.value) {
         legalData.value = response.value as LegalText
-        sections.value = legalData.value[documentType.value] 
+        sections.value = legalData.value[documentType.value]
         loaded.value = true
       }
     } catch (e) {
@@ -48,21 +48,29 @@
 
   // Supprimer uniquement les sections ajoutées dynamiquement
   const removeSection = (id: string) => {
-  sections.value = sections.value.filter(
-    (s) => s.isDefault || s.id !== id
-  )
-}
+    sections.value = sections.value.filter((s) => s.isDefault || s.id !== id)
+  }
 
   // Export JSON prêt à envoyer au backend
   const exportJSON = async () => {
     const data: LegalText = {
       privacy:
         documentType.value === 'privacy'
-          ? sections.value.map(({ id, title, content, isDefault }) => ({ id, title, content, isDefault }))
+          ? sections.value.map(({ id, title, content, isDefault }) => ({
+              id,
+              title,
+              content,
+              isDefault,
+            }))
           : legalData.value.privacy,
       terms:
         documentType.value === 'terms'
-          ? sections.value.map(({ id, title, content, isDefault}) => ({ id, title, content, isDefault}))
+          ? sections.value.map(({ id, title, content, isDefault }) => ({
+              id,
+              title,
+              content,
+              isDefault,
+            }))
           : legalData.value.terms,
     }
 
@@ -94,7 +102,7 @@
   <v-container class="py-10 max-w-7xl mx-auto">
     <h1 class="text-3xl font-bold mb-2">{{ t('legalEditor.title') }}</h1>
     <p class="mb-10 text-lg text-gray-600">{{ t('legalEditor.subtitle') }}</p>
-    
+
     <!-- Type of document toggle -->
     <div class="mb-6">
       <label class="mr-4 font-semibold">{{ t('legalEditor.documentType') }}</label>
@@ -103,7 +111,7 @@
         <option value="terms">{{ t('legalEditor.termsConditions') }}</option>
       </select>
     </div>
-    
+
     <!-- List of sections -->
     <div v-for="section in sections" :key="section.id" class="mb-6 p-4 border rounded-lg shadow-sm">
       <div class="flex items-center justify-between mb-2">
@@ -125,7 +133,7 @@
         rows="4"
       ></textarea>
     </div>
-    
+
     <!-- Buttons -->
     <div class="flex gap-4 mt-6">
       <button class="px-4 py-2 bg-blue-600 text-white rounded-lg" @click="addSection">
@@ -137,7 +145,6 @@
     </div>
 
     <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
-
   </v-container>
 </template>
 

@@ -1,4 +1,4 @@
-import { isDefaultClause } from "typescript"
+import { isDefaultClause } from 'typescript'
 
 export interface Translation {
   en: string
