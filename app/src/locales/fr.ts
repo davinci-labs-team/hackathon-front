@@ -1,6 +1,3 @@
-import { logout } from '@/services/authService'
-import en from './en'
-
 export default {
   common: {
     close: 'Fermer',
@@ -20,6 +17,7 @@ export default {
     from: 'De',
     to: 'À',
     toBis: 'au',
+    fullname: '{firstname} {lastname}',
   },
   profile: {
     mainTitle: 'Mon Profil',
@@ -121,7 +119,15 @@ export default {
     images: 'Ajouter des images',
     max3Images: 'Vous pouvez ajouter jusqu’à 3 images.',
   },
-
+  users: {
+    addUser: 'Créer un compte',
+    editUser: 'Modifier l’utilisateur',
+    firstname: 'Prénom',
+    lastname: 'Nom de famille',
+    school: 'École associée',
+    confirmTitle: 'Confirmer la Suppression',
+    confirmText: 'Vous allez supprimer cet utilisateur : {firstname} {lastname}',
+  },
   // Roles sections
   organizer: {
     dashboard: 'Tableau de bord Organisateur',
@@ -129,6 +135,17 @@ export default {
       searchPlaceholder: 'Rechercher',
       addButton: 'Créer une annonce',
       addClicked: 'Bouton d’ajout cliqué',
+    },
+    userManagement: {
+      addButton: 'Ajouter nouvel utilisateur',
+      role: 'Rôle',
+      roleAll: 'Tous',
+      school: 'École',
+      schoolAll: 'Toutes',
+      name: 'Nom',
+      namePlaceholder: 'Rechercher par nom',
+      email: 'Email',
+      actions: 'Actions',
     },
     nav: {
       announcements: 'Annonces',

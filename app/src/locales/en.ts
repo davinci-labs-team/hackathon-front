@@ -1,5 +1,3 @@
-import fr from './fr'
-
 export default {
   common: {
     close: 'Close',
@@ -19,6 +17,7 @@ export default {
     from: 'From',
     to: 'To',
     toBis: 'to',
+    fullname: '{firstname} {lastname}',
   },
   profile: {
     mainTitle: 'My Profile',
@@ -117,6 +116,15 @@ export default {
     images: 'Upload Images',
     max3Images: 'You can upload up to 3 images.',
   },
+  users: {
+    addUser: 'Create an account',
+    editUser: 'Edit user',
+    firstname: 'First name',
+    lastname: 'Last name',
+    school: 'Associated school',
+    confirmTitle: 'Confirm Deletion',
+    confirmText: `You are about to delete this user: {firstname} {lastname}`,
+  },
   // Roles sections
   organizer: {
     dashboard: 'Organizer Dashboard',
@@ -124,6 +132,17 @@ export default {
       searchPlaceholder: 'Search',
       addButton: 'Create Announcement',
       addClicked: 'Add button clicked',
+    },
+    userManagement: {
+      addButton: 'Add new user',
+      role: 'Role',
+      roleAll: 'All',
+      school: 'School',
+      schoolAll: 'All',
+      name: 'Name',
+      namePlaceholder: 'Search by name',
+      email: 'Email',
+      actions: 'Actions',
     },
     nav: {
       announcements: 'Announcements',
