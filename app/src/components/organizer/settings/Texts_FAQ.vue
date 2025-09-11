@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { FAQItemDTO } from '@/types/faq'
@@ -7,8 +7,29 @@
   import FAQItemCard from '../faq/FAQItemCard.vue'
   import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
   import { useFaq } from '@/composables/useFaq'
+  import { settingsService } from '@/services/settingsService'
+import { UpdateSettingDTO } from '@/types/hackathon'
 
   const { t } = useI18n()
+
+  const slogan = ref('')
+  const hackathonName = ref('')
+  const hackathonDescription = ref('')
+
+  onMounted(async () => {
+    try {
+      const response = await settingsService.findOne('1', 'texts')
+      if (response && response.value) {
+        slogan.value = response.value.slogan || ''
+        hackathonName.value = response.value.hackathon_name || ''
+        hackathonDescription.value = response.value.hackathon_description || ''
+
+        console.log('Fetched settings:', response.value)
+      }
+    } catch (error) {
+      console.error('Error fetching settings:', error)
+    }
+  })
 
   /* FAQ */
 
@@ -45,10 +66,6 @@
   const hackathonNameMaxLength = 60
   const hackathonDescriptionMaxLength = 500
 
-  const slogan = ref('Build the future with us!')
-  const hackathonName = ref('Qubit or not Qubit')
-  const hackathonDescription = ref('Hello World')
-
   // Snackbar
   const snackbar = ref(false)
   const text = ref(t('common.changesSaved'))
@@ -66,8 +83,7 @@
     return true
   }
 
-  // TODO: replace console.log by actual API call
-  const handleSave = () => {
+  const handleSave = async() => {
     if (!validateTexts()) {
       text.value = t('textsSettings.errors.fixErrors')
       error.value = true
@@ -75,18 +91,25 @@
       return
     }
 
-    snackbar.value = true
-    error.value = false
-
-    const payload = {
-      texts: {
-        hackathonName: hackathonName.value,
+    const payload : UpdateSettingDTO = {
+      key: 'texts',
+      value: {
         slogan: slogan.value,
-        hackathonDescription: hackathonDescription.value,
+        hackathon_name: hackathonName.value,
+        hackathon_description: hackathonDescription.value,
       },
     }
 
-    console.log('Payload à envoyer:', JSON.stringify(payload))
+    try {
+      await settingsService.update('1', payload)
+      text.value = t('common.changesSaved')
+      error.value = false
+      snackbar.value = true
+    } catch (e) {
+      text.value = t('common.error')
+      error.value = true
+      snackbar.value = true
+    }
   }
 </script>
 

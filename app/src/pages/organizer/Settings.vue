@@ -6,14 +6,11 @@
   import PlanningEditor from '@/components/organizer/settings/PlanningEditor.vue'
   import SocialMedia from '@/components/organizer/settings/SocialMedia.vue'
   import Texts from '@/components/organizer/settings/Texts_FAQ.vue'
-  import { ref, onMounted } from 'vue'
+  import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { settingsService } from '@/services/settingsService'
-  import { UpdateSettingDTO } from '@/types/hackathon'
   const { t } = useI18n()
 
   const currentSection = ref('social')
-
 </script>
 
 <template>
