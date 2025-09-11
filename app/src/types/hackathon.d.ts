@@ -11,6 +11,7 @@ export interface HackathonPhaseDTO {
 }
 
 export interface PartnersDTO {
+  id: string
   name: string
   logoId: string
   websiteUrl: string

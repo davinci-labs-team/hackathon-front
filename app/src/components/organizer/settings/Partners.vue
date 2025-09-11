@@ -1,8 +1,11 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
-  import { PartnersDTO } from '@/types/hackathon'
+  import { ref, onMounted } from 'vue'
+  import { PartnersDTO, UpdateSettingDTO } from '@/types/hackathon'
   import { useI18n } from 'vue-i18n'
   import PartnerCard from '../partners/PartnerCard.vue'
+  import { settingsService } from '@/services/settingsService'
+  import { v4 as uuidv4 } from 'uuid'
+
   const { t } = useI18n()
 
   /* TODO in this file
@@ -11,48 +14,66 @@
     - call API to update partners object in backend when deleting or updating a partner
   */
 
-  const partners = ref<PartnersDTO[]>([
-    // Example partner data
-    {
-      name: 'EPITA',
-      websiteUrl: 'https://epita.fr',
-      logoId: 'https://upload.wikimedia.org/wikipedia/fr/d/d8/Epita.png',
-      isParticipatingSchool: false,
-    },
-    {
-      name: 'Université de Tours',
-      websiteUrl: 'https://www.univ-tours.fr/',
-      logoId:
-        'https://upload.wikimedia.org/wikipedia/fr/c/c9/Logo_Universit%C3%A9_Tours_-_2017.svg',
-      isParticipatingSchool: true,
-    },
-  ])
+  const partners = ref<PartnersDTO[]>([])
+
+  onMounted(async () => {
+    try {
+      const response = await settingsService.findWithKey('1', 'partners')
+      partners.value = response.value.map((partner: any) => ({
+        id: partner.id,
+        name: partner.name || '',
+        websiteUrl: partner.websiteUrl || '',
+        logoId: partner.logoId || '',
+        isParticipatingSchool: partner.isParticipatingSchool || false,
+      }))
+    } catch (error) {
+      console.error('Error fetching partners:', error)
+    }
+  })
+
+  function savePartners() {
+    const payload: UpdateSettingDTO = {
+      key: 'partners',
+      value: partners.value,
+    }
+
+    return settingsService
+      .update('1', payload)
+      .then(() => {
+        console.log('Partners updated successfully')
+      })
+      .catch((error) => {
+        console.error('Error updating partners:', error)
+      })
+  }
 
   function onDeletePartner(partner: PartnersDTO) {
-    const index = partners.value.findIndex((p) => p === partner)
-    if (index !== -1) partners.value.splice(index, 1)
-
-    // TODO: call API to update partners object in backend
+    const index = partners.value.findIndex((p) => p.id === partner.id)
+    if (index !== -1) {
+      partners.value.splice(index, 1)
+      savePartners()
+    }
   }
 
   function onUpdatePartner(updatedPartner: PartnersDTO) {
-    const index = partners.value.findIndex((p) => p.name === updatedPartner.name)
+    const index = partners.value.findIndex((p) => p.id === updatedPartner.id)
     if (index !== -1) {
       partners.value[index] = { ...updatedPartner }
+      savePartners()
     }
-
-    // TODO: call API to update partners object in backend
   }
 
   // TODO: fetch all images from backend to display logos
 
   const addPartner = () => {
     partners.value.push({
+      id: uuidv4(),
       name: '',
       websiteUrl: '',
       logoId: '',
       isParticipatingSchool: false,
     })
+    savePartners()
   }
 </script>
 
@@ -72,7 +93,7 @@
 
     <PartnerCard
       v-for="(partner, index) in partners"
-      :key="index"
+      :key="partner.id"
       :partner="partner"
       class="mb-4"
       @delete="onDeletePartner"

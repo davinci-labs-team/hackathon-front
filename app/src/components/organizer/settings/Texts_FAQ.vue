@@ -8,23 +8,23 @@
   import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
   import { useFaq } from '@/composables/useFaq'
   import { settingsService } from '@/services/settingsService'
-import { UpdateSettingDTO } from '@/types/hackathon'
+  import { UpdateSettingDTO } from '@/types/hackathon'
 
   const { t } = useI18n()
 
   const slogan = ref('')
   const hackathonName = ref('')
   const hackathonDescription = ref('')
+  const saveAttempted = ref(false)
 
   onMounted(async () => {
+
     try {
-      const response = await settingsService.findOne('1', 'texts')
+      const response = await settingsService.findWithKey('1', 'texts')
       if (response && response.value) {
         slogan.value = response.value.slogan || ''
         hackathonName.value = response.value.hackathon_name || ''
         hackathonDescription.value = response.value.hackathon_description || ''
-
-        console.log('Fetched settings:', response.value)
       }
     } catch (error) {
       console.error('Error fetching settings:', error)
@@ -83,7 +83,9 @@ import { UpdateSettingDTO } from '@/types/hackathon'
     return true
   }
 
-  const handleSave = async() => {
+  const handleSaveTexts = async () => {
+    saveAttempted.value = true
+
     if (!validateTexts()) {
       text.value = t('textsSettings.errors.fixErrors')
       error.value = true
@@ -91,7 +93,7 @@ import { UpdateSettingDTO } from '@/types/hackathon'
       return
     }
 
-    const payload : UpdateSettingDTO = {
+    const payload: UpdateSettingDTO = {
       key: 'texts',
       value: {
         slogan: slogan.value,
@@ -118,7 +120,7 @@ import { UpdateSettingDTO } from '@/types/hackathon'
     <h1 class="text-3xl font-bold mb-2">{{ t('textsSettings.title') }}</h1>
     <div class="flex-direction-row mb-5 flex items-center justify-between">
       <p class="mb-0 text-lg text-gray-600">{{ t('textsSettings.subtitle') }}</p>
-      <v-btn color="primary" @click="handleSave">{{ t('common.saveChanges') }}</v-btn>
+      <v-btn color="primary" @click="handleSaveTexts">{{ t('common.saveChanges') }}</v-btn>
     </div>
 
     <v-container>
@@ -131,7 +133,7 @@ import { UpdateSettingDTO } from '@/types/hackathon'
         variant="outlined"
         class="mb-0"
       />
-      <p class="text-red-500 italic mb-5" v-if="!hackathonName">
+      <p class="text-red-500 italic mb-5" v-if="!hackathonName && saveAttempted">
         {{ t('textsSettings.errors.requiredField') }}
       </p>
       <p class="text-red-500 italic mb-5" v-if="hackathonName.length > hackathonNameMaxLength">
@@ -161,7 +163,7 @@ import { UpdateSettingDTO } from '@/types/hackathon'
         rows="3"
         class="mb-0"
       />
-      <p class="text-red-500 italic mb-5" v-if="!hackathonDescription">
+      <p class="text-red-500 italic mb-5" v-if="!hackathonDescription && saveAttempted">
         {{ t('textsSettings.errors.requiredField') }}
       </p>
       <p

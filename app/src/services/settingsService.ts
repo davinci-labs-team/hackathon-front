@@ -25,7 +25,7 @@ export const settingsService = {
     return res.data
   },
 
-  async findOne(id: string, key?: string): Promise<any> {
+  async findWithKey(id: string, key?: string): Promise<any> {
     const url = `${import.meta.env.VITE_API_URL}/api/settings/${id}` + (key ? `?key=${key}` : '')
     const res = await axios.get(url, { headers: getAuthHeaders() })
     return res.data
