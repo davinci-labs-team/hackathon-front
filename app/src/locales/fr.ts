@@ -197,7 +197,7 @@ export default {
   },
 
   // Settings
-  legalEditor: {
+  legal: {
     title: 'Mentions Légales',
     subtitle: 'Gérez les documents légaux de votre hackathon',
     documentType: 'Type de document',

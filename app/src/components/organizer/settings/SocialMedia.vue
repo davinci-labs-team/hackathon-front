@@ -35,8 +35,24 @@
   })
 
   const handleSave = async () => {
-    snackbar.value = true
-    error.value = false
+    const payload = {
+      key: 'media',
+      value: mediaSettings.value,
+    }
+
+    return settingsService
+      .update('1', payload)
+      .then(() => {
+        text.value = t('common.changesSaved')
+        error.value = false
+        snackbar.value = true
+      })
+      .catch((err) => {
+        console.error('Error updating media settings:', err)
+        text.value = t('common.errorOccurred')
+        error.value = true
+        snackbar.value = true
+      })
   }
 </script>
 
@@ -57,67 +73,66 @@
       </p>
 
       <v-row class="mb-6 gap-4">
-  <v-col cols="12" md="5" class="flex items-center gap-2">
-    <v-icon size="28">mdi-linkedin</v-icon>
-    <v-text-field
-      v-model="mediaSettings.linkedin"
-      :placeholder="t('mediaSettings.linkedin')"
-      variant="outlined"
-      density="comfortable"
-      hide-details
-      class="flex-1"
-    />
-  </v-col>
+        <v-col cols="12" md="5" class="flex items-center gap-2">
+          <v-icon size="28">mdi-linkedin</v-icon>
+          <v-text-field
+            v-model="mediaSettings.linkedin"
+            :placeholder="t('mediaSettings.linkedin')"
+            variant="outlined"
+            density="comfortable"
+            hide-details
+            class="flex-1"
+          />
+        </v-col>
 
-  <v-col cols="12" md="5" class="flex items-center gap-2">
-    <v-icon size="28">mdi-facebook</v-icon>
-    <v-text-field
-      v-model="mediaSettings.facebook"
-      :placeholder="t('mediaSettings.facebook')"
-      variant="outlined"
-      density="comfortable"
-      hide-details
-      class="flex-1"
-    />
-  </v-col>
+        <v-col cols="12" md="5" class="flex items-center gap-2">
+          <v-icon size="28">mdi-facebook</v-icon>
+          <v-text-field
+            v-model="mediaSettings.facebook"
+            :placeholder="t('mediaSettings.facebook')"
+            variant="outlined"
+            density="comfortable"
+            hide-details
+            class="flex-1"
+          />
+        </v-col>
 
-  <v-col cols="12" md="5" class="flex items-center gap-2">
-    <v-icon size="28">mdi-instagram</v-icon>
-    <v-text-field
-      v-model="mediaSettings.instagram"
-      :placeholder="t('mediaSettings.instagram')"
-      variant="outlined"
-      density="comfortable"
-      hide-details
-      class="flex-1"
-    />
-  </v-col>
+        <v-col cols="12" md="5" class="flex items-center gap-2">
+          <v-icon size="28">mdi-instagram</v-icon>
+          <v-text-field
+            v-model="mediaSettings.instagram"
+            :placeholder="t('mediaSettings.instagram')"
+            variant="outlined"
+            density="comfortable"
+            hide-details
+            class="flex-1"
+          />
+        </v-col>
 
-  <v-col cols="12" md="5" class="flex items-center gap-2">
-    <v-icon size="28">mdi-twitter</v-icon>
-    <v-text-field
-      v-model="mediaSettings.x"
-      :placeholder="t('mediaSettings.x')"
-      variant="outlined"
-      density="comfortable"
-      hide-details
-      class="flex-1"
-    />
-  </v-col>
+        <v-col cols="12" md="5" class="flex items-center gap-2">
+          <v-icon size="28">mdi-twitter</v-icon>
+          <v-text-field
+            v-model="mediaSettings.x"
+            :placeholder="t('mediaSettings.x')"
+            variant="outlined"
+            density="comfortable"
+            hide-details
+            class="flex-1"
+          />
+        </v-col>
 
-  <v-col cols="12" md="5" class="flex items-center gap-2">
-    <v-icon size="28">mdi-youtube</v-icon>
-    <v-text-field
-      v-model="mediaSettings.youtube"
-      :placeholder="t('mediaSettings.youtube')"
-      variant="outlined"
-      density="comfortable"
-      hide-details
-      class="flex-1"
-    />
-  </v-col>
-</v-row>
-
+        <v-col cols="12" md="5" class="flex items-center gap-2">
+          <v-icon size="28">mdi-youtube</v-icon>
+          <v-text-field
+            v-model="mediaSettings.youtube"
+            :placeholder="t('mediaSettings.youtube')"
+            variant="outlined"
+            density="comfortable"
+            hide-details
+            class="flex-1"
+          />
+        </v-col>
+      </v-row>
     </v-container>
   </v-container>
 </template>

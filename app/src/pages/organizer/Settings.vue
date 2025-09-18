@@ -29,7 +29,7 @@
             texts: t('texts_faq_title'),
             partners: t('partnersSettings.title'),
             dates: t('planningSettings.title'),
-            legal: t('legalEditor.title'),
+            legal: t('legal.title'),
             matchmaking: t('matchmakingSettings.title'),
             communication: t('communicationSettings.title'),
           }"

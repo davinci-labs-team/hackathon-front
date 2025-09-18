@@ -33,22 +33,38 @@
     <table class="min-w-full text-sm">
       <thead>
         <tr class="border-b">
-          <th class="px-4 py-2 text-left font-semibold">{{ t('organizer.userManagement.name') }}</th>
-          <th class="px-4 py-2 text-left font-semibold">{{ t('organizer.userManagement.email') }}</th>
-          <th class="px-4 py-2 text-left font-semibold">{{ t('organizer.userManagement.role') }}</th>
-          <th class="px-4 py-2 text-left font-semibold">{{ t('organizer.userManagement.school') }}</th>
-          <th class="px-4 py-2 text-center font-semibold">{{ t('organizer.userManagement.actions') }}</th>
+          <th class="px-4 py-2 text-left font-semibold">
+            {{ t('organizer.userManagement.name') }}
+          </th>
+          <th class="px-4 py-2 text-left font-semibold">
+            {{ t('organizer.userManagement.email') }}
+          </th>
+          <th class="px-4 py-2 text-left font-semibold">
+            {{ t('organizer.userManagement.role') }}
+          </th>
+          <th class="px-4 py-2 text-left font-semibold">
+            {{ t('organizer.userManagement.school') }}
+          </th>
+          <th class="px-4 py-2 text-center font-semibold">
+            {{ t('organizer.userManagement.actions') }}
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="user in paginatedUsers" :key="user.id" class="border-b">
-          <td class="px-4 py-2">{{ t('common.fullname', { firstname: user.firstname, lastname: user.lastname }) }}</td>
+          <td class="px-4 py-2">
+            {{ t('common.fullname', { firstname: user.firstname, lastname: user.lastname }) }}
+          </td>
           <td class="px-4 py-2">{{ user.email }}</td>
           <td class="px-4 py-2">{{ t(`roles.${user.role.toLowerCase()}`) }}</td>
           <td class="px-4 py-2">{{ user.school }}</td>
           <td class="px-4 py-2 text-center">
-            <v-icon small class="mr-2" color="primary" @click="$emit('edit', user)">mdi-pencil</v-icon>
-            <v-icon small class="mr-2" color="secondary" @click="$emit('lock', user)">mdi-lock</v-icon>
+            <v-icon small class="mr-2" color="primary" @click="$emit('edit', user)"
+              >mdi-pencil</v-icon
+            >
+            <v-icon small class="mr-2" color="secondary" @click="$emit('lock', user)"
+              >mdi-lock</v-icon
+            >
             <v-icon small color="error" @click="$emit('delete', user)">mdi-delete</v-icon>
           </td>
         </tr>
@@ -56,24 +72,24 @@
     </table>
   </div>
   <div v-if="totalPages > 1" class="flex justify-center items-center gap-2 mt-6">
-      <v-btn
-        icon="mdi-chevron-left"
-        :disabled="currentPage === 1"
-        @click="goToPage(currentPage - 1)"
-      ></v-btn>
-      <v-btn
-        v-for="n in totalPages"
-        :key="n"
-        :variant="n === currentPage ? 'flat' : 'text'"
-        color="primary"
-        @click="goToPage(n)"
-      >
-        {{ n }}
-      </v-btn>
-      <v-btn
-        icon="mdi-chevron-right"
-        :disabled="currentPage === totalPages"
-        @click="goToPage(currentPage + 1)"
-      ></v-btn>
-    </div>
+    <v-btn
+      icon="mdi-chevron-left"
+      :disabled="currentPage === 1"
+      @click="goToPage(currentPage - 1)"
+    ></v-btn>
+    <v-btn
+      v-for="n in totalPages"
+      :key="n"
+      :variant="n === currentPage ? 'flat' : 'text'"
+      color="primary"
+      @click="goToPage(n)"
+    >
+      {{ n }}
+    </v-btn>
+    <v-btn
+      icon="mdi-chevron-right"
+      :disabled="currentPage === totalPages"
+      @click="goToPage(currentPage + 1)"
+    ></v-btn>
+  </div>
 </template>

@@ -42,5 +42,5 @@ export const userService = {
       headers: getAuthHeaders(),
     })
     return res.data
-  }
+  },
 }

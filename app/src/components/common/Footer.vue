@@ -1,8 +1,32 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
   import { RouterLink } from 'vue-router'
+  import { settingsService } from '@/services/settingsService'
+  import { HackathonMediaDTO } from '@/types/hackathon'
+  import { onMounted } from 'vue'
 
   const { t } = useI18n()
+
+  const mediaSettings: HackathonMediaDTO = {
+    bannerPictureId: null,
+    hackathonLogoId: null,
+    instagram: 'https://instagram.com',
+    linkedin: 'https://linkedin.com',
+    facebook: 'https://facebook.com',
+    x: 'https://twitter.com',
+    youtube: 'https://youtube.com',
+  }
+
+  onMounted(async () => {
+    try {
+      const response = await settingsService.findWithKey('1', 'media')
+      if (response && response.value) {
+        Object.assign(mediaSettings, response.value)
+      }
+    } catch (error) {
+      console.error('Error fetching media settings:', error)
+    }
+  })
 </script>
 
 <style scoped>
@@ -16,16 +40,58 @@
     <v-container>
       <!-- Réseaux sociaux -->
       <v-row justify="end" class="mb-2">
-        <v-btn icon variant="text" size="small" href="https://facebook.com" target="_blank">
+        <v-btn
+          v-if="mediaSettings.facebook"
+          icon
+          variant="text"
+          size="small"
+          :href="mediaSettings.facebook"
+          target="_blank"
+        >
           <v-icon>mdi-facebook</v-icon>
         </v-btn>
-        <v-btn icon variant="text" size="small" href="https://instagram.com" target="_blank">
+
+        <v-btn
+          v-if="mediaSettings.instagram"
+          icon
+          variant="text"
+          size="small"
+          :href="mediaSettings.instagram"
+          target="_blank"
+        >
           <v-icon>mdi-instagram</v-icon>
         </v-btn>
-        <v-btn icon variant="text" size="small" href="https://twitter.com" target="_blank">
+
+        <v-btn
+          v-if="mediaSettings.x"
+          icon
+          variant="text"
+          size="small"
+          :href="mediaSettings.x"
+          target="_blank"
+        >
           <v-icon>mdi-twitter</v-icon>
         </v-btn>
-        <v-btn icon variant="text" size="small" href="https://linkedin.com" target="_blank">
+
+        <v-btn
+          v-if="mediaSettings.youtube"
+          icon
+          variant="text"
+          size="small"
+          :href="mediaSettings.youtube"
+          target="_blank"
+        >
+          <v-icon>mdi-youtube</v-icon>
+        </v-btn>
+
+        <v-btn
+          v-if="mediaSettings.linkedin"
+          icon
+          variant="text"
+          size="small"
+          :href="mediaSettings.linkedin"
+          target="_blank"
+        >
           <v-icon>mdi-linkedin</v-icon>
         </v-btn>
       </v-row>

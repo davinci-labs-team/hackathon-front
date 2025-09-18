@@ -13,7 +13,6 @@
     editMode?: boolean
     user?: UserDTO | null
   }>()
-  
 
   const emit = defineEmits<{
     (e: 'update:modelValue', value: boolean): void
@@ -40,10 +39,7 @@
   const school = ref('')
 
   // TODO: récupérer dynamiquement les écoles
-  const schools = [
-    { title: 'Polytech' },
-    { title: 'INSA' }
-  ]
+  const schools = [{ title: 'Polytech' }, { title: 'INSA' }]
 
   // -----------------------------
   // Validation
@@ -71,7 +67,14 @@
   // Save user (via backend => TODO)
   // -----------------------------
   const save = async () => {
-    if (!firstname.value || !lastname.value || !email.value || !role.value || (role.value === 'PARTICIPANT' && !school.value)) return
+    if (
+      !firstname.value ||
+      !lastname.value ||
+      !email.value ||
+      !role.value ||
+      (role.value === 'PARTICIPANT' && !school.value)
+    )
+      return
 
     // Création de FormData pour envoyer au backend
     const userData = {
@@ -80,7 +83,7 @@
       lastname: lastname.value,
       email: email.value,
       role: role.value,
-      school: school.value
+      school: school.value,
     } as UserDTO
 
     emit('save', userData)
@@ -151,12 +154,7 @@
           />
 
           <label class="block mb-1 text-m">{{ t('organizer.userManagement.role') }}</label>
-          <v-radio-group
-            v-model="role"
-            :rules="[required]"
-            row
-            class="mb-4"
-          >
+          <v-radio-group v-model="role" :rules="[required]" row class="mb-4">
             <div class="grid grid-cols-2 gap-x-1">
               <div><v-radio :label="t('roles.participant')" value="PARTICIPANT" /></div>
               <div><v-radio :label="t('roles.mentor')" value="MENTOR" /></div>

@@ -16,34 +16,36 @@
     { title: t('roles.organizer'), value: 'ORGANIZER' },
     { title: t('roles.jury'), value: 'JURY' },
     { title: t('roles.mentor'), value: 'MENTOR' },
-    { title: t('roles.participant'), value: 'PARTICIPANT' }
+    { title: t('roles.participant'), value: 'PARTICIPANT' },
   ])
 
   // TODO: récupérer dynamiquement les écoles
   const schools = computed(() => [
     { title: t('organizer.userManagement.schoolAll'), value: '' },
     { title: 'Polytech' },
-    { title: 'INSA' }
+    { title: 'INSA' },
   ])
 
   const selectedRole = ref('')
   const selectedSchool = ref('')
   const filterName = ref('')
 
-  
   const showUserForm = ref(false)
-  
+
   const userToDelete = ref<UserDTO | null>(null)
   const showConfirmDialog = ref(false)
 
   const editMode = ref(false)
 
   const filteredUsers = computed(() => {
-    return users.value.filter(user => {
+    return users.value.filter((user) => {
       return (
         (selectedRole.value === '' || user.role === selectedRole.value) &&
         (selectedSchool.value === '' || user.school === selectedSchool.value) &&
-        (filterName.value === '' || (user.firstname + ' ' + user.lastname).toLowerCase().includes(filterName.value.toLowerCase()))
+        (filterName.value === '' ||
+          (user.firstname + ' ' + user.lastname)
+            .toLowerCase()
+            .includes(filterName.value.toLowerCase()))
       )
     })
   })
@@ -81,7 +83,6 @@
   }
 
   const selectedUser = ref<UserDTO | null>(null)
-
 </script>
 
 <template>
@@ -97,7 +98,9 @@
         <div class="mb-6 p-4 border rounded-lg shadow-sm">
           <div class="flex gap-8">
             <div class="flex-1">
-              <label class="block mb-1 text-sm font-medium">{{ t('organizer.userManagement.role') }}</label>
+              <label class="block mb-1 text-sm font-medium">{{
+                t('organizer.userManagement.role')
+              }}</label>
               <v-select
                 v-model="selectedRole"
                 :items="roles"
@@ -108,7 +111,9 @@
               />
             </div>
             <div class="flex-1">
-              <label class="block mb-1 text-sm font-medium">{{ t('organizer.userManagement.school') }}</label>
+              <label class="block mb-1 text-sm font-medium">{{
+                t('organizer.userManagement.school')
+              }}</label>
               <v-select
                 v-model="selectedSchool"
                 :items="schools"
@@ -119,7 +124,9 @@
               />
             </div>
             <div class="flex-1">
-              <label class="block mb-1 text-sm font-medium">{{ t('organizer.userManagement.name') }}</label>
+              <label class="block mb-1 text-sm font-medium">{{
+                t('organizer.userManagement.name')
+              }}</label>
               <v-text-field
                 v-model="filterName"
                 :placeholder="t('organizer.userManagement.namePlaceholder')"
@@ -141,17 +148,26 @@
           @edit="onEditUser"
         />
 
-        <UserForm v-model="showUserForm" @save="handleSave" :edit-mode="editMode" :user="selectedUser" />
+        <UserForm
+          v-model="showUserForm"
+          @save="handleSave"
+          :edit-mode="editMode"
+          :user="selectedUser"
+        />
         <ConfirmDialog
           v-model="showConfirmDialog"
           :title="t('users.confirmTitle')"
-          :text="t('users.confirmText', { firstname: userToDelete?.firstname, lastname: userToDelete?.lastname })"
+          :text="
+            t('users.confirmText', {
+              firstname: userToDelete?.firstname,
+              lastname: userToDelete?.lastname,
+            })
+          "
           :confirmLabel="t('common.delete')"
           :cancelLabel="t('common.cancel')"
           @confirm="onDeleteUser(userToDelete!)"
           @cancel="userToDelete = null"
         />
-
       </div>
     </v-row>
   </v-container>

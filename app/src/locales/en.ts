@@ -193,7 +193,7 @@ export default {
   },
 
   // Settings
-  legalEditor: {
+  legal: {
     title: 'Legal Notice',
     subtitle: 'Manage the legal documents of your hackathon',
     documentType: 'Type of document',

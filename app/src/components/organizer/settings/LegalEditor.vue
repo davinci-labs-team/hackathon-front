@@ -100,15 +100,15 @@
 
 <template>
   <v-container class="py-10 max-w-7xl mx-auto">
-    <h1 class="text-3xl font-bold mb-2">{{ t('legalEditor.title') }}</h1>
-    <p class="mb-10 text-lg text-gray-600">{{ t('legalEditor.subtitle') }}</p>
+    <h1 class="text-3xl font-bold mb-2">{{ t('legal.title') }}</h1>
+    <p class="mb-10 text-lg text-gray-600">{{ t('legal.subtitle') }}</p>
 
     <!-- Type of document toggle -->
     <div class="mb-6">
-      <label class="mr-4 font-semibold">{{ t('legalEditor.documentType') }}</label>
+      <label class="mr-4 font-semibold">{{ t('legal.documentType') }}</label>
       <select v-model="documentType" class="border px-3 py-2 rounded-lg">
-        <option value="privacy">{{ t('legalEditor.privacyPolicy') }}</option>
-        <option value="terms">{{ t('legalEditor.termsConditions') }}</option>
+        <option value="privacy">{{ t('legal.privacyPolicy') }}</option>
+        <option value="terms">{{ t('legal.termsConditions') }}</option>
       </select>
     </div>
 
@@ -124,7 +124,7 @@
           class="text-red-600 text-sm hover:underline"
           @click="removeSection(section.id)"
         >
-          {{ t('legalEditor.delete') }}
+          {{ t('legal.delete') }}
         </button>
       </div>
       <textarea
@@ -137,10 +137,10 @@
     <!-- Buttons -->
     <div class="flex gap-4 mt-6">
       <button class="px-4 py-2 bg-blue-600 text-white rounded-lg" @click="addSection">
-        {{ t('legalEditor.addSection') }}
+        {{ t('legal.addSection') }}
       </button>
       <button class="px-4 py-2 bg-green-600 text-white rounded-lg" @click="exportJSON">
-        {{ t('legalEditor.save') }}
+        {{ t('legal.save') }}
       </button>
     </div>
 
