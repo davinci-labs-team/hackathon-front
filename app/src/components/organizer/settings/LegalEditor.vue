@@ -15,14 +15,16 @@
   const error = ref(false)
 
   const sections = ref<Section[]>([])
+  const settingsId = ref('1')
   const loaded = ref(false)
 
   const legalData = ref<LegalText>({ privacy: [], terms: [] })
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('1', 'legal')
+      const response = await settingsService.findWithKey('legal')
       if (response && response.value) {
+        settingsId.value = response.id
         legalData.value = response.value as LegalText
         sections.value = legalData.value[documentType.value]
         loaded.value = true
@@ -86,7 +88,7 @@
     console.log('Exported Legal Text JSON:', JSON.stringify(data, null, 2))
 
     try {
-      await settingsService.update('1', { key: 'legal', value: data })
+      await settingsService.update(settingsId.value, { key: 'legal', value: data })
       text.value = t('common.changesSaved')
       error.value = false
       snackbar.value = true

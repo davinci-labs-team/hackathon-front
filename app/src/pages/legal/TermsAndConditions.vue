@@ -12,7 +12,7 @@
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('1', 'legal')
+      const response = await settingsService.findWithKey('legal')
       terms_and_conditions.value = response.value.terms
     } catch (error) {
       console.error('Error fetching privacy policy:', error)

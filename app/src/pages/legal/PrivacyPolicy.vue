@@ -12,7 +12,7 @@
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('1', 'legal')
+      const response = await settingsService.findWithKey('legal')
       privacy_policy.value = response.value.privacy
       console.log(privacy_policy.value)
     } catch (error) {

@@ -16,14 +16,16 @@
   const hackathonName = ref('')
   const hackathonDescription = ref('')
   const saveAttempted = ref(false)
+  const settingsId = ref('1')
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('1', 'texts')
+      const response = await settingsService.findWithKey('texts')
       if (response && response.value) {
         slogan.value = response.value.slogan || ''
         hackathonName.value = response.value.hackathon_name || ''
         hackathonDescription.value = response.value.hackathon_description || ''
+        settingsId.value = response.id
       }
     } catch (error) {
       console.error('Error fetching settings:', error)

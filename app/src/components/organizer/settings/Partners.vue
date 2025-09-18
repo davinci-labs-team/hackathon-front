@@ -10,15 +10,14 @@
 
   /* TODO in this file
     - check if pictures have changed, if yes upload them to backend and get their urls
-    - fetch partners from backend instead of using hardcoded data
-    - call API to update partners object in backend when deleting or updating a partner
   */
 
   const partners = ref<PartnersDTO[]>([])
+  const settingsId = ref('1')
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('1', 'partners')
+      const response = await settingsService.findWithKey('partners')
       partners.value = response.value.map((partner: any) => ({
         id: partner.id,
         name: partner.name || '',
@@ -26,6 +25,7 @@
         logoId: partner.logoId || '',
         isParticipatingSchool: partner.isParticipatingSchool || false,
       }))
+      settingsId.value = response.id
     } catch (error) {
       console.error('Error fetching partners:', error)
     }
@@ -38,7 +38,7 @@
     }
 
     return settingsService
-      .update('1', payload)
+      .update(settingsId.value, payload)
       .then(() => {
         console.log('Partners updated successfully')
       })

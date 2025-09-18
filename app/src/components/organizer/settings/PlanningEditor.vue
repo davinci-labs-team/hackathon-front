@@ -23,10 +23,11 @@
   const hackathonPhases = ref<
     { order: number; startDateObj: Date | null; endDateObj: Date | null }[]
   >([])
+  const settingsId = ref('1')
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('1', 'phases')
+      const response = await settingsService.findWithKey('phases')
       phasesFromDB.value = response.value.map((phase: any) => ({
         order: phase.order,
         startDate: phase.startDate,
@@ -38,6 +39,7 @@
         startDateObj: phase.startDate ? new Date(phase.startDate) : null,
         endDateObj: phase.endDate ? new Date(phase.endDate) : null,
       }))
+      settingsId.value = response.id
     } catch (e) {
       text.value = t('planningSettings.fetchError')
       error.value = true
@@ -88,7 +90,7 @@
     console.log('Saving phases:', payload)
 
     try {
-      await settingsService.update('1', { key: 'phases', value: payload })
+      await settingsService.update(settingsId.value, { key: 'phases', value: payload })
       text.value = t('common.changesSaved')
       error.value = false
       snackbar.value = true

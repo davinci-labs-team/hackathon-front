@@ -3,7 +3,7 @@
   import { RouterLink } from 'vue-router'
   import { settingsService } from '@/services/settingsService'
   import { HackathonMediaDTO } from '@/types/hackathon'
-  import { onMounted, ref} from 'vue'
+  import { onMounted, ref } from 'vue'
 
   const { t } = useI18n()
 
@@ -19,11 +19,10 @@
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('1', 'media')
+      const response = await settingsService.findWithKey('media')
       if (response && response.value) {
         mediaSettings.value = response.value
       }
-
     } catch (error) {
       console.error('Error fetching media settings:', error)
     }

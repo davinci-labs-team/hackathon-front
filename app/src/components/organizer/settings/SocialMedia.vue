@@ -17,6 +17,11 @@
     youtube: '',
   })
 
+  const bannerFile = ref<File | null>(null)
+  const logoFile = ref<File | null>(null)
+
+  const settingsId = ref('1')
+
   // Snackbar
   const snackbar = ref(false)
   const text = ref(t('common.changesSaved'))
@@ -25,14 +30,18 @@
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('1', 'media')
+      const response = await settingsService.findWithKey('media')
       if (response && response.value) {
         mediaSettings.value = response.value
+        settingsId.value = response.id
+        console.log('Settings ID:', settingsId.value)
       }
     } catch (error) {
       console.error('Error fetching media settings:', error)
     }
   })
+
+  const getPreviewUrl = (file: File) => URL.createObjectURL(file)
 
   const handleSave = async () => {
     const payload = {
@@ -67,6 +76,54 @@
     <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
 
     <v-container>
+      <p class="mb-4 text-lg font-semibold text-gray-700">
+        {{ t('mediaSettings.platformImages') }}
+      </p>
+
+      <div class="mb-4 flex flex-row items-center gap-4">
+        <!-- File input -->
+        <v-file-input
+          v-model="bannerFile"
+          :label="t('mediaSettings.banner')"
+          prepend-icon="mdi-image"
+          accept="image/*"
+          class="flex-1"
+        />
+
+        <!-- Image preview -->
+        <v-img
+          v-if="bannerFile || mediaSettings.bannerPictureId"
+          :src="
+            bannerFile ? getPreviewUrl(bannerFile) : `/api/media/${mediaSettings.bannerPictureId}`
+          "
+          alt="Current Banner"
+          max-height="150"
+          max-width="200"
+          contain
+        />
+      </div>
+
+      <div class="mb-4 flex flex-row items-center gap-4">
+        <!-- File input -->
+        <v-file-input
+          v-model="logoFile"
+          :label="t('mediaSettings.logo')"
+          prepend-icon="mdi-image"
+          accept="image/*"
+          class="flex-1"
+        />
+
+        <!-- Image preview -->
+        <v-img
+          v-if="logoFile || mediaSettings.hackathonLogoId"
+          :src="logoFile ? getPreviewUrl(logoFile) : `/api/media/${mediaSettings.hackathonLogoId}`"
+          alt="Current Banner"
+          max-height="150"
+          max-width="200"
+          contain
+        />
+      </div>
+
       <!-- Social Media Links (two columns) -->
       <p class="mb-4 text-lg font-semibold text-gray-700">
         {{ t('mediaSettings.socialMediaLinks') }}

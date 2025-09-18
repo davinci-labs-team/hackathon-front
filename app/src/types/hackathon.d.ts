@@ -45,3 +45,9 @@ export interface UpdateSettingDTO {
   key?: string
   value?: any
 }
+
+export interface CriterionDTO {
+  rule: 'MIN' | 'MAX' | 'EQUAL'
+  schools: string[]
+  value: number
+}
