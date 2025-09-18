@@ -1,25 +1,24 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { settingsService } from '@/services/settingsService'
-import { Section } from '@/types/legal_texts'
-import { ref, onMounted, computed } from 'vue'
+  import { useI18n } from 'vue-i18n'
+  import { settingsService } from '@/services/settingsService'
+  import { Section } from '@/types/legal_texts'
+  import { ref, onMounted, computed } from 'vue'
 
-const { t, locale } = useI18n()
+  const { t, locale } = useI18n()
 
-const privacy_policy = ref<Section[] | null>(null)
+  const privacy_policy = ref<Section[] | null>(null)
 
-const currentLocale = computed<'en' | 'fr'>(() => locale.value as 'en' | 'fr')
+  const currentLocale = computed<'en' | 'fr'>(() => locale.value as 'en' | 'fr')
 
-
-onMounted(async () => {
-  try {
-    const response = await settingsService.findWithKey('1', 'legal')
-    privacy_policy.value = response.value.privacy
-    console.log(privacy_policy.value)
-  } catch (error) {
-    console.error('Error fetching privacy policy:', error)
-  }
-})
+  onMounted(async () => {
+    try {
+      const response = await settingsService.findWithKey('1', 'legal')
+      privacy_policy.value = response.value.privacy
+      console.log(privacy_policy.value)
+    } catch (error) {
+      console.error('Error fetching privacy policy:', error)
+    }
+  })
 </script>
 
 <template>

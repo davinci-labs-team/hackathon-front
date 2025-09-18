@@ -206,6 +206,7 @@ export default {
     addSection: '+ Ajouter une section',
     newSection: 'Nouvelle section',
     exportJSON: 'Exporter en JSON',
+    errorEmptyContent: 'Le contenu de la section ne peut pas être vide.',
     save: 'Sauvegarder',
     delete: 'Supprimer',
     sections: {

@@ -14,12 +14,9 @@
   const timeout = ref(1500)
   const error = ref(false)
 
-  // Stocke les sections chargées depuis la BDD
   const sections = ref<Section[]>([])
-
   const loaded = ref(false)
 
-  // Charger depuis le backend
   const legalData = ref<LegalText>({ privacy: [], terms: [] })
 
   onMounted(async () => {
@@ -51,9 +48,8 @@
     sections.value = sections.value.filter((s) => s.isDefault || s.id !== id)
   }
 
-  // Export JSON prêt à envoyer au backend
-  const exportJSON = async () => {
-    const data: LegalText = {
+  const exportJSON = (): LegalText => {
+    return {
       privacy:
         documentType.value === 'privacy'
           ? sections.value.map(({ id, title, content, isDefault }) => ({
@@ -73,7 +69,20 @@
             }))
           : legalData.value.terms,
     }
+  }
 
+  const save = async () => {
+    // Vérification que toutes les sections ont du contenu
+    const emptySection = sections.value.find((s) => !s.content[activeLocale.value]?.trim())
+
+    if (emptySection) {
+      text.value = t('legal.errorEmptyContent')
+      error.value = true
+      snackbar.value = true
+      return
+    }
+
+    const data = exportJSON()
     console.log('Exported Legal Text JSON:', JSON.stringify(data, null, 2))
 
     try {
@@ -139,7 +148,7 @@
       <button class="px-4 py-2 bg-blue-600 text-white rounded-lg" @click="addSection">
         {{ t('legal.addSection') }}
       </button>
-      <button class="px-4 py-2 bg-green-600 text-white rounded-lg" @click="exportJSON">
+      <button class="px-4 py-2 bg-green-600 text-white rounded-lg" @click="save">
         {{ t('legal.save') }}
       </button>
     </div>

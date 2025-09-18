@@ -202,6 +202,7 @@ export default {
     addSection: '+ Add Section',
     newSection: 'New Section',
     exportJSON: 'Export JSON',
+    errorEmptyContent: 'Section content cannot be empty.',
     save: 'Save',
     delete: 'Delete',
     sections: {
