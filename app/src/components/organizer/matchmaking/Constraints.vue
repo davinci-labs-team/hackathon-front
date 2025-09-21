@@ -3,6 +3,7 @@
   import { useI18n } from 'vue-i18n'
   import { ConstraintDTO } from '@/types/hackathon'
   import ConstraintForm from './ConstraintForm.vue'
+  import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
   const { t } = useI18n()
 
@@ -12,7 +13,10 @@
     schoolNames?: string[]
   }>()
 
-  defineEmits(['edit', 'delete'])
+  const emit = defineEmits<{
+  (e: 'edit', index: number | undefined, updatedConstraint: ConstraintDTO): void
+  (e: 'delete', constraint: ConstraintDTO): void
+}>()
 
   const itemsPerPage = props.itemsPerPage || 5
   const currentPage = ref(1)
@@ -22,6 +26,23 @@
   // Edit state
   const editedConstraint = ref<(ConstraintDTO & { index?: number }) | null>(null)
   const showEditForm = ref(false)
+
+  // Delete state
+  const constraintToDelete = ref<ConstraintDTO | null>(null)
+  const showConfirmDialog = ref(false)
+
+  const confirmDelete = (constraint: ConstraintDTO) => {
+    constraintToDelete.value = constraint
+    showConfirmDialog.value = true
+  }
+
+  const deleteConstraint = () => {
+    if (!constraintToDelete.value) return
+    // Emit delete event to parent
+    emit('delete', constraintToDelete.value)
+    showConfirmDialog.value = false
+    constraintToDelete.value = null
+  }
 
   const paginatedCriteria = computed(() => {
     const start = (currentPage.value - 1) * itemsPerPage
@@ -92,7 +113,7 @@
               color="red"
               variant="text"
               size="small"
-              @click.stop="$emit('delete', criterion)"
+              @click.stop="confirmDelete(criterion)"
             />
           </td>
         </tr>
@@ -128,5 +149,14 @@
     :constraint="editedConstraint"
     :school-names="props.schoolNames"
     @save="(updatedCriterion) => $emit('edit', editedConstraint?.index, updatedCriterion)"
+  />
+
+  <ConfirmDialog
+    v-model="showConfirmDialog"
+    :title="t('matchmakingSettings.confirmTitle')"
+    :text="t('matchmakingSettings.confirmText')"
+    :confirm-label="t('common.delete')"
+    :cancel-label="t('common.cancel')"
+    @confirm="deleteConstraint"
   />
 </template>
