@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { ConstraintDTO } from '@/types/hackathon'
 
@@ -49,6 +49,21 @@
     }
   }
 
+  const schoolsProxy = computed({
+    get: (): string | string[] | null => {
+      return constraint.value.multiple
+        ? constraint.value.schools
+        : constraint.value.schools[0] || null
+    },
+    set: (val: string | string[] | null) => {
+      if (constraint.value.multiple) {
+        constraint.value.schools = Array.isArray(val) ? val : []
+      } else {
+        constraint.value.schools = val ? [val as string] : []
+      }
+    },
+  })
+
   const initializeForm = () => {
     if (props.editMode && props.constraint) {
       constraint.value.rule = props.constraint.rule
@@ -72,6 +87,7 @@
     if (!Array.isArray(constraint.value.schools)) {
       constraint.value.schools = constraint.value.schools ? [constraint.value.schools] : []
     }
+
     emit('save', { ...constraint.value })
     close()
   }
@@ -121,7 +137,7 @@
           <p>{{ t('matchmakingSettings.numberOfPeople') }}</p>
           <v-text-field
             v-model="constraint.value"
-            :placeholder="t('common.value')"
+            :placeholder="t('matchmakingSettings.numberOfPeople')"
             type="number"
             min="1"
             outlined
@@ -138,10 +154,19 @@
           <!-- Schools -->
           <p>{{ t('matchmakingSettings.schools') }}</p>
           <v-select
-            v-model="constraint.schools"
+            v-model="schoolsProxy as unknown as string[]"
+            v-if="constraint.multiple"
             :items="props.schoolNames"
             :placeholder="t('matchmakingSettings.selectSchools')"
-            :multiple="constraint.multiple"
+            multiple
+            outlined
+          />
+
+          <v-select
+            v-else
+            v-model="schoolsProxy as unknown as string"
+            :items="props.schoolNames"
+            :placeholder="t('matchmakingSettings.selectSchools')"
             outlined
           />
 

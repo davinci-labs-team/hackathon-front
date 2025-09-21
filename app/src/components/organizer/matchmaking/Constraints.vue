@@ -20,7 +20,7 @@
   const totalPages = computed(() => Math.ceil(props.constraints.length / itemsPerPage))
 
   // Edit state
-  const editedConstraint = ref<ConstraintDTO | null>(null)
+  const editedConstraint = ref<(ConstraintDTO & { index?: number }) | null>(null)
   const showEditForm = ref(false)
 
   const paginatedCriteria = computed(() => {
@@ -53,21 +53,29 @@
     <table class="min-w-full text-sm">
       <thead>
         <tr class="border-b">
-          <th class="px-4 py-2 text-left font-semibold">{{ t('matchmakingSettings.schools') }}</th>
-          <th class="px-4 py-2 text-left font-semibold">{{ t('matchmakingSettings.rule') }}</th>
-          <th class="px-4 py-2 text-center font-semibold">{{ t('common.actions') }}</th>
+          <th class="px-4 py-2 text-left font-semibold">
+            {{ t('matchmakingSettings.schools') }}
+          </th>
+          <th class="px-4 py-2 text-left font-semibold">
+            {{ t('matchmakingSettings.rule') }}
+          </th>
+          <th class="px-4 py-2 text-center font-semibold">
+            {{ t('common.actions') }}
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="criterion in paginatedCriteria"
-          :key="criterion.schools.join('-')"
+          v-for="(criterion, index) in paginatedCriteria"
+          :key="criterion.schools.join('-') + '-' + index"
           class="border-b"
         >
           <td class="px-4 py-2">
             {{ criterion.schools.join(', ') }}
           </td>
-          <td class="px-4 py-2">{{ formatRule(criterion) }}</td>
+          <td class="px-4 py-2">
+            {{ formatRule(criterion) }}
+          </td>
           <td class="px-4 py-2 text-center">
             <v-btn
               icon="mdi-pencil"
@@ -75,8 +83,8 @@
               variant="text"
               size="small"
               @click.stop="
-                showEditForm = true;
-                editedConstraint = criterion
+                showEditForm = true; 
+                editedConstraint = { ...criterion, index }
               "
             />
             <v-btn
@@ -97,7 +105,7 @@
       icon="mdi-chevron-left"
       :disabled="currentPage === 1"
       @click="goToPage(currentPage - 1)"
-    ></v-btn>
+    />
     <v-btn
       v-for="n in totalPages"
       :key="n"
@@ -111,7 +119,7 @@
       icon="mdi-chevron-right"
       :disabled="currentPage === totalPages"
       @click="goToPage(currentPage + 1)"
-    ></v-btn>
+    />
   </div>
 
   <ConstraintForm
@@ -119,6 +127,6 @@
     :edit-mode="true"
     :constraint="editedConstraint"
     :school-names="props.schoolNames"
-    @save="$emit('edit', $event)"
+    @save="(updatedCriterion) => $emit('edit', editedConstraint?.index, updatedCriterion)"
   />
 </template>

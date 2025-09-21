@@ -81,10 +81,8 @@
     handleSave()
   }
 
-  const updateConstraint = (updatedCriterion: ConstraintDTO) => {
-    matchmakingSettings.value.constraints = matchmakingSettings.value.constraints.map((c) =>
-      c.schools.join('-') === updatedCriterion.schools.join('-') ? updatedCriterion : c
-    )
+  const updateConstraint = (index: number, updatedCriterion: ConstraintDTO) => {
+    matchmakingSettings.value.constraints[index] = updatedCriterion
     handleSave()
   }
 </script>

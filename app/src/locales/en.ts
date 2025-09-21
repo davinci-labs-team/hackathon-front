@@ -22,7 +22,7 @@ export default {
     minimum: 'Minimum',
     maximum: 'Maximum',
     equal: 'Equal to',
-    people: '{count} person | {count} people',
+    people: '{count} person(s)',
     individual: 'Individual',
     multiple: 'Multiple',
   },
