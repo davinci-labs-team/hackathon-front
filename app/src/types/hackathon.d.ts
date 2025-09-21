@@ -1,3 +1,5 @@
+import { isAccessor } from 'typescript'
+
 export interface HackathonGeneralInfoDTO {
   name: string
   slogan: string
@@ -46,8 +48,16 @@ export interface UpdateSettingDTO {
   value?: any
 }
 
-export interface CriterionDTO {
+export interface ConstraintDTO {
   rule: 'MIN' | 'MAX' | 'EQUAL'
   schools: string[]
   value: number
+  multiple: boolean
+}
+
+export interface MatchmakingSettingsDTO {
+  isActive: boolean
+  teamSizeMin: number
+  teamSizeMax: number
+  constraints: ConstraintDTO[]
 }

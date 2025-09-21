@@ -3,7 +3,14 @@
   import { ref, onMounted } from 'vue'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { settingsService } from '@/services/settingsService'
-import { PartnersDTO } from '@/types/hackathon'
+  import {
+    ConstraintDTO,
+    MatchmakingSettingsDTO,
+    PartnersDTO,
+    UpdateSettingDTO,
+  } from '@/types/hackathon'
+  import Constraints from '@/components/organizer/matchmaking/Constraints.vue'
+  import ConstraintForm from '../matchmaking/ConstraintForm.vue'
 
   const { t } = useI18n()
 
@@ -14,10 +21,13 @@ import { PartnersDTO } from '@/types/hackathon'
   const error = ref(false)
 
   // Matchmaking settings
-  const matchmakingEnabled = ref(false)
   const showCriterionForm = ref(false)
-  const minTeamSize = ref(2)
-  const maxTeamSize = ref(5)
+  const matchmakingSettings = ref<MatchmakingSettingsDTO>({
+    isActive: false,
+    teamSizeMin: 1,
+    teamSizeMax: 4,
+    constraints: [],
+  })
 
   const partners = ref<PartnersDTO[]>([])
   const schoolNames = ref<string[]>([])
@@ -26,7 +36,12 @@ import { PartnersDTO } from '@/types/hackathon'
     try {
       const settings = await settingsService.findWithKey('partners')
       partners.value = settings.value
-      schoolNames.value = partners.value.filter(p => p.isParticipatingSchool).map(p => p.name)
+      schoolNames.value = partners.value.filter((p) => p.isParticipatingSchool).map((p) => p.name)
+
+      const matchmaking = await settingsService.findWithKey('matchmaking')
+      console.log('matchmaking', matchmaking)
+      matchmakingSettings.value = matchmaking.value
+      console.log(matchmakingSettings.value)
       console.log(schoolNames.value)
     } catch (e) {
       text.value = t('common.errorOccurred')
@@ -36,7 +51,41 @@ import { PartnersDTO } from '@/types/hackathon'
   })
 
   const handleSave = async () => {
-    snackbar.value = true
+    const payload: UpdateSettingDTO = {
+      key: 'matchmaking',
+      value: matchmakingSettings.value,
+    }
+    try {
+      await settingsService.update('1', payload)
+      text.value = t('common.changesSaved')
+      error.value = false
+      snackbar.value = true
+    } catch (e) {
+      text.value = t('common.errorOccurred')
+      error.value = true
+      snackbar.value = true
+    }
+  }
+
+  const deleteConstraint = (criterion: ConstraintDTO) => {
+    console.log('Deleting constraint', criterion)
+    matchmakingSettings.value.constraints = matchmakingSettings.value.constraints.filter(
+      (c) => c !== criterion
+    )
+    handleSave()
+  }
+
+  const addConstraint = (criterion: ConstraintDTO) => {
+    console.log('Adding constraint', criterion)
+    matchmakingSettings.value.constraints.push(criterion)
+    handleSave()
+  }
+
+  const updateConstraint = (updatedCriterion: ConstraintDTO) => {
+    matchmakingSettings.value.constraints = matchmakingSettings.value.constraints.map((c) =>
+      c.schools.join('-') === updatedCriterion.schools.join('-') ? updatedCriterion : c
+    )
+    handleSave()
   }
 </script>
 
@@ -52,9 +101,9 @@ import { PartnersDTO } from '@/types/hackathon'
 
     <v-container>
       <v-switch
-        v-model="matchmakingEnabled"
+        v-model="matchmakingSettings.isActive"
         :label="
-          matchmakingEnabled
+          matchmakingSettings.isActive
             ? t('matchmakingSettings.matchmakingEnabled')
             : t('matchmakingSettings.matchmakingDisabled')
         "
@@ -62,11 +111,11 @@ import { PartnersDTO } from '@/types/hackathon'
         color="green"
       ></v-switch>
 
-      <v-row v-if="matchmakingEnabled" class="mb-2" self-align="center">
+      <v-row v-if="matchmakingSettings?.isActive" class="mb-2" self-align="center">
         <v-col cols="12" md="6">
           <p class="mb-2 font-medium">{{ t('matchmakingSettings.minTeamSize') }}</p>
           <v-text-field
-            v-model="minTeamSize"
+            v-model="matchmakingSettings.teamSizeMin"
             :placeholder="t('matchmakingSettings.minTeamSize')"
             type="number"
             min="1"
@@ -77,23 +126,38 @@ import { PartnersDTO } from '@/types/hackathon'
         <v-col cols="12" md="6">
           <p class="mb-2 font-medium">{{ t('matchmakingSettings.maxTeamSize') }}</p>
           <v-text-field
-            v-model="maxTeamSize"
+            v-model="matchmakingSettings.teamSizeMax"
             :placeholder="t('matchmakingSettings.maxTeamSize')"
             type="number"
-            :min="minTeamSize"
+            :min="matchmakingSettings.teamSizeMin"
             class="w-full"
             variant="outlined"
           ></v-text-field>
         </v-col>
       </v-row>
 
-      <v-container v-if="matchmakingEnabled" class="p-0">
+      <v-container v-if="matchmakingSettings?.isActive" class="p-0">
         <div class="flex-direction-row mb-5 flex items-center justify-between">
-          <h2 class="text-2xl font-bold mb-2">{{ t('matchmakingSettings.criteria') }}</h2>
+          <h2 class="text-2xl font-bold mb-2">{{ t('matchmakingSettings.constraint') }}</h2>
           <v-btn color="primary" @click="showCriterionForm = true">
-            {{ t('matchmakingSettings.addCriterionBtn') }}
+            {{ t('matchmakingSettings.addConstraintBtn') }}
           </v-btn>
         </div>
+
+        <Constraints
+          :constraints="matchmakingSettings?.constraints || []"
+          :items-per-page="5"
+          :school-names="schoolNames"
+          @edit="updateConstraint"
+          @delete="deleteConstraint"
+        />
+
+        <ConstraintForm
+          v-model="showCriterionForm"
+          :school-names="schoolNames"
+          :edit-mode="false"
+          @save="addConstraint"
+        />
       </v-container>
     </v-container>
   </v-container>
