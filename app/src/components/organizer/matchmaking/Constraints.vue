@@ -11,12 +11,13 @@
     constraints: ConstraintDTO[]
     itemsPerPage?: number
     schoolNames?: string[]
+    maxTeamSize?: number
   }>()
 
   const emit = defineEmits<{
-  (e: 'edit', index: number | undefined, updatedConstraint: ConstraintDTO): void
-  (e: 'delete', constraint: ConstraintDTO): void
-}>()
+    (e: 'edit', index: number | undefined, updatedConstraint: ConstraintDTO): void
+    (e: 'delete', constraint: ConstraintDTO): void
+  }>()
 
   const itemsPerPage = props.itemsPerPage || 5
   const currentPage = ref(1)
@@ -38,7 +39,6 @@
 
   const deleteConstraint = () => {
     if (!constraintToDelete.value) return
-    // Emit delete event to parent
     emit('delete', constraintToDelete.value)
     showConfirmDialog.value = false
     constraintToDelete.value = null
@@ -104,7 +104,7 @@
               variant="text"
               size="small"
               @click.stop="
-                showEditForm = true; 
+                showEditForm = true;
                 editedConstraint = { ...criterion, index }
               "
             />
@@ -148,6 +148,7 @@
     :edit-mode="true"
     :constraint="editedConstraint"
     :school-names="props.schoolNames"
+    :max-team-size="props.maxTeamSize"
     @save="(updatedCriterion) => $emit('edit', editedConstraint?.index, updatedCriterion)"
   />
 

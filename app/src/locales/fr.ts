@@ -160,6 +160,7 @@ export default {
       teams: 'Gestion des équipes',
       projects: 'Gestion des dépôts',
       settings: 'Paramètres',
+      themes: 'Thèmes & Sujets',
     },
   },
   jury: {
@@ -339,11 +340,19 @@ export default {
     confirmTitle: 'Confirmer la suppression',
     confirmText: 'Êtes-vous sûr de vouloir supprimer cette contrainte ?',
     noConstraints: 'Aucun contrainte disponible.',
-    minLessThanMax: 'La taille minimale doit être inférieure à la taille maximale.',
     fixErrors: 'Veuillez corriger les erreurs avant de sauvegarder.',
     numberOfPeople: 'Nombre de personnes',
     multipleHint: "La règle s'applique si au moins une école respecte la valeur. (Logique OU)",
     selectSchools: 'Sélectionner la(les) école(s)',
+    valueMustBePositive: 'Le nombre de personnes doit être un entier positif.',
+    selectAtLeastOneSchool: 'Veuillez sélectionner au moins une école.',
+    errors: {
+      moreThanOneMin: "Plus d'une contrainte 'minimum' définie pour ",
+      moreThanOneMax: "Plus d'une contrainte 'maximum' définie pour ",
+      moreThanOneEqual: "Plus d'une contrainte 'égal à' définie pour ",
+      incompatibleRules: 'Règles incompatibles définies pour ',
+      minGreaterThanMax: 'La valeur du minimum est supérieure au maximum pour ',
+    },
   },
   communicationSettings: {
     title: 'Communication',

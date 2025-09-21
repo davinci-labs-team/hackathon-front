@@ -20,6 +20,8 @@
   const timeout = ref(1500)
   const error = ref(false)
 
+  const errorMessage = ref<string>('')
+
   // Matchmaking settings
   const showCriterionForm = ref(false)
   const matchmakingSettings = ref<MatchmakingSettingsDTO>({
@@ -31,6 +33,51 @@
 
   const partners = ref<PartnersDTO[]>([])
   const schoolNames = ref<string[]>([])
+
+  const validateConstraints = (constraints: ConstraintDTO[]) => {
+    const schoolMap: Record<string, ConstraintDTO[]> = {}
+
+    constraints.forEach((constraint) => {
+      constraint.schools.forEach((school) => {
+        if (!schoolMap[school]) schoolMap[school] = []
+        schoolMap[school].push(constraint)
+      })
+    })
+
+    const errors: string[] = []
+
+    Object.entries(schoolMap).forEach(([school, cons]) => {
+      const rules = cons.map((c) => c.rule)
+      const counts = rules.reduce<Record<string, number>>((acc, r) => {
+        acc[r] = (acc[r] || 0) + 1
+        return acc
+      }, {})
+
+      // Verify uniqueness of rules
+      if (counts.MIN && counts.MIN > 1)
+        errors.push(`${t('matchmakingSettings.errors.moreThanOneMin')}${school}`)
+      if (counts.MAX && counts.MAX > 1)
+        errors.push(`${t('matchmakingSettings.errors.moreThanOneMax')}${school}`)
+      if (counts.EQUAL && counts.EQUAL > 1)
+        errors.push(`${t('matchmakingSettings.errors.moreThanOneEqual')}${school}`)
+      if (counts.EQUAL && (counts.MIN || counts.MAX))
+        errors.push(`${t('matchmakingSettings.errors.incompatibleRules')}${school}`)
+
+      // Check MIN/MAX coherence
+      const minConstraint = cons.find((c) => c.rule === 'MIN')
+      const maxConstraint = cons.find((c) => c.rule === 'MAX')
+
+      if (minConstraint && maxConstraint) {
+        const minValue = Number(minConstraint.value)
+        const maxValue = Number(maxConstraint.value)
+        if (minValue > maxValue) {
+          errors.push(`${t('matchmakingSettings.errors.minGreaterThanMax')}${school}`)
+        }
+      }
+    })
+
+    return errors
+  }
 
   onMounted(async () => {
     try {
@@ -76,13 +123,29 @@
   }
 
   const addConstraint = (criterion: ConstraintDTO) => {
-    console.log('Adding constraint', criterion)
+    const temporaryConstraints = [...matchmakingSettings.value.constraints, criterion]
+    const validationErrors = validateConstraints(temporaryConstraints)
+    if (validationErrors.length > 0) {
+      errorMessage.value = validationErrors.join(', ')
+      return
+    }
     matchmakingSettings.value.constraints.push(criterion)
+    errorMessage.value = ''
     handleSave()
   }
 
-  const updateConstraint = (index: number, updatedCriterion: ConstraintDTO) => {
+  const updateConstraint = (index: number | undefined, updatedCriterion: ConstraintDTO) => {
+    const temporaryConstraints = matchmakingSettings.value.constraints.map((c, i) =>
+      i === index ? updatedCriterion : c
+    )
+    const validationErrors = validateConstraints(temporaryConstraints)
+    if (validationErrors.length > 0) {
+      errorMessage.value = validationErrors.join(', ')
+      return
+    }
+    if (index === undefined) return
     matchmakingSettings.value.constraints[index] = updatedCriterion
+    errorMessage.value = ''
     handleSave()
   }
 </script>
@@ -142,18 +205,22 @@
           </v-btn>
         </div>
 
+        <p v-if="errorMessage" class="text-red-600 mb-4">{{ errorMessage }}</p>
+
         <Constraints
           :constraints="matchmakingSettings?.constraints || []"
           :items-per-page="5"
           :school-names="schoolNames"
-          @edit="updateConstraint"
+          :max-team-size="matchmakingSettings.teamSizeMax"
           @delete="deleteConstraint"
+          @edit="updateConstraint"
         />
 
         <ConstraintForm
           v-model="showCriterionForm"
           :school-names="schoolNames"
           :edit-mode="false"
+          :max-team-size="matchmakingSettings.teamSizeMax"
           @save="addConstraint"
         />
       </v-container>

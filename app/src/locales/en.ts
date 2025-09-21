@@ -157,6 +157,7 @@ export default {
       teams: 'Team Management',
       projects: 'Projects Management',
       settings: 'Settings',
+      themes: 'Themes & Topics',
     },
   },
   jury: {
@@ -308,11 +309,19 @@ export default {
     confirmTitle: 'Confirm Deletion',
     confirmText: 'Are you sure you want to delete this constraint?',
     noConstraints: 'No constraint defined.',
-    minLessThanMax: 'Minimum team size must be less than maximum team size.',
     fixErrors: 'Please fix the errors before saving.',
     numberOfPeople: 'Number of people',
     multipleHint: 'The rule applies if at least one school meets the value. (OR logic)',
     selectSchools: 'Select schools',
+    valueMustBePositive: 'Number of persons must be a positive integer.',
+    selectAtLeastOneSchool: 'Please select at least one school.',
+    errors: {
+      moreThanOneMin: "More than one 'minimum' constraint defined for ",
+      moreThanOneMax: "More than one 'maximum' constraint defined for ",
+      moreThanOneEqual: "More than one 'equal to' constraint defined for ",
+      incompatibleRules: 'Incompatible rules defined for ',
+      minGreaterThanMax: 'Value for minimum is greater than maximum for ',
+    },
   },
   communicationSettings: {
     title: 'Communication',

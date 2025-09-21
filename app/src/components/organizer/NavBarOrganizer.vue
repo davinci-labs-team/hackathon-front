@@ -12,6 +12,7 @@
     { path: '/organizer/users', label: 'organizer.nav.users' },
     { path: '/organizer/teams', label: 'organizer.nav.teams' },
     { path: '/organizer/projects', label: 'organizer.nav.projects' },
+    { path: '/organizer/themes', label: 'organizer.nav.themes' },
     { path: '/organizer/settings', label: 'organizer.nav.settings' },
   ]
 

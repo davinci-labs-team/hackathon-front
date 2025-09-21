@@ -13,6 +13,7 @@
     editMode?: boolean
     constraint?: ConstraintDTO | null
     schoolNames?: string[]
+    maxTeamSize?: number
   }>()
 
   const emit = defineEmits<{
@@ -36,6 +37,8 @@
     value: 1,
     multiple: false,
   })
+
+  const error = ref<string | null>(null)
 
   // -----------------------------
   // Reset & initialize form
@@ -84,6 +87,14 @@
   // Save constraint (add or edit)
   // -----------------------------
   const save = async () => {
+    if (constraint.value.value < 1) {
+      error.value = t('matchmakingSettings.valueMustBePositive')
+      return
+    }
+    if (constraint.value.schools.length === 0) {
+      error.value = t('matchmakingSettings.selectAtLeastOneSchool')
+      return
+    }
     if (!Array.isArray(constraint.value.schools)) {
       constraint.value.schools = constraint.value.schools ? [constraint.value.schools] : []
     }
@@ -140,6 +151,7 @@
             :placeholder="t('matchmakingSettings.numberOfPeople')"
             type="number"
             min="1"
+            :max="props.maxTeamSize"
             outlined
           />
 
@@ -169,6 +181,8 @@
             :placeholder="t('matchmakingSettings.selectSchools')"
             outlined
           />
+
+          <p v-if="error" class="text-red-600">{{ error }}</p>
 
           <v-card-actions class="justify-center">
             <v-btn color="primary" type="submit" variant="elevated" class="px-8">
