@@ -5,18 +5,11 @@
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { HackathonMediaDTO } from '@/types/hackathon'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
 
   const { t } = useI18n()
 
-  const mediaSettings = ref<HackathonMediaDTO>({
-    bannerPictureId: null,
-    hackathonLogoId: null,
-    instagram: '',
-    linkedin: '',
-    facebook: '',
-    x: '',
-    youtube: '',
-  })
+  const mediaSettings = ref<HackathonMediaDTO>({...defaultConfigurations[ConfigurationKey.MEDIA]})
 
   const bannerFile = ref<File | null>(null)
   const logoFile = ref<File | null>(null)

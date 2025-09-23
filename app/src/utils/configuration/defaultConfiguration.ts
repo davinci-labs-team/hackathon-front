@@ -149,7 +149,7 @@ export const defaultConfigurations = {
     x: null,
     youtube: null,
     bannerPictureId: null,
-    hackathonPosterId: null,
+    hackathonLogoId: null,
   },
   [ConfigurationKey.TEXTS]: {
     hackathon_name: '',
