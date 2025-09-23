@@ -6,6 +6,7 @@
   import UserForm from '@/components/organizer/user_management/UserForm.vue'
   import { UserDTO } from '@/types/user'
   import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
+  import CsvImportDialog from '@/components/organizer/user_management/CsvImportDialog.vue'
 
   const { t } = useI18n()
 
@@ -91,16 +92,19 @@
       <div class="w-full md:w-8/12 lg:w-9/12 px-4">
         <div class="flex w-full justify-between items-center mb-6">
           <h1 class="text-3xl font-bold">{{ t('organizer.nav.users') }}</h1>
-          <v-btn color="primary" class="h-full" @click="onAddUser">
-            {{ t('organizer.userManagement.addButton') }}
-          </v-btn>
+          <div class="flex">
+            <CsvImportDialog :addUser="createUser" />
+            <v-btn color="primary" class="h-full" @click="onAddUser">
+              {{ t('organizer.userManagement.addButton') }}
+            </v-btn>
+          </div>
         </div>
         <div class="mb-6 p-4 border rounded-lg shadow-sm">
           <div class="flex gap-8">
             <div class="flex-1">
-              <label class="block mb-1 text-sm font-medium">{{
-                t('organizer.userManagement.role')
-              }}</label>
+              <label class="block mb-1 text-sm font-medium">
+                {{ t('organizer.userManagement.role') }}
+              </label>
               <v-select
                 v-model="selectedRole"
                 :items="roles"
@@ -111,9 +115,9 @@
               />
             </div>
             <div class="flex-1">
-              <label class="block mb-1 text-sm font-medium">{{
-                t('organizer.userManagement.school')
-              }}</label>
+              <label class="block mb-1 text-sm font-medium">
+                {{ t('organizer.userManagement.school') }}
+              </label>
               <v-select
                 v-model="selectedSchool"
                 :items="schools"
@@ -124,9 +128,9 @@
               />
             </div>
             <div class="flex-1">
-              <label class="block mb-1 text-sm font-medium">{{
-                t('organizer.userManagement.name')
-              }}</label>
+              <label class="block mb-1 text-sm font-medium">
+                {{ t('organizer.userManagement.name') }}
+              </label>
               <v-text-field
                 v-model="filterName"
                 :placeholder="t('organizer.userManagement.namePlaceholder')"
@@ -140,7 +144,7 @@
             </div>
           </div>
         </div>
-
+        
         <Users
           :users="filteredUsers"
           :items-per-page="30"
