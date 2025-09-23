@@ -1,9 +1,10 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
   import { RouterLink } from 'vue-router'
-  import { settingsService } from '@/services/settingsService'
+  import { configurationService } from '@/services/configurationService'
   import { HackathonMediaDTO } from '@/types/hackathon'
   import { onMounted, ref } from 'vue'
+import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 
   const { t } = useI18n()
 
@@ -19,7 +20,7 @@
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('media')
+      const response = await configurationService.findOne(ConfigurationKey.MEDIA)
       if (response && response.value) {
         mediaSettings.value = response.value
       }

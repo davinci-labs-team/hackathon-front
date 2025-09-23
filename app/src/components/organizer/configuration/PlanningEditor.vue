@@ -6,7 +6,8 @@
   import VueDatePicker from '@vuepic/vue-datepicker'
   import '@vuepic/vue-datepicker/dist/main.css'
   import { enUS, fr } from 'date-fns/locale'
-  import { settingsService } from '@/services/settingsService'
+  import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 
   const { t, locale } = useI18n()
 
@@ -23,11 +24,10 @@
   const hackathonPhases = ref<
     { order: number; startDateObj: Date | null; endDateObj: Date | null }[]
   >([])
-  const settingsId = ref('1')
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('phases')
+      const response = await getOrCreateConfiguration(ConfigurationKey.PHASES)
       phasesFromDB.value = response.value.map((phase: any) => ({
         order: phase.order,
         startDate: phase.startDate,
@@ -39,7 +39,6 @@
         startDateObj: phase.startDate ? new Date(phase.startDate) : null,
         endDateObj: phase.endDate ? new Date(phase.endDate) : null,
       }))
-      settingsId.value = response.id
     } catch (e) {
       text.value = t('planningSettings.fetchError')
       error.value = true
@@ -72,7 +71,6 @@
     return true
   }
 
-  // Sauvegarde
   const handleSave = async () => {
     if (!validatePhases()) {
       text.value = t('planningSettings.invalidPhases')
@@ -90,11 +88,12 @@
     console.log('Saving phases:', payload)
 
     try {
-      await settingsService.update(settingsId.value, { key: 'phases', value: payload })
+      await configurationService.update(ConfigurationKey.PHASES, { value: payload })
       text.value = t('common.changesSaved')
       error.value = false
       snackbar.value = true
     } catch (e) {
+      console.error('Error saving phases:', e)
       text.value = t('planningSettings.saveError')
       error.value = true
       snackbar.value = true

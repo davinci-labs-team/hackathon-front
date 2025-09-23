@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Communication from '@/components/organizer/settings/Communication.vue'
-  import LegalEditor from '@/components/organizer/settings/LegalEditor.vue'
-  import Matchmaking from '@/components/organizer/settings/Matchmaking.vue'
-  import Partners from '@/components/organizer/settings/Partners.vue'
-  import PlanningEditor from '@/components/organizer/settings/PlanningEditor.vue'
-  import SocialMedia from '@/components/organizer/settings/SocialMedia.vue'
-  import Texts from '@/components/organizer/settings/Texts_FAQ.vue'
+  import Communication from '@/components/organizer/configuration/Communication.vue'
+  import LegalEditor from '@/components/organizer/configuration/LegalEditor.vue'
+  import Matchmaking from '@/components/organizer/configuration/Matchmaking.vue'
+  import Partners from '@/components/organizer/configuration/Partners.vue'
+  import PlanningEditor from '@/components/organizer/configuration/PlanningEditor.vue'
+  import SocialMedia from '@/components/organizer/configuration/SocialMedia.vue'
+  import Texts from '@/components/organizer/configuration/Texts_FAQ.vue'
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   const { t } = useI18n()

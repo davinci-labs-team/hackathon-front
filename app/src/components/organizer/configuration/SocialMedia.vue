@@ -1,9 +1,10 @@
 <script setup lang="ts">
   import { onMounted, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { settingsService } from '@/services/settingsService'
+  import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { HackathonMediaDTO } from '@/types/hackathon'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 
   const { t } = useI18n()
 
@@ -20,8 +21,6 @@
   const bannerFile = ref<File | null>(null)
   const logoFile = ref<File | null>(null)
 
-  const settingsId = ref('1')
-
   // Snackbar
   const snackbar = ref(false)
   const text = ref(t('common.changesSaved'))
@@ -30,11 +29,9 @@
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('media')
+      const response = await getOrCreateConfiguration(ConfigurationKey.MEDIA)
       if (response && response.value) {
-        mediaSettings.value = response.value
-        settingsId.value = response.id
-        console.log('Settings ID:', settingsId.value)
+        mediaSettings.value = response.value as HackathonMediaDTO
       }
     } catch (error) {
       console.error('Error fetching media settings:', error)
@@ -44,24 +41,19 @@
   const getPreviewUrl = (file: File) => URL.createObjectURL(file)
 
   const handleSave = async () => {
-    const payload = {
-      key: 'media',
-      value: mediaSettings.value,
+    try {
+      await configurationService.update(ConfigurationKey.MEDIA, {
+        value: mediaSettings.value,
+      })
+      snackbar.value = true
+      text.value = t('common.changesSaved')
+      error.value = false
+    } catch (err) {
+      console.error(err)
+      snackbar.value = true
+      text.value = t('common.errorSaving')
+      error.value = true
     }
-
-    return settingsService
-      .update('1', payload)
-      .then(() => {
-        text.value = t('common.changesSaved')
-        error.value = false
-        snackbar.value = true
-      })
-      .catch((err) => {
-        console.error('Error updating media settings:', err)
-        text.value = t('common.errorOccurred')
-        error.value = true
-        snackbar.value = true
-      })
   }
 </script>
 

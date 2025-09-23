@@ -23,5 +23,11 @@ export const useAuthStore = defineStore('auth', {
         this.user = JSON.parse(data)
       }
     },
+    updateAccessToken(newAccessToken: string) {
+      if (this.user) {
+        this.user.accessToken = newAccessToken
+        localStorage.setItem('authUser', JSON.stringify(this.user))
+      }
+    },
   },
 })

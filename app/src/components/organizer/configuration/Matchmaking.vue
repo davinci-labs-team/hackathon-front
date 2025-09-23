@@ -1,16 +1,17 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, computed } from 'vue'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
-  import { settingsService } from '@/services/settingsService'
+  import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
   import {
     ConstraintDTO,
     MatchmakingSettingsDTO,
     PartnersDTO,
-    UpdateSettingDTO,
+    UpdateConfigurationDTO,
   } from '@/types/hackathon'
   import Constraints from '@/components/organizer/matchmaking/Constraints.vue'
   import ConstraintForm from '../matchmaking/ConstraintForm.vue'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 
   const { t } = useI18n()
 
@@ -81,15 +82,12 @@
 
   onMounted(async () => {
     try {
-      const settings = await settingsService.findWithKey('partners')
+      const settings = await getOrCreateConfiguration(ConfigurationKey.PARTNERS)
       partners.value = settings.value
       schoolNames.value = partners.value.filter((p) => p.isParticipatingSchool).map((p) => p.name)
 
-      const matchmaking = await settingsService.findWithKey('matchmaking')
-      console.log('matchmaking', matchmaking)
+      const matchmaking = await getOrCreateConfiguration(ConfigurationKey.MATCHMAKING)
       matchmakingSettings.value = matchmaking.value
-      console.log(matchmakingSettings.value)
-      console.log(schoolNames.value)
     } catch (e) {
       text.value = t('common.errorOccurred')
       error.value = true
@@ -98,16 +96,15 @@
   })
 
   const handleSave = async () => {
-    const payload: UpdateSettingDTO = {
-      key: 'matchmaking',
-      value: matchmakingSettings.value,
-    }
     try {
-      await settingsService.update('1', payload)
+      await configurationService.update(ConfigurationKey.MATCHMAKING, {
+        value: matchmakingSettings.value,
+      })
       text.value = t('common.changesSaved')
       error.value = false
       snackbar.value = true
     } catch (e) {
+      console.error('Error saving matchmaking settings:', e)
       text.value = t('common.errorOccurred')
       error.value = true
       snackbar.value = true
@@ -148,6 +145,10 @@
     errorMessage.value = ''
     handleSave()
   }
+
+  const hasConstraints = computed(() => 
+    matchmakingSettings.value.constraints && matchmakingSettings.value.constraints.length > 0
+  )
 </script>
 
 <template>
@@ -207,7 +208,10 @@
 
         <p v-if="errorMessage" class="text-red-600 mb-4">{{ errorMessage }}</p>
 
+        <p v-if="!hasConstraints">{{ t('matchmakingSettings.noConstraints') }}</p>
+
         <Constraints
+          v-if="hasConstraints"
           :constraints="matchmakingSettings?.constraints || []"
           :items-per-page="5"
           :school-names="schoolNames"

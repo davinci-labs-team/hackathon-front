@@ -1,10 +1,11 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import { PartnersDTO, UpdateSettingDTO } from '@/types/hackathon'
+  import { PartnersDTO, UpdateConfigurationDTO } from '@/types/hackathon'
   import { useI18n } from 'vue-i18n'
   import PartnerCard from '../partners/PartnerCard.vue'
-  import { settingsService } from '@/services/settingsService'
+  import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
   import { v4 as uuidv4 } from 'uuid'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 
   const { t } = useI18n()
 
@@ -13,38 +14,27 @@
   */
 
   const partners = ref<PartnersDTO[]>([])
-  const settingsId = ref('1')
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('partners')
-      partners.value = response.value.map((partner: any) => ({
-        id: partner.id,
-        name: partner.name || '',
-        websiteUrl: partner.websiteUrl || '',
-        logoId: partner.logoId || '',
-        isParticipatingSchool: partner.isParticipatingSchool || false,
-      }))
-      settingsId.value = response.id
+      const response = await getOrCreateConfiguration(ConfigurationKey.PARTNERS)
+      partners.value = response.value as PartnersDTO[]
     } catch (error) {
       console.error('Error fetching partners:', error)
     }
   })
 
-  function savePartners() {
-    const payload: UpdateSettingDTO = {
-      key: 'partners',
+  const savePartners = async () => {
+    const updateDto: UpdateConfigurationDTO = {
       value: partners.value,
     }
 
-    return settingsService
-      .update(settingsId.value, payload)
-      .then(() => {
-        console.log('Partners updated successfully')
-      })
-      .catch((error) => {
-        console.error('Error updating partners:', error)
-      })
+    try {
+      await configurationService.update(ConfigurationKey.PARTNERS, updateDto)
+      console.log('Partners updated successfully')
+    } catch (error) {
+      console.error('Error updating partners:', error)
+    }
   }
 
   function onDeletePartner(partner: PartnersDTO) {

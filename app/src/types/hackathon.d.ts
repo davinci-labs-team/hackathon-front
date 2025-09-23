@@ -30,20 +30,20 @@ export interface HackathonMediaDTO {
   youtube: string | null
 }
 
-export interface SettingResponse {
+export interface ConfigurationResponse {
   id: string
   key: string
-  value: any // JSON flexible
+  value: any
   createdAt: string
   updatedAt: string
 }
 
-export interface CreateSettingDTO {
+export interface CreateConfigurationDTO {
   key: string
   value: any
 }
 
-export interface UpdateSettingDTO {
+export interface UpdateConfigurationDTO {
   key?: string
   value?: any
 }
@@ -60,4 +60,17 @@ export interface MatchmakingSettingsDTO {
   teamSizeMin: number
   teamSizeMax: number
   constraints: ConstraintDTO[]
+}
+
+export interface SubjectDTO {
+  id: string
+  name: string
+  description: string
+}
+
+export interface ThemesDTO {
+  id: string
+  name: string
+  description: string
+  subjects: SubjectDTO[]
 }

@@ -1,8 +1,9 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
-  import { settingsService } from '@/services/settingsService'
+  import { configurationService } from '@/services/configurationService'
   import { Section } from '@/types/legal_texts'
   import { ref, onMounted, computed } from 'vue'
+import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 
   const { t, locale } = useI18n()
 
@@ -12,7 +13,7 @@
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('legal')
+      const response = await configurationService.findOne(ConfigurationKey.LEGAL)
       privacy_policy.value = response.value.privacy
       console.log(privacy_policy.value)
     } catch (error) {

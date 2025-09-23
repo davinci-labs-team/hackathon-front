@@ -7,8 +7,9 @@
   import FAQItemCard from '../faq/FAQItemCard.vue'
   import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
   import { useFaq } from '@/composables/useFaq'
-  import { settingsService } from '@/services/settingsService'
-  import { UpdateSettingDTO } from '@/types/hackathon'
+  import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
+  import { UpdateConfigurationDTO } from '@/types/hackathon'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 
   const { t } = useI18n()
 
@@ -16,16 +17,14 @@
   const hackathonName = ref('')
   const hackathonDescription = ref('')
   const saveAttempted = ref(false)
-  const settingsId = ref('1')
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('texts')
+      const response = await getOrCreateConfiguration(ConfigurationKey.TEXTS)
       if (response && response.value) {
         slogan.value = response.value.slogan || ''
         hackathonName.value = response.value.hackathon_name || ''
         hackathonDescription.value = response.value.hackathon_description || ''
-        settingsId.value = response.id
       }
     } catch (error) {
       console.error('Error fetching settings:', error)
@@ -94,8 +93,7 @@
       return
     }
 
-    const payload: UpdateSettingDTO = {
-      key: 'texts',
+    const updateDto: UpdateConfigurationDTO = {
       value: {
         slogan: slogan.value,
         hackathon_name: hackathonName.value,
@@ -104,7 +102,7 @@
     }
 
     try {
-      await settingsService.update('1', payload)
+      await configurationService.update(ConfigurationKey.TEXTS, updateDto)
       text.value = t('common.changesSaved')
       error.value = false
       snackbar.value = true

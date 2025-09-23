@@ -1,9 +1,10 @@
 <script setup lang="ts">
   import { ref, computed, watch, onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { settingsService } from '@/services/settingsService'
+  import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
   import type { LegalText, Section } from '@/types/legal_texts'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 
   const { t, locale } = useI18n()
   const documentType = ref<'privacy' | 'terms'>('privacy')
@@ -15,16 +16,14 @@
   const error = ref(false)
 
   const sections = ref<Section[]>([])
-  const settingsId = ref('1')
   const loaded = ref(false)
 
   const legalData = ref<LegalText>({ privacy: [], terms: [] })
 
   onMounted(async () => {
     try {
-      const response = await settingsService.findWithKey('legal')
+      const response = await getOrCreateConfiguration(ConfigurationKey.LEGAL)
       if (response && response.value) {
-        settingsId.value = response.id
         legalData.value = response.value as LegalText
         sections.value = legalData.value[documentType.value]
         loaded.value = true
@@ -88,7 +87,7 @@
     console.log('Exported Legal Text JSON:', JSON.stringify(data, null, 2))
 
     try {
-      await settingsService.update(settingsId.value, { key: 'legal', value: data })
+      await configurationService.update(ConfigurationKey.LEGAL, { value: data })
       text.value = t('common.changesSaved')
       error.value = false
       snackbar.value = true

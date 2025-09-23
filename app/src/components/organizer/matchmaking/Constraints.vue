@@ -104,7 +104,7 @@
               variant="text"
               size="small"
               @click.stop="
-                showEditForm = true;
+                showEditForm = true ;
                 editedConstraint = { ...criterion, index }
               "
             />
