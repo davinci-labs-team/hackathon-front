@@ -29,6 +29,7 @@ export default {
   profile: {
     mainTitle: 'Mon Profil',
     otherUserTitle: 'Profil de',
+    contacts: 'Contacts',
     personalInfo: {
       title: 'Informations Personnelles',
       editButton: 'Modifier les Informations',
@@ -37,14 +38,23 @@ export default {
       name: 'Nom ',
       email: 'Email ',
       role: 'Rôle ',
-      phone: 'Téléphone ',
+      school: 'École ',
+      interests: 'Centres d’intérêt ',
       bio: 'Bio ',
       linkedin: 'LinkedIn ',
       github: 'GitHub ',
+      discord: 'Discord ',
       website: 'Site Web ',
       noInfo: 'Aucune information supplémentaire fournie.',
     },
     otherUserInfoTitle: "Informations de l'Utilisateur",
+    deleteAccount: 'Supprimer le Compte',
+    deleteAccountText: 'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
+    deleteAccountConfirm: 'Oui, supprimer mon compte',
+
+    logoutConfirmTitle: 'Confirmer la Déconnexion',
+    logoutConfirmText: 'Êtes-vous sûr de vouloir vous déconnecter ?',
+    confirmButton: 'Oui, me déconnecter',
   },
   roles: {
     organizer: 'Organisateur',

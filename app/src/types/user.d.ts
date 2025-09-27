@@ -7,4 +7,10 @@ export interface UserDTO {
   email: string
   role: UserRole
   school?: string
+  bio?: string
+  interests?: string[]
+  linkedin?: string
+  github?: string
+  discord?: string 
+  profilePictureUrl?: string
 }

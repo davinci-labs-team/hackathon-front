@@ -29,6 +29,7 @@ export default {
   profile: {
     mainTitle: 'My Profile',
     otherUserTitle: 'Profile of',
+    contacts: 'Contacts',
     personalInfo: {
       title: 'Personal Information',
       editButton: 'Edit Information',
@@ -36,15 +37,24 @@ export default {
       cancelButton: 'Cancel',
       name: 'Name',
       email: 'Email',
-      phone: 'Phone',
       role: 'Role',
       bio: 'Bio',
       linkedin: 'LinkedIn',
       github: 'GitHub',
+      discord: 'Discord',
+      school: 'School',
+      interests: 'Interests',
       website: 'Website',
       noInfo: 'No additional information provided.',
     },
     otherUserInfoTitle: 'User Information',
+    deleteAccount: 'Delete Account',
+    deleteAccountText: 'Are you sure you want to delete your account? This action is irreversible.',
+    deleteAccountConfirm: 'Yes, delete my account',
+
+    logoutConfirmTitle: 'Confirm Logout',
+    logoutConfirmText: 'Are you sure you want to logout?',
+    confirmButton: 'Yes, logout',
   },
   roles: {
     organizer: 'Organizer',
