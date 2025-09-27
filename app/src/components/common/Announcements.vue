@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { AnnouncementDTO } from '@/types/announcement'
+  import { AnnouncementDTO, UpdateAnnouncementDTO } from '@/types/announcement'
   import AnnouncementPopup from '@/components/common/AnnouncementPopup.vue'
   import AnnouncementCard from '@/components/common/AnnouncementCard.vue'
   import AnnouncementForm from '@/components/organizer/announcements/AnnouncementForm.vue'
@@ -60,6 +60,11 @@
     selectedAnnouncement.value = announcement
     showPopup.value = true
   }
+
+  const handleUpdate = (id: string, update: UpdateAnnouncementDTO) => {
+    // TODO : call API to update and get new AnnouncementDTO object to replace it locally
+}
+
 </script>
 
 <style scoped>
@@ -111,6 +116,7 @@
         v-model="showEditForm"
         :editMode="true"
         :announcement="selectedAnnouncement"
+        @update="handleUpdate"
       />
 
       <!-- Pagination (no ellipsis for now) -->

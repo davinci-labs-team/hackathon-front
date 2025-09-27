@@ -1,140 +1,167 @@
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
-  import { useI18n } from 'vue-i18n'
-  import type { AnnouncementDTO } from '@/types/announcement'
+import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import type { AnnouncementDTO, CreateAnnouncementDTO, UpdateAnnouncementDTO } from '@/types/announcement'
 
-  const { t } = useI18n()
+const { t } = useI18n()
 
-  // -----------------------------
-  // Props & Emits
-  // -----------------------------
-  const props = defineProps<{
-    modelValue: boolean
-    editMode?: boolean
-    announcement?: AnnouncementDTO | null
-  }>()
+// -----------------------------
+// Props & Emits
+// -----------------------------
+const props = defineProps<{
+  modelValue: boolean
+  editMode?: boolean
+  announcement?: AnnouncementDTO | null
+}>()
 
-  const emit = defineEmits<{
-    (e: 'update:modelValue', value: boolean): void
-    (e: 'save', announcement: AnnouncementDTO): void
-  }>()
+const emit = defineEmits<{
+  (e: 'create', announcement: CreateAnnouncementDTO): void
+  (e: 'update', id: string, announcement: UpdateAnnouncementDTO): void
+  (e: 'update:modelValue', value: boolean): void
+}>()
 
-  // -----------------------------
-  // Dialog state
-  // -----------------------------
-  const localModelValue = ref(props.modelValue)
-  watch(
-    () => props.modelValue,
-    (val) => (localModelValue.value = val)
-  )
-  watch(localModelValue, (val) => emit('update:modelValue', val))
+// -----------------------------
+// Dialog state
+// -----------------------------
+const localModelValue = ref(props.modelValue)
+watch(
+  () => props.modelValue,
+  (val) => (localModelValue.value = val)
+)
+watch(localModelValue, (val) => emit('update:modelValue', val))
 
-  // -----------------------------
-  // Form state
-  // -----------------------------
-  const title = ref('')
-  const description = ref('')
-  const tags = ref('')
-  const isPrivate = ref(false)
+// -----------------------------
+// Form state
+// -----------------------------
+const title = ref('')
+const description = ref('')
+const tags = ref('')
+const isPrivate = ref(false)
 
-  // -----------------------------
-  // Images
-  // -----------------------------
-  const newImages = ref<File[]>([])
-  const existingImages = ref<string[]>([])
+// -----------------------------
+// Images
+// -----------------------------
+const newImages = ref<File[]>([])
+const existingImages = ref<string[]>([])
 
-  // -----------------------------
-  // Validation
-  // -----------------------------
-  const required = (v: string | null | undefined) => !!v || t('common.fieldRequired')
-  const validateImages = (files: File[] | null) => {
-    if (!files) return true
-    if (files.length + existingImages.value.length > 3) return t('announcements.max3Images')
-    for (const f of files) {
-      if (f.size > 3 * 1024 * 1024) return t('announcements.max3MB')
-      if (!f.type.startsWith('image/')) return t('announcements.onlyImages')
+// -----------------------------
+// Validation
+// -----------------------------
+const required = (v: string | null | undefined) => !!v || t('common.fieldRequired')
+const validateImages = (files: File[] | null) => {
+  if (!files) return true
+  if (files.length + existingImages.value.length > 3) return t('announcements.max3Images')
+  for (const f of files) {
+    if (f.size > 3 * 1024 * 1024) return t('announcements.max3MB')
+    if (!f.type.startsWith('image/')) return t('announcements.onlyImages')
+  }
+  return true
+}
+
+// -----------------------------
+// Image helpers
+// -----------------------------
+const getPreviewUrl = (file: File) => URL.createObjectURL(file)
+const removeNewImage = (i: number) => newImages.value.splice(i, 1)
+const removeExistingImage = (i: number) => existingImages.value.splice(i, 1)
+const onFileInputChange = (files: File | File[] | null) => {
+  if (!files) return
+  const newFiles = Array.isArray(files) ? files : [files]
+  const combined = [...newImages.value, ...newFiles]
+  if (combined.length + existingImages.value.length > 3) {
+    alert(t('announcements.max3Images'))
+    return
+  }
+  newImages.value = combined
+}
+
+// -----------------------------
+// Form actions
+// -----------------------------
+const resetForm = () => {
+  title.value = ''
+  description.value = ''
+  tags.value = ''
+  isPrivate.value = false
+  newImages.value = []
+  existingImages.value = []
+}
+
+const close = () => {
+  localModelValue.value = false
+  resetForm()
+}
+
+// -----------------------------
+// Create & Update logic
+// -----------------------------
+const createAnnouncement = () => {
+  const tagsArray = tags.value
+    .split(',')
+    .map((t) => t.trim())
+    .filter(Boolean)
+
+  const created: CreateAnnouncementDTO = {
+    title: title.value,
+    content: description.value,
+    tags: tagsArray,
+    isPrivate: isPrivate.value,
+    files: [...newImages.value],
+  }
+
+  emit('create', created)
+  close()
+}
+
+const updateAnnouncement = () => {
+  if (!props.announcement) return
+
+  const tagsArray = tags.value
+    .split(',')
+    .map((t) => t.trim())
+    .filter(Boolean)
+
+  const update: UpdateAnnouncementDTO = {
+    title: title.value,
+    content: description.value,
+    tags: tagsArray,
+    isPrivate: isPrivate.value,
+    files: newImages.value.length ? [...newImages.value] : undefined,
+  }
+
+  emit('update', props.announcement.id, update)
+  close()
+}
+
+// -----------------------------
+// Handle form submit
+// -----------------------------
+const onSubmit = () => {
+  if (!title.value || !description.value) return
+  if (props.editMode) updateAnnouncement()
+  else createAnnouncement()
+}
+
+// -----------------------------
+// Initialize form when dialog opens
+// -----------------------------
+watch(
+  localModelValue,
+  (open) => {
+    if (!open) return
+    if (props.editMode && props.announcement) {
+      title.value = props.announcement.title
+      description.value = props.announcement.content
+      tags.value = props.announcement.tags ? props.announcement.tags.join(', ') : ''
+      isPrivate.value = props.announcement.isPrivate
+      newImages.value = []
+      existingImages.value = props.announcement.images || []
+    } else {
+      resetForm()
     }
-    return true
-  }
-
-  // -----------------------------
-  // Image helpers
-  // -----------------------------
-  const getPreviewUrl = (file: File) => URL.createObjectURL(file)
-  const removeNewImage = (i: number) => newImages.value.splice(i, 1)
-  const removeExistingImage = (i: number) => existingImages.value.splice(i, 1)
-  const onFileInputChange = (files: File | File[] | null) => {
-    if (!files) return
-    const newFiles = Array.isArray(files) ? files : [files]
-    const combined = [...newImages.value, ...newFiles]
-    if (combined.length + existingImages.value.length > 3) {
-      alert(t('announcements.max3Images'))
-      return
-    }
-    newImages.value = combined
-  }
-
-  // -----------------------------
-  // Form actions
-  // -----------------------------
-  const resetForm = () => {
-    title.value = ''
-    description.value = ''
-    tags.value = ''
-    isPrivate.value = false
-    newImages.value = []
-    existingImages.value = []
-  }
-
-  const close = () => {
-    localModelValue.value = false
-    resetForm()
-  }
-
-  // -----------------------------
-  // Save announcement (via backend => TODO)
-  // -----------------------------
-  const save = async () => {
-    if (!title.value || !description.value) return
-
-    // Création de FormData pour envoyer au backend
-    const formData = new FormData()
-    formData.append('title', title.value)
-    formData.append('description', description.value)
-    formData.append('isPrivate', isPrivate.value.toString())
-    formData.append(
-      'tags',
-      tags.value
-        .split(',')
-        .map((t) => t.trim())
-        .filter((t) => t)
-        .join(',')
-    )
-
-    newImages.value.forEach((file) => formData.append('newImages', file))
-    existingImages.value.forEach((url) => formData.append('existingImages', url))
-  }
-
-  // -----------------------------
-  // Initialize form when dialog opens
-  // -----------------------------
-  watch(
-    localModelValue,
-    (open) => {
-      if (!open) return
-      if (props.editMode && props.announcement) {
-        title.value = props.announcement.title
-        description.value = props.announcement.description
-        tags.value = props.announcement.tags.join(', ')
-        isPrivate.value = props.announcement.isPrivate
-        newImages.value = []
-        existingImages.value = props.announcement.existingImages || []
-      } else {
-        resetForm()
-      }
-    },
-    { immediate: true }
-  )
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -148,7 +175,7 @@
       </v-card-title>
 
       <v-card-text>
-        <v-form @submit.prevent="save">
+        <v-form @submit.prevent="onSubmit">
           <v-text-field
             v-model="title"
             :placeholder="t('announcements.title')"

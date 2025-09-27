@@ -348,6 +348,8 @@ export default {
     subtitle: 'Manage the themes and topics for the hackathon',
     theme: 'Theme',
     topic: 'Topic',
+    newTheme: 'New Theme',
+    newSubject : 'New Subject',
     description: 'Description',
     addThemeBtn: '+ Add Theme',
     addTopicBtn: '+ Add Topic',
@@ -367,5 +369,7 @@ export default {
       maxLength: 'Maximum length reached',
       fixErrors: 'Please fix the errors before saving.',
     },
+    noName: "No name provided",
+    noDescription: "No description provided"
   },
 }

@@ -45,15 +45,15 @@
 
       <v-card-text>
         <p class="text-gray-800 whitespace-pre-line">
-          {{ props.announcement.description }}
+          {{ props.announcement.content }}
         </p>
 
         <div
-          v-if="props.announcement.existingImages?.length"
+          v-if="props.announcement.images?.length"
           class="flex gap-2 overflow-x-auto mt-4"
         >
           <v-img
-            v-for="(img, idx) in props.announcement.existingImages"
+            v-for="(img, idx) in props.announcement.images"
             :key="idx"
             :src="img"
             class="rounded-lg w-40 h-40 object-cover"

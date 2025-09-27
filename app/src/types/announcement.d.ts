@@ -1,12 +1,21 @@
 export interface AnnouncementDTO {
-  id?: string
+  id: string
   title: string
   author: string
-  createdAt: string
-  lastModified?: string
-  tags: string[]
-  description: string
-  existingImages?: string[]
-  newImages?: File[]
+  tags?: string[]
+  content: string
+  images?: string[]
   isPrivate: boolean
+  createdAt: string
 }
+
+
+export interface CreateAnnouncementDTO { 
+  title: string
+  tags: string[]
+  content: string
+  isPrivate : boolean
+  files? : File[]
+}
+
+export type UpdateAnnouncementDTO = Partial<CreateAnnouncementDTO>;

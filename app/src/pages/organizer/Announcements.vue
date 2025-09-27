@@ -2,24 +2,28 @@
   import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import Announcements from '@/components/common/Announcements.vue'
-  import { announcements as allAnnouncements } from '@/tests/data/announcements'
+  import { announcements as allAnnouncementsRaw } from '@/tests/data/announcements'
   import AnnouncementForm from '@/components/organizer/announcements/AnnouncementForm.vue'
-  import type { AnnouncementDTO } from '@/types/announcement'
+  import type { AnnouncementDTO, CreateAnnouncementDTO } from '@/types/announcement'
 
   const { t } = useI18n()
 
   const searchQuery = ref('')
   const showAddPopup = ref(false)
 
+  const allAnnouncements = ref<AnnouncementDTO[]>(allAnnouncementsRaw)
+
   // Computed property to filter announcements based on search query
   const filteredAnnouncements = computed(() => {
-    if (!searchQuery.value.trim()) return allAnnouncements
-    return allAnnouncements.filter(
+    const query = searchQuery.value.trim().toLowerCase()
+    if (!query) return allAnnouncements.value
+
+    return allAnnouncements.value.filter(
       (a) =>
-        a.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        a.description.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        a.author.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        a.tags.some((tag) => tag.toLowerCase().includes(searchQuery.value.toLowerCase()))
+        a.title.toLowerCase().includes(query) ||
+        a.content.toLowerCase().includes(query) ||
+        a.author.toLowerCase().includes(query) ||
+        a.tags?.some((tag) => tag.toLowerCase().includes(query))
     )
   })
 
@@ -28,10 +32,11 @@
     showAddPopup.value = true
   }
 
-  const handleSave = (newAnnouncement: AnnouncementDTO) => {
-    // Ici tu gères l'ajout réel (push dans une liste, appel API, etc)
-    console.log('Nouvelle annonce sauvegardée:', newAnnouncement)
-    showAddPopup.value = false
+  const handleCreate = (newAnnouncement: CreateAnnouncementDTO) => {
+    // 1. Appel API pour créer l'annonce
+    // 2. Mettre à jour la liste locale
+    console.log('Nouvelle annonce créée :', newAnnouncement)
+
   }
 </script>
 
@@ -65,7 +70,7 @@
           :can-delete="true"
         />
 
-        <AnnouncementForm v-model="showAddPopup" @save="handleSave" />
+        <AnnouncementForm v-model="showAddPopup" @create="handleCreate"/>
       </div>
     </v-row>
   </v-container>

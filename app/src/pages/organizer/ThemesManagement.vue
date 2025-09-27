@@ -1,84 +1,87 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
-  import { useI18n } from 'vue-i18n'
-  import { ThemesDTO, SubjectDTO } from '@/types/hackathon'
-  import ThemeCard from '@/components/organizer/themes/ThemeCard.vue'
+import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { ThemesDTO, SubjectDTO, UpdateConfigurationDTO } from '@/types/hackathon'
+import ThemeCard from '@/components/organizer/themes/ThemeCard.vue'
+import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
+import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 
-  const { t } = useI18n()
+const { t } = useI18n()
 
-  const themes = ref<ThemesDTO[]>([
-    {
-      id: '1',
-      name: 'Sustainability',
-      description: 'Projects focused on environmental sustainability and green technologies.',
-      subjects: [
-        {
-          id: '1',
-          name: 'Renewable Energy',
-          description: 'Projects related to solar, wind, and other renewable energy sources.',
-        },
-        {
-          id: '2',
-          name: 'Waste Management',
-          description: 'Innovative solutions for reducing and managing waste.',
-        },
-      ],
-    },
-    {
-      id: '2',
-      name: 'Healthcare',
-      description: 'Innovative solutions in the healthcare sector.',
-      subjects: [
-        {
-          id: '3',
-          name: 'Telemedicine',
-          description: 'Projects that enhance remote healthcare services.',
-        },
-        {
-          id: '4',
-          name: 'Medical Devices',
-          description: 'Development of new medical devices and technologies.',
-        },
-      ],
-    },
-  ])
+const themes = ref<ThemesDTO[]>([])
 
-  // --- THEMES ---
-  const addTheme = () => {
-    const newTheme: ThemesDTO = {
-      id: Date.now().toString(),
-      name: '',
-      description: '',
-      subjects: [],
-    }
-    themes.value.push(newTheme)
+onMounted(async () => {
+  try {
+    const response = await getOrCreateConfiguration(ConfigurationKey.THEMES)
+    themes.value = response.value as ThemesDTO[]
+  } catch (error) {
+    console.error('Error fetching partners:', error)
+  }
+})
+
+const saveThemes = async () => {
+  const updateDto: UpdateConfigurationDTO = {
+    value: themes.value
   }
 
-  const removeTheme = (themeIndex: number) => {
-    themes.value.splice(themeIndex, 1)
+  try {
+    await configurationService.update(ConfigurationKey.THEMES, updateDto)
+    console.log('Themes updated successfully')
+  } catch (error) {
+    console.error('Error updating themes: ', error)
   }
+}
 
-  const editTheme = (themeIndex: number, updatedTheme: ThemesDTO) => {
-    themes.value[themeIndex] = updatedTheme
-  }
+// --- THEMES ---
+const addTheme = () => {
+  if (themes.value.some(theme => !theme.name.trim())) return
 
-  // --- SUBJECTS ---
-  const addSubject = (themeIndex: number) => {
-    const newSubject: SubjectDTO = {
-      id: Date.now().toString(),
-      name: '',
-      description: '',
-    }
-    themes.value[themeIndex].subjects.push(newSubject)
+  const newTheme: ThemesDTO = {
+    id: Date.now().toString(),
+    name: '',
+    description: '',
+    subjects: [],
   }
+  themes.value.push(newTheme)
+}
 
-  const removeSubject = (themeIndex: number, subjectIndex: number) => {
-    themes.value[themeIndex].subjects.splice(subjectIndex, 1)
-  }
+const removeTheme = (themeIndex: number) => {
+  themes.value.splice(themeIndex, 1)
+}
 
-  const editSubject = (themeIndex: number, subjectIndex: number, updatedSubject: SubjectDTO) => {
-    themes.value[themeIndex].subjects[subjectIndex] = updatedSubject
+const editTheme = (themeIndex: number, updatedTheme: ThemesDTO) => {
+  themes.value[themeIndex] = updatedTheme
+}
+
+// --- SUBJECTS ---
+const addSubject = (themeIndex: number) => {
+  const newSubject: SubjectDTO = {
+    id: Date.now().toString(),
+    name: '',
+    description: '',
   }
+  themes.value[themeIndex].subjects.push(newSubject)
+}
+
+const removeSubject = (themeIndex: number, subjectIndex: number) => {
+  themes.value[themeIndex].subjects.splice(subjectIndex, 1)
+}
+
+const editSubject = (themeIndex: number, subjectIndex: number, updatedSubject: SubjectDTO) => {
+  themes.value[themeIndex].subjects[subjectIndex] = updatedSubject
+}
+
+const validThemes = (): boolean => {
+  if (themes.value.length === 0) return false
+
+  if (themes.value.some(theme => !theme.name || !theme.name.trim())) return false
+
+  if (themes.value.some(theme => !theme.subjects || theme.subjects.length === 0)) return false
+
+  if (themes.value.some(theme => theme.subjects.some(s => !s.name || !s.name.trim()))) return false
+
+  return true
+}
 </script>
 
 <template>
@@ -89,7 +92,11 @@
 
         <div class="flex items-center justify-between mb-5">
           <p class="text-gray-600 text-lg mb-0">{{ t('themes.subtitle') }}</p>
-          <v-btn color="primary" @click="addTheme">{{ t('themes.addThemeBtn') }}</v-btn>
+          <div class="flex items-center justify-end mb-5">
+          <v-btn color="primary" @click="saveThemes" :disabled="!validThemes()">
+            {{ t('common.saveChanges') }}
+          </v-btn>
+        </div>
         </div>
 
         <div v-if="themes.length === 0" class="text-center text-gray-600 my-10">
@@ -107,6 +114,16 @@
           @editTheme="editTheme"
           @editSubject="editSubject"
         />
+
+        <div class="flex justify-center mt-6">
+          <v-btn 
+            color="primary" 
+            @click="addTheme"
+            :disabled="themes.some(theme => !theme.name.trim())"
+          >
+            {{ t('themes.addThemeBtn') }}
+          </v-btn>
+        </div>
       </v-col>
     </v-row>
   </v-container>

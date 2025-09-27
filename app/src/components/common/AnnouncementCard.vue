@@ -43,16 +43,16 @@
         </div>
       </div>
       <p class="mt-3 text-gray-700 line-clamp-2">
-        {{ announcement.description }}
+        {{ announcement.content }}
       </p>
     </div>
 
     <div
-      v-if="announcement.existingImages && announcement.existingImages?.length > 0"
+      v-if="announcement.images && announcement.images?.length > 0"
       class="flex gap-2 overflow-x-auto items-center"
     >
       <v-img
-        v-for="(img, idx) in announcement.existingImages"
+        v-for="(img, idx) in announcement.images"
         :key="idx"
         :src="img"
         class="rounded-lg w-32 h-32 object-cover"
