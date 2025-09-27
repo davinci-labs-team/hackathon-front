@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { PartnersDTO } from '@/types/hackathon'
+  import { PartnersDTO } from '@/types/config'
 
   const { t } = useI18n()
   const props = defineProps<{

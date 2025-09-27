@@ -94,15 +94,17 @@
             color="red"
             variant="text"
             size="small"
+            :title="t('common.delete')"
             @click.stop="confirmDelete(item)"
           />
           <!-- Edit button -->
           <v-btn
             v-if="canDelete"
             icon="mdi-pencil"
-            color="black"
+            color="primary"
             variant="text"
             size="small"
+            :title="t('common.edit')"
             @click.stop="editAnnouncement(item)"
           />
         </div>

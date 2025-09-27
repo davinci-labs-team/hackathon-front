@@ -4,7 +4,7 @@ import {
   ConfigurationResponse,
   UpdateConfigurationDTO,
   CreateConfigurationDTO,
-} from '@/types/hackathon'
+} from '@/types/config'
 import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
 

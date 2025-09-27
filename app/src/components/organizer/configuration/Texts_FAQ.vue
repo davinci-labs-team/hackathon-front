@@ -1,184 +1,190 @@
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
-  import { useI18n } from 'vue-i18n'
-  import AppSnackbar from '@/components/common/AppSnackbar.vue'
-  import { FAQItemDTO } from '@/types/faq'
-  import FAQForm from '@/components/organizer/faq/FAQForm.vue'
-  import FAQItemCard from '../faq/FAQItemCard.vue'
-  import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
-  import { useFaq } from '@/composables/useFaq'
-  import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
-  import { UpdateConfigurationDTO } from '@/types/hackathon'
-  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import AppSnackbar from '@/components/common/AppSnackbar.vue'
+import FAQForm from '@/components/organizer/faq/FAQForm.vue'
+import FAQItemCard from '@/components/organizer/faq/FAQItemCard.vue'
+import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
+import { useFaq } from '@/composables/useFaq'
+import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
+import { HackathonTextDTO, UpdateConfigurationDTO } from '@/types/config'
+import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+import { FAQItemDTO } from '@/types/faq'
 
-  const { t } = useI18n()
+const { t } = useI18n()
 
-  const slogan = ref('')
-  const hackathonName = ref('')
-  const hackathonDescription = ref('')
-  const saveAttempted = ref(false)
+// --- Hackathon Texts ---
+const hackathonTexts = ref<HackathonTextDTO>({
+  hackathonName: '',
+  slogan: '',
+  hackathonDescription: '',
+  location: '',
+})
 
-  onMounted(async () => {
-    try {
-      const response = await getOrCreateConfiguration(ConfigurationKey.TEXTS)
-      if (response && response.value) {
-        slogan.value = response.value.slogan || ''
-        hackathonName.value = response.value.hackathon_name || ''
-        hackathonDescription.value = response.value.hackathon_description || ''
-      }
-    } catch (error) {
-      console.error('Error fetching settings:', error)
+const saveAttempted = ref(false)
+
+onMounted(async () => {
+  try {
+    const response = await getOrCreateConfiguration(ConfigurationKey.TEXTS)
+    if (response && response.value) {
+      hackathonTexts.value = response.value
     }
-  })
+  } catch (error) {
+    console.error('Error fetching hackathon texts:', error)
+  }
+})
 
-  /* FAQ */
+// --- FAQ ---
+const { faqs, createFaq, updateFaq, deleteFaq } = useFaq()
+const showFAQForm = ref(false)
+const editFAQItem = ref<FAQItemDTO | null>(null)
+const faqToDelete = ref<FAQItemDTO | null>(null)
+const showConfirmDialog = ref(false)
 
-  // Composable
-  const { faqs, createFaq, updateFaq, deleteFaq } = useFaq()
+const confirmDelete = (faq: FAQItemDTO) => {
+  faqToDelete.value = faq
+  showConfirmDialog.value = true
+}
 
-  const showFAQForm = ref(false)
-  const editFAQItem = ref<FAQItemDTO | null>(null)
-  const faqToDelete = ref<FAQItemDTO | null>(null)
-  const showConfirmDialog = ref(false)
+const handleDelete = async () => {
+  if (!faqToDelete.value?.id) return
+  await deleteFaq(faqToDelete.value.id)
+  showConfirmDialog.value = false
+  faqToDelete.value = null
+}
 
-  const confirmDelete = (faq: FAQItemDTO) => {
-    faqToDelete.value = faq
-    showConfirmDialog.value = true
+const handleSaveFAQ = async (faqItem: FAQItemDTO) => {
+  if (editFAQItem.value?.id) {
+    await updateFaq(editFAQItem.value.id, faqItem)
+  } else {
+    await createFaq(faqItem)
+  }
+  editFAQItem.value = null
+}
+
+// --- Validation & Limits ---
+const hackathonNameMaxLength = 60
+const sloganMaxLength = 60
+const hackathonDescriptionMaxLength = 500
+
+const validateTexts = () => {
+  const texts = hackathonTexts.value
+  if (!texts.hackathonName || texts.hackathonName.length > hackathonNameMaxLength) return false
+  if (texts.slogan && texts.slogan.length > sloganMaxLength) return false
+  if (!texts.hackathonDescription || texts.hackathonDescription.length > hackathonDescriptionMaxLength)
+    return false
+  return true
+}
+
+// --- Snackbar ---
+const snackbar = ref(false)
+const snackbarText = ref(t('common.changesSaved'))
+const snackbarTimeout = ref(1500)
+const snackbarError = ref(false)
+
+const handleSaveTexts = async () => {
+  saveAttempted.value = true
+
+  if (!validateTexts()) {
+    snackbarText.value = t('textsSettings.errors.fixErrors')
+    snackbarError.value = true
+    snackbar.value = true
+    return
   }
 
-  const handleDelete = async () => {
-    if (!faqToDelete.value?.id) return
-    await deleteFaq(faqToDelete.value.id)
-    showConfirmDialog.value = false
-    faqToDelete.value = null
+  const updateDto: UpdateConfigurationDTO = {
+    value: {
+      hackathon_name: hackathonTexts.value.hackathonName,
+      slogan: hackathonTexts.value.slogan,
+      hackathon_description: hackathonTexts.value.hackathonDescription,
+      location: hackathonTexts.value.location,
+    },
   }
 
-  const handleSaveFAQ = async (faqItem: FAQItemDTO) => {
-    if (editFAQItem.value?.id) {
-      await updateFaq(editFAQItem.value.id, faqItem)
-    } else {
-      await createFaq(faqItem)
-    }
-    editFAQItem.value = null
+  try {
+    await configurationService.update(ConfigurationKey.TEXTS, updateDto)
+    snackbarText.value = t('common.changesSaved')
+    snackbarError.value = false
+    snackbar.value = true
+  } catch (e) {
+    snackbarText.value = t('common.error')
+    snackbarError.value = true
+    snackbar.value = true
   }
-
-  const sloganMaxLength = 60
-  const hackathonNameMaxLength = 60
-  const hackathonDescriptionMaxLength = 500
-
-  // Snackbar
-  const snackbar = ref(false)
-  const text = ref(t('common.changesSaved'))
-  const timeout = ref(1500)
-  const error = ref(false)
-
-  const validateTexts = () => {
-    if (!hackathonName.value || hackathonName.value.length > hackathonNameMaxLength) return false
-    if (slogan.value && slogan.value.length > sloganMaxLength) return false
-    if (
-      !hackathonDescription.value ||
-      hackathonDescription.value.length > hackathonDescriptionMaxLength
-    )
-      return false
-    return true
-  }
-
-  const handleSaveTexts = async () => {
-    saveAttempted.value = true
-
-    if (!validateTexts()) {
-      text.value = t('textsSettings.errors.fixErrors')
-      error.value = true
-      snackbar.value = true
-      return
-    }
-
-    const updateDto: UpdateConfigurationDTO = {
-      value: {
-        slogan: slogan.value,
-        hackathon_name: hackathonName.value,
-        hackathon_description: hackathonDescription.value,
-      },
-    }
-
-    try {
-      await configurationService.update(ConfigurationKey.TEXTS, updateDto)
-      text.value = t('common.changesSaved')
-      error.value = false
-      snackbar.value = true
-    } catch (e) {
-      text.value = t('common.error')
-      error.value = true
-      snackbar.value = true
-    }
-  }
+}
 </script>
 
 <template>
   <v-container class="py-10 max-w-7xl mx-auto">
+    <!-- Hackathon Texts -->
     <h1 class="text-3xl font-bold mb-2">{{ t('textsSettings.title') }}</h1>
-    <div class="flex-direction-row mb-5 flex items-center justify-between">
+    <div class="flex flex-row mb-5 items-center justify-between">
       <p class="mb-0 text-lg text-gray-600">{{ t('textsSettings.subtitle') }}</p>
       <v-btn color="primary" @click="handleSaveTexts">{{ t('common.saveChanges') }}</v-btn>
     </div>
 
     <v-container>
-      <p class="mb-2 text-lg text-600">
+      <!-- Hackathon Name -->
+      <p class="mb-2 text-lg font-medium">
         {{ t('textsSettings.hackathonName') }} <span class="text-red-500">*</span>
       </p>
       <v-text-field
-        v-model="hackathonName"
+        v-model="hackathonTexts.hackathonName"
         :counter="hackathonNameMaxLength"
         variant="outlined"
         class="mb-0"
       />
-      <p class="text-red-500 italic mb-5" v-if="!hackathonName && saveAttempted">
+      <p class="text-red-500 italic mb-5" v-if="!hackathonTexts.hackathonName && saveAttempted">
         {{ t('textsSettings.errors.requiredField') }}
       </p>
-      <p class="text-red-500 italic mb-5" v-if="hackathonName.length > hackathonNameMaxLength">
+      <p class="text-red-500 italic mb-5" v-if="hackathonTexts.hackathonName.length > hackathonNameMaxLength">
         {{ t('textsSettings.errors.maxLength', { max: hackathonNameMaxLength }) }}
       </p>
 
-      <p class="mb-2 text-lg text-600">{{ t('textsSettings.slogan') }}</p>
+      <!-- Slogan -->
+      <p class="mb-2 text-lg font-medium">{{ t('textsSettings.slogan') }}</p>
       <v-text-field
-        v-model="slogan"
+        v-model="hackathonTexts.slogan"
         :counter="sloganMaxLength"
         variant="outlined"
         dense
         class="mb-2"
       />
-      <p class="text-red-500 italic mb-5" v-if="slogan.length > sloganMaxLength">
+      <p class="text-red-500 italic mb-5" v-if="hackathonTexts.slogan && hackathonTexts.slogan.length > sloganMaxLength">
         {{ t('textsSettings.errors.maxLength', { max: sloganMaxLength }) }}
       </p>
 
-      <p class="mb-2 text-lg text-600">
+      <!-- Hackathon Description -->
+      <p class="mb-2 text-lg font-medium">
         {{ t('textsSettings.hackathonDescription') }} <span class="text-red-500">*</span>
       </p>
       <v-textarea
-        v-model="hackathonDescription"
+        v-model="hackathonTexts.hackathonDescription"
         :counter="hackathonDescriptionMaxLength"
         variant="outlined"
         auto-grow
         rows="3"
         class="mb-0"
       />
-      <p class="text-red-500 italic mb-5" v-if="!hackathonDescription && saveAttempted">
+      <p class="text-red-500 italic mb-5" v-if="!hackathonTexts.hackathonDescription && saveAttempted">
         {{ t('textsSettings.errors.requiredField') }}
       </p>
-      <p
-        class="text-red-500 italic mb-5"
-        v-if="hackathonDescription.length > hackathonDescriptionMaxLength"
-      >
+      <p class="text-red-500 italic mb-5" v-if="hackathonTexts.hackathonDescription.length > hackathonDescriptionMaxLength">
         {{ t('textsSettings.errors.maxLength', { max: hackathonDescriptionMaxLength }) }}
       </p>
 
-      <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
+      <AppSnackbar
+        v-model="snackbar"
+        :message="snackbarText"
+        :timeout="snackbarTimeout"
+        :error="snackbarError"
+      />
     </v-container>
 
+    <!-- FAQ Section -->
     <h1 class="text-3xl font-bold mb-2">{{ t('faqSettings.title') }}</h1>
-    <div class="flex-direction-row mb-5 flex items-center justify-between">
+    <div class="flex flex-row mb-5 items-center justify-between">
       <p class="mb-0 text-lg text-gray-600">{{ t('faqSettings.subtitle') }}</p>
-
       <v-btn color="primary" @click="showFAQForm = true">
         {{ t('faqSettings.addQuestionBtn') }}
       </v-btn>
@@ -192,12 +198,7 @@
       v-for="faq in faqs"
       :key="faq.id"
       :faqItem="faq"
-      @click="
-        (item: FAQItemDTO) => {
-          editFAQItem = item
-          showFAQForm = true
-        }
-      "
+      @click="(item: FAQItemDTO) => { editFAQItem = item; showFAQForm = true }"
       @delete="confirmDelete(faq)"
     />
 

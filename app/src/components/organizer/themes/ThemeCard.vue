@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ThemesDTO, SubjectDTO } from '@/types/hackathon'
+import { ThemesDTO, SubjectDTO } from '@/types/config'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{

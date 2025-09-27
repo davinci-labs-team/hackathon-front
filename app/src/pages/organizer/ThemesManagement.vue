@@ -1,14 +1,21 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { ThemesDTO, SubjectDTO, UpdateConfigurationDTO } from '@/types/hackathon'
+import { ThemesDTO, SubjectDTO, UpdateConfigurationDTO } from '@/types/config'
 import ThemeCard from '@/components/organizer/themes/ThemeCard.vue'
 import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
 import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+import AppSnackbar from '@/components/common/AppSnackbar.vue'
 
 const { t } = useI18n()
 
 const themes = ref<ThemesDTO[]>([])
+
+// Snackbar
+const snackbar = ref(false)
+const text = ref('')
+const timeout = ref(1500)
+const error = ref(false)
 
 onMounted(async () => {
   try {
@@ -26,9 +33,15 @@ const saveThemes = async () => {
 
   try {
     await configurationService.update(ConfigurationKey.THEMES, updateDto)
+    text.value = t('common.changesSaved')
+    error.value = false
+    snackbar.value = true
     console.log('Themes updated successfully')
-  } catch (error) {
-    console.error('Error updating themes: ', error)
+  } catch (e) {
+    console.error('Error updating themes: ', e)
+    text.value = t('common.error')
+    error.value = true
+    snackbar.value = true
   }
 }
 
@@ -114,6 +127,8 @@ const validThemes = (): boolean => {
           @editTheme="editTheme"
           @editSubject="editSubject"
         />
+
+        <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
 
         <div class="flex justify-center mt-6">
           <v-btn 

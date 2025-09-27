@@ -61,7 +61,7 @@ export default {
     inscriptionMessage: 'Welcome! To join the event, please register below.',
     firstLoginBtn: 'First login',
     locationText: 'Register to see the exact location',
-    dateText: '2 intensive days of coding',
+    dateText: '{numberOfDays} intensive day(s) of coding)',
     phases: {
       1: {
         name: 'Publication of themes and topics',
@@ -342,6 +342,9 @@ export default {
     noQuestions: 'No questions available at the moment.',
     question: 'Question',
     answer: 'Answer',
+    public: 'Public Question',
+    private: 'Private Question',
+    privateHint: 'Visible only to authenticated users',
   },
   themes: {
     title: 'Themes & Topics',

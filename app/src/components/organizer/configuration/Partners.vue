@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import { PartnersDTO, UpdateConfigurationDTO } from '@/types/hackathon'
+  import { PartnersDTO, UpdateConfigurationDTO } from '@/types/config'
   import { useI18n } from 'vue-i18n'
   import PartnerCard from '../partners/PartnerCard.vue'
   import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'

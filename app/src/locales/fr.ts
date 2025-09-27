@@ -62,7 +62,7 @@ export default {
       "Bienvenue ! Pour rejoindre l'événement, veuillez vous inscrire ci-dessous.",
     firstLoginBtn: 'Première connexion',
     locationText: 'Inscrivez-vous pour connaître le lieu exact',
-    dateText: '2 jours intensifs de codage',
+    dateText: '{numberOfDays} jours intensif(s) de code',
     phases: {
       1: {
         name: 'Publication des thèmes et sujets',
@@ -373,6 +373,9 @@ export default {
     noQuestions: 'Aucune question disponible pour le moment.',
     question: 'Question',
     answer: 'Réponse',
+    public: 'Question Publique',
+    private: 'Question Privée',
+    privateHint: 'Visible uniquement par les utilisateurs authentifiés',
   },
   themes: {
     title: 'Thèmes & Sujets',

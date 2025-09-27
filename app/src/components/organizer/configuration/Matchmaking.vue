@@ -8,7 +8,7 @@
     MatchmakingSettingsDTO,
     PartnersDTO,
     UpdateConfigurationDTO,
-  } from '@/types/hackathon'
+  } from '@/types/config'
   import Constraints from '@/components/organizer/matchmaking/Constraints.vue'
   import ConstraintForm from '../matchmaking/ConstraintForm.vue'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'

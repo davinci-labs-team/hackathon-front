@@ -1,11 +1,26 @@
 <script setup lang="ts">
   import basicImg from '@/assets/images/basic.jpg'
+  import { configurationService } from '@/services/configurationService'
+  import { PartnersDTO } from '@/types/config'
+  import { ref, onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+
 
   const { t } = useI18n()
 
-  // TODO:
-  // Call API to list all partners with name and picture
+  const partners = ref<PartnersDTO[]>([])
+
+  onMounted(async () => {
+    try {
+      const response = await configurationService.findOne(ConfigurationKey.PARTNERS)
+      partners.value = response.value as PartnersDTO[]
+    } catch (error) {
+      console.error('Error fetching partners:', error)
+    }
+  })
+
+
 </script>
 
 <template>
@@ -14,8 +29,14 @@
     style="height: 100%"
   >
     <h3 class="text-2xl font-medium">{{ t('partners.title') }}</h3>
-    <img :src="basicImg" alt="Partenaire 1" class="rounded shadow" />
-    <img :src="basicImg" alt="Partenaire 2" class="rounded shadow" />
-    <img :src="basicImg" alt="Partenaire 3" class="rounded shadow" />
+    <div class="flex flex-wrap justify-center gap-8">
+      <img
+        v-for="(partner, index) in partners"
+        :key="partner.id || index"
+        :src="partner.logoId || basicImg"
+        :alt="partner.name"
+        class="rounded h-32 w-auto object-contain"
+      />
+    </div>
   </div>
 </template>
