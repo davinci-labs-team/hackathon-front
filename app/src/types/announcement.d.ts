@@ -4,7 +4,7 @@ export interface AnnouncementDTO {
   author: string
   tags?: string[]
   content: string
-  images?: string[]
+  files?: string[]
   isPrivate: boolean
   createdAt: string
 }
@@ -15,7 +15,7 @@ export interface CreateAnnouncementDTO {
   tags: string[]
   content: string
   isPrivate : boolean
-  files? : File[]
+  files? : string[]
 }
 
 export type UpdateAnnouncementDTO = Partial<CreateAnnouncementDTO>;

@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { AnnouncementDTO, CreateAnnouncementDTO, UpdateAnnouncementDTO } from '@/types/announcement'
+import { S3BucketService } from '@/services/s3BucketService'
+import { generateSignedUrls } from '@/utils/s3utils'
 
 const { t } = useI18n()
 
@@ -45,25 +47,50 @@ const newImages = ref<File[]>([])
 const existingImages = ref<string[]>([])
 
 // -----------------------------
+// Tags
+// -----------------------------
+const parseTags = (tagsString: string): string[] => {
+  return tagsString
+    .split(',')
+    .map((t) => t.trim())
+    .filter(Boolean)
+}
+
+// -----------------------------
 // Validation
 // -----------------------------
 const required = (v: string | null | undefined) => !!v || t('common.fieldRequired')
 const validateImages = (files: File[] | null) => {
   if (!files) return true
-  if (files.length + existingImages.value.length > 3) return t('announcements.max3Images')
+
+  const MAX_IMAGES = 3
+  const MAX_SIZE_MB = 5
+  const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024
+
+  if (files.length + existingImages.value.length > MAX_IMAGES) {
+    return t('announcements.max3Images')
+  }
+
   for (const f of files) {
-    if (f.size > 3 * 1024 * 1024) return t('announcements.max3MB')
+    if (f.size > MAX_SIZE_BYTES) return t('announcements.max5MB')
     if (!f.type.startsWith('image/')) return t('announcements.onlyImages')
   }
+
   return true
 }
+
 
 // -----------------------------
 // Image helpers
 // -----------------------------
 const getPreviewUrl = (file: File) => URL.createObjectURL(file)
 const removeNewImage = (i: number) => newImages.value.splice(i, 1)
-const removeExistingImage = (i: number) => existingImages.value.splice(i, 1)
+
+const removeExistingImage = (i: number) => {
+  existingImages.value.splice(i, 1)
+  signedUrls.value.splice(i, 1)
+}
+
 const onFileInputChange = (files: File | File[] | null) => {
   if (!files) return
   const newFiles = Array.isArray(files) ? files : [files]
@@ -95,43 +122,57 @@ const close = () => {
 // -----------------------------
 // Create & Update logic
 // -----------------------------
-const createAnnouncement = () => {
-  const tagsArray = tags.value
-    .split(',')
-    .map((t) => t.trim())
-    .filter(Boolean)
+const uploadImages = async (): Promise<string[]> => {
+  if (newImages.value.length === 0) return []
+
+  try {
+    const uploadedPaths = await Promise.all(
+      newImages.value.map((file) => S3BucketService.uploadFile(file))
+    )
+
+    return uploadedPaths.map((res) => res.path)
+  } catch (error) {
+    console.error('Error uploading images:', error)
+    alert(t('announcements.imageUploadError'))
+    return []
+  }
+}
+
+const createAnnouncement = async () => {
+  const tagsArray =  parseTags(tags.value)
+
+  const uploadedImagePaths: string[] = await uploadImages()
 
   const created: CreateAnnouncementDTO = {
     title: title.value,
     content: description.value,
     tags: tagsArray,
     isPrivate: isPrivate.value,
-    files: [...newImages.value],
+    files: [...existingImages.value, ...uploadedImagePaths],
   }
-
   emit('create', created)
   close()
 }
 
-const updateAnnouncement = () => {
+const updateAnnouncement = async () => {
   if (!props.announcement) return
 
-  const tagsArray = tags.value
-    .split(',')
-    .map((t) => t.trim())
-    .filter(Boolean)
+  const tagsArray = parseTags(tags.value)
+
+  const uploadedImagePaths = await uploadImages()
 
   const update: UpdateAnnouncementDTO = {
     title: title.value,
     content: description.value,
     tags: tagsArray,
     isPrivate: isPrivate.value,
-    files: newImages.value.length ? [...newImages.value] : undefined,
+    files: [...existingImages.value, ...uploadedImagePaths],
   }
 
   emit('update', props.announcement.id, update)
   close()
 }
+
 
 // -----------------------------
 // Handle form submit
@@ -155,13 +196,34 @@ watch(
       tags.value = props.announcement.tags ? props.announcement.tags.join(', ') : ''
       isPrivate.value = props.announcement.isPrivate
       newImages.value = []
-      existingImages.value = props.announcement.images || []
+      existingImages.value = props.announcement.files || []
     } else {
       resetForm()
     }
   },
   { immediate: true }
 )
+
+const signedUrls = ref<string[]>([])
+
+const loadImages = async () => {
+  if (props.announcement && props.announcement.files && props.announcement.files.length > 0) {
+    signedUrls.value = await generateSignedUrls(props.announcement.files)
+  }
+}
+
+onMounted(loadImages)
+
+watch(
+  () => existingImages.value,
+  async (files) => {
+    if (props.announcement) {
+      signedUrls.value = await generateSignedUrls(files)
+    }
+  },
+  { immediate: true }
+)
+
 </script>
 
 <template>
@@ -233,7 +295,7 @@ watch(
             </div>
 
             <div
-              v-for="(url, index) in existingImages"
+              v-for="(url, index) in signedUrls"
               :key="url"
               class="relative w-32 h-32 border rounded-lg overflow-hidden"
             >

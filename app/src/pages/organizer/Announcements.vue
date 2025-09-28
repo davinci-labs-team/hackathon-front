@@ -1,19 +1,18 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { ref, computed, onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
   import Announcements from '@/components/common/Announcements.vue'
-  import { announcements as allAnnouncementsRaw } from '@/tests/data/announcements'
   import AnnouncementForm from '@/components/organizer/announcements/AnnouncementForm.vue'
   import type { AnnouncementDTO, CreateAnnouncementDTO } from '@/types/announcement'
+  import { AnnouncementService } from '@/services/announcementService'
 
   const { t } = useI18n()
 
   const searchQuery = ref('')
   const showAddPopup = ref(false)
 
-  const allAnnouncements = ref<AnnouncementDTO[]>(allAnnouncementsRaw)
+  const allAnnouncements = ref<AnnouncementDTO[]>([])
 
-  // Computed property to filter announcements based on search query
   const filteredAnnouncements = computed(() => {
     const query = searchQuery.value.trim().toLowerCase()
     if (!query) return allAnnouncements.value
@@ -28,16 +27,29 @@
   })
 
   const onAddAnnouncement = () => {
-    // TODO: gérer l'ajout d'une annonce (popup, navigation, etc.)
     showAddPopup.value = true
   }
 
-  const handleCreate = (newAnnouncement: CreateAnnouncementDTO) => {
-    // 1. Appel API pour créer l'annonce
-    // 2. Mettre à jour la liste locale
-    console.log('Nouvelle annonce créée :', newAnnouncement)
-
+  const handleCreate = async (data: CreateAnnouncementDTO) => {
+    try {
+      const newAnnouncement = await AnnouncementService.create(data)
+      allAnnouncements.value.unshift(newAnnouncement)
+      showAddPopup.value = false
+    } catch (error) {
+      console.error('Error creating announcement:', error)
+    }
   }
+
+  onMounted(async () => {
+    try {
+      const response = await AnnouncementService.getAll()
+      allAnnouncements.value = response
+
+      console.log('Fetched announcements:', response)
+    } catch (error) {
+      console.error('Error fetching announcements:', error)
+    }
+  })
 </script>
 
 <template>

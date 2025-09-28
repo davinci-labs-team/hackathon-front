@@ -3,10 +3,12 @@
   import { AnnouncementDTO } from '@/types/announcement'
   import { newTabImage } from '@/utils/imageUtils'
   import { timeAgo } from '@/utils/dateUtils'
+  import { ref, onMounted } from 'vue'
+  import { generateSignedUrls } from '@/utils/s3utils'
 
   const { t, locale } = useI18n()
   const props = defineProps<{
-    announcement: AnnouncementDTO | null
+    announcement: AnnouncementDTO
     show: boolean
   }>()
 
@@ -17,6 +19,16 @@
   const closePopup = () => {
     emit('update:show', false)
   }
+
+  const signedUrls = ref<string[]>([])
+
+  const loadImages = async () => {
+  if (props.announcement.files && props.announcement.files.length > 0) {
+    signedUrls.value = await generateSignedUrls(props.announcement.files)
+  }
+}
+
+onMounted(loadImages)
 </script>
 
 <template>
@@ -49,17 +61,16 @@
         </p>
 
         <div
-          v-if="props.announcement.images?.length"
+          v-if="signedUrls.length > 0"
           class="flex gap-2 overflow-x-auto mt-4"
         >
-          <v-img
-            v-for="(img, idx) in props.announcement.images"
-            :key="idx"
-            :src="img"
-            class="rounded-lg w-40 h-40 object-cover"
-            cover
-            @click="newTabImage(img)"
-          />
+        <v-img
+        v-for="(url, idx) in signedUrls"
+          :key="idx"
+          :src="url"
+          class="rounded-lg w-28 h-28 object-contain"
+          contain
+        />
         </div>
       </v-card-text>
 

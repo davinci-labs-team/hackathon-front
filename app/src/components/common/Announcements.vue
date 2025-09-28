@@ -6,6 +6,7 @@
   import AnnouncementCard from '@/components/common/AnnouncementCard.vue'
   import AnnouncementForm from '@/components/organizer/announcements/AnnouncementForm.vue'
   import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
+  import { AnnouncementService } from '@/services/announcementService'
 
   const { t } = useI18n()
 
@@ -24,12 +25,20 @@
     showConfirmDialog.value = true
   }
 
-  const deleteAnnouncement = () => {
+  const deleteAnnouncement = async () => {
     if (!announcementToDelete.value) return
-    // TODO: Implement actual deletion logic here
-    console.log('Deleting:', announcementToDelete.value.title)
-    showConfirmDialog.value = false
-    announcementToDelete.value = null
+
+    try {
+      await AnnouncementService.delete(announcementToDelete.value.id)
+      const index = props.announcements.findIndex((a) => a.id === announcementToDelete.value?.id)
+      if (index !== -1) {
+        props.announcements.splice(index, 1)
+      }
+      showConfirmDialog.value = false
+      announcementToDelete.value = null
+    } catch (error) {
+      console.error('Error deleting announcement:', error)
+    }
   }
 
   const editAnnouncement = (announcement: AnnouncementDTO) => {
@@ -61,9 +70,19 @@
     showPopup.value = true
   }
 
-  const handleUpdate = (id: string, update: UpdateAnnouncementDTO) => {
-    // TODO : call API to update and get new AnnouncementDTO object to replace it locally
-}
+  const handleUpdate = async (id: string, update: UpdateAnnouncementDTO) => {
+    try {
+      const updatedAnnouncement = await AnnouncementService.update(id, update)
+      const index = props.announcements.findIndex((a) => a.id === id)
+      if (index !== -1) {
+        props.announcements.splice(index, 1, updatedAnnouncement)
+      }
+      showEditForm.value = false
+      selectedAnnouncement.value = null
+    } catch (error) {
+      console.error('Error updating announcement:', error)  
+    }
+  }
 
 </script>
 
@@ -78,8 +97,8 @@
   <div>
     <div v-if="paginatedAnnouncements.length > 0">
       <div
-        v-for="(item, index) in paginatedAnnouncements"
-        :key="index"
+        v-for="item in paginatedAnnouncements"
+        :key="item.id"
         class="flex items-start gap-2 mb-4"
       >
         <div class="flex-grow" @click="openPopup(item)">
@@ -111,7 +130,7 @@
       </div>
 
       <!-- Popup -->
-      <AnnouncementPopup v-model:show="showPopup" :announcement="selectedAnnouncement" />
+      <AnnouncementPopup v-model:show="showPopup" :announcement="selectedAnnouncement" v-if="selectedAnnouncement"/>
 
       <!-- Edit Form -->
       <AnnouncementForm
