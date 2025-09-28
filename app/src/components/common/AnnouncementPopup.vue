@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
   import { AnnouncementDTO } from '@/types/announcement'
-  import { newTabImage } from '@/utils/imageUtils'
   import { timeAgo } from '@/utils/dateUtils'
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, watch } from 'vue'
   import { generateSignedUrls } from '@/utils/s3utils'
+  import { openImaggeInNewTab } from '@/utils/s3utils'
 
   const { t, locale } = useI18n()
   const props = defineProps<{
@@ -69,6 +69,8 @@ onMounted(loadImages)
           :key="idx"
           :src="url"
           class="rounded-lg w-28 h-28 object-contain"
+          @click="openImaggeInNewTab(url)"
+          style="cursor: pointer"
           contain
         />
         </div>

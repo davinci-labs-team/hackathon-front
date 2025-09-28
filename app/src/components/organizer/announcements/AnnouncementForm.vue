@@ -214,16 +214,6 @@ const loadImages = async () => {
 
 onMounted(loadImages)
 
-watch(
-  () => existingImages.value,
-  async (files) => {
-    if (props.announcement) {
-      signedUrls.value = await generateSignedUrls(files)
-    }
-  },
-  { immediate: true }
-)
-
 </script>
 
 <template>

@@ -102,7 +102,9 @@
         class="flex items-start gap-2 mb-4"
       >
         <div class="flex-grow" @click="openPopup(item)">
-          <AnnouncementCard :announcement="item" />
+          <AnnouncementCard 
+            :announcement="item" 
+          />
         </div>
 
         <div class="flex flex-col gap-1">
@@ -130,13 +132,19 @@
       </div>
 
       <!-- Popup -->
-      <AnnouncementPopup v-model:show="showPopup" :announcement="selectedAnnouncement" v-if="selectedAnnouncement"/>
+      <AnnouncementPopup 
+        v-model:show="showPopup" 
+        :announcement="selectedAnnouncement" 
+        :key="selectedAnnouncement?.id"
+        v-if="selectedAnnouncement"
+      />
 
       <!-- Edit Form -->
       <AnnouncementForm
         v-model="showEditForm"
         :editMode="true"
         :announcement="selectedAnnouncement"
+        :key="selectedAnnouncement?.id"
         @update="handleUpdate"
       />
 

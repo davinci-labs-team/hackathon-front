@@ -28,6 +28,9 @@ const loadImages = async () => {
   if (props.announcement.files && props.announcement.files.length > 0) {
     signedUrls.value = await generateSignedUrls(props.announcement.files)
   }
+  else {
+    signedUrls.value = []
+  }
 }
 
 onMounted(loadImages)
