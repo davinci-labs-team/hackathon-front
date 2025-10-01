@@ -18,8 +18,8 @@ export const AnnouncementService = {
         return res.data;
       },
     
+      // Demander comment gérer le cas où on n'est pas connecté
       getAll: async (visibilityType: VisibilityType = VisibilityType.BOTH) => {
-        console.log(API_URL);
         const res = await axios.get(`${API_URL}/api/announcement`, {
           params: { visibilityType },
           headers: getAuthHeaders(),

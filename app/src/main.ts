@@ -5,6 +5,10 @@ import { createPinia } from 'pinia'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import './assets/vuetify-overload.css'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faDiscord } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
@@ -17,6 +21,8 @@ import '@mdi/font/css/materialdesignicons.css'
 
 import fr from './locales/fr'
 import en from './locales/en'
+
+library.add(faDiscord)
 
 const savedLocale = localStorage.getItem('lang') || navigator.language.split('-')[0] || 'en'
 
@@ -49,6 +55,7 @@ const vuetify = createVuetify({
 
 const app = createApp(App)
 app.component('VueDatePicker', VueDatePicker)
+app.component('font-awesome-icon', FontAwesomeIcon)
 
 app.use(router)
 app.use(i18n)

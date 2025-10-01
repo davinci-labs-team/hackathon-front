@@ -46,6 +46,7 @@ export default {
       discord: 'Discord ',
       website: 'Site Web ',
       noInfo: 'Aucune information supplémentaire fournie.',
+      addInterest: 'Ajouter un centre d’intérêt',
     },
     otherUserInfoTitle: "Informations de l'Utilisateur",
     deleteAccount: 'Supprimer le Compte',

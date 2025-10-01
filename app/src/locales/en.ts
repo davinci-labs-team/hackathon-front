@@ -46,6 +46,7 @@ export default {
       interests: 'Interests',
       website: 'Website',
       noInfo: 'No additional information provided.',
+      addInterest: 'Add an interest',
     },
     otherUserInfoTitle: 'User Information',
     deleteAccount: 'Delete Account',

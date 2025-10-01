@@ -12,5 +12,5 @@ export interface UserDTO {
   linkedin?: string
   github?: string
   discord?: string 
-  profilePictureUrl?: string
+  profilePicturePath?: string
 }
