@@ -4,6 +4,7 @@ import type { UserDTO } from '@/types/user'
 import { useI18n } from 'vue-i18n';
 import { S3BucketService } from '@/services/s3BucketService'
 import { Logger } from 'sass';
+import { UserRole } from '@/types/roles';
 
 const { t } = useI18n()
 
@@ -27,21 +28,20 @@ watch(() => props, (val) => {
 
 // Expose méthode save
 const saveChanges = async () => {
+  let path = localUser.value.profilePicturePath
   if (fileInputRef.value) {
-    const { path } = await S3BucketService.uploadFile(fileInputRef.value)
-    console.log('Saving file', fileInputRef.value, 'to path', path)
-
-    emit('update:user', { 
+    path = (await S3BucketService.uploadFile(fileInputRef.value)).path
+  }
+  emit('update:user', { 
       id: localUser.value.id, 
       firstname: localUser.value.firstname, 
       lastname: localUser.value.lastname, 
       email: localUser.value.email, 
       role: localUser.value.role, 
+      school: localUser.value.school,
       profilePicturePath: path })
-  }
-
-  console.log('Saving changes', props.user)
 }
+
 const resetLocalUser = () => {
   console.log('Resetting local user')
   localUser.value = { ...props.user }
@@ -95,7 +95,14 @@ const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
           <div class="user-role">
             {{ t(`roles.${role}`) }}
           </div>
-          <div class="user-school" v-if="user.school">{{ user.school }}</div>
+          <v-textarea 
+            v-model="localUser.school" 
+            placeholder="School" 
+            rows="1" 
+            v-if="props.editMode && localUser.role !== UserRole.PARTICIPANT" 
+            auto-grow
+            variant="solo"/>
+          <div v-else>{{ localUser.school || 'No info yet' }}</div>
         </div>
       </v-col>
     </v-row>
