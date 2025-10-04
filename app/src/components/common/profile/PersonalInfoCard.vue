@@ -14,7 +14,17 @@ const localUser = ref<UserDTO>({ ...props.user })
 watch(() => props.user, val => localUser.value = { ...val }, { deep: true })
 
 // Expose méthode save
-const saveChanges = () => emit('update:user', { ...localUser.value })
+const saveChanges = () => {
+  emit('update:user', { 
+      id: localUser.value.id, 
+      firstname: localUser.value.firstname, 
+      lastname: localUser.value.lastname, 
+      email: localUser.value.email, 
+      role: localUser.value.role, 
+      bio: localUser.value.bio,
+      interests: localUser.value.interests
+    })
+}
 const resetLocalUser = () => {
   localUser.value = { ...props.user }
 }
