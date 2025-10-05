@@ -3,16 +3,10 @@
   import { RouterLink, useRoute } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { getRole, getTPrefix } from '@/utils/user'
-  import { HackathonMediaDTO } from '@/types/config'
-  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
-  import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
-  import { onMounted, ref } from 'vue'
-  import { getOrCreateConfiguration } from '@/services/configurationService'
-  import { S3BucketService } from '@/services/s3BucketService'
+  import { useHackathonLogo } from '@/composables/useHackathonLogo'
 
   const { t } = useI18n()
   const route = useRoute()
-
   const role = getRole()
   const tPrefix = getTPrefix(role, true)
 
@@ -32,32 +26,7 @@
     ].join(' ')
   }
 
-  const mediaSettings = ref<HackathonMediaDTO>({...defaultConfigurations[ConfigurationKey.MEDIA]})
-  const logoPicture = ref('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/NZ_default_banner.jpg/640px-NZ_default_banner.jpg')
-
-  const getLogoPictureUrl = async () => {
-    if (mediaSettings.value?.hackathonLogoId) {
-      try {
-        const response = await S3BucketService.getFileUrl(mediaSettings.value.hackathonLogoId)
-        logoPicture.value = response.url
-      } catch (err) {
-        console.error('Error fetching logo picture:', err)
-      }
-    }
-  }
-
-  onMounted(async () => {
-    try {
-      const response = await getOrCreateConfiguration(ConfigurationKey.MEDIA)
-      console.log('Fetched media settings:', response)
-      if (response && response.value) {
-        mediaSettings.value = response.value as HackathonMediaDTO
-        getLogoPictureUrl()
-      }
-    } catch (error) {
-      console.error('Error fetching media settings:', error)
-    }
-  })
+  const { logoPicture } = useHackathonLogo()
 </script>
 
 <template>
