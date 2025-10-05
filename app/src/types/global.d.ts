@@ -3,6 +3,7 @@ import { UserRole } from '@/types/roles'
 declare global {
   interface SupabaseDecodedUser {
     id: string
+    supabaseUserId: string
     sub: string
     email: string
     name: string

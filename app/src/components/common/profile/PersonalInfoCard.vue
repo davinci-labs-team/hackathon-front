@@ -10,10 +10,10 @@ const emit = defineEmits<{ (e: 'update:user', value: UserDTO): void }>()
 
 const localUser = ref<UserDTO>({ ...props.user })
 
-// Réinitialiser localUser si parent change
+// Re initialize localUser when props.user changes
 watch(() => props.user, val => localUser.value = { ...val }, { deep: true })
 
-// Expose méthode save
+// Expose save method
 const saveChanges = () => emit('update:user', { ...localUser.value })
 const resetLocalUser = () => {
   localUser.value = { ...props.user }

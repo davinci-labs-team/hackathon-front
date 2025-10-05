@@ -30,6 +30,8 @@ export default {
     mainTitle: 'My Profile',
     otherUserTitle: 'Profile of',
     contacts: 'Contacts',
+    connectDiscord: 'Connect your Discord',
+    connectGithub: 'Connect your GitHub',
     personalInfo: {
       title: 'Personal Information',
       editButton: 'Edit Information',

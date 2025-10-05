@@ -127,7 +127,7 @@ const confirmDeleteAccount = () => showConfirmDeleteAccountDialog.value = true
       </div>
     </div>
 
-    <ProfileCard :user="userInfo" :profile-picture="profilePicture" :edit-mode="editMode" />
+    <ProfileCard :user="userInfo" :profile-picture="profilePicture" :edit-mode="editMode"/>
 
     <v-row class="equal-height-row">
       <v-col cols="12" md="8">
@@ -143,6 +143,7 @@ const confirmDeleteAccount = () => showConfirmDeleteAccountDialog.value = true
           ref="contactCard"
           :user="userInfo"
           :edit-mode="editMode"
+          :adminPlatform="isAdminPlatform"
           @update:user="handleSave"
         />
       </v-col>

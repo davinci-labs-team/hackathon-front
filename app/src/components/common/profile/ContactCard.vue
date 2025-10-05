@@ -3,13 +3,19 @@ import { ref, watch } from 'vue'
 import type { UserDTO } from '@/types/user'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useI18n } from 'vue-i18n';
+import { loginDiscord } from '@/services/oauthService';
+import { useAuthStore } from '@/stores/auth';
 
 const { t } = useI18n()
 
-const props = defineProps<{ user: UserDTO; editMode: boolean }>()
+const props = defineProps<{ user: UserDTO; editMode: boolean, adminPlatform: boolean }>()
 const emit = defineEmits<{ (e: 'update:user', value: UserDTO): void }>()
 
 const localUser = ref<UserDTO>({ ...props.user })
+
+const loginWithDiscord = async () => {
+  await loginDiscord(props.adminPlatform, localUser.value.id!)
+}
 
 // Réinitialiser localUser si parent change
 watch(() => props.user, val => localUser.value = { ...val }, { deep: true })
@@ -44,12 +50,15 @@ defineExpose({ saveChanges, resetLocalUser })
         </v-col>
 
         <!-- Discord -->
-        <v-col cols="12" class="d-flex align-center mb-2" v-if="localUser.discord">
-          <v-icon size="large" class="mr-4 mb-4">
+        <v-col cols="12" class="d-flex align-center mb-2">
+          <v-btn base-color="purple"
+            :disabled="!!localUser.discord"
+            @click="loginWithDiscord">
+            <v-icon size="large" class="mr-4">
             <FontAwesomeIcon icon="fa-brands fa-discord" />
           </v-icon>
-          <div v-if="!props.editMode">{{ localUser.discord }}</div>
-          <v-text-field v-else v-model="localUser.discord" placeholder="Discord" variant="solo"/>
+            {{ localUser.discord ? localUser.discord : t('profile.connectDiscord') }}
+          </v-btn>
         </v-col>
 
         <!-- LinkedIn -->
