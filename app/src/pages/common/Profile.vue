@@ -152,6 +152,7 @@ const confirmDeleteAccount = () => showConfirmDeleteAccountDialog.value = true
           ref="contactCard"
           :user="userInfo"
           :edit-mode="editMode"
+          :adminPlatform="isAdminPlatform"
           @update:user="handleSave"
         />
       </v-col>
