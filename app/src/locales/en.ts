@@ -163,6 +163,10 @@ export default {
       selectFile: 'Select a file',
       exampleCsvText: 'Example CSV:',
       exampleCsv: 'firstname,lastname,email,role,school\nJohn,Doe,john@example.com,PARTICIPANT,EPITA\nJane,Smith,jane@example.com,MENTOR,',
+      selectAllPending: 'Select all non-invited users',
+      inviteSelected: 'Invite selected ({count})',
+      deleteSelected: 'Delete selected ({count})',
+      invite: "Send invitation email",
     },
     nav: {
       announcements: 'Announcements',

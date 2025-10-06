@@ -7,4 +7,5 @@ export interface UserDTO {
   email: string
   role: UserRole
   school?: string
+  invitationSent: boolean
 }

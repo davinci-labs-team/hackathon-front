@@ -9,6 +9,7 @@
   const emailRule = (v: string) => /.+@.+\..+/.test(v)
 
   interface Row {
+    id: string
     firstname: string
     lastname: string
     email: string
@@ -33,7 +34,9 @@
     const reader = new FileReader()
     reader.onload = (e) => {
       const text = e.target?.result as string
-      csvPreview.value = csvParse<keyof Row>(text) as Row[]
+      const parsed = csvParse<keyof Row>(text) as Omit<Row, 'id'>[]
+      csvPreview.value = parsed.map(item => ({ ...item, id: crypto.randomUUID() }))
+
       checkValidity()
       csvLoaded.value = true
     }
@@ -87,6 +90,7 @@
   // Add new empty row
   const addEmptyRow = () => {
     csvPreview.value.push({
+      id: crypto.randomUUID(),
       firstname: '',
       lastname: '',
       email: '',
@@ -100,8 +104,8 @@
   }
 
   // Remove a row
-  const removeRow = (index: number) => {
-    csvPreview.value.splice(index, 1)
+  const removeRow = (id: string) => {
+    csvPreview.value = csvPreview.value.filter(item => item.id !== id)
   }
 
   // Add all valid users
@@ -173,7 +177,7 @@
             :items-per-page="pagination.itemsPerPage"
           >
             <template #item="{ item , index }">
-              <tr :class="{'bg-red-100': isRowInvalid(item)}">
+              <tr :key="item.id" :class="{'bg-red-100': isRowInvalid(item)}">
                 <td>
                   <v-text-field v-model="item.firstname" variant="outlined" density="comfortable" hide-details />
                 </td>
@@ -196,8 +200,8 @@
                   <v-text-field v-model="item.school" variant="outlined" density="comfortable" hide-details />
                 </td>
                 <td>
-                  <v-btn icon @click="removeRow(index)">
-                    <v-icon>mdi-delete</v-icon>
+                  <v-btn icon @click="removeRow(item.id)">
+                    <v-icon :title="t('common.delete')">mdi-delete</v-icon>
                   </v-btn>
                 </td>
               </tr>

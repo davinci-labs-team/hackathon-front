@@ -84,6 +84,34 @@
   }
 
   const selectedUser = ref<UserDTO | null>(null)
+
+  const selectedUserIds = ref<string[]>([])
+
+  const onInviteUser = (user: UserDTO) => {
+    // TODO: envoyer l'invitation par email
+
+    const updatedUser = { ...user, invitationSent: true }
+    updateUser(user.id, updatedUser)
+  }
+
+  const onSelectionChange = (ids: string[]) => {
+    selectedUserIds.value = ids
+  }
+
+  const inviteSelected = () => {
+    const usersToInvite = users.value.filter(
+      (u) => selectedUserIds.value.includes(u.id)
+    )
+    usersToInvite.forEach((u) => onInviteUser(u))
+  }
+
+  const deleteSelected = () => {
+    const usersToDelete = users.value.filter(
+      (u) => selectedUserIds.value.includes(u.id)
+    )
+    usersToDelete.forEach((u) => onDeleteUser(u))
+    selectedUserIds.value = []
+  }
 </script>
 
 <template>
@@ -144,12 +172,25 @@
             </div>
           </div>
         </div>
+
+        <div class="flex gap-2 mb-4">
+          <div class="flex gap-2">
+            <v-btn color="secondary" @click="inviteSelected">
+              {{ t('organizer.userManagement.inviteSelected', { count: selectedUserIds.length }) }}
+            </v-btn>
+            <v-btn color="error" @click="deleteSelected">
+              {{ t('organizer.userManagement.deleteSelected', { count: selectedUserIds.length }) }}
+            </v-btn>
+          </div>
+        </div>
         
         <Users
           :users="filteredUsers"
           :items-per-page="30"
           @delete="confirmDelete"
           @edit="onEditUser"
+          @invite="onInviteUser"
+          @selection-change="onSelectionChange"
         />
 
         <UserForm

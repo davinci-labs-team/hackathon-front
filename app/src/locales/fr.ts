@@ -166,6 +166,10 @@ export default {
       selectFile: 'Sélectionner un fichier',
       exampleCsvText: 'Exemple de CSV :',
       exampleCsv: 'firstname,lastname,email,role,school\nJohn,Doe,john@example.com,PARTICIPANT,EPITA\nJane,Smith,jane@example.com,MENTOR,',
+      selectAllPending: 'Sélectionner tous les utilisateurs non invités',
+      inviteSelected: 'Inviter la sélection ({count})',
+      deleteSelected: 'Supprimer la sélection ({count})',
+      invite: "Envoyer l'email d'invitation",
     },
     nav: {
       announcements: 'Annonces',

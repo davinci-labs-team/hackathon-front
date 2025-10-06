@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { ref, computed, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { UserDTO } from '@/types/user'
 
@@ -9,7 +9,7 @@
     users: UserDTO[]
     itemsPerPage?: number
   }>()
-  defineEmits(['edit', 'lock', 'delete'])
+  const emit = defineEmits(['edit', 'invite', 'delete', 'selection-change'])
 
   const itemsPerPage = props.itemsPerPage || 5
   const currentPage = ref(1)
@@ -26,13 +26,57 @@
       currentPage.value = page
     }
   }
+
+  const selectedUserIds = ref<string[]>([])
+  const allSelected = computed({
+    get: () =>
+      paginatedUsers.value.length > 0 &&
+      paginatedUsers.value.every((u) => selectedUserIds.value.includes(u.id)),
+    set: (val: boolean) => {
+      if (val) {
+        selectedUserIds.value = paginatedUsers.value.map((u) => u.id)
+      } else {
+        selectedUserIds.value = []
+      }
+    },
+  })
+
+  const toggleSelectAll = () => {
+    if (allSelected.value) {
+      selectedUserIds.value = []
+    } else {
+      selectedUserIds.value = paginatedUsers.value.map((u) => u.id)
+    }
+  }
+
+  const selectAllPendingInvites = () => {
+    selectedUserIds.value = props.users
+      .filter((u) => !u.invitationSent)
+      .map((u) => u.id)
+  }
+
+  watch(selectedUserIds, () => {
+    emit('selection-change', selectedUserIds.value)
+  })
 </script>
 
 <template>
+  <v-btn class="mb-4" color="primary" @click="selectAllPendingInvites">
+    {{ t('organizer.userManagement.selectAllPending') }}
+  </v-btn>
+
   <div class="bg-white border rounded-lg overflow-x-auto">
     <table class="min-w-full text-sm">
       <thead>
         <tr class="border-b">
+          <th class="px-4 py-2">
+            <v-checkbox
+              v-model="allSelected"
+              hide-details
+              density="compact"
+              @click.stop="toggleSelectAll"
+            />
+          </th>
           <th class="px-4 py-2 text-left font-semibold">
             {{ t('organizer.userManagement.name') }}
           </th>
@@ -53,19 +97,28 @@
       <tbody>
         <tr v-for="user in paginatedUsers" :key="user.id" class="border-b">
           <td class="px-4 py-2">
+            <v-checkbox
+              v-model="selectedUserIds"
+              :value="user.id"
+              hide-details
+              density="compact"
+            />
+          </td>
+          <td class="px-4 py-2">
             {{ t('common.fullname', { firstname: user.firstname, lastname: user.lastname }) }}
           </td>
           <td class="px-4 py-2">{{ user.email }}</td>
           <td class="px-4 py-2">{{ t(`roles.${user.role.toLowerCase()}`) }}</td>
           <td class="px-4 py-2">{{ user.school }}</td>
-          <td class="px-4 py-2 text-center">
-            <v-icon small class="mr-2" color="primary" @click="$emit('edit', user)"
-              >mdi-pencil</v-icon
-            >
-            <v-icon small class="mr-2" color="secondary" @click="$emit('lock', user)"
-              >mdi-lock</v-icon
-            >
-            <v-icon small color="error" @click="$emit('delete', user)">mdi-delete</v-icon>
+          <td class="px-4 py-2 text-center flex gap-2 justify-center">
+            <v-icon small color="primary" :title="t('common.edit')" @click="$emit('edit', user)">mdi-pencil</v-icon>
+            <div v-if="user.invitationSent">
+              <v-icon small color="grey-darken-2" :title="t('organizer.userManagement.invite')" @click="$emit('invite', user)">mdi-send-check</v-icon>
+            </div>
+            <div v-else>
+              <v-icon small color="secondary" :title="t('organizer.userManagement.invite')" @click="$emit('invite', user)">mdi-send</v-icon>
+            </div>
+            <v-icon small color="error" :title="t('common.delete')" @click="$emit('delete', user)">mdi-delete</v-icon>
           </td>
         </tr>
       </tbody>
