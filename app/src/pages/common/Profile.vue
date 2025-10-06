@@ -38,6 +38,7 @@ const profilePicture = ref('https://upload.wikimedia.org/wikipedia/commons/a/ac/
 
 const personalInfoCard = ref<any>(null)
 const contactCard = ref<any>(null)
+const profileCard = ref<any>(null)
 
 const getProfilePictureUrl = async () => {
   if (userInfo.value?.profilePicturePath) {
@@ -67,12 +68,14 @@ const cancelEdit = () => {
   editMode.value = false
   personalInfoCard.value?.resetLocalUser()
   contactCard.value?.resetLocalUser()
+  profileCard.value?.resetLocalUser()
 }
 
 const handleSave = async (updatedUser: UserDTO) => {
   try {
     const savedUser = await userService.update(updatedUser.id, updatedUser)
     userInfo.value = savedUser
+    getProfilePictureUrl()
     editMode.value = false
     text.value = t('common.changesSaved')
     error.value = false
@@ -121,13 +124,19 @@ const confirmDeleteAccount = () => showConfirmDeleteAccountDialog.value = true
       </div>
       <div v-else>
         <v-btn color="grey" class="mr-2" @click="cancelEdit">{{ t('common.cancel') }}</v-btn>
-        <v-btn color="primary" class="ml-2" @click="personalInfoCard?.saveChanges(); contactCard?.saveChanges()">
+        <v-btn color="primary" class="ml-2" @click="profileCard?.saveChanges(); personalInfoCard?.saveChanges(); contactCard?.saveChanges()">
           {{ t('common.saveChanges') }}
         </v-btn>
       </div>
     </div>
 
-    <ProfileCard :user="userInfo" :profile-picture="profilePicture" :edit-mode="editMode"/>
+    <ProfileCard 
+      ref="profileCard"
+      :user="userInfo" 
+      :profile-picture="profilePicture" 
+      :edit-mode="editMode"
+      @update:user="handleSave"
+    />
 
     <v-row class="equal-height-row">
       <v-col cols="12" md="8">

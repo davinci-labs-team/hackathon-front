@@ -21,7 +21,18 @@ const loginWithDiscord = async () => {
 watch(() => props.user, val => localUser.value = { ...val }, { deep: true })
 
 // Expose méthode save
-const saveChanges = () => emit('update:user', { ...localUser.value })
+const saveChanges = () => {
+  emit('update:user', { 
+      id: localUser.value.id, 
+      firstname: localUser.value.firstname, 
+      lastname: localUser.value.lastname, 
+      email: localUser.value.email, 
+      role: localUser.value.role, 
+      github: localUser.value.github,
+      discord: localUser.value.discord,
+      linkedin: localUser.value.linkedin
+    })
+}
 const resetLocalUser = () => {
   localUser.value = { ...props.user }
 }

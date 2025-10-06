@@ -5,14 +5,17 @@
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { HackathonMediaDTO } from '@/types/config'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
-import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
+  import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
+  import { S3BucketService } from '@/services/s3BucketService'
 
   const { t } = useI18n()
 
   const mediaSettings = ref<HackathonMediaDTO>({...defaultConfigurations[ConfigurationKey.MEDIA]})
 
-  const bannerFile = ref<File | null>(null)
-  const logoFile = ref<File | null>(null)
+  const bannerFileInput = ref<File | null>(null)
+  const logoFileInput = ref<File | null>(null)
+  const bannerPicture = ref('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/NZ_default_banner.jpg/640px-NZ_default_banner.jpg')
+  const logoPicture = ref('https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg')
 
   // Snackbar
   const snackbar = ref(false)
@@ -20,11 +23,32 @@ import { defaultConfigurations } from '@/utils/configuration/defaultConfiguratio
   const timeout = ref(1500)
   const error = ref(false)
 
+  const getBannerAndLogoPictureUrl = async () => {
+    if (mediaSettings.value?.bannerPictureId) {
+      try {
+        const response = await S3BucketService.getFileUrl(mediaSettings.value.bannerPictureId)
+        bannerPicture.value = response.url
+      } catch (err) {
+        console.error('Error fetching banner picture:', err)
+      }
+    }
+    if (mediaSettings.value?.hackathonLogoId) {
+      try {
+        const response = await S3BucketService.getFileUrl(mediaSettings.value.hackathonLogoId)
+        logoPicture.value = response.url
+      } catch (err) {
+        console.error('Error fetching logo picture:', err)
+      }
+    }
+  }
+
   onMounted(async () => {
     try {
       const response = await getOrCreateConfiguration(ConfigurationKey.MEDIA)
+      console.log('Fetched media settings:', response)
       if (response && response.value) {
         mediaSettings.value = response.value as HackathonMediaDTO
+        getBannerAndLogoPictureUrl()
       }
     } catch (error) {
       console.error('Error fetching media settings:', error)
@@ -35,6 +59,11 @@ import { defaultConfigurations } from '@/utils/configuration/defaultConfiguratio
 
   const handleSave = async () => {
     try {
+      if (bannerFileInput.value)
+        mediaSettings.value.bannerPictureId = (await S3BucketService.uploadFile(bannerFileInput.value)).path
+      if (logoFileInput.value)
+        mediaSettings.value.hackathonLogoId = (await S3BucketService.uploadFile(logoFileInput.value)).path
+
       await configurationService.update(ConfigurationKey.MEDIA, {
         value: mediaSettings.value,
       })
@@ -68,7 +97,7 @@ import { defaultConfigurations } from '@/utils/configuration/defaultConfiguratio
       <div class="mb-4 flex flex-row items-center gap-4">
         <!-- File input -->
         <v-file-input
-          v-model="bannerFile"
+          v-model="bannerFileInput"
           :label="t('mediaSettings.banner')"
           prepend-icon="mdi-image"
           accept="image/*"
@@ -77,10 +106,8 @@ import { defaultConfigurations } from '@/utils/configuration/defaultConfiguratio
 
         <!-- Image preview -->
         <v-img
-          v-if="bannerFile || mediaSettings.bannerPictureId"
-          :src="
-            bannerFile ? getPreviewUrl(bannerFile) : `/api/media/${mediaSettings.bannerPictureId}`
-          "
+          v-if="bannerFileInput || mediaSettings.bannerPictureId"
+          :src="bannerFileInput ? getPreviewUrl(bannerFileInput) : bannerPicture"
           alt="Current Banner"
           max-height="150"
           max-width="200"
@@ -91,7 +118,7 @@ import { defaultConfigurations } from '@/utils/configuration/defaultConfiguratio
       <div class="mb-4 flex flex-row items-center gap-4">
         <!-- File input -->
         <v-file-input
-          v-model="logoFile"
+          v-model="logoFileInput"
           :label="t('mediaSettings.logo')"
           prepend-icon="mdi-image"
           accept="image/*"
@@ -100,9 +127,9 @@ import { defaultConfigurations } from '@/utils/configuration/defaultConfiguratio
 
         <!-- Image preview -->
         <v-img
-          v-if="logoFile || mediaSettings.hackathonLogoId"
-          :src="logoFile ? getPreviewUrl(logoFile) : `/api/media/${mediaSettings.hackathonLogoId}`"
-          alt="Current Banner"
+          v-if="logoFileInput || mediaSettings.hackathonLogoId"
+          :src="logoFileInput ? getPreviewUrl(logoFileInput) : logoPicture"
+          alt="Current Logo"
           max-height="150"
           max-width="200"
           contain

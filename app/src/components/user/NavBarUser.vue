@@ -1,13 +1,12 @@
 <script setup lang="ts">
   import LanguageSelector from '@/components/common/LanguageSelector.vue'
-  import logo from '@/assets/images/basic.jpg'
   import { RouterLink, useRoute } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { getRole, getTPrefix } from '@/utils/user'
+  import { useHackathonLogo } from '@/composables/useHackathonLogo'
 
   const { t } = useI18n()
   const route = useRoute()
-
   const role = getRole()
   const tPrefix = getTPrefix(role, true)
 
@@ -26,13 +25,15 @@
       'hover:bg-green-800 hover:scale-105',
     ].join(' ')
   }
+
+  const { logoPicture } = useHackathonLogo()
 </script>
 
 <template>
   <header class="p-4 bg-green-600 text-white flex justify-between items-center">
     <!-- Logo -->
     <div class="flex items-center gap-4">
-      <img :src="logo" alt="Logo" class="h-12" />
+      <img :src="logoPicture" alt="Logo" class="h-12" />
     </div>
 
     <!-- Navigation -->

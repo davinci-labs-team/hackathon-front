@@ -1,16 +1,18 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
   import LanguageSelector from '@/components/common/LanguageSelector.vue'
-  import logo from '@/assets/images/basic.jpg'
+  import { useHackathonLogo } from '@/composables/useHackathonLogo'
 
   const { t } = useI18n()
+
+  const { logoPicture } = useHackathonLogo()
 </script>
 
 <template>
   <header class="p-4 bg-white shadow flex justify-between items-center">
     <div class="flex items-center gap-4">
       <router-link to="/">
-        <img :src="logo" alt="Logo" class="h-12" />
+        <img :src="logoPicture" alt="Logo" class="h-12" />
       </router-link>
     </div>
 
