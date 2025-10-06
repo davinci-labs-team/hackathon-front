@@ -59,6 +59,12 @@ const onFileChange = async (e: Event) => {
   fileInputRef.value = file
 }
 
+const deleteProfilePicture = () => {
+  preview.value = ''
+  fileInputRef.value = null
+  localUser.value.profilePicturePath = undefined
+}
+
 const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
 </script>
 
@@ -87,6 +93,16 @@ const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
             class="d-none"
             @change="onFileChange"
           />
+
+            <v-icon
+            v-if="props.editMode"
+            class="delete-icon"
+            color="red"
+            @click="deleteProfilePicture"
+            >
+            mdi-delete
+            </v-icon>
+
         </div>
 
         <div>
@@ -130,6 +146,22 @@ const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
   transform: scale(1.1);
 }
 
+
+.delete-icon {
+  position: absolute;
+  top: 8px;
+  left: 0px;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 50%;
+  padding: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.delete-icon:hover {
+  transform: scale(1.1);
+}
 .user-name { font-size: 2rem; font-weight: bold; }
 .user-role { font-size: 1.4rem; color: gray; }
 .user-school { font-size: 1.4rem; margin-top: 1rem; }
