@@ -70,7 +70,7 @@ defineExpose({ saveChanges, resetLocalUser })
       <div class="mt-4">
         <v-chip
           v-for="(interest, i) in localUser.interests"
-          :key="i"
+          :key="interest"
           color="teal lighten-3"
           class="mr-2 mb-2"
           :closable="props.editMode"

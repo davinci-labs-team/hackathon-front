@@ -3,7 +3,6 @@ import { defineProps, ref, watch } from 'vue'
 import type { UserDTO } from '@/types/user'
 import { useI18n } from 'vue-i18n';
 import { S3BucketService } from '@/services/s3BucketService'
-import { Logger } from 'sass';
 import { UserRole } from '@/types/roles';
 
 const { t } = useI18n()
@@ -78,7 +77,7 @@ const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
             color="primary"
             @click="fileInput?.click()"
           >
-            mdi-pencil
+            mdi-upload
           </v-icon>
 
           <input
