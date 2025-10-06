@@ -31,3 +31,14 @@ export const useAuthStore = defineStore('auth', {
     },
   },
 })
+
+
+export function getAuthHeaders() {
+  const authStore = useAuthStore()
+  if (!authStore.user?.accessToken) {
+    throw new Error('User is not authenticated')
+  }
+  return {
+    Authorization: `Bearer ${authStore.user.accessToken}`,
+  }
+}

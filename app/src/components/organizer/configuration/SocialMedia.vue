@@ -3,7 +3,7 @@
   import { useI18n } from 'vue-i18n'
   import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
-  import { HackathonMediaDTO } from '@/types/hackathon'
+  import { HackathonMediaDTO } from '@/types/config'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
 

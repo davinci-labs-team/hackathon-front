@@ -123,8 +123,8 @@
 
           <v-switch
             v-model="isPrivate"
-            :label="isPrivate ? t('announcements.private') : t('announcements.public')"
-            :hint="isPrivate ? t('announcements.privateHint') : t('announcements.publicHint')"
+            :label="isPrivate ? t('faq.private') : t('faq.public')"
+            :hint="isPrivate ? t('faq.privateHint') : t('faq.publicHint')"
             color="blue"
           />
 

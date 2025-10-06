@@ -1,12 +1,14 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
   import { AnnouncementDTO } from '@/types/announcement'
-  import { newTabImage } from '@/utils/imageUtils'
   import { timeAgo } from '@/utils/dateUtils'
+  import { ref, onMounted, watch } from 'vue'
+  import { generateSignedUrls } from '@/utils/s3utils'
+  import { openImaggeInNewTab } from '@/utils/s3utils'
 
   const { t, locale } = useI18n()
   const props = defineProps<{
-    announcement: AnnouncementDTO | null
+    announcement: AnnouncementDTO
     show: boolean
   }>()
 
@@ -17,6 +19,16 @@
   const closePopup = () => {
     emit('update:show', false)
   }
+
+  const signedUrls = ref<string[]>([])
+
+  const loadImages = async () => {
+  if (props.announcement.files && props.announcement.files.length > 0) {
+    signedUrls.value = await generateSignedUrls(props.announcement.files)
+  }
+}
+
+onMounted(loadImages)
 </script>
 
 <template>
@@ -45,21 +57,22 @@
 
       <v-card-text>
         <p class="text-gray-800 whitespace-pre-line">
-          {{ props.announcement.description }}
+          {{ props.announcement.content }}
         </p>
 
         <div
-          v-if="props.announcement.existingImages?.length"
+          v-if="signedUrls.length > 0"
           class="flex gap-2 overflow-x-auto mt-4"
         >
-          <v-img
-            v-for="(img, idx) in props.announcement.existingImages"
-            :key="idx"
-            :src="img"
-            class="rounded-lg w-40 h-40 object-cover"
-            cover
-            @click="newTabImage(img)"
-          />
+        <v-img
+        v-for="(url, idx) in signedUrls"
+          :key="idx"
+          :src="url"
+          class="rounded-lg w-28 h-28 object-contain"
+          @click="openImaggeInNewTab(url)"
+          style="cursor: pointer"
+          contain
+        />
         </div>
       </v-card-text>
 

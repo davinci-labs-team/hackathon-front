@@ -1,22 +1,12 @@
 import axios from 'axios'
-import { useAuthStore } from '@/stores/auth'
 import {
   ConfigurationResponse,
   UpdateConfigurationDTO,
   CreateConfigurationDTO,
-} from '@/types/hackathon'
+} from '@/types/config'
 import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
-
-function getAuthHeaders() {
-  const authStore = useAuthStore()
-  if (!authStore.user?.accessToken) {
-    throw new Error('User is not authenticated')
-  }
-  return {
-    Authorization: `Bearer ${authStore.user.accessToken}`,
-  }
-}
+import { getAuthHeaders } from '@/stores/auth'
 
 export const configurationService = {
   async create(dto: CreateConfigurationDTO): Promise<ConfigurationResponse> {

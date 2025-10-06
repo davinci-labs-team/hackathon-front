@@ -1,101 +1,180 @@
 <script setup lang="ts">
-  import { useI18n } from 'vue-i18n'
-  const { t } = useI18n()
-  import { getRole, getTPrefix } from '@/utils/user'
-  import { useAuthStore } from '@/stores/auth'
-  import { computed, ref } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
-  import { logout } from '@/services/authService'
+import { ref, onMounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter, useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { logout } from '@/services/authService'
+import { userService } from '@/services/userService'
+import { S3BucketService } from '@/services/s3BucketService'
+import { getRole, getTPrefix } from '@/utils/user'
+import type { UserDTO } from '@/types/user'
 
-  const router = useRouter()
-  const authStore = useAuthStore()
-  const role = getRole()
-  const route = useRoute()
-  const isAdminPlatform = computed(() => route.path.startsWith('/organizer'))
-  const tPrefix = getTPrefix(role, !isAdminPlatform.value)
+import ProfileCard from '@/components/common/profile/ProfileCard.vue'
+import PersonalInfoCard from '@/components/common/profile/PersonalInfoCard.vue'
+import ContactCard from '@/components/common/profile/ContactCard.vue'
+import AppSnackbar from '@/components/common/AppSnackbar.vue'
+import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
-  const userName = computed(() => authStore.user?.name || 'User')
-  const profilPicture = ref('https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg')
+const { t } = useI18n()
+const router = useRouter()
+const route = useRoute()
+const authStore = useAuthStore()
 
-  const handleLogout = async () => {
+const snackbar = ref(false)
+const text = ref('')
+const timeout = ref(1500)
+const error = ref(false)
+
+const showConfirmLogoutDialog = ref(false)
+const showConfirmDeleteAccountDialog = ref(false)
+
+const role = getRole()
+const isAdminPlatform = computed(() => route.path.startsWith('/organizer'))
+const tPrefix = getTPrefix(role, !isAdminPlatform.value)
+
+const editMode = ref(false)
+const userInfo = ref<UserDTO | null>(null)
+const profilePicture = ref('https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg')
+
+const personalInfoCard = ref<any>(null)
+const contactCard = ref<any>(null)
+
+const getProfilePictureUrl = async () => {
+  if (userInfo.value?.profilePicturePath) {
     try {
-      await logout()
-      if (isAdminPlatform.value) {
-        router.push('/admin-login')
-      } else {
-        router.push('/login')
-      }
+      const response = await S3BucketService.getFileUrl(userInfo.value.profilePicturePath)
+      profilePicture.value = response.url
     } catch (err) {
-      console.error('Logout error:', err)
+      console.error('Error fetching profile picture:', err)
     }
   }
+}
+
+onMounted(async () => {
+  if (authStore.user?.id) {
+    try {
+      const userResponse = await userService.getById(authStore.user.id)
+      userInfo.value = userResponse
+      if (userResponse.profilePicturePath) getProfilePictureUrl()
+    } catch (err) {
+      console.error('Error fetching user data:', err)
+    }
+  }
+})
+
+const handleEdit = () => { editMode.value = true }
+const cancelEdit = () => { 
+  editMode.value = false
+  personalInfoCard.value?.resetLocalUser()
+  contactCard.value?.resetLocalUser()
+}
+
+const handleSave = async (updatedUser: UserDTO) => {
+  try {
+    const savedUser = await userService.update(updatedUser.id, updatedUser)
+    userInfo.value = savedUser
+    editMode.value = false
+    text.value = t('common.changesSaved')
+    error.value = false
+    snackbar.value = true
+  } catch (err) {
+    console.error('Error saving user:', err)
+    text.value = t('errors.loadUserFailed')
+    error.value = true
+    snackbar.value = true
+  }
+}
+
+const handleLogout = async () => {
+  try {
+    await logout()
+    router.push(isAdminPlatform.value ? '/admin-login' : '/login')
+  } catch (err) {
+    console.error(err)
+    text.value = t('errors.loadUserFailed')
+    error.value = true
+    snackbar.value = true
+  }
+}
+
+const handleDeleteAccount = async () => {
+  try {
+    if (authStore.user?.id) {
+      await userService.remove(authStore.user.id)
+      await logout()
+    }
+  } catch (err) {
+    console.error('Delete account error:', err)
+  }
+}
+
+const confirmLogout = () => showConfirmLogoutDialog.value = true
+const confirmDeleteAccount = () => showConfirmDeleteAccountDialog.value = true
 </script>
 
 <template>
-  <v-container>
-    <!-- Première carte: profil -->
-    <v-card class="pa-6 mb-6" outlined>
-      <v-card-title class="text-h4 font-weight-bold mb-6 d-flex align-center">
-        {{ t(`profile.mainTitle`) }}
-        <v-spacer></v-spacer>
-        <v-btn color="primary" small @click="handleEdit">
-          {{ t(`common.edit`) }}
+  <v-container v-if="userInfo">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold mb-2">{{ t('profile.mainTitle') }}</h1>
+      <div v-if="!editMode">
+        <v-btn color="primary" @click="handleEdit">{{ t('profile.personalInfo.editButton') }}</v-btn>
+      </div>
+      <div v-else>
+        <v-btn color="grey" class="mr-2" @click="cancelEdit">{{ t('common.cancel') }}</v-btn>
+        <v-btn color="primary" class="ml-2" @click="personalInfoCard?.saveChanges(); contactCard?.saveChanges()">
+          {{ t('common.saveChanges') }}
         </v-btn>
-      </v-card-title>
+      </div>
+    </div>
 
-      <v-row justify="space-between">
-        <!-- Picture, name and role -->
-        <v-col cols="12" md="4" class="d-flex align-center">
-          <v-avatar size="150" class="mr-4 elevation-1">
-            <v-img :src="profilPicture" />
-          </v-avatar>
-          <div>
-            <div class="user-name">{{ userName }}</div>
-            <div class="user-role">{{ t(`roles.${tPrefix}`) }}</div>
-          </div>
-        </v-col>
+    <ProfileCard :user="userInfo" :profile-picture="profilePicture" :edit-mode="editMode"/>
 
-        <!-- Personal info -->
-        <v-col cols="12" md="8" class="d-flex align-center">
-          <v-row>
-            <v-col cols="12" sm="6">
-              <strong>{{ t(`profile.personalInfo.email`) }}:</strong>
-              {{ authStore.user?.mail || 'test@example.com' }}
-            </v-col>
-            <v-col cols="12" sm="6">
-              <strong>{{ t(`profile.personalInfo.phone`) }}:</strong>
-              {{ authStore.user?.phone || '01 23 45 67 89' }}
-            </v-col>
-            <v-col cols="12" sm="6">
-              <strong>{{ t(`profile.personalInfo.linkedin`) }}:</strong>
-              <a :href="authStore.user?.linkedin || '#'" target="_blank">
-                {{ authStore.user?.linkedin || ' JeanMartin' }}
-              </a>
-            </v-col>
-            <v-col cols="12" sm="6">
-              <strong>{{ t(`profile.personalInfo.github`) }}:</strong>
-              {{ authStore.user?.otherInfo || '—' }}
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-card>
+    <v-row class="equal-height-row">
+      <v-col cols="12" md="8">
+        <PersonalInfoCard
+          ref="personalInfoCard"
+          :user="userInfo"
+          :edit-mode="editMode"
+          @update:user="handleSave"
+        />
+      </v-col>
+      <v-col cols="12" md="4">
+        <ContactCard
+          ref="contactCard"
+          :user="userInfo"
+          :edit-mode="editMode"
+          :adminPlatform="isAdminPlatform"
+          @update:user="handleSave"
+        />
+      </v-col>
+    </v-row>
 
-    <!-- Logout button -->
-    <v-btn color="red" class="mt-4" @click="handleLogout">
-      {{ t(`common.logout`) }}
-    </v-btn>
+    <div class="flex justify-center gap-4 mt-4">
+      <v-btn color="red" @click="confirmLogout">{{ t('common.logout') }}</v-btn>
+      <v-btn color="red-darken-4" @click="confirmDeleteAccount">{{ t('profile.deleteAccount') }}</v-btn>
+    </div>
+
+    <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
+
+    <ConfirmDialog
+      v-model="showConfirmLogoutDialog"
+      :title="t('profile.logoutConfirmTitle')"
+      :text="t('profile.logoutConfirmText')"
+      :confirmText="t('profile.confirmButton')"
+      :cancelText="t('common.cancel')"
+      @confirm="handleLogout"
+    />
+    <ConfirmDialog
+      v-model="showConfirmDeleteAccountDialog"
+      :title="t('profile.deleteAccount')"
+      :text="t('profile.deleteAccountText')"
+      :confirmText="t('profile.deleteAccountConfirm')"
+      :cancelText="t('common.cancel')"
+      @confirm="handleDeleteAccount"
+    />
   </v-container>
 </template>
 
 <style scoped>
-  .user-name {
-    font-size: 2rem;
-    font-weight: bold;
-  }
-
-  .user-role {
-    font-size: 1.4rem;
-    color: gray;
-  }
+.equal-height-row { display: flex; flex-wrap: wrap; align-items: stretch; }
 </style>

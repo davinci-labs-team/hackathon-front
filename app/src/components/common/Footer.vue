@@ -2,7 +2,7 @@
   import { useI18n } from 'vue-i18n'
   import { RouterLink } from 'vue-router'
   import { configurationService } from '@/services/configurationService'
-  import { HackathonMediaDTO } from '@/types/hackathon'
+  import { HackathonMediaDTO } from '@/types/config'
   import { onMounted, ref } from 'vue'
 import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 

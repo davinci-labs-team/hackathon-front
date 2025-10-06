@@ -8,4 +8,10 @@ export interface UserDTO {
   role: UserRole
   school?: string
   invitationSent: boolean
+  bio?: string
+  interests?: string[]
+  linkedin?: string
+  github?: string
+  discord?: string 
+  profilePicturePath?: string
 }

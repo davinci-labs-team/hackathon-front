@@ -29,6 +29,9 @@ export default {
   profile: {
     mainTitle: 'My Profile',
     otherUserTitle: 'Profile of',
+    contacts: 'Contacts',
+    connectDiscord: 'Connect your Discord',
+    connectGithub: 'Connect your GitHub',
     personalInfo: {
       title: 'Personal Information',
       editButton: 'Edit Information',
@@ -36,15 +39,25 @@ export default {
       cancelButton: 'Cancel',
       name: 'Name',
       email: 'Email',
-      phone: 'Phone',
       role: 'Role',
       bio: 'Bio',
       linkedin: 'LinkedIn',
       github: 'GitHub',
+      discord: 'Discord',
+      school: 'School',
+      interests: 'Interests',
       website: 'Website',
       noInfo: 'No additional information provided.',
+      addInterest: 'Add an interest',
     },
     otherUserInfoTitle: 'User Information',
+    deleteAccount: 'Delete Account',
+    deleteAccountText: 'Are you sure you want to delete your account? This action is irreversible.',
+    deleteAccountConfirm: 'Yes, delete my account',
+
+    logoutConfirmTitle: 'Confirm Logout',
+    logoutConfirmText: 'Are you sure you want to logout?',
+    confirmButton: 'Yes, logout',
   },
   roles: {
     organizer: 'Organizer',
@@ -61,7 +74,7 @@ export default {
     inscriptionMessage: 'Welcome! To join the event, please register below.',
     firstLoginBtn: 'First login',
     locationText: 'Register to see the exact location',
-    dateText: '2 intensive days of coding',
+    dateText: '{numberOfDays} intensive day(s) of coding)',
     phases: {
       1: {
         name: 'Publication of themes and topics',
@@ -359,12 +372,17 @@ export default {
     noQuestions: 'No questions available at the moment.',
     question: 'Question',
     answer: 'Answer',
+    public: 'Public Question',
+    private: 'Private Question',
+    privateHint: 'Visible only to authenticated users',
   },
   themes: {
     title: 'Themes & Topics',
     subtitle: 'Manage the themes and topics for the hackathon',
     theme: 'Theme',
     topic: 'Topic',
+    newTheme: 'New Theme',
+    newSubject : 'New Subject',
     description: 'Description',
     addThemeBtn: '+ Add Theme',
     addTopicBtn: '+ Add Topic',
@@ -384,5 +402,7 @@ export default {
       maxLength: 'Maximum length reached',
       fixErrors: 'Please fix the errors before saving.',
     },
+    noName: "No name provided",
+    noDescription: "No description provided"
   },
 }

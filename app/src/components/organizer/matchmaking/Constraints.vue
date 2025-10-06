@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { ConstraintDTO } from '@/types/hackathon'
+  import { ConstraintDTO } from '@/types/config'
   import ConstraintForm from './ConstraintForm.vue'
   import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
@@ -100,7 +100,7 @@
           <td class="px-4 py-2 text-center">
             <v-btn
               icon="mdi-pencil"
-              color="black"
+              color="primary"
               variant="text"
               size="small"
               @click.stop="

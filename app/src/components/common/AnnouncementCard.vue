@@ -1,21 +1,47 @@
 <script setup lang="ts">
-  import { AnnouncementDTO } from '@/types/announcement'
-  import { useI18n } from 'vue-i18n'
-  import { timeAgo } from '@/utils/dateUtils'
+import { AnnouncementDTO } from '@/types/announcement'
+import { useI18n } from 'vue-i18n'
+import { timeAgo } from '@/utils/dateUtils'
+import { ref, onMounted, watch } from 'vue'
+import { generateSignedUrls } from '@/utils/s3utils'
 
-  const { t, locale } = useI18n()
+const { t, locale } = useI18n()
 
-  const props = defineProps<{
-    announcement: AnnouncementDTO
-  }>()
+const props = defineProps<{
+  announcement: AnnouncementDTO
+}>()
 
-  const emit = defineEmits<{
-    (e: 'click', announcement: AnnouncementDTO): void
-  }>()
+const emit = defineEmits<{
+  (e: 'click', announcement: AnnouncementDTO): void
+}>()
 
-  const handleClick = () => {
-    emit('click', props.announcement)
+const handleClick = () => {
+  emit('click', props.announcement)
+}
+
+// -----------------------------
+// Signed URLs for images in S3
+// -----------------------------
+const signedUrls = ref<string[]>([])
+
+const loadImages = async () => {
+  if (props.announcement.files && props.announcement.files.length > 0) {
+    signedUrls.value = await generateSignedUrls(props.announcement.files)
   }
+  else {
+    signedUrls.value = []
+  }
+}
+
+onMounted(loadImages)
+
+watch(
+  () => props.announcement.files,
+  () => {
+    loadImages()
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -25,6 +51,7 @@
         <h3 class="text-lg font-bold">{{ announcement.title }}</h3>
         <v-icon v-if="announcement.isPrivate" color="black" size="18"> mdi-lock </v-icon>
       </div>
+
       <div class="flex items-center gap-2">
         <p class="text-sm text-gray-600">
           {{ t('announcements.writtenBy') }}
@@ -42,29 +69,31 @@
           </v-chip>
         </div>
       </div>
+
       <p class="mt-3 text-gray-700 line-clamp-2">
-        {{ announcement.description }}
+        {{ announcement.content }}
       </p>
     </div>
 
     <div
-      v-if="announcement.existingImages && announcement.existingImages?.length > 0"
+      v-if="signedUrls.length"
       class="flex gap-2 overflow-x-auto items-center"
     >
       <v-img
-        v-for="(img, idx) in announcement.existingImages"
-        :key="idx"
-        :src="img"
-        class="rounded-lg w-32 h-32 object-cover"
-        cover
+        v-for="(url, index) in signedUrls"
+        :key="index"
+        :src="url"
+        class="w-24 h-24 rounded-lg object-cover"
+        :alt="`Announcement Image ${index + 1}`"
+        contain
       />
     </div>
   </v-card>
 </template>
 
 <style scoped>
-  .announcement-card:hover {
-    box-shadow: 0 6px 18px rgb(0 0 0 / 0.15);
-    cursor: pointer;
-  }
+.announcement-card:hover {
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.15);
+  cursor: pointer;
+}
 </style>

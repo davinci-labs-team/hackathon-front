@@ -19,7 +19,8 @@ export const userService = {
   },
 
   async getById(userId: string): Promise<UserDTO> {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/${userId}`)
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/${userId}`,
+      { headers: getAuthHeaders() })
     return res.data
   },
 

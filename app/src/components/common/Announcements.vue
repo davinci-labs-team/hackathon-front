@@ -1,11 +1,12 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { AnnouncementDTO } from '@/types/announcement'
+  import { AnnouncementDTO, UpdateAnnouncementDTO } from '@/types/announcement'
   import AnnouncementPopup from '@/components/common/AnnouncementPopup.vue'
   import AnnouncementCard from '@/components/common/AnnouncementCard.vue'
   import AnnouncementForm from '@/components/organizer/announcements/AnnouncementForm.vue'
   import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
+  import { AnnouncementService } from '@/services/announcementService'
 
   const { t } = useI18n()
 
@@ -24,12 +25,20 @@
     showConfirmDialog.value = true
   }
 
-  const deleteAnnouncement = () => {
+  const deleteAnnouncement = async () => {
     if (!announcementToDelete.value) return
-    // TODO: Implement actual deletion logic here
-    console.log('Deleting:', announcementToDelete.value.title)
-    showConfirmDialog.value = false
-    announcementToDelete.value = null
+
+    try {
+      await AnnouncementService.delete(announcementToDelete.value.id)
+      const index = props.announcements.findIndex((a) => a.id === announcementToDelete.value?.id)
+      if (index !== -1) {
+        props.announcements.splice(index, 1)
+      }
+      showConfirmDialog.value = false
+      announcementToDelete.value = null
+    } catch (error) {
+      console.error('Error deleting announcement:', error)
+    }
   }
 
   const editAnnouncement = (announcement: AnnouncementDTO) => {
@@ -60,6 +69,21 @@
     selectedAnnouncement.value = announcement
     showPopup.value = true
   }
+
+  const handleUpdate = async (id: string, update: UpdateAnnouncementDTO) => {
+    try {
+      const updatedAnnouncement = await AnnouncementService.update(id, update)
+      const index = props.announcements.findIndex((a) => a.id === id)
+      if (index !== -1) {
+        props.announcements.splice(index, 1, updatedAnnouncement)
+      }
+      showEditForm.value = false
+      selectedAnnouncement.value = null
+    } catch (error) {
+      console.error('Error updating announcement:', error)  
+    }
+  }
+
 </script>
 
 <style scoped>
@@ -73,12 +97,14 @@
   <div>
     <div v-if="paginatedAnnouncements.length > 0">
       <div
-        v-for="(item, index) in paginatedAnnouncements"
-        :key="index"
+        v-for="item in paginatedAnnouncements"
+        :key="item.id"
         class="flex items-start gap-2 mb-4"
       >
         <div class="flex-grow" @click="openPopup(item)">
-          <AnnouncementCard :announcement="item" />
+          <AnnouncementCard 
+            :announcement="item" 
+          />
         </div>
 
         <div class="flex flex-col gap-1">
@@ -89,28 +115,37 @@
             color="red"
             variant="text"
             size="small"
+            :title="t('common.delete')"
             @click.stop="confirmDelete(item)"
           />
           <!-- Edit button -->
           <v-btn
             v-if="canDelete"
             icon="mdi-pencil"
-            color="black"
+            color="primary"
             variant="text"
             size="small"
+            :title="t('common.edit')"
             @click.stop="editAnnouncement(item)"
           />
         </div>
       </div>
 
       <!-- Popup -->
-      <AnnouncementPopup v-model:show="showPopup" :announcement="selectedAnnouncement" />
+      <AnnouncementPopup 
+        v-model:show="showPopup" 
+        :announcement="selectedAnnouncement" 
+        :key="selectedAnnouncement?.id"
+        v-if="selectedAnnouncement"
+      />
 
       <!-- Edit Form -->
       <AnnouncementForm
         v-model="showEditForm"
         :editMode="true"
         :announcement="selectedAnnouncement"
+        :key="selectedAnnouncement?.id"
+        @update="handleUpdate"
       />
 
       <!-- Pagination (no ellipsis for now) -->

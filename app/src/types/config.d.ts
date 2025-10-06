@@ -20,6 +20,13 @@ export interface PartnersDTO {
   isParticipatingSchool: boolean
 }
 
+export interface HackathonTextDTO {
+  hackathonName: string
+  slogan? : string
+  hackathonDescription: string
+  location?: string
+}
+
 export interface HackathonMediaDTO {
   bannerPictureId: string | null
   hackathonLogoId: string | null

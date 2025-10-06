@@ -1,38 +1,55 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { ref, computed, onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
   import Announcements from '@/components/common/Announcements.vue'
-  import { announcements as allAnnouncements } from '@/tests/data/announcements'
   import AnnouncementForm from '@/components/organizer/announcements/AnnouncementForm.vue'
-  import type { AnnouncementDTO } from '@/types/announcement'
+  import type { AnnouncementDTO, CreateAnnouncementDTO } from '@/types/announcement'
+  import { AnnouncementService } from '@/services/announcementService'
 
   const { t } = useI18n()
 
   const searchQuery = ref('')
   const showAddPopup = ref(false)
 
-  // Computed property to filter announcements based on search query
+  const allAnnouncements = ref<AnnouncementDTO[]>([])
+
   const filteredAnnouncements = computed(() => {
-    if (!searchQuery.value.trim()) return allAnnouncements
-    return allAnnouncements.filter(
+    const query = searchQuery.value.trim().toLowerCase()
+    if (!query) return allAnnouncements.value
+
+    return allAnnouncements.value.filter(
       (a) =>
-        a.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        a.description.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        a.author.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        a.tags.some((tag) => tag.toLowerCase().includes(searchQuery.value.toLowerCase()))
+        a.title.toLowerCase().includes(query) ||
+        a.content.toLowerCase().includes(query) ||
+        a.author.toLowerCase().includes(query) ||
+        a.tags?.some((tag) => tag.toLowerCase().includes(query))
     )
   })
 
   const onAddAnnouncement = () => {
-    // TODO: gérer l'ajout d'une annonce (popup, navigation, etc.)
     showAddPopup.value = true
   }
 
-  const handleSave = (newAnnouncement: AnnouncementDTO) => {
-    // Ici tu gères l'ajout réel (push dans une liste, appel API, etc)
-    console.log('Nouvelle annonce sauvegardée:', newAnnouncement)
-    showAddPopup.value = false
+  const handleCreate = async (data: CreateAnnouncementDTO) => {
+    try {
+      const newAnnouncement = await AnnouncementService.create(data)
+      allAnnouncements.value.unshift(newAnnouncement)
+      showAddPopup.value = false
+    } catch (error) {
+      console.error('Error creating announcement:', error)
+    }
   }
+
+  onMounted(async () => {
+    try {
+      const response = await AnnouncementService.getAll()
+      allAnnouncements.value = response
+
+      console.log('Fetched announcements:', response)
+    } catch (error) {
+      console.error('Error fetching announcements:', error)
+    }
+  })
 </script>
 
 <template>
@@ -65,7 +82,7 @@
           :can-delete="true"
         />
 
-        <AnnouncementForm v-model="showAddPopup" @save="handleSave" />
+        <AnnouncementForm v-model="showAddPopup" @create="handleCreate"/>
       </div>
     </v-row>
   </v-container>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, onMounted, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { HackathonPhaseDTO } from '@/types/hackathon'
+  import { HackathonPhaseDTO } from '@/types/config'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import VueDatePicker from '@vuepic/vue-datepicker'
   import '@vuepic/vue-datepicker/dist/main.css'
