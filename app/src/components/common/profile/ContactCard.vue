@@ -47,16 +47,15 @@ defineExpose({ saveChanges, resetLocalUser })
     <v-card-text class="flex-grow-1">
       <v-row dense>
         <!-- Email -->
-        <v-col cols="12" class="d-flex align-center mb-2" v-if="localUser.email">
-          <v-icon size="x-large" class="mr-4 mb-4">mdi-email</v-icon>
-          <div v-if="!props.editMode">{{ localUser.email }}</div>
-          <v-text-field v-else v-model="localUser.email" placeholder="Email" variant="solo"/>
+        <v-col cols="12" class="d-flex align-center mb-2">
+          <v-icon size="x-large" class="mr-4">mdi-email</v-icon>
+          <div>{{ localUser.email || 'N/A' }}</div>
         </v-col>
 
         <!-- GitHub -->
-        <v-col cols="12" class="d-flex align-center mb-2" v-if="localUser.github">
+        <v-col cols="12" class="d-flex align-center mb-2">
           <v-icon size="x-large" class="mr-4 mb-4">mdi-github</v-icon>
-          <div v-if="!props.editMode">{{ localUser.github }}</div>
+          <div v-if="!props.editMode">{{ localUser.github || 'N/A' }}</div>
           <v-text-field v-else v-model="localUser.github" placeholder="GitHub" variant="solo"/>
         </v-col>
 
@@ -73,11 +72,17 @@ defineExpose({ saveChanges, resetLocalUser })
         </v-col>
 
         <!-- LinkedIn -->
-        <v-col cols="12" class="d-flex align-center mb-2" v-if="localUser.linkedin">
-          <v-icon size="x-large" class="mr-4 mb-4">mdi-linkedin</v-icon>
-          <div v-if="!props.editMode">{{ localUser.linkedin }}</div>
-          <v-text-field v-else v-model="localUser.linkedin" placeholder="LinkedIn" variant="solo"/>
+        <v-col cols="12" class="d-flex align-center mb-2">
+          <v-icon size="x-large" class="mr-4">mdi-linkedin</v-icon>
+          <div v-if="!props.editMode">{{ localUser.linkedin || 'N/A' }}</div>
+          <v-text-field v-else
+            v-model="localUser.linkedin"
+            placeholder="LinkedIn"
+            variant="solo"
+            class="flex-grow-1"
+          />
         </v-col>
+
       </v-row>
     </v-card-text>
   </v-card>

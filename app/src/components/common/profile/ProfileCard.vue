@@ -83,7 +83,7 @@ const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
             color="primary"
             @click="fileInput?.click()"
           >
-            mdi-upload
+            mdi-upload-circle
           </v-icon>
 
           <input
@@ -100,24 +100,22 @@ const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
             color="red"
             @click="deleteProfilePicture"
             >
-            mdi-delete
+            mdi-delete-circle
             </v-icon>
 
         </div>
 
         <div>
           <div class="user-name">{{ user.firstname }} {{ user.lastname }}</div>
-          <div class="user-role">
-            {{ t(`roles.${role}`) }}
-          </div>
+          <div class="user-role">{{ t(`roles.${role}`) }}</div>
           <v-textarea 
             v-model="localUser.school" 
-            placeholder="School" 
+            :placeholder="t('profile.personalInfo.school')"
             rows="1" 
             v-if="props.editMode && localUser.role !== UserRole.PARTICIPANT" 
             auto-grow
             variant="solo"/>
-          <div v-else>{{ localUser.school || 'No info yet' }}</div>
+          <div v-else class="user-school">{{ localUser.school || 'No info yet' }}</div>
         </div>
       </v-col>
     </v-row>
@@ -132,8 +130,8 @@ const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
 
 .edit-icon {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  bottom: -5px;
+  right: 70px;
   cursor: pointer;
   background-color: white;
   border-radius: 50%;
@@ -146,11 +144,15 @@ const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
   transform: scale(1.1);
 }
 
+.edit-icon, .delete-icon {
+  font-size: 35px;
+}
+
 
 .delete-icon {
   position: absolute;
-  top: 8px;
-  left: 0px;
+  bottom: -5px;
+  right: 30px;
   cursor: pointer;
   background-color: white;
   border-radius: 50%;
@@ -162,7 +164,7 @@ const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
 .delete-icon:hover {
   transform: scale(1.1);
 }
-.user-name { font-size: 2rem; font-weight: bold; }
-.user-role { font-size: 1.4rem; color: gray; }
-.user-school { font-size: 1.4rem; margin-top: 1rem; }
+.user-name { font-size: 2rem; font-weight: bold;}
+.user-role { font-size: 1.8rem; color: gray; padding-bottom: 0.5rem; }
+.user-school { font-size: 1.4rem; }
 </style>
