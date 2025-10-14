@@ -3,7 +3,7 @@ import { ref, watch } from 'vue'
 import type { UserDTO } from '@/types/user'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useI18n } from 'vue-i18n';
-import { loginDiscord } from '@/services/oauthService';
+import { loginDiscord, loginGitHub } from '@/services/oauthService';
 import { useAuthStore } from '@/stores/auth';
 
 const { t } = useI18n()
@@ -15,6 +15,10 @@ const localUser = ref<UserDTO>({ ...props.user })
 
 const loginWithDiscord = async () => {
   await loginDiscord(props.adminPlatform, localUser.value.id!)
+}
+
+const loginWithGithub = async () => {
+  await loginGitHub(props.adminPlatform, localUser.value.id!)
 }
 
 // Réinitialiser localUser si parent change
@@ -46,29 +50,34 @@ defineExpose({ saveChanges, resetLocalUser })
     </v-card-title>
     <v-card-text class="flex-grow-1">
       <v-row dense>
-        <!-- Email -->
-        <v-col cols="12" class="d-flex align-center mb-2">
-          <v-icon size="x-large" class="mr-4">mdi-email</v-icon>
-          <div>{{ localUser.email || 'N/A' }}</div>
-        </v-col>
-
         <!-- GitHub -->
         <v-col cols="12" class="d-flex align-center mb-2">
-          <v-icon size="x-large" class="mr-4 mb-4">mdi-github</v-icon>
-          <div v-if="!props.editMode">{{ localUser.github || 'N/A' }}</div>
-          <v-text-field v-else v-model="localUser.github" placeholder="GitHub" variant="solo"/>
+          <v-btn base-color="black"
+            :disabled="!!localUser.github"
+            @click="loginWithGithub"
+            class="connect-button">
+            <v-icon size="x-large" class="mr-4">mdi-github</v-icon>
+            {{ localUser.github ? localUser.github.username : t('profile.connectGithub') }}
+          </v-btn>
         </v-col>
 
         <!-- Discord -->
         <v-col cols="12" class="d-flex align-center mb-2">
           <v-btn base-color="purple"
             :disabled="!!localUser.discord"
-            @click="loginWithDiscord">
+            @click="loginWithDiscord"
+            class="connect-button">
             <v-icon size="large" class="mr-4">
             <FontAwesomeIcon icon="fa-brands fa-discord" />
           </v-icon>
             {{ localUser.discord ? localUser.discord.username : t('profile.connectDiscord') }}
           </v-btn>
+        </v-col>
+
+        <!-- Email -->
+        <v-col cols="12" class="d-flex align-center mb-2">
+          <v-icon size="x-large" class="mr-4">mdi-email</v-icon>
+          <div>{{ localUser.email || 'N/A' }}</div>
         </v-col>
 
         <!-- LinkedIn -->
@@ -97,5 +106,14 @@ defineExpose({ saveChanges, resetLocalUser })
 
 .v-card-text.flex-grow-1 {
   flex-grow: 1;
+}
+
+.connect-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  gap: 8px;
+  font-weight: 500;
 }
 </style>
