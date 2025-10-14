@@ -67,7 +67,7 @@ defineExpose({ saveChanges, resetLocalUser })
             <v-icon size="large" class="mr-4">
             <FontAwesomeIcon icon="fa-brands fa-discord" />
           </v-icon>
-            {{ localUser.discord ? localUser.discord : t('profile.connectDiscord') }}
+            {{ localUser.discord ? localUser.discord.username : t('profile.connectDiscord') }}
           </v-btn>
         </v-col>
 

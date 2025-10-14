@@ -11,7 +11,12 @@ export interface UserDTO {
   bio?: string
   interests?: string[]
   linkedin?: string
-  github?: string
-  discord?: string 
+  github?: SocialMediaDTO
+  discord?: SocialMediaDTO 
   profilePicturePath?: string
+}
+
+export interface SocialMediaDTO {
+  id: string
+  username: string
 }
