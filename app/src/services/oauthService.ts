@@ -2,7 +2,7 @@ import { useAuthStore } from '@/stores/auth'
 
 export function loginDiscord(organizerPlatform: boolean = false, userId: string) {
     const clientId = import.meta.env.VITE_DISCORD_CLIENT_ID;
-    const redirectUri = encodeURIComponent(import.meta.env.VITE_API_URL + '/api/auth/discord/callback');
+    const redirectUri = encodeURIComponent(import.meta.env.VITE_DISCORD_REDIRECT_URI);
 
     const supabaseUserId = useAuthStore().user?.supabaseUserId;
 
@@ -23,7 +23,7 @@ const state = encodeURIComponent(JSON.stringify({
 
 export function loginGitHub(organizerPlatform: boolean = false, userId: string) {
     const clientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
-    const redirectUri = encodeURIComponent(import.meta.env.VITE_API_URL + '/api/auth/github/callback');
+    const redirectUri = encodeURIComponent(import.meta.env.VITE_GITHUB_REDIRECT_URI);
     
     const supabaseUserId = useAuthStore().user?.supabaseUserId;
 
