@@ -36,7 +36,6 @@ const saveThemes = async () => {
     text.value = t('common.changesSaved')
     error.value = false
     snackbar.value = true
-    console.log('Themes updated successfully')
   } catch (e) {
     console.error('Error updating themes: ', e)
     text.value = t('common.error')

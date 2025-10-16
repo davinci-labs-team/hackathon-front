@@ -33,7 +33,6 @@ export function useHackathonLogo(defaultLogoUrl: string = DEFAULT_LOGO) {
     
     try {
       const response = await getOrCreateConfiguration(ConfigurationKey.MEDIA)
-      console.log('Fetched media settings:', response)
       
       if (response && response.value) {
         mediaSettings.value = response.value as HackathonMediaDTO

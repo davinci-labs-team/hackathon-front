@@ -41,3 +41,15 @@ export async function getOrCreateConfiguration(key: ConfigurationKey) {
     throw error
   }
 }
+
+export async function getConfiguration(key: ConfigurationKey) {
+  try {
+    const config = await configurationService.findOne(key)
+    return config
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      return null
+    }
+    throw error
+  }
+}

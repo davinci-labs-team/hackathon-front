@@ -12,6 +12,11 @@ export interface HackathonPhaseDTO {
   endDate: string | null
 }
 
+export interface HackathonPhase extends HackathonPhaseDTO {
+  startDateObj: Date | null
+  endDateObj: Date | null
+}
+
 export interface PartnersDTO {
   id: string
   name: string

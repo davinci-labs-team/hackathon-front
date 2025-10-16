@@ -2,13 +2,13 @@
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { useI18n } from 'vue-i18n'
-  import { useAuthStore } from '@/stores/auth'
   import { UserRole } from '@/types/roles'
   import { loginWithSupabase } from '@/services/authService'
+import { usePhaseStore } from '@/stores/phase'
 
   const { t } = useI18n()
   const router = useRouter()
-  const authStore = useAuthStore()
+  const phaseStore = usePhaseStore()
 
   const email = ref('')
   const password = ref('')
@@ -26,6 +26,9 @@
       const user = await loginWithSupabase(email.value, password.value, true)
 
       error.value = false
+      // Fetch phases and schedule next refresh
+      await phaseStore.fetchPhases()
+      phaseStore.scheduleNextRefresh()
 
       if (user.role === UserRole.ORGANIZER) {
         router.push('/organizer/announcements')

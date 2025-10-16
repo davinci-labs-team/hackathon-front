@@ -45,7 +45,6 @@
       const response = await AnnouncementService.getAll()
       allAnnouncements.value = response
 
-      console.log('Fetched announcements:', response)
     } catch (error) {
       console.error('Error fetching announcements:', error)
     }

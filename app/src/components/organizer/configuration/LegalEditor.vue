@@ -84,7 +84,6 @@
     }
 
     const data = exportJSON()
-    console.log('Exported Legal Text JSON:', JSON.stringify(data, null, 2))
 
     try {
       await configurationService.update(ConfigurationKey.LEGAL, { value: data })
