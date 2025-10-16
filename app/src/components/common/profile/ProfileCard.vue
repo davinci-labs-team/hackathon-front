@@ -31,6 +31,9 @@ const saveChanges = async () => {
   if (fileInputRef.value) {
     path = (await S3BucketService.uploadFile(fileInputRef.value)).path
   }
+  if (!fileInputRef.value && !preview.value) {
+    path = ""
+  }
   emit('update:user', { 
       id: localUser.value.id, 
       firstname: localUser.value.firstname, 
@@ -42,7 +45,6 @@ const saveChanges = async () => {
 }
 
 const resetLocalUser = () => {
-  console.log('Resetting local user')
   localUser.value = { ...props.user }
 }
 defineExpose({ saveChanges, resetLocalUser })
