@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import Communication from '@/components/organizer/configuration/Communication.vue'
   import LegalEditor from '@/components/organizer/configuration/LegalEditor.vue'
   import Matchmaking from '@/components/organizer/configuration/Matchmaking.vue'
   import Partners from '@/components/organizer/configuration/Partners.vue'
@@ -31,7 +30,6 @@
             dates: t('planningSettings.title'),
             legal: t('legal.title'),
             matchmaking: t('matchmakingSettings.title'),
-            communication: t('communicationSettings.title'),
           }"
           :key="key"
           @click="currentSection = key"
@@ -68,8 +66,6 @@
         return Partners
       case 'matchmaking':
         return Matchmaking
-      case 'communication':
-        return Communication
       case 'legal':
         return LegalEditor
       default:

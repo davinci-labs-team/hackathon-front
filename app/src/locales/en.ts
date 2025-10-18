@@ -181,6 +181,50 @@ export default {
       deleteSelected: 'Delete selected ({count})',
       invite: "Send invitation email",
     },
+    teamManagement: {
+      title: 'Team Management',
+      noTeams: 'No teams available.',
+      team: 'Team',
+      members: 'Members',
+      constraints : 
+      {
+        label: 'Constraints',
+        valid: 'Valid',
+        invalid: 'Invalid',
+      },
+      viewTeam: 'View Team',
+      withoutTeam: 'Without Team',
+      withTeam: 'With Team',
+      role: 'Role',
+      all: 'All',
+      viewMode: {
+        label: 'View Mode',
+        team: 'Team',
+        individual: 'Individual',
+      },
+      status: {
+        name: 'Team Status',
+        locked: 'Locked',
+        unlocked: 'Unlocked',
+      },
+      modale: {
+        addMembers: 'Add Participants',
+        addJury: 'Add Jury',
+        addMentors: 'Add Mentors',
+        membersPlaceholder: 'Search by name or email',
+      },
+      actions: {
+        name: 'Actions',
+        create: 'Create',
+        addBtn: '+ Create a Team',
+        add: 'Create a Team',
+        lock: 'Lock',
+        unlock: 'Unlock',
+        noConstraintsMode: 'No-Constraints Mode',
+        assignTeam: 'Assign Team',
+        withdrawTeam: 'Withdraw Team',
+      }
+    },
     nav: {
       announcements: 'Announcements',
       users: 'User Management',
@@ -404,5 +448,5 @@ export default {
     },
     noName: "No name provided",
     noDescription: "No description provided"
-  },
+  }
 }

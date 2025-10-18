@@ -184,6 +184,50 @@ export default {
       deleteSelected: 'Supprimer la sélection ({count})',
       invite: "Envoyer l'email d'invitation",
     },
+    teamManagement: {
+      title: 'Gestion des Équipes',
+      noTeams: 'Aucune équipe disponible.',
+      team: 'Équipe',
+      members: 'Membres',
+      constraints : 
+      {
+        label: 'Contraintes',
+        valid: 'Valide',
+        invalid: 'Invalide',
+      },
+      withoutTeam: 'Sans équipe',
+      withTeam: 'Avec équipe',
+      role: 'Rôle',
+      all: 'Tous',
+      viewMode: {
+        label: 'Mode de vue',
+        team: 'Équipe',
+        individual: 'Individuel',
+      },
+      status: {
+        name: "Statut d'équipe",
+        locked: 'Verrouillée',
+        unlocked: 'Déverrouillée',
+      },
+      viewTeam: 'Voir l’Équipe',
+      modale: {
+        addMembers: 'Ajouter des participants',
+        addJury: 'Ajouter des jury',
+        addMentors: 'Ajouter des mentors',
+        membersPlaceholder: 'Rechercher par nom ou email',
+      },
+      actions: {
+        name: 'Actions',
+        create: "Créer",
+        addBtn: '+ Créer une Équipe',
+        add: 'Créer une Équipe',
+        lock: 'Verrouiller',
+        unlock: 'Déverrouiller',
+        noConstraintsMode: 'Mode sans contraintes',
+        assignTeam: 'Assigner équipe',
+        withdrawTeam: 'Retirer équipe',
+      }
+    },
     nav: {
       announcements: 'Annonces',
       users: 'Gestion des utilisateurs',
@@ -435,5 +479,5 @@ export default {
     },
     noName: "Nom non renseigné",
     noDescription: "Description non renseignée"
-  }  
+  },
 }

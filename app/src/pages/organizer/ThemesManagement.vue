@@ -99,7 +99,7 @@ const validThemes = (): boolean => {
 <template>
   <v-container>
     <v-row justify="center" class="mt-8">
-      <v-col cols="12" md="8" lg="6">
+      <div class="w-full md:w-8/12 lg:w-8/12 px-4">
         <h1 class="text-3xl font-bold">{{ t('organizer.nav.themes') }}</h1>
 
         <div class="flex items-center justify-between mb-5">
@@ -138,7 +138,7 @@ const validThemes = (): boolean => {
             {{ t('themes.addThemeBtn') }}
           </v-btn>
         </div>
-      </v-col>
+      </div>
     </v-row>
   </v-container>
 </template>
