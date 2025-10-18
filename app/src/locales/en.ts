@@ -186,6 +186,7 @@ export default {
       noTeams: 'No teams available.',
       team: 'Team',
       members: 'Members',
+      namePlaceholder: 'Search by name, team, topic',
       constraints : 
       {
         label: 'Constraints',

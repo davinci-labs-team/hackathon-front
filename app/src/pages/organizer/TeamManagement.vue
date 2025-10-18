@@ -43,6 +43,9 @@
     { title: t('roles.participant'), value: 'PARTICIPANT' },
   ])
 
+  // Both Views
+  const filterName = ref('')
+
   const onAddTeam = () => {
     showTeamForm.value = true
   }
@@ -111,13 +114,13 @@
               />
 
             </div>
-            <div class="flex-1">
+            <div class="flex-[2]">
               <label class="block mb-2 text-sm font-medium">
                 {{ t('organizer.userManagement.name') }}
               </label>
               <v-text-field
                 v-model="filterName"
-                :placeholder="t('organizer.userManagement.namePlaceholder')"
+                :placeholder="t('organizer.teamManagement.namePlaceholder')"
                 variant="solo"
                 hide-details
                 density="comfortable"

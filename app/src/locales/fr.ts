@@ -189,6 +189,7 @@ export default {
       noTeams: 'Aucune équipe disponible.',
       team: 'Équipe',
       members: 'Membres',
+      namePlaceholder: 'Rechercher par nom, équipe, sujet',
       constraints : 
       {
         label: 'Contraintes',
