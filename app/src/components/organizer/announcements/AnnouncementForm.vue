@@ -17,8 +17,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'create', announcement: CreateAnnouncementDTO): void
-  (e: 'update', id: string, announcement: UpdateAnnouncementDTO): void
+  (e: 'save', payload: CreateAnnouncementDTO | UpdateAnnouncementDTO): void
   (e: 'update:modelValue', value: boolean): void
 }>()
 
@@ -138,50 +137,25 @@ const uploadImages = async (): Promise<string[]> => {
   }
 }
 
-const createAnnouncement = async () => {
-  const tagsArray =  parseTags(tags.value)
-
-  const uploadedImagePaths: string[] = await uploadImages()
-
-  const created: CreateAnnouncementDTO = {
-    title: title.value,
-    content: description.value,
-    tags: tagsArray,
-    isPrivate: isPrivate.value,
-    files: [...existingImages.value, ...uploadedImagePaths],
-  }
-  emit('create', created)
-  close()
-}
-
-const updateAnnouncement = async () => {
-  if (!props.announcement) return
-
-  const tagsArray = parseTags(tags.value)
-
-  const uploadedImagePaths = await uploadImages()
-
-  const update: UpdateAnnouncementDTO = {
-    title: title.value,
-    content: description.value,
-    tags: tagsArray,
-    isPrivate: isPrivate.value,
-    files: [...existingImages.value, ...uploadedImagePaths],
-  }
-
-  emit('update', props.announcement.id, update)
-  close()
-}
-
-
 // -----------------------------
 // Handle form submit
 // -----------------------------
-const onSubmit = () => {
+const onSubmit = async () => {
   if (!title.value || !description.value) return
-  if (props.editMode) updateAnnouncement()
-  else createAnnouncement()
+
+  const tagsArray = parseTags(tags.value)
+  const payload = {
+    title: title.value,
+    content: description.value,
+    tags: tagsArray,
+    isPrivate: isPrivate.value,
+    files: [...existingImages.value, ...(await uploadImages())],
+  }
+
+  emit('save', payload)
+  close()
 }
+
 
 // -----------------------------
 // Initialize form when dialog opens

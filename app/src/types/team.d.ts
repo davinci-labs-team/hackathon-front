@@ -5,6 +5,7 @@ export interface TeamDTO {
   id: string
   name: string
   description?: string
+  themeId: string
   subjectId: string
   status: TeamStatus
   createdAt: string
@@ -12,6 +13,16 @@ export interface TeamDTO {
   juries: UserPreviewDTO[]
   mentors: UserPreviewDTO[]
 }
+
+export interface TeamFormDTO {
+  name: string
+  themeId: string
+  subjectId: string
+  memberIds: string[]
+  mentorIds?: string[]
+  juryIds?: string[]
+}
+
 
 export interface UserPreviewDTO {
   id: string

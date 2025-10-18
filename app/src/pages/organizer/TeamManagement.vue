@@ -3,6 +3,7 @@
   import { useI18n } from 'vue-i18n'
 
   import type { TeamDTO } from '@/types/team'
+  import TeamForm from '@/components/organizer/team_management/TeamForm.vue'
   import { TeamStatus } from '@/types/team_status'
   import { UserRole } from '@/types/roles'
 
@@ -10,6 +11,8 @@
 
   const showTeamForm = ref(false)
   const viewMode = ref<'team' | 'individual'>('team')
+  const selectedTeam = ref<TeamDTO | null>(null)
+  const editMode = ref(false)
 
   // Filters for Team View
   const selectedTeamStatus = ref<string>('')
@@ -48,6 +51,23 @@
 
   const onAddTeam = () => {
     showTeamForm.value = true
+    editMode.value = false
+  }
+
+  const onEditTeam = (team: TeamDTO) => {
+    selectedTeam.value = team
+    showTeamForm.value = true
+    editMode.value = true
+  }
+
+  const handleSave = (team: TeamDTO) => {
+    if (editMode.value) {
+      // Update team logic here
+    } else {
+      // Create team logic here
+    }
+    showTeamForm.value = false
+    selectedTeam.value = null
   }
 </script>
 
@@ -59,7 +79,7 @@
           <h1 class="text-3xl font-bold">{{ t('organizer.teamManagement.title') }}</h1>
           <div class="flex">
             <v-btn color="primary" class="h-full" @click="onAddTeam">
-              {{ t('organizer.teamManagement.actions.addBtn') }}
+              {{ t('organizer.teamManagement.actions.add') }}
             </v-btn>
           </div>
         </div>
@@ -145,6 +165,13 @@
           </div>
         </div>
       </div>
+
+      <TeamForm
+          v-model="showTeamForm"
+          @save="handleSave"
+          :edit-mode="editMode"
+          :team="selectedTeam"
+        />
     </v-row>
   </v-container>
 </template>

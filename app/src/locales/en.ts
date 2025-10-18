@@ -217,8 +217,8 @@ export default {
       actions: {
         name: 'Actions',
         create: 'Create',
-        addBtn: '+ Create a Team',
         add: 'Create a Team',
+        edit: 'Edit Team',
         lock: 'Lock',
         unlock: 'Unlock',
         noConstraintsMode: 'No-Constraints Mode',
