@@ -162,7 +162,7 @@ const onSubmit = async () => {
 // -----------------------------
 watch(
   localModelValue,
-  (open) => {
+  async (open) => {
     if (!open) return
     if (props.editMode && props.announcement) {
       title.value = props.announcement.title
@@ -171,12 +171,14 @@ watch(
       isPrivate.value = props.announcement.isPrivate
       newImages.value = []
       existingImages.value = props.announcement.files || []
+      await loadImages()
     } else {
       resetForm()
     }
   },
   { immediate: true }
 )
+
 
 const signedUrls = ref<string[]>([])
 
