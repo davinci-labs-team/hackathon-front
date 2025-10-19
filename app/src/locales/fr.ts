@@ -198,6 +198,7 @@ export default {
         label: 'Contraintes',
         valid: 'Valide',
         invalid: 'Invalide',
+        ignored: 'Ignorées',
       },
       withoutTeam: 'Sans équipe',
       withTeam: 'Avec équipe',
@@ -488,4 +489,18 @@ export default {
     noName: "Nom non renseigné",
     noDescription: "Description non renseignée"
   },
+  matchmakingViolations: {
+    teamSizeMin: "Il manque {count} membre(s)",
+    teamSizeMax: "{count} membre(s) en trop",
+    mentorMissing: "Il faut au moins 1 mentor",
+    juryMissing: "Il faut au moins 1 jury",
+    // Contraintes sur une école
+    schoolMin: "Il manque {count} membre(s) de l'école {school}",
+    schoolMax: "{count} membre(s) en trop de l'école {school}",
+    schoolEqual: "Il faut exactement {count} membre(s) de l'école {school}",
+    // Contraintes sur plusieurs écoles (OU)
+    schoolsMin: "Il manque {count} membre(s) dans au moins une des écoles suivantes : {schools}",
+    schoolsMax: "{count} membre(s) en trop dans au moins une des écoles suivantes : {schools}",
+    schoolsEqual: "Il faut exactement {count} membre(s) dans au moins une des écoles suivantes : {schools}"
+  }
 }

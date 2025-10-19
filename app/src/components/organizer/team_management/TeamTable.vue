@@ -2,8 +2,9 @@
   import { ThemesDTO } from '@/types/config'
   import { TeamDTO } from '@/types/team'
   import { TeamStatus } from '@/types/team_status'
-  import { ref, computed, watch } from 'vue'
+  import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
+  import { TeamConstraintViolation } from '@/types/config'
 
   const { t } = useI18n()
 
@@ -11,6 +12,7 @@
     teams: TeamDTO[]
     themes: ThemesDTO[]
     itemsPerPage?: number
+    constraintsMap?: Record<string, TeamConstraintViolation[]>
   }>()
   const emit = defineEmits(['edit', 'delete', 'toggle-lock', 'toggle-constraints'])
 
@@ -28,6 +30,14 @@
     if (page >= 1 && page <= totalPages.value) {
       currentPage.value = page
     }
+  }
+
+  const formatViolationMessage = (violation: TeamConstraintViolation) => {
+    return t(`matchmakingViolations.${violation.type}`, {
+      count: violation.count,
+      school: violation.schools,
+      schools: violation.schools,
+    })
   }
 </script>
 
@@ -80,9 +90,21 @@
                 ?.subjects.find((subject) => subject.id === team.subjectId)?.name || ''
             }}
           </td>
+
           <td class="px-4 py-2 text-center">
-            {{ team.ignoreConstraints ? '-' : '+' }}
+            <div v-if="constraintsMap?.[team.id]?.length">
+              <div v-for="(violation, index) in constraintsMap[team.id]" :key="index">
+                {{ formatViolationMessage(violation) }}
+              </div>
+            </div>
+            <div v-else-if="team.ignoreConstraints">
+              {{ t('organizer.teamManagement.constraints.ignored') }}
+            </div>
+            <div v-else>
+              {{ t('organizer.teamManagement.constraints.valid') }}
+            </div>
           </td>
+
           <td class="px-4 py-2 text-center">
             {{ t(`organizer.teamManagement.status.${team.status}`) }}
           </td>

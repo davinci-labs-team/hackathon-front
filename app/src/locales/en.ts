@@ -195,6 +195,7 @@ export default {
         label: 'Constraints',
         valid: 'Valid',
         invalid: 'Invalid',
+        ignored: 'Ignored',
       },
       viewTeam: 'View Team',
       withoutTeam: 'Without Team',
@@ -455,5 +456,19 @@ export default {
     },
     noName: "No name provided",
     noDescription: "No description provided"
+  },
+  matchmakingViolations: {
+    teamSizeMin: "{count} member(s) missing",
+    teamSizeMax: "{count} member(s) too many",
+    mentorMissing: "Missing mentor",
+    juryMissing: "Missing jury member",
+    // Single school constraints
+    schoolMin: "{count} member(s) missing from {school}",
+    schoolMax: "{count} member(s) too many from {school}",
+    schoolEqual: "{count} member(s) required from {school}",
+    // Multiple schools constraints (OR)
+    schoolsMin: "{count} member(s) missing from at least one of these schools: {schools}",
+    schoolsMax: "{count} member(s) too many from at least one of these schools: {schools}",
+    schoolsEqual: "{count} member(s) required from at least one of these schools: {schools}"
   }
 }

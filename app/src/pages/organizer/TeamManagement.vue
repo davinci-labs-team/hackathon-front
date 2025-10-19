@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed, onMounted } from 'vue'
+  import { watch, ref, computed, onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   import type { TeamDTO, TeamFormDTO } from '@/types/team'
@@ -8,11 +8,13 @@
   import { UserRole } from '@/types/roles'
   import { UserDTO } from '@/types/user'
   import { userService } from '@/services/userService'
-  import { ThemesDTO } from '@/types/config'
+  import { MatchmakingSettingsDTO, ThemesDTO } from '@/types/config'
   import { configurationService } from '@/services/configurationService'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
   import TeamTable from '@/components/organizer/team_management/TeamTable.vue'
   import mockTeams from '@/tests/data/teams'
+  import { calculateAllTeamsConstraints } from '@/utils/teamConstraints'
+  import { TeamConstraintViolation } from '@/types/config'
 
   const { t } = useI18n()
 
@@ -89,6 +91,31 @@
     selectedTeam.value = null
   }
 
+  // ----------------------
+  // TEAM CONSTRAINTS LOGIC
+  // ----------------------
+  const matchmakingConfig = ref<MatchmakingSettingsDTO | null>(null)
+  const teamConstraintsMap = ref<Record<string, TeamConstraintViolation[]>>({})
+
+  const updateConstraints = () => {
+    if (matchmakingConfig.value && matchmakingConfig.value.isActive) {
+      const result = calculateAllTeamsConstraints(teams.value, matchmakingConfig.value)
+      teamConstraintsMap.value = result.reduce(
+        (acc, r) => {
+          acc[r.teamId] = r.violations
+          return acc
+        },
+        {} as Record<string, TeamConstraintViolation[]>
+      )
+    }
+  }
+
+  watch([teams, matchmakingConfig], updateConstraints, { deep: true, immediate: true })
+
+  // ----------------------
+  // FETCHING DATA
+  // ----------------------
+
   const fetchTeams = async () => {
     //const response = await teamService.getAll()
     /*if (response) {
@@ -106,11 +133,6 @@
         )
         mentors.value = response.filter((user) => user.role === UserRole.MENTOR)
         juries.value = response.filter((user) => user.role === UserRole.JURY)
-        console.log('Fetched users:', {
-          members: members.value,
-          mentors: mentors.value,
-          juries: juries.value,
-        })
       }
     } catch (error) {
       console.error('Error fetching users:', error)
@@ -122,19 +144,31 @@
       const response = await configurationService.findOne(ConfigurationKey.THEMES)
       if (response && response.value) {
         themes.value = response.value
-        console.log('Fetched themes:', themes.value)
       }
     } catch (error) {
       console.error('Error fetching media settings:', error)
     }
   }
 
+  const fetchMatchmakingConfig = async () => {
+    try {
+      const response = await configurationService.findOne(ConfigurationKey.MATCHMAKING)
+      if (response && response.value) {
+        matchmakingConfig.value = response.value
+      }
+    } catch (error) {
+      console.error('Error fetching matchmaking config:', error)
+    }
+  }
+
   onMounted(() => {
     fetchUsers()
     fetchThemes()
+    fetchMatchmakingConfig()
     //fetchTeams()
   })
 
+  // TODO: implement API calls
   const onToggleLock = async (team: TeamDTO) => {
     try {
       const newStatus = team.status === TeamStatus.LOCKED ? TeamStatus.UNLOCKED : TeamStatus.LOCKED
@@ -148,6 +182,7 @@
     }
   }
 
+  // TODO: implement API calls
   const onToggleConstraints = async (team: TeamDTO) => {
     try {
       const newIgnoreState = !team.ignoreConstraints
@@ -167,11 +202,14 @@
         !filterName.value ||
         team.name.toLowerCase().includes(query) ||
         team.members.some((member) =>
-          (member.firstname + ' ' + member.lastname).toLowerCase().includes(query)) ||
+          (member.firstname + ' ' + member.lastname).toLowerCase().includes(query)
+        ) ||
         team.mentors.some((mentor) =>
-          (mentor.firstname + ' ' + mentor.lastname).toLowerCase().includes(query)) ||
+          (mentor.firstname + ' ' + mentor.lastname).toLowerCase().includes(query)
+        ) ||
         team.juries.some((jury) =>
-          (jury.firstname + ' ' + jury.lastname).toLowerCase().includes(query)) 
+          (jury.firstname + ' ' + jury.lastname).toLowerCase().includes(query)
+        )
 
       const matchesStatus = !selectedTeamStatus.value || team.status === selectedTeamStatus.value
       return matchesName && matchesStatus
@@ -297,6 +335,7 @@
           :selected-team-status="selectedTeamStatus"
           :selected-constraints="selectedConstraints"
           :filter-name="filterName"
+          :constraints-map="teamConstraintsMap"
           @edit="onEditTeam"
           @toggle-lock="onToggleLock"
           @toggle-constraints="onToggleConstraints"

@@ -74,6 +74,12 @@ export interface MatchmakingSettingsDTO {
   constraints: ConstraintDTO[]
 }
 
+export interface TeamConstraintViolation {
+  type: TeamConstraintType
+  count?: number
+  schools?: string
+}
+
 export interface SubjectDTO {
   id: string
   name: string
