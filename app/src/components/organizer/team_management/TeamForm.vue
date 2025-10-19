@@ -141,7 +141,7 @@
       <v-card-text>
         <v-form @submit.prevent="save">
           <label class="block mb-1 text-m">
-            {{ t('organizer.teamManagement.modale.name') }}
+            {{ t('organizer.teamManagement.name') }}
           </label>
           <v-text-field
             v-model="teamForm.name"
@@ -153,7 +153,7 @@
           />
 
           <label class="block mb-1 text-m">
-            {{ t('organizer.teamManagement.modale.theme') }}
+            {{ t('organizer.teamManagement.theme') }}
           </label>
           <v-select
             v-model="teamForm.themeId"
@@ -169,7 +169,7 @@
 
           <template v-if="teamForm.themeId">
             <label class="block mb-1 text-m">
-              {{ t('organizer.teamManagement.modale.subject') }}
+              {{ t('organizer.teamManagement.subject') }}
             </label>
             <v-select
               v-model="teamForm.subjectId"
@@ -199,6 +199,7 @@
             chips
             variant="solo"
             class="mb-4"
+            :no-data-text="t('common.noDataText')"
           />
 
           <label class="block mb-1 text-m">{{
@@ -215,6 +216,7 @@
             chips
             variant="solo"
             class="mb-4"
+            :no-data-text="t('common.noDataText')"
           />
 
           <label class="block mb-1 text-m">{{
@@ -231,6 +233,7 @@
             chips
             variant="solo"
             class="mb-4"
+            :no-data-text="t('common.noDataText')"
           />
 
           <v-card-actions class="justify-center">

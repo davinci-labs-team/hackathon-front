@@ -25,6 +25,7 @@ export default {
     people: '{count} personne(s)',
     individual: 'Individuel',
     multiple: 'Multiple',
+    noDataText: 'Aucune donnée disponible',
   },
   profile: {
     mainTitle: 'Mon Profil',
@@ -189,6 +190,8 @@ export default {
       noTeams: 'Aucune équipe disponible.',
       team: 'Équipe',
       members: 'Membres',
+      name: 'Nom',
+      themeAndSubject: 'Thème & Sujet',
       namePlaceholder: 'Rechercher par nom, équipe, sujet',
       constraints : 
       {
@@ -206,30 +209,28 @@ export default {
         individual: 'Individuel',
       },
       status: {
+        label: 'Statut',
         name: "Statut d'équipe",
-        locked: 'Verrouillée',
-        unlocked: 'Déverrouillée',
+        LOCKED: 'Verrouillée',
+        UNLOCKED: 'Non Verrouillée',
       },
       viewTeam: 'Voir l’Équipe',
       modale: {
-        name: 'Nom',
-        theme: 'Thème',
-        subject: 'Sujet',
         addMembers: 'Ajouter des participants',
         addJury: 'Ajouter des jury',
         addMentors: 'Ajouter des mentors',
-        membersPlaceholder: 'Rechercher par nom ou email',
+        membersPlaceholder: 'Rechercher par nom',
         selectTheme: 'Sélectionner un thème',
         selectSubject: 'Sélectionner un sujet',
       },
       actions: {
-        name: 'Actions',
+        label: 'Actions',
         create: "Créer",
         add: 'Créer une Équipe',
         edit: 'Modifier l’Équipe',
         lock: 'Verrouiller',
         unlock: 'Déverrouiller',
-        noConstraintsMode: 'Mode sans contraintes',
+        ignoreConstraints: 'Sans contraintes',
         assignTeam: 'Assigner équipe',
         withdrawTeam: 'Retirer équipe',
       }

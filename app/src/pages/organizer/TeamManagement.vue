@@ -11,6 +11,8 @@
   import { ThemesDTO } from '@/types/config'
   import { configurationService } from '@/services/configurationService'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import TeamTable from '@/components/organizer/team_management/TeamTable.vue'
+import mockTeams from '@/tests/data/teams'
 
   const { t } = useI18n()
 
@@ -60,6 +62,8 @@
   const mentors = ref<UserDTO[]>([])
   const themes = ref<ThemesDTO[]>([])
 
+  const teams = ref<TeamDTO[]>(mockTeams)
+
   const onAddTeam = () => {
     showTeamForm.value = true
     editMode.value = false
@@ -79,8 +83,17 @@
     }
     // Refresh user list to update team assignments
     await fetchUsers()
+    await fetchTeams()
     showTeamForm.value = false
     selectedTeam.value = null
+  }
+
+  const fetchTeams = async () => {
+      //const response = await teamService.getAll()
+      /*if (response) {
+        teams.value = response
+        console.log('Fetched teams:', teams.value)
+      }*/
   }
 
   const fetchUsers = async () => {
@@ -112,6 +125,8 @@
   onMounted(() => {
     fetchUsers()
     fetchThemes()
+    //fetchTeams()
+
   })
 </script>
 
@@ -209,7 +224,7 @@
           </div>
         </div>
       </div>
-
+      
       <TeamForm
         v-model="showTeamForm"
         @save="onSaveTeam"
@@ -220,6 +235,20 @@
         :juries="juries"
         :themes="themes"
         />
+    </v-row>
+    <v-row justify="center" class="mb-12">
+      <div class="w-full md:w-8/12 lg:w-9/12 px-4">
+        <TeamTable
+          v-if="viewMode === 'team'"
+          :teams="teams"
+          :themes="themes"
+          :selected-team-status="selectedTeamStatus"
+          :selected-constraints="selectedConstraints"
+          :filter-name="filterName"
+          @edit="onEditTeam"
+        />
+        <!-- Individual User Management Table can be placed here -->
+      </div>
     </v-row>
   </v-container>
 </template>
