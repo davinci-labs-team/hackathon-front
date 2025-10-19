@@ -10,6 +10,7 @@ const mockTeams: TeamDTO[] = [
     themeId: "f47ac10b-58cc-4372-a567-0e02b2c3d479", // Quantum Computing for Healthcare
     subjectId: "1c6f9d3b-3b89-4a9f-bde3-0c7a1c0f1a12", // Drug Discovery
     status: TeamStatus.UNLOCKED,
+    ignoreConstraints: true,
     createdAt: "2025-10-19T10:00:00Z",
     members: [
       {
@@ -59,6 +60,7 @@ const mockTeams: TeamDTO[] = [
     themeId: "b72d9f0e-12c3-4b1e-9f3a-7a6d8b5c2e34", // Quantum Solutions for Environment
     subjectId: "4a5e6b7c-8d9f-4b3a-91e2-5f7c6a3d2b18", // Climate Modeling
     status: TeamStatus.UNLOCKED,
+    ignoreConstraints: false,
     createdAt: "2025-10-19T11:00:00Z",
     members: [
       {
@@ -101,6 +103,7 @@ const mockTeams: TeamDTO[] = [
     themeId: "c83e0f1a-23b4-4c2d-9f5b-8c0d9e6f3b41", // Quantum Computing for Transportation
     subjectId: "7d8f9a0b-1c2d-4e3f-94f5-8d0e9f6a4b51", // Traffic Flow Optimization
     status: TeamStatus.UNLOCKED,
+    ignoreConstraints: false,
     createdAt: "2025-10-19T12:00:00Z",
     members: [
       {
@@ -144,6 +147,7 @@ const mockTeams: TeamDTO[] = [
     themeId: "b72d9f0e-12c3-4b1e-9f3a-7a6d8b5c2e34", // Quantum Solutions for Environment
     subjectId: "5b6f7c8d-9a0b-4c2e-92f3-6a8b7d4e1c29", // Energy Optimization
     status: TeamStatus.LOCKED,
+    ignoreConstraints: false,
     createdAt: "2025-10-19T13:00:00Z",
     members: [
       {

@@ -12,7 +12,7 @@
   import { configurationService } from '@/services/configurationService'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
   import TeamTable from '@/components/organizer/team_management/TeamTable.vue'
-import mockTeams from '@/tests/data/teams'
+  import mockTeams from '@/tests/data/teams'
 
   const { t } = useI18n()
 
@@ -25,8 +25,8 @@ import mockTeams from '@/tests/data/teams'
   const selectedTeamStatus = ref<string>('')
   const teamStatus = computed(() => [
     { title: t('organizer.teamManagement.all'), value: '' },
-    { title: t('organizer.teamManagement.status.locked'), value: TeamStatus.LOCKED },
-    { title: t('organizer.teamManagement.status.unlocked'), value: TeamStatus.UNLOCKED },
+    { title: t('organizer.teamManagement.status.LOCKED'), value: TeamStatus.LOCKED },
+    { title: t('organizer.teamManagement.status.UNLOCKED'), value: TeamStatus.UNLOCKED },
   ])
 
   const selectedConstraints = ref<string>('')
@@ -41,7 +41,7 @@ import mockTeams from '@/tests/data/teams'
   const userTeamStatus = computed(() => [
     { title: t('organizer.teamManagement.all'), value: '' },
     { title: t('organizer.teamManagement.withTeam'), value: 'withTeam' },
-    { title: t('organizer.teamManagement.withoutTeam') , value: 'withoutTeam' },
+    { title: t('organizer.teamManagement.withoutTeam'), value: 'withoutTeam' },
   ])
 
   const selectedRole = ref<UserRole | ''>('')
@@ -56,12 +56,13 @@ import mockTeams from '@/tests/data/teams'
   // Both Views
   const filterName = ref('')
 
-  // Fetch user list 
+  // Fetch user list
   const members = ref<UserDTO[]>([])
   const juries = ref<UserDTO[]>([])
   const mentors = ref<UserDTO[]>([])
   const themes = ref<ThemesDTO[]>([])
 
+  // FOR TESTING PURPOSES ONLY
   const teams = ref<TeamDTO[]>(mockTeams)
 
   const onAddTeam = () => {
@@ -89,8 +90,8 @@ import mockTeams from '@/tests/data/teams'
   }
 
   const fetchTeams = async () => {
-      //const response = await teamService.getAll()
-      /*if (response) {
+    //const response = await teamService.getAll()
+    /*if (response) {
         teams.value = response
         console.log('Fetched teams:', teams.value)
       }*/
@@ -100,10 +101,16 @@ import mockTeams from '@/tests/data/teams'
     try {
       const response = await userService.getAll()
       if (response) {
-        members.value = response.filter(user => user.role === UserRole.PARTICIPANT && !user.teamId)
-        mentors.value = response.filter(user => user.role === UserRole.MENTOR)
-        juries.value = response.filter(user => user.role === UserRole.JURY)
-        console.log('Fetched users:', { members: members.value, mentors: mentors.value, juries: juries.value })
+        members.value = response.filter(
+          (user) => user.role === UserRole.PARTICIPANT && !user.teamId
+        )
+        mentors.value = response.filter((user) => user.role === UserRole.MENTOR)
+        juries.value = response.filter((user) => user.role === UserRole.JURY)
+        console.log('Fetched users:', {
+          members: members.value,
+          mentors: mentors.value,
+          juries: juries.value,
+        })
       }
     } catch (error) {
       console.error('Error fetching users:', error)
@@ -126,7 +133,49 @@ import mockTeams from '@/tests/data/teams'
     fetchUsers()
     fetchThemes()
     //fetchTeams()
+  })
 
+  const onToggleLock = async (team: TeamDTO) => {
+    try {
+      const newStatus = team.status === TeamStatus.LOCKED ? TeamStatus.UNLOCKED : TeamStatus.LOCKED
+
+      // Appel API minimaliste
+      //await teamService.updateStatus(team.id, newStatus)
+
+      team.status = newStatus
+    } catch (error) {
+      console.error('Erreur lors du verrouillage/déverrouillage:', error)
+    }
+  }
+
+  const onToggleConstraints = async (team: TeamDTO) => {
+    try {
+      const newIgnoreState = !team.ignoreConstraints
+
+      //await teamService.updateIgnoreConstraints(team.id, newIgnoreState)
+
+      team.ignoreConstraints = newIgnoreState
+    } catch (error) {
+      console.error('Erreur lors du changement de mode contraintes:', error)
+    }
+  }
+
+  const filteredTeams = computed(() => {
+    return teams.value.filter((team) => {
+      const query = filterName.value.toLowerCase()
+      const matchesName =
+        !filterName.value ||
+        team.name.toLowerCase().includes(query) ||
+        team.members.some((member) =>
+          (member.firstname + ' ' + member.lastname).toLowerCase().includes(query)) ||
+        team.mentors.some((mentor) =>
+          (mentor.firstname + ' ' + mentor.lastname).toLowerCase().includes(query)) ||
+        team.juries.some((jury) =>
+          (jury.firstname + ' ' + jury.lastname).toLowerCase().includes(query)) 
+
+      const matchesStatus = !selectedTeamStatus.value || team.status === selectedTeamStatus.value
+      return matchesName && matchesStatus
+    })
   })
 </script>
 
@@ -170,7 +219,11 @@ import mockTeams from '@/tests/data/teams'
             </div>
             <div class="flex-1">
               <label class="block mb-2 text-sm font-medium">
-                {{ viewMode === 'individual' ? t('organizer.teamManagement.role')  : t('organizer.teamManagement.constraints.label') }}
+                {{
+                  viewMode === 'individual'
+                    ? t('organizer.teamManagement.role')
+                    : t('organizer.teamManagement.constraints.label')
+                }}
               </label>
               <!-- Role filter only for Individual View else Team Constraints -->
               <v-select
@@ -191,7 +244,6 @@ import mockTeams from '@/tests/data/teams'
                 density="comfortable"
                 class="w-full"
               />
-
             </div>
             <div class="flex-[2]">
               <label class="block mb-2 text-sm font-medium">
@@ -224,7 +276,7 @@ import mockTeams from '@/tests/data/teams'
           </div>
         </div>
       </div>
-      
+
       <TeamForm
         v-model="showTeamForm"
         @save="onSaveTeam"
@@ -234,18 +286,20 @@ import mockTeams from '@/tests/data/teams'
         :mentors="mentors"
         :juries="juries"
         :themes="themes"
-        />
+      />
     </v-row>
     <v-row justify="center" class="mb-12">
       <div class="w-full md:w-8/12 lg:w-9/12 px-4">
         <TeamTable
           v-if="viewMode === 'team'"
-          :teams="teams"
+          :teams="filteredTeams"
           :themes="themes"
           :selected-team-status="selectedTeamStatus"
           :selected-constraints="selectedConstraints"
           :filter-name="filterName"
           @edit="onEditTeam"
+          @toggle-lock="onToggleLock"
+          @toggle-constraints="onToggleConstraints"
         />
         <!-- Individual User Management Table can be placed here -->
       </div>

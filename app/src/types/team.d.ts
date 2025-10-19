@@ -9,6 +9,7 @@ export interface TeamDTO {
   subjectId: string
   status: TeamStatus
   createdAt: string
+  ignoreConstraints: boolean
   members: UserPreviewDTO[]
   juries: UserPreviewDTO[]
   mentors: UserPreviewDTO[]

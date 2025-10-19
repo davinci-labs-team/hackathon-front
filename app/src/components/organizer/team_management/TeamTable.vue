@@ -12,7 +12,7 @@
     themes: ThemesDTO[]
     itemsPerPage?: number
   }>()
-  const emit = defineEmits(['edit', 'delete'])
+  const emit = defineEmits(['edit', 'delete', 'toggle-lock', 'toggle-constraints'])
 
   const itemsPerPage = props.itemsPerPage || 5
   const currentPage = ref(1)
@@ -81,7 +81,7 @@
             }}
           </td>
           <td class="px-4 py-2 text-center">
-            {{ team.juries.length === 0 ? t('none') : team.juries.length }}
+            {{ team.ignoreConstraints ? '-' : '+' }}
           </td>
           <td class="px-4 py-2 text-center">
             {{ t(`organizer.teamManagement.status.${team.status}`) }}
@@ -112,7 +112,7 @@
                 color="info"
                 @click="emit('edit', team)"
                 :title="t('common.edit')"
-                :disabled="team.status === TeamStatus.LOCKED"
+                v-if="team.status === TeamStatus.UNLOCKED"
               >
                 <v-icon>mdi-pencil-outline</v-icon>
               </v-btn>
@@ -121,12 +121,20 @@
               <v-btn
                 icon
                 size="small"
-                color="orange"
+                :color="team.ignoreConstraints ? 'green' : 'orange'"
                 @click="emit('toggle-constraints', team)"
-                :title="t('organizer.teamManagement.actions.ignoreConstraints')"
-                :disabled="team.status === TeamStatus.LOCKED"
+                :title="
+                  team.ignoreConstraints
+                    ? t('organizer.teamManagement.actions.considerConstraints')
+                    : t('organizer.teamManagement.actions.ignoreConstraints')
+                "
+                v-if="team.status === TeamStatus.UNLOCKED"
               >
-                <v-icon>mdi-shield-off-outline</v-icon>
+                <v-icon>
+                  {{
+                    team.ignoreConstraints ? 'mdi-shield-check-outline' : 'mdi-shield-off-outline'
+                  }}
+                </v-icon>
               </v-btn>
             </div>
           </td>

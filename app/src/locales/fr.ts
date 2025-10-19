@@ -230,7 +230,8 @@ export default {
         edit: 'Modifier l’Équipe',
         lock: 'Verrouiller',
         unlock: 'Déverrouiller',
-        ignoreConstraints: 'Sans contraintes',
+        ignoreConstraints: 'Ignorer les contraintes',
+        considerConstraints: 'Activer les contraintes',
         assignTeam: 'Assigner équipe',
         withdrawTeam: 'Retirer équipe',
       }
