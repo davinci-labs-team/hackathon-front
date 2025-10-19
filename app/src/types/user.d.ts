@@ -14,6 +14,7 @@ export interface UserDTO {
   github?: SocialMediaDTO
   discord?: SocialMediaDTO 
   profilePicturePath?: string
+  teamId?: string
 }
 
 export interface SocialMediaDTO {

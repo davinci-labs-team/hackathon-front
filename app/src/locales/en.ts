@@ -77,9 +77,9 @@ export default {
     dateText: '{numberOfDays} intensive day(s) of coding)',
     phases: {
       1: {
-        name: 'Publication of themes and topics',
+        name: 'Publication of themes and subjects',
         description:
-          'Kick-off phase of the hackathon. Participants discover the proposed themes and topics. They must choose 3 that interest them the most to guide their project ideas.',
+          'Kick-off phase of the hackathon. Participants discover the proposed themes and subjects. They must choose 3 that interest them the most to guide their project ideas.',
       },
       2: {
         name: 'Team formation',
@@ -186,7 +186,7 @@ export default {
       noTeams: 'No teams available.',
       team: 'Team',
       members: 'Members',
-      namePlaceholder: 'Search by name, team, topic',
+      namePlaceholder: 'Search by name, team, subject',
       constraints : 
       {
         label: 'Constraints',
@@ -209,10 +209,15 @@ export default {
         unlocked: 'Unlocked',
       },
       modale: {
+        name: 'Name',
+        theme: 'Theme',
+        subject: 'Subject',
         addMembers: 'Add Participants',
         addJury: 'Add Jury',
         addMentors: 'Add Mentors',
         membersPlaceholder: 'Search by name or email',
+        selectTheme: 'Select a theme',
+        selectSubject: 'Select a subject',
       },
       actions: {
         name: 'Actions',
@@ -232,7 +237,7 @@ export default {
       teams: 'Team Management',
       projects: 'Projects Management',
       settings: 'Settings',
-      themes: 'Themes & Topics',
+      themes: 'Themes & Subjects',
     },
   },
   jury: {
@@ -422,26 +427,26 @@ export default {
     privateHint: 'Visible only to authenticated users',
   },
   themes: {
-    title: 'Themes & Topics',
-    subtitle: 'Manage the themes and topics for the hackathon',
+    title: 'Themes & Subjects',
+    subtitle: 'Manage the themes and subjects for the hackathon',
     theme: 'Theme',
-    topic: 'Topic',
+    topic: 'Subject',
     newTheme: 'New Theme',
     newSubject : 'New Subject',
     description: 'Description',
     addThemeBtn: '+ Add Theme',
-    addTopicBtn: '+ Add Topic',
+    addTopicBtn: '+ Add Subject',
     addTheme: 'New Theme',
     editTheme: 'Edit Theme',
     deleteTheme: 'Delete Theme',
-    addTopic: 'New Topic',
-    editTopic: 'Edit Topic',
-    deleteTopic: 'Delete Topic',
+    addTopic: 'New Subject',
+    editTopic: 'Edit SUbject',
+    deleteTopic: 'Delete Subject',
     confirmTitle: 'Confirm Deletion',
-    confirmTextTheme: 'Are you sure you want to delete this theme and all its topics?',
-    confirmTextTopic: 'Are you sure you want to delete this topic?',
+    confirmTextTheme: 'Are you sure you want to delete this theme and all its subjects?',
+    confirmTextTopic: 'Are you sure you want to delete this subject?',
     noThemes: 'No themes available.',
-    noTopics: 'No topics for this theme.',
+    noTopics: 'No subjects for this theme.',
     errors: {
       requiredField: 'This field is required',
       maxLength: 'Maximum length reached',

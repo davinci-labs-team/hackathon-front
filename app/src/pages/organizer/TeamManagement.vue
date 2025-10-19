@@ -1,11 +1,16 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { ref, computed, onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
 
-  import type { TeamDTO } from '@/types/team'
+  import type { TeamDTO, TeamFormDTO } from '@/types/team'
   import TeamForm from '@/components/organizer/team_management/TeamForm.vue'
   import { TeamStatus } from '@/types/team_status'
   import { UserRole } from '@/types/roles'
+  import { UserDTO } from '@/types/user'
+  import { userService } from '@/services/userService'
+  import { ThemesDTO } from '@/types/config'
+  import { configurationService } from '@/services/configurationService'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 
   const { t } = useI18n()
 
@@ -49,6 +54,12 @@
   // Both Views
   const filterName = ref('')
 
+  // Fetch user list 
+  const members = ref<UserDTO[]>([])
+  const juries = ref<UserDTO[]>([])
+  const mentors = ref<UserDTO[]>([])
+  const themes = ref<ThemesDTO[]>([])
+
   const onAddTeam = () => {
     showTeamForm.value = true
     editMode.value = false
@@ -60,15 +71,48 @@
     editMode.value = true
   }
 
-  const handleSave = (team: TeamDTO) => {
+  const onSaveTeam = async (team: TeamFormDTO) => {
     if (editMode.value) {
       // Update team logic here
     } else {
       // Create team logic here
     }
+    // Refresh user list to update team assignments
+    await fetchUsers()
     showTeamForm.value = false
     selectedTeam.value = null
   }
+
+  const fetchUsers = async () => {
+    try {
+      const response = await userService.getAll()
+      if (response) {
+        members.value = response.filter(user => user.role === UserRole.PARTICIPANT && !user.teamId)
+        mentors.value = response.filter(user => user.role === UserRole.MENTOR)
+        juries.value = response.filter(user => user.role === UserRole.JURY)
+        console.log('Fetched users:', { members: members.value, mentors: mentors.value, juries: juries.value })
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error)
+    }
+  }
+
+  const fetchThemes = async () => {
+    try {
+      const response = await configurationService.findOne(ConfigurationKey.THEMES)
+      if (response && response.value) {
+        themes.value = response.value
+        console.log('Fetched themes:', themes.value)
+      }
+    } catch (error) {
+      console.error('Error fetching media settings:', error)
+    }
+  }
+
+  onMounted(() => {
+    fetchUsers()
+    fetchThemes()
+  })
 </script>
 
 <template>
@@ -167,10 +211,14 @@
       </div>
 
       <TeamForm
-          v-model="showTeamForm"
-          @save="handleSave"
-          :edit-mode="editMode"
-          :team="selectedTeam"
+        v-model="showTeamForm"
+        @save="onSaveTeam"
+        :edit-mode="editMode"
+        :team="selectedTeam"
+        :members="members"
+        :mentors="mentors"
+        :juries="juries"
+        :themes="themes"
         />
     </v-row>
   </v-container>

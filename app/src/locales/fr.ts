@@ -212,10 +212,15 @@ export default {
       },
       viewTeam: 'Voir l’Équipe',
       modale: {
+        name: 'Nom',
+        theme: 'Thème',
+        subject: 'Sujet',
         addMembers: 'Ajouter des participants',
         addJury: 'Ajouter des jury',
         addMentors: 'Ajouter des mentors',
         membersPlaceholder: 'Rechercher par nom ou email',
+        selectTheme: 'Sélectionner un thème',
+        selectSubject: 'Sélectionner un sujet',
       },
       actions: {
         name: 'Actions',
