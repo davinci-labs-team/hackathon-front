@@ -94,14 +94,20 @@
           <td class="px-4 py-2 text-center">
             <div v-if="constraintsMap?.[team.id]?.length">
               <div v-for="(violation, index) in constraintsMap[team.id]" :key="index">
-                {{ formatViolationMessage(violation) }}
+                <v-chip :key="violation.type" class="ma-1" variant="flat" color="warning">
+                  {{ formatViolationMessage(violation) }}
+                </v-chip>
               </div>
             </div>
             <div v-else-if="team.ignoreConstraints">
-              {{ t('organizer.teamManagement.constraints.ignored') }}
+              <v-chip variant="flat" color="grey">
+                {{ t('organizer.teamManagement.constraints.ignored') }}
+              </v-chip>
             </div>
             <div v-else>
-              {{ t('organizer.teamManagement.constraints.valid') }}
+              <v-chip variant="flat" color="green">
+                {{ t('organizer.teamManagement.constraints.valid') }}
+              </v-chip>
             </div>
           </td>
 
