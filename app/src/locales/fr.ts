@@ -8,6 +8,7 @@ export default {
     invalidEmail: 'Veuillez saisir une adresse email valide',
     actions: 'Actions',
     save: 'Enregistrer',
+    validate: 'Valider',
     cancel: 'Annuler',
     delete: 'Supprimer',
     edit: 'Modifier',
@@ -192,6 +193,8 @@ export default {
       members: 'Membres',
       name: 'Nom',
       themeAndSubject: 'Thème & Sujet',
+      theme: 'Thème',
+      subject: 'Sujet',
       namePlaceholder: 'Rechercher par nom, équipe, sujet',
       constraints : 
       {

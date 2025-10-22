@@ -1,3 +1,5 @@
+import { validate } from "uuid";
+
 export default {
   common: {
     close: 'Close',
@@ -8,6 +10,7 @@ export default {
     invalidEmail: 'Please enter a valid email address',
     actions: 'Actions',
     save: 'Save',
+    validate: 'Validate',
     cancel: 'Cancel',
     delete: 'Delete',
     edit: 'Edit',
@@ -189,6 +192,8 @@ export default {
       members: 'Members',
       name: 'Name',
       themeAndSubject: 'Theme & Subject',
+      theme: 'Theme',
+      subject: 'Subject',
       namePlaceholder: 'Search by name, team, subject',
       constraints : 
       {

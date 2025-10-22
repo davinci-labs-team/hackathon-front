@@ -198,6 +198,7 @@
   const filteredTeams = computed(() => {
     return teams.value.filter((team) => {
       const query = filterName.value.toLowerCase()
+
       const matchesName =
         !filterName.value ||
         team.name.toLowerCase().includes(query) ||
@@ -212,7 +213,16 @@
         )
 
       const matchesStatus = !selectedTeamStatus.value || team.status === selectedTeamStatus.value
-      return matchesName && matchesStatus
+
+      const violations = teamConstraintsMap.value[team.id] || []
+      const hasViolations = violations.length > 0
+
+      const matchesConstraints =
+        !selectedConstraints.value ||
+        (selectedConstraints.value === 'valid' && !hasViolations) ||
+        (selectedConstraints.value === 'invalid' && hasViolations)
+
+      return matchesName && matchesStatus && matchesConstraints
     })
   })
 </script>
@@ -223,7 +233,10 @@
       <div class="w-full md:w-8/12 lg:w-9/12 px-4">
         <div class="flex w-full justify-between items-center mb-6">
           <h1 class="text-3xl font-bold">{{ t('organizer.teamManagement.title') }}</h1>
-          <div class="flex">
+          <div class="flex gap-2">
+            <v-btn color="green" class="h-full" @click="onAddTeam">
+              {{ t('common.validate') }}
+            </v-btn>
             <v-btn color="primary" class="h-full" @click="onAddTeam">
               {{ t('organizer.teamManagement.actions.add') }}
             </v-btn>
