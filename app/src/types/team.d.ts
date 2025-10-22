@@ -16,10 +16,11 @@ export interface TeamDTO {
 }
 
 export interface TeamFormDTO {
-  name: string
-  themeId: string
-  subjectId: string
-  memberIds: string[]
+  name?: string
+  description?: string
+  themeId?: string
+  subjectId?: string
+  memberIds?: string[]
   mentorIds?: string[]
   juryIds?: string[]
 }

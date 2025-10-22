@@ -8,21 +8,23 @@ import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
 import { getAuthHeaders } from '@/stores/auth'
 
+const API_URL = `${import.meta.env.VITE_API_URL}/api/configuration`
+
 export const configurationService = {
   async create(dto: CreateConfigurationDTO): Promise<ConfigurationResponse> {
-    const url = `${import.meta.env.VITE_API_URL}/api/configuration`
+    const url = `${API_URL}`
     const res = await axios.post(url, dto, { headers: getAuthHeaders() })
     return res.data
   },
 
   async update(key: ConfigurationKey, dto: UpdateConfigurationDTO): Promise<ConfigurationResponse> {
-    const url = `${import.meta.env.VITE_API_URL}/api/configuration/${key}`
+    const url = `${API_URL}/${key}`
     const res = await axios.patch(url, dto, { headers: getAuthHeaders() })
     return res.data
   },
 
   async findOne(key: ConfigurationKey): Promise<ConfigurationResponse> {
-    const url = `${import.meta.env.VITE_API_URL}/api/configuration/${key}`
+    const url = `${API_URL}/${key}`
     const res = await axios.get(url, { headers: getAuthHeaders() })
     return res.data
   },
