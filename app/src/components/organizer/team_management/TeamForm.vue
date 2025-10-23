@@ -22,7 +22,7 @@
 
   const emit = defineEmits<{
     (e: 'update:modelValue', value: boolean): void
-    (e: 'save', team: TeamFormDTO): void
+    (e: 'save', teamId: string, team: TeamFormDTO): void
   }>()
 
   // -----------------------------
@@ -83,7 +83,7 @@
     if (!teamForm.value.name || !teamForm.value.themeId || !teamForm.value.subjectId) return
 
     const payload: TeamFormDTO = { ...teamForm.value }
-    emit('save', payload)
+    emit('save', props.team?.id || '', payload)
     close()
   }
 

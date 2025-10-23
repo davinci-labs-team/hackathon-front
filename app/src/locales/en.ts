@@ -236,7 +236,10 @@ export default {
         ignoreConstraints: 'Bypass Constraints',
         assignTeam: 'Assign Team',
         withdrawTeam: 'Withdraw Team',
-      }
+      },
+      teamUpdated: 'Team updated successfully',
+      teamCreated: 'Team created successfully',
+      lockImpossible: 'Cannot lock team with constraint violations, either fix them or bypass constraints',
     },
     nav: {
       announcements: 'Announcements',

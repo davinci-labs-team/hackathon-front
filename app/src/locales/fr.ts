@@ -238,7 +238,10 @@ export default {
         considerConstraints: 'Activer les contraintes',
         assignTeam: 'Assigner équipe',
         withdrawTeam: 'Retirer équipe',
-      }
+      },
+      teamCreated: 'Équipe créée avec succès',
+      teamUpdated: 'Équipe mise à jour avec succès',
+      lockImpossible: 'Impossible de verrouiller l’équipe avec des violations de contraintes, corrigez-les ou ignorez les contraintes',
     },
     nav: {
       announcements: 'Annonces',
@@ -502,8 +505,8 @@ export default {
     schoolMax: "{count} membre(s) en trop de l'école {school}",
     schoolEqual: "Il faut exactement {count} membre(s) de l'école {school}",
     // Contraintes sur plusieurs écoles (OU)
-    schoolsMin: "Il manque {count} membre(s) dans au moins une des écoles suivantes : {schools}",
-    schoolsMax: "{count} membre(s) en trop dans au moins une des écoles suivantes : {schools}",
-    schoolsEqual: "Il faut exactement {count} membre(s) dans au moins une des écoles suivantes : {schools}"
+    schoolsMin: "Il manque {count} membre(s) d'une des écoles suivantes : {schools}",
+    schoolsMax: "{count} membre(s) en trop d'une des écoles suivantes : {schools}",
+    schoolsEqual: "Il faut {count} membre(s) dans au moins une des écoles suivantes : {schools}"
   }
 }

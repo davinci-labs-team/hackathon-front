@@ -12,11 +12,19 @@
   import { configurationService } from '@/services/configurationService'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
   import TeamTable from '@/components/organizer/team_management/TeamTable.vue'
-  import mockTeams from '@/tests/data/teams'
   import { calculateAllTeamsConstraints } from '@/utils/teamConstraints'
   import { TeamConstraintViolation } from '@/types/config'
+  import { teamService } from '@/services/teamService'
+  import AppSnackbar from '@/components/common/AppSnackbar.vue'
 
   const { t } = useI18n()
+
+  // App Snackbar
+  const snackbar = ref(false)
+  const text = ref('')
+  const timeout = ref(2500)
+  const error = ref(false)
+  // ----------------------
 
   const showTeamForm = ref(false)
   const viewMode = ref<'team' | 'individual'>('team')
@@ -65,7 +73,7 @@
   const themes = ref<ThemesDTO[]>([])
 
   // FOR TESTING PURPOSES ONLY
-  const teams = ref<TeamDTO[]>(mockTeams)
+  const teams = ref<TeamDTO[]>([])
 
   const onAddTeam = () => {
     showTeamForm.value = true
@@ -78,13 +86,19 @@
     editMode.value = true
   }
 
-  const onSaveTeam = async (team: TeamFormDTO) => {
+  const onSaveTeam = async (teamId: string, team: TeamFormDTO) => {
     if (editMode.value) {
-      // Update team logic here
+      await teamService.update(teamId, team)
+      text.value = t('organizer.teamManagement.teamUpdated')
+      error.value = false
+      snackbar.value = true
     } else {
-      // Create team logic here
+      await teamService.create(team)
+      text.value = t('organizer.teamManagement.teamCreated')
+      error.value = false
+      snackbar.value = true
     }
-    // Refresh user list to update team assignments
+
     await fetchUsers()
     await fetchTeams()
     showTeamForm.value = false
@@ -117,11 +131,10 @@
   // ----------------------
 
   const fetchTeams = async () => {
-    //const response = await teamService.getAll()
-    /*if (response) {
-        teams.value = response
-        console.log('Fetched teams:', teams.value)
-      }*/
+    const response = await teamService.getAll()
+    if (response) {
+      teams.value = response
+    }
   }
 
   const fetchUsers = async () => {
@@ -165,16 +178,19 @@
     fetchUsers()
     fetchThemes()
     fetchMatchmakingConfig()
-    //fetchTeams()
+    fetchTeams()
   })
 
-  // TODO: implement API calls
   const onToggleLock = async (team: TeamDTO) => {
+    if (teamConstraintsMap.value[team.id]?.length > 0 && team.status !== TeamStatus.LOCKED) {
+      text.value = t('organizer.teamManagement.lockImpossible')
+      error.value = true
+      snackbar.value = true
+      return
+    }
     try {
       const newStatus = team.status === TeamStatus.LOCKED ? TeamStatus.UNLOCKED : TeamStatus.LOCKED
-
-      // Appel API minimaliste
-      //await teamService.updateStatus(team.id, newStatus)
+      await teamService.updateStatus(team.id, newStatus)
 
       team.status = newStatus
     } catch (error) {
@@ -182,12 +198,10 @@
     }
   }
 
-  // TODO: implement API calls
   const onToggleConstraints = async (team: TeamDTO) => {
     try {
       const newIgnoreState = !team.ignoreConstraints
-
-      //await teamService.updateIgnoreConstraints(team.id, newIgnoreState)
+      await teamService.toggleIgnoreConstraints(team.id, newIgnoreState)
 
       team.ignoreConstraints = newIgnoreState
     } catch (error) {
@@ -342,7 +356,7 @@
     <v-row justify="center" class="mb-12">
       <div class="w-full md:w-8/12 lg:w-9/12 px-4">
         <TeamTable
-          v-if="viewMode === 'team'"
+          v-if="viewMode === 'team' && teams.length > 0"
           :teams="filteredTeams"
           :themes="themes"
           :selected-team-status="selectedTeamStatus"
@@ -353,8 +367,13 @@
           @toggle-lock="onToggleLock"
           @toggle-constraints="onToggleConstraints"
         />
+        <div v-else-if="viewMode === 'team' && teams.length === 0" class="text-center py-12">
+          {{ t('organizer.teamManagement.noTeams') }}
+        </div>
         <!-- Individual User Management Table can be placed here -->
       </div>
     </v-row>
+
+    <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />    
   </v-container>
 </template>

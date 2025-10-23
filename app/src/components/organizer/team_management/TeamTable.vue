@@ -33,12 +33,17 @@
   }
 
   const formatViolationMessage = (violation: TeamConstraintViolation) => {
-    return t(`matchmakingViolations.${violation.type}`, {
+    const message = t(`matchmakingViolations.${violation.type}`, {
       count: violation.count,
       school: violation.schools,
       schools: violation.schools,
     })
+    return message.replace(/:\s*/g, ':\n')
   }
+
+  const getChipPadding = (text: string) => {
+  return text.length > 40 ? 'mb-2 py-6' : 'mb-2 py-3'
+}
 </script>
 
 <template>
@@ -94,8 +99,16 @@
           <td class="px-4 py-2 text-center">
             <div v-if="constraintsMap?.[team.id]?.length">
               <div v-for="(violation, index) in constraintsMap[team.id]" :key="index">
-                <v-chip :key="violation.type" class="ma-1" variant="flat" color="warning">
-                  {{ formatViolationMessage(violation) }}
+                <v-chip
+                  :key="violation.type"
+                  :class="[getChipPadding(formatViolationMessage(violation))]"
+                  variant="flat"
+                  color="warning"
+                  small
+                >
+                  <span class="block whitespace-pre-line leading-snug">
+                    {{ formatViolationMessage(violation) }}
+                  </span>
                 </v-chip>
               </div>
             </div>
