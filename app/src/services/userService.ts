@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
-import type { UserDTO } from '@/types/user'
+import type { UserDTO, UserReducedDTO } from '@/types/user'
 
 function getAuthHeaders() {
   const authStore = useAuthStore()
@@ -15,6 +15,11 @@ function getAuthHeaders() {
 export const userService = {
   async getAll(): Promise<UserDTO[]> {
     const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user`)
+    return res.data
+  },
+
+  async getAllReduced(): Promise<UserReducedDTO[]> {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/reduced`)
     return res.data
   },
 

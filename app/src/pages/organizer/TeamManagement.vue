@@ -146,7 +146,6 @@
     if (response?.value) {
       const partners: PartnersDTO[] = response.value
       schools.value = partners.filter((p) => p.isParticipatingSchool).map((p) => p.name)
-      console.log('Fetched schools:', schools.value)
     }
   }
 
@@ -181,9 +180,14 @@
       <div class="w-full md:w-8/12 lg:w-9/12 px-4">
         <div class="flex w-full justify-between items-center mb-6">
           <h1 class="text-3xl font-bold">{{ t('organizer.teamManagement.title') }}</h1>
+        <div class="flex gap-4">
+          <v-btn color="green" class="h-full">
+            {{ t('common.validate') }}
+          </v-btn>
           <v-btn color="primary" class="h-full" @click="onAddTeam">
             {{ t('organizer.teamManagement.actions.add') }}
           </v-btn>
+          </div>
         </div>
 
         <TeamFilters

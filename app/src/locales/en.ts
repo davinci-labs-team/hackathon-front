@@ -1,5 +1,3 @@
-import { validate } from "uuid";
-
 export default {
   common: {
     close: 'Close',

@@ -100,11 +100,8 @@
 
   const deleteTeam = async () => {
     if (!props.team?.id) return
-    // optionnel : debug
-    console.log('Emitting delete for team id', props.team.id)
     emit('delete', props.team.id)
 
-    // fermer confirm + modale
     showConfirmDeleteDialog.value = false
     localModelValue.value = false
   }
