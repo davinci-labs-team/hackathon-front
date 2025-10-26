@@ -194,7 +194,8 @@ export default {
       themeAndSubject: 'Theme & Subject',
       theme: 'Theme',
       subject: 'Subject',
-      namePlaceholder: 'Search by name, team, subject',
+      school: 'School',
+      namePlaceholder: 'Search by name, team',
       constraints : 
       {
         label: 'Constraints',
