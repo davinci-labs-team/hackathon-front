@@ -7,11 +7,28 @@ export interface UserDTO {
   email: string
   role: UserRole
   school?: string
-  invitationSent: boolean
+  invitationSent?: boolean
   bio?: string
   interests?: string[]
   linkedin?: string
-  github?: string
-  discord?: string 
+  github?: SocialMediaDTO
+  discord?: SocialMediaDTO 
   profilePicturePath?: string
+  teamId?: string
+}
+
+export interface UserReducedDTO {
+  id: string
+  firstname: string
+  lastname: string
+  email: string
+  role: Role
+  school?: string | null
+  favoriteSubjectId?: string | null
+  teamId?: string | null
+}
+
+export interface SocialMediaDTO {
+  id: string
+  username: string
 }
