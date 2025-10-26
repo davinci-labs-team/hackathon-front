@@ -23,7 +23,7 @@
   const snackbar = ref(false)
   const text = ref('')
   const timeout = ref(2500)
-  const error = ref(false)
+  const error = ref<boolean>(false)
   // ----------------------
 
   const showTeamForm = ref(false)
@@ -72,7 +72,6 @@
   const mentors = ref<UserDTO[]>([])
   const themes = ref<ThemesDTO[]>([])
 
-  // FOR TESTING PURPOSES ONLY
   const teams = ref<TeamDTO[]>([])
 
   const onAddTeam = () => {
@@ -141,9 +140,7 @@
     try {
       const response = await userService.getAll()
       if (response) {
-        members.value = response.filter(
-          (user) => user.role === UserRole.PARTICIPANT && !user.teamId
-        )
+        members.value = response.filter((user) => user.role === UserRole.PARTICIPANT)
         mentors.value = response.filter((user) => user.role === UserRole.MENTOR)
         juries.value = response.filter((user) => user.role === UserRole.JURY)
       }
@@ -206,6 +203,27 @@
       team.ignoreConstraints = newIgnoreState
     } catch (error) {
       console.error('Erreur lors du changement de mode contraintes:', error)
+    }
+  }
+
+  const deleteTeam = async (teamId: string) => {
+    try {
+      await teamService.delete(teamId)
+      text.value = t('organizer.teamManagement.teamDeleted')
+      error.value = false
+      snackbar.value = true
+
+      teams.value = teams.value.filter((t) => t.id !== teamId)
+
+      await fetchTeams()
+    } catch (err) {
+      console.error('Error deleting team:', err)
+      text.value = t('organizer.teamManagement.teamDeleteError')
+      error.value = true
+      snackbar.value = true
+    } finally {
+      showTeamForm.value = false
+      selectedTeam.value = null
     }
   }
 
@@ -345,6 +363,7 @@
       <TeamForm
         v-model="showTeamForm"
         @save="onSaveTeam"
+        @delete="deleteTeam"
         :edit-mode="editMode"
         :team="selectedTeam"
         :members="members"
@@ -359,9 +378,6 @@
           v-if="viewMode === 'team' && teams.length > 0"
           :teams="filteredTeams"
           :themes="themes"
-          :selected-team-status="selectedTeamStatus"
-          :selected-constraints="selectedConstraints"
-          :filter-name="filterName"
           :constraints-map="teamConstraintsMap"
           @edit="onEditTeam"
           @toggle-lock="onToggleLock"
@@ -374,6 +390,6 @@
       </div>
     </v-row>
 
-    <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />    
+    <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
   </v-container>
 </template>

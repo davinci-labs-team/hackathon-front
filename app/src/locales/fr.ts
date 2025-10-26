@@ -239,6 +239,12 @@ export default {
         assignTeam: 'Assigner équipe',
         withdrawTeam: 'Retirer équipe',
       },
+      dialog: {
+        deleteConfirmTitle: 'Confirmer la suppression',
+        deleteConfirmText: "Vous allez supprimer l'équipe : {teamName}",
+      },
+      teamDeleted: 'Équipe supprimée avec succès',
+      teamDeleteError: "Erreur lors de la suppression de l'équipe",
       teamCreated: 'Équipe créée avec succès',
       teamUpdated: 'Équipe mise à jour avec succès',
       lockImpossible: 'Impossible de verrouiller l’équipe avec des violations de contraintes, corrigez-les ou ignorez les contraintes',

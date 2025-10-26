@@ -128,7 +128,7 @@
             {{ t(`organizer.teamManagement.status.${team.status}`) }}
           </td>
           <td class="px-4 py-2 text-center">
-            <div class="flex justify-center items-center gap-3">
+            <div class="flex flex-col justify-center items-center gap-2">
               <!-- Lock / Unlock -->
               <v-btn
                 icon

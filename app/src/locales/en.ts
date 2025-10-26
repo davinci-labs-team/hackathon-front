@@ -226,6 +226,10 @@ export default {
         selectTheme: 'Select a theme',
         selectSubject: 'Select a subject',
       },
+      dialog: {
+        deleteConfirmTitle: 'Confirm Deletion',
+        deleteConfirmText: "You are about to delete the team: {teamName}",
+      },
       actions: {
         label: 'Actions',
         create: 'Create',
@@ -237,6 +241,8 @@ export default {
         assignTeam: 'Assign Team',
         withdrawTeam: 'Withdraw Team',
       },
+      teamDeleted: 'Team deleted successfully',
+      teamDeleteError: 'Error deleting team',
       teamUpdated: 'Team updated successfully',
       teamCreated: 'Team created successfully',
       lockImpossible: 'Cannot lock team with constraint violations, either fix them or bypass constraints',

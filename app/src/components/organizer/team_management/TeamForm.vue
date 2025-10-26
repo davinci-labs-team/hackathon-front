@@ -4,6 +4,7 @@
   import { TeamFormDTO, TeamDTO } from '@/types/team'
   import { UserDTO } from '@/types/user'
   import { ThemesDTO } from '@/types/config'
+  import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
   const { t } = useI18n()
 
@@ -20,9 +21,12 @@
     themes: ThemesDTO[]
   }>()
 
+  const showConfirmDeleteDialog = ref(false)
+
   const emit = defineEmits<{
     (e: 'update:modelValue', value: boolean): void
     (e: 'save', teamId: string, team: TeamFormDTO): void
+    (e: 'delete', teamId: string): void
   }>()
 
   // -----------------------------
@@ -87,25 +91,49 @@
     close()
   }
 
+  // ------------------------------
+  // Delete team
+  // ------------------------------
+  const onDeleteTeam = () => {
+    showConfirmDeleteDialog.value = true
+  }
+
+  const deleteTeam = async () => {
+    if (!props.team?.id) return
+    // optionnel : debug
+    console.log('Emitting delete for team id', props.team.id)
+    emit('delete', props.team.id)
+
+    // fermer confirm + modale
+    showConfirmDeleteDialog.value = false
+    localModelValue.value = false
+  }
+
   // ----------------------------------
   // Initialize form when dialog opens
   // ----------------------------------
+  const filteredMembers = ref<UserDTO[]>(props.members)
   watch(
     localModelValue,
     (open) => {
       if (!open) return
-      if (props.editMode && props.team) {
-        // Map TeamDTO to TeamFormDTO
+
+      if (props.editMode) {
+        // On ne fait rien si l’équipe n’est pas encore prête
+        if (!props.team) return
+
         teamForm.value = {
-          name: props.team.name,
-          themeId: props.team.themeId,
-          subjectId: props.team.subjectId,
-          memberIds: props.team.members.map((u) => u.id),
-          mentorIds: props.team.mentors.map((u) => u.id),
-          juryIds: props.team.juries.map((u) => u.id),
+          name: props.team.name || '',
+          themeId: props.team.themeId || '',
+          subjectId: props.team.subjectId || '',
+          memberIds: (props.team.members ?? []).map((u) => u.id),
+          mentorIds: (props.team.mentors ?? []).map((u) => u.id),
+          juryIds: (props.team.juries ?? []).map((u) => u.id),
         }
+        filteredMembers.value = props.members // garder la liste complète
       } else {
         resetForm()
+        filteredMembers.value = props.members.filter((u) => !u.teamId)
       }
     },
     { immediate: true }
@@ -190,8 +218,8 @@
           }}</label>
           <v-autocomplete
             v-model="teamForm.memberIds"
-            :items="members"
-            :item-title="(user) => `${user.firstname} ${user.lastname}`"
+            :items="filteredMembers"
+            :item-title="(user) => `${user.firstname} ${user.lastname} (${user.school})`"
             item-value="id"
             :placeholder="t('organizer.teamManagement.modale.membersPlaceholder')"
             :rules="[required]"
@@ -240,9 +268,27 @@
             <v-btn color="primary" type="submit" variant="elevated" class="px-8 mb-3">
               {{ props.editMode ? t('common.edit') : t('common.create') }}
             </v-btn>
+            <v-btn
+              v-if="props.editMode"
+              color="red"
+              variant="elevated"
+              class="px-8 mb-3"
+              @click="onDeleteTeam"
+            >
+              {{ t('common.delete') }}
+            </v-btn>
           </v-card-actions>
         </v-form>
       </v-card-text>
     </v-card>
   </v-dialog>
+
+  <ConfirmDialog
+    v-model="showConfirmDeleteDialog"
+    :title="t('organizer.teamManagement.dialog.deleteConfirmTitle')"
+    :text="t('organizer.teamManagement.dialog.deleteConfirmText', { teamName: props.team?.name })"
+    :confirm-label="t('common.delete')"
+    confirm-color="red"
+    @confirm="deleteTeam"
+  />
 </template>
