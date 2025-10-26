@@ -187,7 +187,7 @@ export default {
     },
     teamManagement: {
       title: 'Team Management',
-      noTeams: 'No teams available.',
+      noTeams: 'No teams matching the criteria.',
       team: 'Team',
       members: 'Members',
       name: 'Name',

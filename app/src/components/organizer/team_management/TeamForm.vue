@@ -264,10 +264,7 @@
             :no-data-text="t('common.noDataText')"
           />
 
-          <v-card-actions class="justify-center">
-            <v-btn color="primary" type="submit" variant="elevated" class="px-8 mb-3">
-              {{ props.editMode ? t('common.edit') : t('common.create') }}
-            </v-btn>
+          <v-card-actions class="justify-between mt-6">
             <v-btn
               v-if="props.editMode"
               color="red"
@@ -276,6 +273,9 @@
               @click="onDeleteTeam"
             >
               {{ t('common.delete') }}
+            </v-btn>
+            <v-btn color="primary" type="submit" variant="elevated" class="px-8 mb-3">
+              {{ props.editMode ? t('common.edit') : t('common.create') }}
             </v-btn>
           </v-card-actions>
         </v-form>

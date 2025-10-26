@@ -375,7 +375,7 @@
     <v-row justify="center" class="mb-12">
       <div class="w-full md:w-8/12 lg:w-9/12 px-4">
         <TeamTable
-          v-if="viewMode === 'team' && teams.length > 0"
+          v-if="viewMode === 'team' && filteredTeams.length > 0"
           :teams="filteredTeams"
           :themes="themes"
           :constraints-map="teamConstraintsMap"
@@ -383,7 +383,7 @@
           @toggle-lock="onToggleLock"
           @toggle-constraints="onToggleConstraints"
         />
-        <div v-else-if="viewMode === 'team' && teams.length === 0" class="text-center py-12">
+        <div v-else-if="viewMode === 'team' && filteredTeams.length === 0" class="text-center py-12">
           {{ t('organizer.teamManagement.noTeams') }}
         </div>
         <!-- Individual User Management Table can be placed here -->
