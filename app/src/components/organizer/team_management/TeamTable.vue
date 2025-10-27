@@ -5,6 +5,7 @@
   import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { TeamConstraintViolation } from '@/types/config'
+  import { get } from 'node_modules/axios/index.cjs'
 
   const { t } = useI18n()
 
@@ -41,9 +42,16 @@
     return message.replace(/:\s*/g, ':\n')
   }
 
+  const getThemeAndSubject = (team: TeamDTO) => {
+    const theme = props.themes.find((theme) => theme.id === team.themeId)
+    if (!theme) return ''
+    const subject = theme.subjects.find((subject) => subject.id === team.subjectId)
+    return subject ? `${theme.name} - ${subject.name}` : theme.name
+  }
+
   const getChipPadding = (text: string) => {
-  return text.length > 40 ? 'mb-2 py-6' : 'mb-2 py-3'
-}
+    return text.length > 40 ? 'mb-2 py-6' : 'mb-2 py-3'
+  }
 </script>
 
 <template>
@@ -86,14 +94,7 @@
             </div>
           </td>
           <td class="px-4 py-2">
-            {{ themes.find((theme) => theme.id === team.themeId)?.name || '' }}
-            -
-            <br />
-            {{
-              themes
-                .find((theme) => theme.id === team.themeId)
-                ?.subjects.find((subject) => subject.id === team.subjectId)?.name || ''
-            }}
+            {{ getThemeAndSubject(team) }}
           </td>
 
           <td class="px-4 py-2 text-center">

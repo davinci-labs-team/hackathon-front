@@ -26,6 +26,10 @@ export interface UserReducedDTO {
   school?: string | null
   favoriteSubjectId?: string | null
   teamId?: string | null
+  team ? : {
+    id: string
+    name: string
+  } | null
 }
 
 export interface SocialMediaDTO {

@@ -186,6 +186,7 @@ export default {
     teamManagement: {
       title: 'Team Management',
       noTeams: 'No teams matching the criteria.',
+      noTeamAssigned: 'No team assigned',
       team: 'Team',
       members: 'Members',
       name: 'Name',
@@ -193,6 +194,7 @@ export default {
       theme: 'Theme',
       subject: 'Subject',
       school: 'School',
+      mail: 'Email',
       namePlaceholder: 'Search by name, team',
       constraints : 
       {

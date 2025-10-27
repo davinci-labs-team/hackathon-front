@@ -2,7 +2,7 @@
   import { ref, watch, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { TeamFormDTO, TeamDTO } from '@/types/team'
-  import { UserDTO } from '@/types/user'
+  import { UserReducedDTO } from '@/types/user'
   import { ThemesDTO } from '@/types/config'
   import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
@@ -15,9 +15,9 @@
     modelValue: boolean
     editMode?: boolean
     team?: TeamDTO | null
-    members: UserDTO[]
-    mentors: UserDTO[]
-    juries: UserDTO[]
+    members: UserReducedDTO[]
+    mentors: UserReducedDTO[]
+    juries: UserReducedDTO[]
     themes: ThemesDTO[]
   }>()
 
@@ -109,7 +109,7 @@
   // ----------------------------------
   // Initialize form when dialog opens
   // ----------------------------------
-  const filteredMembers = ref<UserDTO[]>(props.members)
+  const filteredMembers = ref<UserReducedDTO[]>(props.members)
   watch(
     localModelValue,
     (open) => {

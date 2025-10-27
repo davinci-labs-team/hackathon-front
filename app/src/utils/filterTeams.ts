@@ -1,6 +1,7 @@
 import type { TeamDTO } from '@/types/team'
 import type { TeamConstraintViolation } from '@/types/config'
 import type { UserRole } from '@/types/roles'
+import { UserReducedDTO } from '@/types/user'
 
 export function filterTeams(
   teams: TeamDTO[],
@@ -8,9 +9,6 @@ export function filterTeams(
   constraints: string,
   filterName: string,
   constraintsMap: Record<string, TeamConstraintViolation[]>,
-  userTeamStatus?: string,
-  role?: UserRole | '',
-  school?: string
 ) {
   const nameQuery = filterName.toLowerCase()
 
@@ -31,19 +29,38 @@ export function filterTeams(
       (constraints === 'valid' && violations.length === 0) ||
       (constraints === 'invalid' && violations.length > 0)
 
+    return matchesName && matchesStatus && matchesConstraints
+  })
+}
+
+export function filterUsers(
+  users: UserReducedDTO[],
+  userTeamStatus: string,
+  filterName: string,
+  role?: UserRole | '',
+  school?: string
+) {
+  const nameQuery = filterName.toLowerCase()
+
+  return users.filter(user => {
+    // Name filter
+    const matchesName =
+      !filterName ||
+      (user.firstname + ' ' + user.lastname).toLowerCase().includes(nameQuery)
+
     // Individual filters
     let matchesUserStatus = true
     if (userTeamStatus) {
-      if (userTeamStatus === 'withTeam') matchesUserStatus = team.members.length > 0
-      if (userTeamStatus === 'withoutTeam') matchesUserStatus = team.members.length === 0
+      if (userTeamStatus === 'withTeam') matchesUserStatus = !!user.teamId
+      if (userTeamStatus === 'withoutTeam') matchesUserStatus = !user.teamId
     }
 
     let matchesRole = true
-    if (role) matchesRole = team.members.some(m => m.role === role)
+    if (role) matchesRole = user.role === role
 
     let matchesSchool = true
-    if (school) matchesSchool = team.members.some(m => m.school === school)
+    if (school) matchesSchool = user.school === school
 
-    return matchesName && matchesStatus && matchesConstraints && matchesUserStatus && matchesRole && matchesSchool
+    return matchesName && matchesUserStatus && matchesRole && matchesSchool
   })
 }

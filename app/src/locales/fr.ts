@@ -189,6 +189,7 @@ export default {
     teamManagement: {
       title: 'Gestion des Équipes',
       noTeams: 'Aucune équipe correspondant aux critères.',
+      noTeamAssigned: 'Aucune équipe assignée',
       team: 'Équipe',
       members: 'Membres',
       name: 'Nom',
@@ -196,6 +197,7 @@ export default {
       theme: 'Thème',
       subject: 'Sujet',
       school: 'École',
+      mail: 'Email',
       namePlaceholder: 'Rechercher par nom, équipe',
       constraints : 
       {
@@ -512,8 +514,8 @@ export default {
     schoolMax: "{count} membre(s) en trop de l'école {school}",
     schoolEqual: "Il faut exactement {count} membre(s) de l'école {school}",
     // Contraintes sur plusieurs écoles (OU)
-    schoolsMin: "Il manque {count} membre(s) d'une des écoles suivantes : {schools}",
-    schoolsMax: "{count} membre(s) en trop d'une des écoles suivantes : {schools}",
-    schoolsEqual: "Il faut {count} membre(s) dans au moins une des écoles suivantes : {schools}"
+    schoolsMin: "Il manque {count} membre(s) d'une des écoles : {schools}",
+    schoolsMax: "{count} membre(s) en trop d'une des écoles  : {schools}",
+    schoolsEqual: "Il faut {count} membre(s) dans une des écoles suivantes : {schools}"
   }
 }

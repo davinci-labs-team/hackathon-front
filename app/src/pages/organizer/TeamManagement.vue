@@ -4,18 +4,19 @@
   import type { TeamDTO, TeamFormDTO } from '@/types/team'
   import TeamForm from '@/components/organizer/team_management/TeamForm.vue'
   import { UserRole } from '@/types/roles'
-  import { UserDTO } from '@/types/user'
+  import { UserReducedDTO } from '@/types/user'
   import { userService } from '@/services/userService'
   import { MatchmakingSettingsDTO, PartnersDTO, ThemesDTO } from '@/types/config'
   import { configurationService } from '@/services/configurationService'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
   import TeamTable from '@/components/organizer/team_management/TeamTable.vue'
+  import UsersTable from '@/components/organizer/team_management/UsersTable.vue'
   import { calculateAllTeamsConstraints } from '@/utils/teamConstraints'
   import { TeamConstraintViolation } from '@/types/config'
   import { teamService } from '@/services/teamService'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import TeamFilters from '../../components/organizer/team_management/TeamFilters.vue'
-  import { filterTeams } from '@/utils/filterTeams'
+  import { filterTeams, filterUsers } from '@/utils/filterTeams'
 
   const { t } = useI18n()
 
@@ -40,9 +41,9 @@
   const selectedSchool = ref<string>('')
 
   // Data
-  const members = ref<UserDTO[]>([])
-  const juries = ref<UserDTO[]>([])
-  const mentors = ref<UserDTO[]>([])
+  const members = ref<UserReducedDTO[]>([])
+  const juries = ref<UserReducedDTO[]>([])
+  const mentors = ref<UserReducedDTO[]>([])
   const themes = ref<ThemesDTO[]>([])
   const teams = ref<TeamDTO[]>([])
 
@@ -123,7 +124,7 @@
   }
 
   const fetchUsers = async () => {
-    const response = await userService.getAll()
+    const response = await userService.getAllReduced()
     if (response) {
       members.value = response.filter((u) => u.role === UserRole.PARTICIPANT)
       mentors.value = response.filter((u) => u.role === UserRole.MENTOR)
@@ -158,7 +159,7 @@
   })
 
   // ----------------------
-  // FILTERED TEAMS
+  // FILTERED TEAMS OR USERS
   // ----------------------
   const filteredTeams = computed(() =>
     filterTeams(
@@ -166,12 +167,19 @@
       selectedTeamStatus.value,
       selectedConstraints.value,
       filterName.value,
-      teamConstraintsMap.value,
-      selectedUserTeamStatus.value,
-      selectedRole.value,
-      selectedSchool.value
+      teamConstraintsMap.value
     )
   )
+
+  const filteredUsers = computed(() =>
+  filterUsers(
+    members.value.concat(mentors.value).concat(juries.value),
+    selectedUserTeamStatus.value,
+    filterName.value,
+    selectedRole.value,
+    selectedSchool.value
+  )
+)
 </script>
 
 <template>
@@ -230,6 +238,11 @@
         >
           {{ t('organizer.teamManagement.noTeams') }}
         </div>
+        <UsersTable
+          v-if="viewMode === 'individual'"
+          :users="filteredUsers"
+          :themes="themes"
+        />
       </div>
     </v-row>
 

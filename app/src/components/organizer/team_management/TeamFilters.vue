@@ -49,7 +49,6 @@ const userTeamStatus = computed(() => [
 
 const roles = computed(() => [
   { title: t('organizer.userManagement.roleAll'), value: '' },
-  { title: t('roles.organizer'), value: 'ORGANIZER' },
   { title: t('roles.jury'), value: 'JURY' },
   { title: t('roles.mentor'), value: 'MENTOR' },
   { title: t('roles.participant'), value: 'PARTICIPANT' },
