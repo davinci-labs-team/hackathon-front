@@ -30,6 +30,14 @@ export interface UserReducedDTO {
     id: string
     name: string
   } | null
+  juryTeams? : Array<{
+    id: string
+    name: string
+  }> | null
+  mentorTeams? : Array<{
+    id: string
+    name: string
+  }> | null
 }
 
 export interface SocialMediaDTO {

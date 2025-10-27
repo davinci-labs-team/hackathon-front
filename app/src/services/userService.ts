@@ -19,7 +19,9 @@ export const userService = {
   },
 
   async getAllReduced(): Promise<UserReducedDTO[]> {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/reduced`)
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/reduced`, {
+      headers: getAuthHeaders(),
+    })
     return res.data
   },
 

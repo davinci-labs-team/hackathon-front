@@ -3,12 +3,14 @@
   import { ThemesDTO } from '@/types/config'
   import { useI18n } from 'vue-i18n'
   import { ref, computed } from 'vue'
+import { TeamDTO } from '@/types/team'
 
   const { t } = useI18n()
 
   const props = defineProps<{
     users: UserReducedDTO[]
     themes: ThemesDTO[]
+    teams: TeamDTO[]
     itemsPerPage?: number
   }>()
 
@@ -29,6 +31,9 @@
       currentPage.value = page
     }
   }
+
+  const selectedTeamId = ref<TeamDTO | null>(null)
+  const selectedUserId = ref<string | null>(null)
 
   const getThemeAndSubject = (subjectId: string) => {
     const theme = props.themes.find((theme) =>
@@ -72,6 +77,16 @@
           <td class="px-4 py-2 text-center">{{ user.school ?? '-' }}</td>
           <td class="px-4 py-2 text-center">
             <span v-if="user.teamId">{{ user.team?.name }}</span>
+            <div v-else-if="user.juryTeams && user.juryTeams.length > 0">
+                <div v-for="team in user.juryTeams" :key="team.id">
+                    {{ team.name }}
+                </div>
+            </div>
+            <div v-else-if="user.mentorTeams && user.mentorTeams.length > 0">
+                <div v-for="team in user.mentorTeams" :key="team.id">
+                    {{ team.name }}
+                </div>
+            </div>
             <v-icon
               v-else
               color="warning"
@@ -86,7 +101,23 @@
           </td>
           <td class="px-4 py-2 text-center">
             <div class="flex flex-col justify-center items-center gap-2">
-              <v-btn v-if="!user.teamId" color="primary" small @click="$emit('assign-team', user)">
+              <v-btn
+                v-if="!user.teamId"
+                color="primary"
+                variant="outlined"
+                small
+                @click="$emit('assign-team', user)"
+              >
+                {{ t('organizer.teamManagement.actions.assignTeam') }}
+              </v-btn>
+              <v-btn
+                v-else
+                color="error"
+                variant="outlined"
+                small
+                @click="$emit('withdraw-team', user)"
+              >
+                {{ t('organizer.teamManagement.actions.withdrawTeam') }}
               </v-btn>
             </div>
           </td>

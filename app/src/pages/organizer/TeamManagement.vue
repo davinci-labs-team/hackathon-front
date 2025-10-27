@@ -95,6 +95,38 @@
     }
   }
 
+  const assignToTeam = async (userId: string, teamId: string) => {
+    try {
+      await teamService.assignUserToTeam(userId, teamId)
+      text.value = t('organizer.teamManagement.userAssignedToTeam')
+      error.value = false
+      snackbar.value = true
+      await fetchUsers()
+      await fetchTeams()
+    } catch (err) {
+      console.error('Error assigning user to team:', err)
+      text.value = t('organizer.teamManagement.userAssignToTeamError')
+      error.value = true
+      snackbar.value = true
+    }
+  }
+
+  const withdrawFromTeam = async (userId: string, teamId: string) => {
+    try {
+      await teamService.withdrawUserFromTeam(userId, teamId)
+      text.value = t('organizer.teamManagement.userWithdrawnFromTeam')
+      error.value = false
+      snackbar.value = true
+      await fetchUsers()
+      await fetchTeams()
+    } catch (err) {
+      console.error('Error withdrawing user from team:', err)
+      text.value = t('organizer.teamManagement.userWithdrawFromTeamError')
+      error.value = true
+      snackbar.value = true
+    }
+  }
+
   // ----------------------
   // CONSTRAINTS
   // ----------------------
@@ -163,7 +195,7 @@
   // ----------------------
   const filteredTeams = computed(() =>
     filterTeams(
-      teams.value,
+      teams.value.sort((a, b) => a.name.localeCompare(b.name)),
       selectedTeamStatus.value,
       selectedConstraints.value,
       filterName.value,
@@ -173,7 +205,7 @@
 
   const filteredUsers = computed(() =>
   filterUsers(
-    members.value.concat(mentors.value).concat(juries.value),
+    members.value.concat(mentors.value).concat(juries.value).sort((a, b) => a.lastname.localeCompare(b.lastname)),
     selectedUserTeamStatus.value,
     filterName.value,
     selectedRole.value,
@@ -242,6 +274,9 @@
           v-if="viewMode === 'individual'"
           :users="filteredUsers"
           :themes="themes"
+          :teams="teams"
+          @assign-team="assignToTeam"
+          @withdraw-team="withdrawFromTeam"
         />
       </div>
     </v-row>
