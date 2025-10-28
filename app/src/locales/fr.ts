@@ -189,7 +189,7 @@ export default {
     teamManagement: {
       title: 'Gestion des Équipes',
       noTeams: 'Aucune équipe correspondant aux critères.',
-      noTeamAvailable: "Aucune équipe disponible. Veuillez d'abord créer des équipes.",
+      noTeamAvailable: "Aucune équipe disponible éligible pour cet utilisateur. Créez une autre équipe ou modifiez les contraintes.",
       noTeamAssigned: 'Aucune équipe assignée',
       team: 'Équipe',
       members: 'Membres',

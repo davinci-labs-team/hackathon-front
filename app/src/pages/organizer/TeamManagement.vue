@@ -275,7 +275,7 @@
           :users="filteredUsers"
           :themes="themes"
           :teams="teams"
-          :constraints="teamConstraintsMap"
+          :config="matchmakingConfig"
           @assign-team="assignToTeam"
           @withdraw-team="withdrawFromTeam"
         />

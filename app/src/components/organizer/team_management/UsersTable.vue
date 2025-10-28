@@ -1,12 +1,12 @@
 <script lang="ts" setup>
   import { UserReducedDTO } from '@/types/user'
-  import { ThemesDTO } from '@/types/config'
+  import { MatchmakingSettingsDTO, ThemesDTO } from '@/types/config'
   import { useI18n } from 'vue-i18n'
   import { ref, computed } from 'vue'
   import { TeamDTO } from '@/types/team'
-  import { TeamConstraintViolation } from '@/types/config'
   import UserTeamActions from './UserTeamActions.vue'
   import UserTeamDialog from './UserTeamDialog.vue'
+  import { getEligibleTeamsForUser } from '@/utils/teamConstraints'
 
   const { t } = useI18n()
 
@@ -14,7 +14,7 @@
     users: UserReducedDTO[]
     themes: ThemesDTO[]
     teams: TeamDTO[]
-    constraints: Record<string, TeamConstraintViolation[]>
+    config: MatchmakingSettingsDTO | null
     itemsPerPage?: number
   }>()
 
@@ -48,6 +48,15 @@
     if (!theme) return '-'
     const subject = theme.subjects.find((subject) => subject.id === subjectId)
     return subject ? `${theme.name} - \n${subject.name}` : theme.name
+  }
+
+  const getEligibleTeams = () => {
+    if (!selectedUserId.value || !props.config) return []
+    const user = props.users.find((u) => u.id === selectedUserId.value)
+    if (user?.role && user.role === 'PARTICIPANT') {
+      return getEligibleTeamsForUser(props.teams, user, props.config)
+    }
+    return props.teams
   }
 </script>
 
@@ -148,7 +157,7 @@
     v-model="showAssignTeamDialog"
     v-if="showAssignTeamDialog"
     :user="users.find((u) => u.id === selectedUserId)!"
-    :teams="props.teams"
+    :teams="getEligibleTeams()"
     :team-available="props.teams.length > 0"
     type="assign"
     @confirm="({ userId, teamId }) => emit('assign-team', { userId, teamId })"

@@ -186,7 +186,7 @@ export default {
     teamManagement: {
       title: 'Team Management',
       noTeams: 'No teams matching the criteria.',
-      noTeamAvailable: 'No teams available. Please create teams first.',
+      noTeamAvailable: 'No teams available eligible for this user. Create another team or modify the constraints.',
       noTeamAssigned: 'No team assigned',
       team: 'Team',
       members: 'Members',

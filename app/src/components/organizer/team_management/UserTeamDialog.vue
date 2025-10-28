@@ -9,7 +9,6 @@ const { t } = useI18n()
 const props = defineProps<{
   user: UserReducedDTO
   teams: TeamDTO[]
-  teamAvailable: boolean
   type: 'assign' | 'withdraw'
   modelValue: boolean
 }>()
@@ -20,6 +19,7 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
 }>()
 
+const teamAvailable = computed(() => props.teams.length > 0)
 const selectedTeamId = ref<string | null>(null)
 
 watch(
