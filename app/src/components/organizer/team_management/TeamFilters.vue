@@ -53,6 +53,13 @@ const roles = computed(() => [
   { title: t('roles.mentor'), value: 'MENTOR' },
   { title: t('roles.participant'), value: 'PARTICIPANT' },
 ])
+
+const schoolsOptions = computed(() => {
+  const uniqueSchools = Array.from(new Set(props.schools))
+  return [{ title: t('organizer.teamManagement.all'), value: '' }].concat(
+    uniqueSchools.map((school) => ({ title: school, value: school }))
+  )
+})
 </script>
 
 <template>
@@ -117,11 +124,10 @@ const roles = computed(() => [
         </label>
         <v-select
           :model-value="selectedSchool"
-          :items="schools"
+          :items="schoolsOptions"
           variant="solo"
           hide-details
           density="comfortable"
-          clearable
           @update:model-value="v => emit('update:selectedSchool', v)"
         />
       </div>

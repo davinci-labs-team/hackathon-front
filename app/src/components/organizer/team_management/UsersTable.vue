@@ -3,7 +3,10 @@
   import { ThemesDTO } from '@/types/config'
   import { useI18n } from 'vue-i18n'
   import { ref, computed } from 'vue'
-import { TeamDTO } from '@/types/team'
+  import { TeamDTO } from '@/types/team'
+  import { TeamConstraintViolation } from '@/types/config'
+  import UserTeamActions from './UserTeamActions.vue'
+  import UserTeamDialog from './UserTeamDialog.vue'
 
   const { t } = useI18n()
 
@@ -11,6 +14,7 @@ import { TeamDTO } from '@/types/team'
     users: UserReducedDTO[]
     themes: ThemesDTO[]
     teams: TeamDTO[]
+    constraints: Record<string, TeamConstraintViolation[]>
     itemsPerPage?: number
   }>()
 
@@ -32,8 +36,10 @@ import { TeamDTO } from '@/types/team'
     }
   }
 
-  const selectedTeamId = ref<TeamDTO | null>(null)
-  const selectedUserId = ref<string | null>(null)
+  const selectedUserId = ref<string>()
+
+  const showAssignTeamDialog = ref(false)
+  const showWithdrawTeamDialog = ref(false)
 
   const getThemeAndSubject = (subjectId: string) => {
     const theme = props.themes.find((theme) =>
@@ -78,14 +84,14 @@ import { TeamDTO } from '@/types/team'
           <td class="px-4 py-2 text-center">
             <span v-if="user.teamId">{{ user.team?.name }}</span>
             <div v-else-if="user.juryTeams && user.juryTeams.length > 0">
-                <div v-for="team in user.juryTeams" :key="team.id">
-                    {{ team.name }}
-                </div>
+              <div v-for="team in user.juryTeams" :key="team.id">
+                {{ team.name }}
+              </div>
             </div>
             <div v-else-if="user.mentorTeams && user.mentorTeams.length > 0">
-                <div v-for="team in user.mentorTeams" :key="team.id">
-                    {{ team.name }}
-                </div>
+              <div v-for="team in user.mentorTeams" :key="team.id">
+                {{ team.name }}
+              </div>
             </div>
             <v-icon
               v-else
@@ -100,26 +106,18 @@ import { TeamDTO } from '@/types/team'
             {{ user.favoriteSubjectId ? getThemeAndSubject(user.favoriteSubjectId) : '-' }}
           </td>
           <td class="px-4 py-2 text-center">
-            <div class="flex flex-col justify-center items-center gap-2">
-              <v-btn
-                v-if="!user.teamId"
-                color="primary"
-                variant="outlined"
-                small
-                @click="$emit('assign-team', user)"
-              >
-                {{ t('organizer.teamManagement.actions.assignTeam') }}
-              </v-btn>
-              <v-btn
-                v-else
-                color="error"
-                variant="outlined"
-                small
-                @click="$emit('withdraw-team', user)"
-              >
-                {{ t('organizer.teamManagement.actions.withdrawTeam') }}
-              </v-btn>
-            </div>
+            <UserTeamActions
+              :user="user"
+              :team-available="props.teams.length > 0"
+              @assign="
+                showAssignTeamDialog = true;
+                selectedUserId = user.id
+              "
+              @withdraw="
+                showWithdrawTeamDialog = true;
+                selectedUserId = user.id
+              "
+            />
           </td>
         </tr>
       </tbody>
@@ -146,4 +144,25 @@ import { TeamDTO } from '@/types/team'
       @click="goToPage(currentPage + 1)"
     ></v-btn>
   </div>
+  <UserTeamDialog
+    v-model="showAssignTeamDialog"
+    v-if="showAssignTeamDialog"
+    :user="users.find((u) => u.id === selectedUserId)!"
+    :teams="props.teams"
+    :team-available="props.teams.length > 0"
+    type="assign"
+    @confirm="({ userId, teamId }) => emit('assign-team', { userId, teamId })"
+    @cancel="showAssignTeamDialog = false"
+  />
+
+  <UserTeamDialog
+    v-model="showWithdrawTeamDialog"
+    v-if="showWithdrawTeamDialog"
+    :user="users.find((u) => u.id === selectedUserId)!"
+    :teams="props.teams"
+    :team-available="props.teams.length > 0"
+    type="withdraw"
+    @confirm="({ userId, teamId }) => emit('withdraw-team', { userId, teamId })"
+    @cancel="showWithdrawTeamDialog = false"
+  />
 </template>
