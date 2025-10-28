@@ -95,9 +95,11 @@
     }
   }
 
-  const assignToTeam = async (userId: string, teamId: string) => {
+  const assignToTeam = async (payload: { userId: string; teamId: string }) => {
+    const { userId, teamId } = payload
+    console.log('assigning', userId, teamId)
     try {
-      await teamService.assignUserToTeam(userId, teamId)
+      await teamService.assignUserToTeam(teamId, userId)
       text.value = t('organizer.teamManagement.userAssignedToTeam')
       error.value = false
       snackbar.value = true
@@ -111,9 +113,11 @@
     }
   }
 
-  const withdrawFromTeam = async (userId: string, teamId: string) => {
+  const withdrawFromTeam = async (payload: { userId: string; teamId: string }) => {
+    const { userId, teamId } = payload
+    console.log('withdrawing', userId, teamId)
     try {
-      await teamService.withdrawUserFromTeam(userId, teamId)
+      await teamService.withdrawUserFromTeam(teamId, userId)
       text.value = t('organizer.teamManagement.userWithdrawnFromTeam')
       error.value = false
       snackbar.value = true
@@ -204,14 +208,17 @@
   )
 
   const filteredUsers = computed(() =>
-  filterUsers(
-    members.value.concat(mentors.value).concat(juries.value).sort((a, b) => a.lastname.localeCompare(b.lastname)),
-    selectedUserTeamStatus.value,
-    filterName.value,
-    selectedRole.value,
-    selectedSchool.value
+    filterUsers(
+      members.value
+        .concat(mentors.value)
+        .concat(juries.value)
+        .sort((a, b) => a.lastname.localeCompare(b.lastname)),
+      selectedUserTeamStatus.value,
+      filterName.value,
+      selectedRole.value,
+      selectedSchool.value
+    )
   )
-)
 </script>
 
 <template>
@@ -220,13 +227,13 @@
       <div class="w-full md:w-8/12 lg:w-9/12 px-4">
         <div class="flex w-full justify-between items-center mb-6">
           <h1 class="text-3xl font-bold">{{ t('organizer.teamManagement.title') }}</h1>
-        <div class="flex gap-4">
-          <v-btn color="green" class="h-full">
-            {{ t('common.validate') }}
-          </v-btn>
-          <v-btn color="primary" class="h-full" @click="onAddTeam">
-            {{ t('organizer.teamManagement.actions.add') }}
-          </v-btn>
+          <div class="flex gap-4">
+            <v-btn color="green" class="h-full">
+              {{ t('common.validate') }}
+            </v-btn>
+            <v-btn color="primary" class="h-full" @click="onAddTeam">
+              {{ t('organizer.teamManagement.actions.add') }}
+            </v-btn>
           </div>
         </div>
 

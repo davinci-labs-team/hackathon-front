@@ -7,6 +7,7 @@
   import UserTeamActions from './UserTeamActions.vue'
   import UserTeamDialog from './UserTeamDialog.vue'
   import { getEligibleTeamsForUser } from '@/utils/teamConstraints'
+import { UserRole } from '@/types/roles'
 
   const { t } = useI18n()
 
@@ -41,6 +42,17 @@
   const showAssignTeamDialog = ref(false)
   const showWithdrawTeamDialog = ref(false)
 
+  const handleAssignTeam = (userId: string, teamId: string) => {
+    emit('assign-team', { userId, teamId })
+    showAssignTeamDialog.value = false
+  }
+
+  const handleWithdrawTeam = (userId: string, teamId: string) => {
+    console.log('withdrawing', userId, teamId)
+    emit('withdraw-team', { userId, teamId })
+    showWithdrawTeamDialog.value = false
+  }
+
   const getThemeAndSubject = (subjectId: string) => {
     const theme = props.themes.find((theme) =>
       theme.subjects.some((subject) => subject.id === subjectId)
@@ -53,10 +65,19 @@
   const getEligibleTeams = () => {
     if (!selectedUserId.value || !props.config) return []
     const user = props.users.find((u) => u.id === selectedUserId.value)
-    if (user?.role && user.role === 'PARTICIPANT') {
-      return getEligibleTeamsForUser(props.teams, user, props.config)
+    if (user?.role) {
+      switch (user.role) {
+        case UserRole.PARTICIPANT:
+          return getEligibleTeamsForUser(props.teams, user, props.config)
+        case UserRole.MENTOR:
+          return props.teams.filter((t => !user.mentorTeams?.some(ut => ut.id === t.id)))
+        case UserRole.JURY:
+          return props.teams.filter((t => !user.juryTeams?.some(ut => ut.id === t.id)))
+        default:
+          return []
+      }
     }
-    return props.teams
+    return []
   }
 </script>
 
@@ -158,9 +179,8 @@
     v-if="showAssignTeamDialog"
     :user="users.find((u) => u.id === selectedUserId)!"
     :teams="getEligibleTeams()"
-    :team-available="props.teams.length > 0"
     type="assign"
-    @confirm="({ userId, teamId }) => emit('assign-team', { userId, teamId })"
+    @confirm="handleAssignTeam"
     @cancel="showAssignTeamDialog = false"
   />
 
@@ -169,9 +189,8 @@
     v-if="showWithdrawTeamDialog"
     :user="users.find((u) => u.id === selectedUserId)!"
     :teams="props.teams"
-    :team-available="props.teams.length > 0"
     type="withdraw"
-    @confirm="({ userId, teamId }) => emit('withdraw-team', { userId, teamId })"
+    @confirm="handleWithdrawTeam"
     @cancel="showWithdrawTeamDialog = false"
   />
 </template>

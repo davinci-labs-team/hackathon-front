@@ -14,7 +14,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'confirm', payload: { userId: string; teamId: string }): void
+  (e: 'confirm', userId: string, teamId: string ): void
   (e: 'cancel'): void
   (e: 'update:modelValue', value: boolean): void
 }>()
@@ -50,7 +50,7 @@ const isConfirmDisabled = computed(
 
 const confirmAction = () => {
   if (selectedTeam.value) {
-    emit('confirm', { userId: props.user.id, teamId: selectedTeam.value.id })
+    emit('confirm', props.user.id, selectedTeam.value.id)
     emit('update:modelValue', false)
   }
 }
