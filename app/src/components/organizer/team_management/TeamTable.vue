@@ -5,7 +5,6 @@
   import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { TeamConstraintViolation } from '@/types/config'
-  import { get } from 'node_modules/axios/index.cjs'
 
   const { t } = useI18n()
 

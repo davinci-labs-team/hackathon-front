@@ -518,10 +518,12 @@ export default {
     // Contraintes sur une école
     schoolMin: "Il manque {count} membre(s) de l'école {school}",
     schoolMax: "{count} membre(s) en trop de l'école {school}",
-    schoolEqual: "Il faut exactement {count} membre(s) de l'école {school}",
+    schoolEqualTooMany: "{count} membre(s) en trop de l'école {school}",
+    schoolEqualTooFew: "{count} membre(s) de l'école {school} manquant(s)",
     // Contraintes sur plusieurs écoles (OU)
     schoolsMin: "Il manque {count} membre(s) d'une des écoles : {schools}",
     schoolsMax: "{count} membre(s) en trop d'une des écoles  : {schools}",
-    schoolsEqual: "Il faut {count} membre(s) dans une des écoles suivantes : {schools}"
+    schoolsEqualTooMany: "{count} en trop ({schools})",
+    schoolsEqualTooFew: "{count} manquant(s) ({schools})",
   }
 }

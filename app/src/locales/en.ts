@@ -486,10 +486,12 @@ export default {
     // Single school constraints
     schoolMin: "{count} member(s) missing from {school}",
     schoolMax: "{count} member(s) too many from {school}",
-    schoolEqual: "{count} member(s) required from {school}",
+    schoolEqualTooMany: "{count} member(s) too many from {school}",
+    schoolEqualTooFew: "{count} member(s) missing from {school}",
     // Multiple schools constraints (OR)
-    schoolsMin: "{count} member(s) missing from at least one of these schools: {schools}",
-    schoolsMax: "{count} member(s) too many from at least one of these schools: {schools}",
-    schoolsEqual: "{count} member(s) required from at least one of these schools: {schools}"
+    schoolsMin: "{count} member(s) missing from one of these schools: {schools}",
+    schoolsMax: "{count} member(s) too many from one of these schools: {schools}",
+    schoolsEqualTooMany: "{count} member(s) too many from one of these schools: {schools}",
+    schoolsEqualTooFew: "{count} member(s) missing from one of these schools: {schools}",
   }
 }
