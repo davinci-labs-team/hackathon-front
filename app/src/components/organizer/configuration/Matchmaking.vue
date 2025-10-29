@@ -112,7 +112,6 @@
   }
 
   const deleteConstraint = (criterion: ConstraintDTO) => {
-    console.log('Deleting constraint', criterion)
     matchmakingSettings.value.constraints = matchmakingSettings.value.constraints.filter(
       (c) => c !== criterion
     )
