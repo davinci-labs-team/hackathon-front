@@ -17,6 +17,7 @@
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import TeamFilters from '../../components/organizer/team_management/TeamFilters.vue'
   import { filterTeams, filterUsers } from '@/utils/filterTeams'
+  import { TeamStatus } from '@/types/team_status'
 
   const { t } = useI18n()
 
@@ -126,6 +127,38 @@
     } catch (err) {
       console.error('Error withdrawing user from team:', err)
       text.value = t('organizer.teamManagement.userWithdrawFromTeamError')
+      error.value = true
+      snackbar.value = true
+    }
+  }
+
+  const toggleConstraints = async (ignoreConstraints: boolean, teamId: string) => {
+    try {
+      await teamService.toggleIgnoreConstraints(teamId, ignoreConstraints)
+      await fetchTeams()
+    } catch (err) {
+      console.error('Error toggling team constraints:', err)
+      text.value = t('organizer.teamManagement.teamConstraintsToggleError')
+      error.value = true
+      snackbar.value = true
+    }
+  }
+
+  const updateLockStatus = async (status: TeamStatus, teamId: string) => {
+    const teamConstraints = teamConstraintsMap.value[teamId]
+    if (status === TeamStatus.LOCKED && teamConstraints && teamConstraints.length > 0) {
+      text.value = t('organizer.teamManagement.lockImpossible')
+      error.value = true
+      snackbar.value = true
+      return
+    }
+    try {
+      await teamService.updateStatus(teamId, status)
+      await fetchTeams()
+    }
+    catch (err) {
+      console.error('Error updating team lock status:', err)
+      text.value = t('organizer.teamManagement.teamLockStatusUpdateError')
       error.value = true
       snackbar.value = true
     }
@@ -270,6 +303,8 @@
           :themes="themes"
           :constraints-map="teamConstraintsMap"
           @edit="onEditTeam"
+          @toggle-constraints="toggleConstraints"
+          @toggle-lock="updateLockStatus"
         />
         <div
           v-else-if="viewMode === 'team' && filteredTeams.length === 0"
