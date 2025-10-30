@@ -246,6 +246,7 @@ export default {
         withdraw: 'Retirer',
         assignTeamTo: 'Assigner {name} à l’équipe',
         withdrawTeamFrom: 'Retirer {name} de l’équipe',
+        selectTeam: 'Sélectionner une équipe',
       },
       dialog: {
         deleteConfirmTitle: 'Confirmer la suppression',
