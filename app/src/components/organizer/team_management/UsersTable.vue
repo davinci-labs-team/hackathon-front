@@ -62,7 +62,7 @@ import { UserRole } from '@/types/roles'
     return subject ? `${theme.name} - \n${subject.name}` : theme.name
   }
 
-  const getEligibleTeams = () => {
+  const getEligibleTeamsToAssign = () => {
     if (!selectedUserId.value || !props.config) return []
     const user = props.users.find((u) => u.id === selectedUserId.value)
     if (user?.role) {
@@ -73,6 +73,24 @@ import { UserRole } from '@/types/roles'
           return props.teams.filter((t => !user.mentorTeams?.some(ut => ut.id === t.id)))
         case UserRole.JURY:
           return props.teams.filter((t => !user.juryTeams?.some(ut => ut.id === t.id)))
+        default:
+          return []
+      }
+    }
+    return []
+  }
+
+  const getEligibleTeamsToWithdraw = () => {
+    if (!selectedUserId.value) return []
+    const user = props.users.find((u) => u.id === selectedUserId.value)
+    if (user?.role) {
+      switch (user.role) {
+        case UserRole.PARTICIPANT:
+          return props.teams.filter(t => t.id === user.teamId)
+        case UserRole.MENTOR:
+          return props.teams.filter(t => user.mentorTeams?.some(ut => ut.id === t.id))
+        case UserRole.JURY:
+          return props.teams.filter(t => user.juryTeams?.some(ut => ut.id === t.id))
         default:
           return []
       }
@@ -178,7 +196,7 @@ import { UserRole } from '@/types/roles'
     v-model="showAssignTeamDialog"
     v-if="showAssignTeamDialog"
     :user="users.find((u) => u.id === selectedUserId)!"
-    :teams="getEligibleTeams()"
+    :teams="getEligibleTeamsToAssign()"
     type="assign"
     @confirm="handleAssignTeam"
     @cancel="showAssignTeamDialog = false"
@@ -188,7 +206,7 @@ import { UserRole } from '@/types/roles'
     v-model="showWithdrawTeamDialog"
     v-if="showWithdrawTeamDialog"
     :user="users.find((u) => u.id === selectedUserId)!"
-    :teams="props.teams"
+    :teams="getEligibleTeamsToWithdraw()"
     type="withdraw"
     @confirm="handleWithdrawTeam"
     @cancel="showWithdrawTeamDialog = false"

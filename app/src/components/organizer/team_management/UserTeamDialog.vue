@@ -81,7 +81,7 @@ const cancelAction = () => {
             :items="teams"
             item-title="name"
             item-value="id"
-            label="Sélectionnez une équipe"
+            :placeholder="t('organizer.teamManagement.actions.selectTeam')"
             outlined
             dense
           />

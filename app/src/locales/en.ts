@@ -246,6 +246,7 @@ export default {
         withdraw: 'Withdraw',
         assignTeamTo: 'Assign team to {name}',
         withdrawTeamFrom: 'Withdraw team from {name}',
+        selectTeam: 'Select a team',
       },
       selectedTeam: 'Selected Team:',
       teamDeleted: 'Team deleted successfully',

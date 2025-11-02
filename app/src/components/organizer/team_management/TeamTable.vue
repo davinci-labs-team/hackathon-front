@@ -14,7 +14,13 @@
     itemsPerPage?: number
     constraintsMap?: Record<string, TeamConstraintViolation[]>
   }>()
-  const emit = defineEmits(['edit', 'delete', 'toggle-lock', 'toggle-constraints'])
+
+  const emit = defineEmits<{
+    (e: 'edit', team: TeamDTO): void
+    (e: 'delete', teamId: string): void
+    (e: 'toggle-lock', status: TeamStatus, teamId: string): void
+    (e: 'toggle-constraints', ignoreConstraints: boolean, teamId: string): void
+  }>()
 
   const itemsPerPage = props.itemsPerPage || 5
   const currentPage = ref(1)
@@ -50,6 +56,15 @@
 
   const getChipPadding = (text: string) => {
     return text.length > 40 ? 'mb-2 py-6' : 'mb-2 py-3'
+  }
+
+  const emitToggleLock = (team: TeamDTO) => {
+    const newStatus = team.status === TeamStatus.LOCKED ? TeamStatus.UNLOCKED : TeamStatus.LOCKED
+    emit('toggle-lock', newStatus, team.id)
+  }
+
+  const emitToggleIgnoreConstraints = (team: TeamDTO) => {
+    emit('toggle-constraints', !team.ignoreConstraints, team.id)
   }
 </script>
 
@@ -134,7 +149,7 @@
                 icon
                 size="small"
                 :color="team.status === TeamStatus.LOCKED ? 'red' : 'primary'"
-                @click="emit('toggle-lock', team)"
+                @click="emitToggleLock(team)"
                 :title="
                   team.status === TeamStatus.LOCKED
                     ? t('organizer.teamManagement.actions.unlock')
@@ -163,7 +178,7 @@
                 icon
                 size="small"
                 :color="team.ignoreConstraints ? 'green' : 'orange'"
-                @click="emit('toggle-constraints', team)"
+                @click="emitToggleIgnoreConstraints(team)"
                 :title="
                   team.ignoreConstraints
                     ? t('organizer.teamManagement.actions.considerConstraints')
