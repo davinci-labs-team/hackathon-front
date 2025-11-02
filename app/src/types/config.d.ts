@@ -12,6 +12,11 @@ export interface HackathonPhaseDTO {
   endDate: string | null
 }
 
+export interface HackathonPhase extends HackathonPhaseDTO {
+  startDateObj: Date | null
+  endDateObj: Date | null
+}
+
 export interface PartnersDTO {
   id: string
   name: string
@@ -67,6 +72,12 @@ export interface MatchmakingSettingsDTO {
   teamSizeMin: number
   teamSizeMax: number
   constraints: ConstraintDTO[]
+}
+
+export interface TeamConstraintViolation {
+  type: TeamConstraintType
+  count?: number
+  schools?: string
 }
 
 export interface SubjectDTO {

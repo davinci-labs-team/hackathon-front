@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, onMounted, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { HackathonPhaseDTO } from '@/types/config'
+  import { HackathonPhaseDTO, HackathonPhase } from '@/types/config'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import VueDatePicker from '@vuepic/vue-datepicker'
   import '@vuepic/vue-datepicker/dist/main.css'
@@ -21,9 +21,7 @@
 
   // Phases
   const phasesFromDB = ref<HackathonPhaseDTO[]>([])
-  const hackathonPhases = ref<
-    { order: number; startDateObj: Date | null; endDateObj: Date | null }[]
-  >([])
+  const hackathonPhases = ref<HackathonPhase[]>([])
 
   onMounted(async () => {
     try {
@@ -34,8 +32,14 @@
         endDate: phase.endDate,
       }))
 
-      hackathonPhases.value = phasesFromDB.value.map((phase) => ({
+      const rawPhases: HackathonPhaseDTO[] = Array.isArray(response.value)
+      ? response.value
+      : []
+      
+      hackathonPhases.value = rawPhases.map((phase) => ({
         order: phase.order,
+        startDate: phase.startDate ?? null,
+        endDate: phase.endDate ?? null,
         startDateObj: phase.startDate ? new Date(phase.startDate) : null,
         endDateObj: phase.endDate ? new Date(phase.endDate) : null,
       }))
@@ -84,8 +88,6 @@
       startDate: phase.startDateObj?.toISOString() ?? null,
       endDate: phase.endDateObj?.toISOString() ?? null,
     }))
-
-    console.log('Saving phases:', payload)
 
     try {
       await configurationService.update(ConfigurationKey.PHASES, { value: payload })

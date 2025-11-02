@@ -2,13 +2,12 @@
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { useI18n } from 'vue-i18n'
-  import { useAuthStore } from '@/stores/auth'
-  import { UserRole } from '@/types/roles'
   import { loginWithSupabase } from '@/services/authService'
+  import { usePhaseStore } from '@/stores/phase'
 
   const { t } = useI18n()
   const router = useRouter()
-  const authStore = useAuthStore()
+  const phaseStore = usePhaseStore()
 
   // Fields of the login form
   const email = ref('')
@@ -26,6 +25,11 @@
     try {
       const user = await loginWithSupabase(email.value, password.value)
       console.log('Logged in user:', user)
+
+      // Fetch phases and schedule next refresh
+      await phaseStore.fetchPhases()
+      phaseStore.scheduleNextRefresh()
+      
       error.value = false
       router.push('/user/dashboard')
     } catch (err) {

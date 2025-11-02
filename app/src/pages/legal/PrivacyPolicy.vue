@@ -15,7 +15,6 @@ import { ConfigurationKey } from '@/utils/configuration/configurationKey'
     try {
       const response = await configurationService.findOne(ConfigurationKey.LEGAL)
       privacy_policy.value = response.value.privacy
-      console.log(privacy_policy.value)
     } catch (error) {
       console.error('Error fetching privacy policy:', error)
     }

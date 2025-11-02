@@ -6,6 +6,7 @@ import ThemeCard from '@/components/organizer/themes/ThemeCard.vue'
 import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
 import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 import AppSnackbar from '@/components/common/AppSnackbar.vue'
+import { v4 as uuidv4 } from 'uuid'
 
 const { t } = useI18n()
 
@@ -36,7 +37,6 @@ const saveThemes = async () => {
     text.value = t('common.changesSaved')
     error.value = false
     snackbar.value = true
-    console.log('Themes updated successfully')
   } catch (e) {
     console.error('Error updating themes: ', e)
     text.value = t('common.error')
@@ -50,7 +50,7 @@ const addTheme = () => {
   if (themes.value.some(theme => !theme.name.trim())) return
 
   const newTheme: ThemesDTO = {
-    id: Date.now().toString(),
+    id: uuidv4(),
     name: '',
     description: '',
     subjects: [],
@@ -69,7 +69,7 @@ const editTheme = (themeIndex: number, updatedTheme: ThemesDTO) => {
 // --- SUBJECTS ---
 const addSubject = (themeIndex: number) => {
   const newSubject: SubjectDTO = {
-    id: Date.now().toString(),
+    id: uuidv4(),
     name: '',
     description: '',
   }
@@ -100,7 +100,7 @@ const validThemes = (): boolean => {
 <template>
   <v-container>
     <v-row justify="center" class="mt-8">
-      <v-col cols="12" md="8" lg="6">
+      <div class="w-full md:w-8/12 lg:w-8/12 px-4">
         <h1 class="text-3xl font-bold">{{ t('organizer.nav.themes') }}</h1>
 
         <div class="flex items-center justify-between mb-5">
@@ -139,7 +139,7 @@ const validThemes = (): boolean => {
             {{ t('themes.addThemeBtn') }}
           </v-btn>
         </div>
-      </v-col>
+      </div>
     </v-row>
   </v-container>
 </template>

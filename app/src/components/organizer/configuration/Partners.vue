@@ -31,7 +31,6 @@
 
     try {
       await configurationService.update(ConfigurationKey.PARTNERS, updateDto)
-      console.log('Partners updated successfully')
     } catch (error) {
       console.error('Error updating partners:', error)
     }

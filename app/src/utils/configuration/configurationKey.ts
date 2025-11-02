@@ -1,9 +1,9 @@
 export enum ConfigurationKey {
-  LEGAL = 'legal',
-  MEDIA = 'media',
-  TEXTS = 'texts',
-  PHASES = 'phases',
-  PARTNERS = 'partners',
-  MATCHMAKING = 'matchmaking',
-  THEMES = 'themes',
+  LEGAL = 'LEGAL',
+  MEDIA = 'MEDIA',
+  TEXTS = 'TEXTS',
+  PHASES = 'PHASES',
+  PARTNERS = 'PARTNERS',
+  MATCHMAKING = 'MATCHMAKING',
+  THEMES = 'THEMES',
 }

@@ -169,16 +169,16 @@ const confirmDeleteAccount = () => showConfirmDeleteAccountDialog.value = true
       v-model="showConfirmLogoutDialog"
       :title="t('profile.logoutConfirmTitle')"
       :text="t('profile.logoutConfirmText')"
-      :confirmText="t('profile.confirmButton')"
-      :cancelText="t('common.cancel')"
+      :confirm-label="t('profile.confirmButton')"
+      :cancel-label="t('common.cancel')"
       @confirm="handleLogout"
     />
     <ConfirmDialog
       v-model="showConfirmDeleteAccountDialog"
       :title="t('profile.deleteAccount')"
       :text="t('profile.deleteAccountText')"
-      :confirmText="t('profile.deleteAccountConfirm')"
-      :cancelText="t('common.cancel')"
+      :confirm-label="t('profile.deleteAccountConfirm')"
+      :cancel-label="t('common.cancel')"
       @confirm="handleDeleteAccount"
     />
   </v-container>

@@ -130,7 +130,7 @@
         <div class="mb-6 p-4 border rounded-lg shadow-sm">
           <div class="flex gap-8">
             <div class="flex-1">
-              <label class="block mb-1 text-sm font-medium">
+              <label class="block mb-2 text-sm font-medium">
                 {{ t('organizer.userManagement.role') }}
               </label>
               <v-select
@@ -143,7 +143,7 @@
               />
             </div>
             <div class="flex-1">
-              <label class="block mb-1 text-sm font-medium">
+              <label class="block mb-2 text-sm font-medium">
                 {{ t('organizer.userManagement.school') }}
               </label>
               <v-select
@@ -156,7 +156,7 @@
               />
             </div>
             <div class="flex-1">
-              <label class="block mb-1 text-sm font-medium">
+              <label class="block mb-2 text-sm font-medium">
                 {{ t('organizer.userManagement.name') }}
               </label>
               <v-text-field
