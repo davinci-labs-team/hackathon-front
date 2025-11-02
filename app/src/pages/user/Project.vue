@@ -65,7 +65,7 @@ const timeRemaining = computed(() => {
 
     <!-- Bloc principal -->
     <v-card class="pa-6 mb-8">
-      <h2 class="text-xl font-semibold mb-4">Équipe {{ userInfo?.teamName || '-' }}</h2>
+      <h2 class="text-xl font-semibold mb-4">Équipe {{ userInfo?.teamId || '-' }}</h2>
 
       <v-row align="center" class="mb-4">
         <v-col cols="12" md="8">
@@ -120,7 +120,7 @@ const timeRemaining = computed(() => {
         <tbody>
           <tr>
             <td><b>Équipe</b></td>
-            <td>{{ userInfo?.teamName || '-' }}</td>
+            <td>{{ userInfo?.teamId || '-' }}</td>
           </tr>
           <tr>
             <td><b>Statut des travaux remis</b></td>
