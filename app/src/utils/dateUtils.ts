@@ -55,7 +55,9 @@ export function timeAgo(date: Date | string, locale: string): string {
  *  - FR : "Samedi 27 juillet 2025 à 09h00"
  *  - EN : "Saturday, July 27, 2025 at 09:00 AM"
  */
-export function formatDate(date: Date | string, locale: string): string {
+export function formatDate(date: Date | string | null, locale: string): string {
+  if (!date) return '-' // ou un texte traduit selon le contexte
+
   const d = typeof date === 'string' ? new Date(date) : date
 
   if (locale === 'fr') {
@@ -84,3 +86,16 @@ export function formatDate(date: Date | string, locale: string): string {
 
   return `${dateStr} at ${timeStr}`
 }
+
+export function getDaysBetween(start: string | Date | null, end: string | Date | null): number | null {
+  if (!start || !end) return null // gérer les cas où une date est nulle
+
+  const startD = typeof start === 'string' ? new Date(start) : start
+  const endD = typeof end === 'string' ? new Date(end) : end
+
+  const diffMs = endD.getTime() - startD.getTime()
+  const diffDays = diffMs / (1000 * 60 * 60 * 24)
+
+  return Math.ceil(diffDays)
+}
+

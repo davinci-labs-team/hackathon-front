@@ -19,7 +19,6 @@ export async function loginWithSupabase(
 
   const accessToken = data.session.access_token
 
-  // Appel backend NestJS
   const response = await axios.post(
     `${import.meta.env.VITE_API_URL}/api/user/login`,
     {},
@@ -30,7 +29,6 @@ export async function loginWithSupabase(
     }
   )
 
-  // Données user renvoyées par ton backend
   const user = {
     ...response.data,
     accessToken,
@@ -41,7 +39,6 @@ export async function loginWithSupabase(
     throw new Error('Access denied')
   }
 
-  // Sauvegarde dans le store
   const authStore = useAuthStore()
   authStore.login(user)
 
@@ -57,3 +54,14 @@ export async function logout() {
   const authStore = useAuthStore()
   authStore.logout()
 }
+
+// Manage Supabase auth state changes (e.g., token refresh)
+supabase.auth.onAuthStateChange((event, session) => {
+  const authStore = useAuthStore()
+
+  if (session) {
+    authStore.updateAccessToken(session.access_token)
+  } else {
+    authStore.logout()
+  }
+})

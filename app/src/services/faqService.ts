@@ -1,16 +1,6 @@
 import axios from 'axios'
-import { useAuthStore } from '@/stores/auth'
 import type { FAQItemDTO, CreateFaqDto, UpdateFaqDto } from '@/types/faq'
-
-function getAuthHeaders() {
-  const authStore = useAuthStore()
-  if (!authStore.user?.accessToken) {
-    throw new Error('User is not authenticated')
-  }
-  return {
-    Authorization: `Bearer ${authStore.user.accessToken}`,
-  }
-}
+import { getAuthHeaders } from '@/stores/auth'
 
 export const faqService = {
   async getAll(): Promise<FAQItemDTO[]> {

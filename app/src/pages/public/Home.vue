@@ -4,6 +4,12 @@
   import Announcements from '@/components/common/Announcements.vue'
   import { announcements } from '@/tests/data/announcements'
   import Info from '@/components/public/Info.vue'
+  import { useI18n } from 'vue-i18n'
+import { AnnouncementDTO } from '@/types/announcement'
+
+  const { t } = useI18n()
+
+  const publicAnnouncements : AnnouncementDTO[] = announcements.filter(a => !a.isPrivate)
 </script>
 
 <template>
@@ -29,9 +35,9 @@
 
       <div class="w-3/4 flex flex-col gap-6 rounded p-6 bg-white shadow" style="height: 100%">
         <h2 class="text-3xl font-semibold mt-2 mb-3">
-          {{ $t('announcements.title') }}
+          {{ t('announcements.lastAnnouncements') }}
         </h2>
-        <Announcements :announcements="announcements" :items-per-page="5" />
+        <Announcements :announcements="publicAnnouncements" :items-per-page="5" />
       </div>
     </div>
   </v-container>

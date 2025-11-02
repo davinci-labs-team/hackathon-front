@@ -6,6 +6,7 @@ import ProjectsManagement from '@/pages/organizer/ProjectsManagement.vue'
 import Settings from '@/pages/organizer/Settings.vue'
 import Profile from '@/pages/common/Profile.vue'
 import Announcements from '@/pages/organizer/Announcements.vue'
+import ThemesManagement from '@/pages/organizer/ThemesManagement.vue'
 
 export default [
   {
@@ -46,6 +47,12 @@ export default [
         path: 'profile',
         name: 'OrganizerProfilePage',
         component: Profile,
+        meta: { requiresAuth: true, role: UserRole.ORGANIZER },
+      },
+      {
+        path: 'themes',
+        name: 'ThemesManagement',
+        component: ThemesManagement,
         meta: { requiresAuth: true, role: UserRole.ORGANIZER },
       },
     ],

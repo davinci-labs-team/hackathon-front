@@ -1,80 +1,60 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
-  import { useI18n } from 'vue-i18n'
-  import { AnnouncementDTO } from '@/types/announcement'
-  import AnnouncementPopup from '@/components/common/AnnouncementPopup.vue'
-  import AnnouncementCard from '@/components/common/AnnouncementCard.vue'
-  import AnnouncementForm from '@/components/organizer/announcements/AnnouncementForm.vue'
-  import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
+import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { AnnouncementDTO } from '@/types/announcement'
+import AnnouncementPopup from '@/components/common/AnnouncementPopup.vue'
+import AnnouncementCard from '@/components/common/AnnouncementCard.vue'
 
-  const { t } = useI18n()
+const { t } = useI18n()
 
-  const props = defineProps<{
-    announcements: AnnouncementDTO[]
-    itemsPerPage?: number
-    canDelete?: boolean // or edit (is the user the author of the announcement)
-  }>()
+// Props
+const props = defineProps<{
+  announcements: AnnouncementDTO[]
+  itemsPerPage?: number
+  canDelete?: boolean
+}>()
 
-  const announcementToDelete = ref<AnnouncementDTO | null>(null)
-  const showConfirmDialog = ref(false)
-  const showEditForm = ref(false)
+// Events pour le parent
+const emit = defineEmits(['edit', 'delete'])
 
-  const confirmDelete = (announcement: AnnouncementDTO) => {
-    announcementToDelete.value = announcement
-    showConfirmDialog.value = true
-  }
+// Pagination
+const itemsPerPage = props.itemsPerPage || 5
+const currentPage = ref(1)
+const totalPages = computed(() => Math.ceil(props.announcements.length / itemsPerPage))
+const paginatedAnnouncements = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  return props.announcements.slice(start, start + itemsPerPage)
+})
+const goToPage = (page: number) => {
+  if (page >= 1 && page <= totalPages.value) currentPage.value = page
+}
 
-  const deleteAnnouncement = () => {
-    if (!announcementToDelete.value) return
-    // TODO: Implement actual deletion logic here
-    console.log('Deleting:', announcementToDelete.value.title)
-    showConfirmDialog.value = false
-    announcementToDelete.value = null
-  }
+// Popup interne
+const showPopup = ref(false)
+const selectedAnnouncement = ref<AnnouncementDTO | null>(null)
+const openPopup = (announcement: AnnouncementDTO) => {
+  selectedAnnouncement.value = announcement
+  showPopup.value = true
+}
 
-  const editAnnouncement = (announcement: AnnouncementDTO) => {
-    selectedAnnouncement.value = announcement
-    showEditForm.value = true
-  }
-
-  const itemsPerPage = props.itemsPerPage || 5
-  const currentPage = ref(1)
-
-  const totalPages = computed(() => Math.ceil(props.announcements.length / itemsPerPage))
-
-  const paginatedAnnouncements = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage
-    return props.announcements.slice(start, start + itemsPerPage)
-  })
-
-  const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages.value) {
-      currentPage.value = page
-    }
-  }
-
-  const showPopup = ref(false)
-  const selectedAnnouncement = ref<AnnouncementDTO | null>(null)
-
-  const openPopup = (announcement: AnnouncementDTO) => {
-    selectedAnnouncement.value = announcement
-    showPopup.value = true
-  }
+// Actions déléguées au parent
+const onEdit = (announcement: AnnouncementDTO) => emit('edit', announcement)
+const onDelete = (announcement: AnnouncementDTO) => emit('delete', announcement)
 </script>
 
 <style scoped>
-  .announcement-card:hover {
-    box-shadow: 0 6px 18px rgb(0 0 0 / 0.15);
-    cursor: pointer;
-  }
+.announcement-card:hover {
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.15);
+  cursor: pointer;
+}
 </style>
 
 <template>
   <div>
     <div v-if="paginatedAnnouncements.length > 0">
       <div
-        v-for="(item, index) in paginatedAnnouncements"
-        :key="index"
+        v-for="item in paginatedAnnouncements"
+        :key="item.id"
         class="flex items-start gap-2 mb-4"
       >
         <div class="flex-grow" @click="openPopup(item)">
@@ -89,31 +69,31 @@
             color="red"
             variant="text"
             size="small"
-            @click.stop="confirmDelete(item)"
+            :title="t('common.delete')"
+            @click.stop="onDelete(item)"
           />
           <!-- Edit button -->
           <v-btn
             v-if="canDelete"
             icon="mdi-pencil"
-            color="black"
+            color="primary"
             variant="text"
             size="small"
-            @click.stop="editAnnouncement(item)"
+            :title="t('common.edit')"
+            @click.stop="onEdit(item)"
           />
         </div>
       </div>
 
       <!-- Popup -->
-      <AnnouncementPopup v-model:show="showPopup" :announcement="selectedAnnouncement" />
-
-      <!-- Edit Form -->
-      <AnnouncementForm
-        v-model="showEditForm"
-        :editMode="true"
-        :announcement="selectedAnnouncement"
+      <AnnouncementPopup 
+        v-model:show="showPopup" 
+        :announcement="selectedAnnouncement" 
+        :key="selectedAnnouncement?.id"
+        v-if="selectedAnnouncement"
       />
 
-      <!-- Pagination (no ellipsis for now) -->
+      <!-- Pagination -->
       <div class="flex justify-center items-center gap-2 mt-6">
         <v-btn
           icon="mdi-chevron-left"
@@ -141,14 +121,4 @@
       {{ t('announcements.noContent') }}
     </div>
   </div>
-
-  <ConfirmDialog
-    v-model="showConfirmDialog"
-    :title="t('announcements.confirmTitle')"
-    :text="`${t('announcements.confirmText')} : ${announcementToDelete?.title}`"
-    :confirmLabel="t('common.delete')"
-    :cancelLabel="t('common.cancel')"
-    @confirm="deleteAnnouncement"
-    @cancel="announcementToDelete = null"
-  />
 </template>

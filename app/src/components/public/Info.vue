@@ -1,24 +1,54 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
-  import { formatDate } from '@/utils/dateUtils'
+  import { ref, onMounted } from 'vue'
+  import { formatDate, getDaysBetween } from '@/utils/dateUtils'
+  import { HackathonPhaseDTO, HackathonTextDTO } from '@/types/config'
+  import { configurationService } from '@/services/configurationService'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import { HackathonPhaseOrder } from '@/utils/phases'
 
-  const infos = {
-    location: 'Paris, Île-de-France',
-    startDate: '2025-06-10T07:00:00.000Z',
-    endDate: '2025-06-11T18:00:00.000Z',
-  }
+  const infos = ref<HackathonTextDTO>({
+    hackathonName: '',
+    slogan: '',
+    hackathonDescription: '',
+    location: ''
+  })
+
+  const phases = ref<HackathonPhaseDTO[]>([])
+
+  const startDate = ref('')
+  const endDate = ref('')
+  const numberOfDays = ref(0)
 
   const { t, locale } = useI18n()
+
+  onMounted(async () => {
+  try {
+    const textsResponse = await configurationService.findOne(ConfigurationKey.TEXTS)
+    infos.value = textsResponse.value as HackathonTextDTO
+
+    const phasesResponse = await configurationService.findOne(ConfigurationKey.PHASES)
+    phases.value = phasesResponse.value as HackathonPhaseDTO[]
+    const hackathonPhase = phases.value.find(phase => phase.order === HackathonPhaseOrder.Hackathon)
+
+    startDate.value = hackathonPhase?.startDate || ''
+    endDate.value = hackathonPhase?.endDate || ''
+    numberOfDays.value = getDaysBetween(startDate.value, endDate.value) || 0
+    
+  } catch (error) {
+    console.error('Error fetching partners:', error)
+  }
+})
 </script>
 
 <template>
   <div class="flex flex-col h-full">
     <h1 class="text-5xl font-bold mb-1">{{ t('hackathon.title') }}</h1>
     <p class="text-2xl italic text-gray-600 mb-8">
-      {{ t('hackathon.subtitle') }}
+      {{ infos.slogan }}
     </p>
     <p class="mb-6 text-xl text-gray-700 mb-8">
-      {{ t('hackathon.description') }}
+      {{ infos.hackathonDescription }}
     </p>
 
     <div class="flex gap-6 items-center">
@@ -26,9 +56,9 @@
         <div class="flex items-center gap-4 mb-10">
           <v-icon size="55">mdi-calendar</v-icon>
           <div>
-            <div class="text-2xl font-semibold">{{ t('hackathon.dateText') }}</div>
+            <div class="text-2xl font-semibold">{{ t('hackathon.dateText', { numberOfDays: numberOfDays }) }}</div>
             <div class="text-xl text-gray-600">
-              {{ formatDate(infos.startDate, locale) }} - {{ formatDate(infos.endDate, locale) }}
+              {{ formatDate(startDate, locale) }} - {{ formatDate(endDate, locale) }}
             </div>
           </div>
         </div>
