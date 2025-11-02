@@ -44,3 +44,19 @@ export interface SocialMediaDTO {
   id: string
   username: string
 }
+
+export interface UserReducedDTO {
+  id: string
+  firstname: string
+  lastname: string
+  email: string
+  role: Role
+  school?: string | null
+  favoriteSubjectId?: string | null
+  teamId?: string | null
+}
+
+export interface SocialMediaDTO {
+  id: string
+  username: string
+}
