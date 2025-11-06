@@ -7,7 +7,8 @@
   import UserTeamActions from './UserTeamActions.vue'
   import UserTeamDialog from './UserTeamDialog.vue'
   import { getEligibleTeamsForUser } from '@/utils/teamConstraints'
-import { UserRole } from '@/types/roles'
+  import { UserRole } from '@/types/roles'
+  import { usePagination } from '@/composables/usePagination'
 
   const { t } = useI18n()
 
@@ -21,21 +22,10 @@ import { UserRole } from '@/types/roles'
 
   const emit = defineEmits(['assign-team', 'withdraw-team'])
 
-  const itemsPerPage = props.itemsPerPage || 10
-  const currentPage = ref(1)
-
-  const totalPages = computed(() => Math.ceil(props.users.length / itemsPerPage))
-
-  const paginatedUsers = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage
-    return props.users.slice(start, start + itemsPerPage)
-  })
-
-  const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages.value) {
-      currentPage.value = page
-    }
-  }
+  const { currentPage, totalPages, paginatedItems, goToPage } = usePagination(
+    props.users,
+    props.itemsPerPage || 10
+  )
 
   const selectedUserId = ref<string>()
 
@@ -125,7 +115,7 @@ import { UserRole } from '@/types/roles'
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in paginatedUsers" :key="user.id" class="border-b">
+        <tr v-for="user in paginatedItems" :key="user.id" class="border-b">
           <td class="px-4 py-2">{{ user.firstname }} {{ user.lastname }}</td>
           <td class="px-4 py-2">{{ t(`roles.${user.role.toLowerCase()}`) }}</td>
           <td class="px-4 py-2 text-center">{{ user.school ?? '-' }}</td>

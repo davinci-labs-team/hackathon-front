@@ -5,6 +5,7 @@
   import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { TeamConstraintViolation } from '@/types/config'
+  import { usePagination } from '@/composables/usePagination'
 
   const { t } = useI18n()
 
@@ -22,21 +23,10 @@
     (e: 'toggle-constraints', ignoreConstraints: boolean, teamId: string): void
   }>()
 
-  const itemsPerPage = props.itemsPerPage || 5
-  const currentPage = ref(1)
-
-  const totalPages = computed(() => Math.ceil(props.teams.length / itemsPerPage))
-
-  const paginatedTeams = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage
-    return props.teams.slice(start, start + itemsPerPage)
-  })
-
-  const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages.value) {
-      currentPage.value = page
-    }
-  }
+  const { currentPage, totalPages, paginatedItems, goToPage } = usePagination(
+    props.teams,
+    props.itemsPerPage || 10
+  )
 
   const formatViolationMessage = (violation: TeamConstraintViolation) => {
     const message = t(`matchmakingViolations.${violation.type}`, {
@@ -94,7 +84,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="team in paginatedTeams" :key="team.id" class="border-b">
+        <tr v-for="team in paginatedItems" :key="team.id" class="border-b">
           <td class="px-4 py-2">{{ team.name }}</td>
           <td class="px-4 py-2">
             <div v-for="member in team.members" :key="member.id">
