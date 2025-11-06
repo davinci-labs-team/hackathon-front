@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CreateAnnouncementDTO, UpdateAnnouncementDTO, AnnouncementDTO } from "@/types/announcement";
+import { CreateAnnouncementDTO, UpdateAnnouncementDTO } from "@/types/announcement";
 import { getAuthHeaders } from "@/stores/auth";
 
 export enum VisibilityType {
