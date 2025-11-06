@@ -147,6 +147,7 @@ export default {
     firstname: 'Prénom',
     lastname: 'Nom de famille',
     school: 'École associée',
+    affiliation: 'Affiliation',
     confirmTitle: 'Confirmer la suppression',
     confirmText: 'Vous allez supprimer cet utilisateur : {firstname} {lastname}',
   },

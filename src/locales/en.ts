@@ -144,6 +144,7 @@ export default {
     firstname: 'First name',
     lastname: 'Last name',
     school: 'Associated school',
+    affiliation: 'Affiliation',
     confirmTitle: 'Confirm Deletion',
     confirmText: `You are about to delete this user: {firstname} {lastname}`,
   },

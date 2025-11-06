@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { ref, computed, onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
   import Users from '@/components/common/Users.vue'
   import { useUser } from '@/composables/useUser'
@@ -7,10 +7,14 @@
   import { UserDTO } from '@/types/user'
   import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
   import CsvImportDialog from '@/components/organizer/user_management/CsvImportDialog.vue'
+import { configurationService } from '@/services/configurationService'
+import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+import { PartnersDTO } from '@/types/config'
 
   const { t } = useI18n()
 
   const { users, createUser, updateUser, deleteUser } = useUser()
+
 
   const roles = computed(() => [
     { title: t('organizer.userManagement.roleAll'), value: '' },
@@ -20,12 +24,22 @@
     { title: t('roles.participant'), value: 'PARTICIPANT' },
   ])
 
-  // TODO: récupérer dynamiquement les écoles
-  const schools = computed(() => [
-    { title: t('organizer.userManagement.schoolAll'), value: '' },
-    { title: 'Polytech' },
-    { title: 'INSA' },
-  ])
+  
+  const schools = ref<{ title: string; value: string }[]>([{ title: t('organizer.userManagement.schoolAll'), value: '' }])
+
+  const fetchSchools = async () => {
+    const response = await configurationService.findOne(ConfigurationKey.PARTNERS)
+    if (response?.value) {
+      const partners : PartnersDTO[] = response.value
+      schools.value.push(
+        ...partners.map((partner) => ({
+          title: partner.name,
+          value: partner.name,
+        }))
+
+      )
+    }
+  }
 
   const selectedRole = ref('')
   const selectedSchool = ref('')
@@ -112,6 +126,15 @@
     usersToDelete.forEach((u) => onDeleteUser(u))
     selectedUserIds.value = []
   }
+
+  onMounted(() => {
+    fetchSchools()
+  })
+
+  const schoolsList = computed(() =>
+    schools.value.map((school) => school.value)
+    .filter((value) => value !== '')
+  )
 </script>
 
 <template>
@@ -198,6 +221,7 @@
           @save="handleSave"
           :edit-mode="editMode"
           :user="selectedUser"
+          :schools="schoolsList"
         />
         <ConfirmDialog
           v-model="showConfirmDialog"
