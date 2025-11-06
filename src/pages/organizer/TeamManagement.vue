@@ -83,7 +83,7 @@
       text.value = t('organizer.teamManagement.teamDeleted')
       error.value = false
       snackbar.value = true
-      teams.value = teams.value.filter((t) => t.id !== teamId)
+      teams.value = teams.value.filter((t: TeamDTO) => t.id !== teamId)
       await fetchTeams()
     } catch (err) {
       console.error('Error deleting team:', err)
@@ -232,7 +232,7 @@
   // ----------------------
   const filteredTeams = computed(() =>
     filterTeams(
-      teams.value.sort((a, b) => a.name.localeCompare(b.name)),
+      teams.value.sort((a: TeamDTO, b: TeamDTO) => a.name.localeCompare(b.name)),
       selectedTeamStatus.value,
       selectedConstraints.value,
       filterName.value,
@@ -245,7 +245,7 @@
       members.value
         .concat(mentors.value)
         .concat(juries.value)
-        .sort((a, b) => a.lastname.localeCompare(b.lastname)),
+        .sort((a: UserReducedDTO, b: UserReducedDTO) => a.lastname.localeCompare(b.lastname)),
       selectedUserTeamStatus.value,
       filterName.value,
       selectedRole.value,
