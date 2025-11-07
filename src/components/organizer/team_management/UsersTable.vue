@@ -2,7 +2,7 @@
   import { UserReducedDTO } from '@/types/user'
   import { MatchmakingSettingsDTO, ThemesDTO } from '@/types/config'
   import { useI18n } from 'vue-i18n'
-  import { ref, computed } from 'vue'
+  import { ref, toRef } from 'vue'
   import { TeamDTO } from '@/types/team'
   import UserTeamActions from './UserTeamActions.vue'
   import UserTeamDialog from './UserTeamDialog.vue'
@@ -20,10 +20,12 @@
     itemsPerPage?: number
   }>()
 
+  const users = toRef(props, 'users')
+
   const emit = defineEmits(['assign-team', 'withdraw-team'])
 
   const { currentPage, totalPages, paginatedItems, goToPage } = usePagination(
-    props.users,
+    users,
     props.itemsPerPage || 10
   )
 

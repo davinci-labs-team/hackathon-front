@@ -1,14 +1,22 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch, type Ref } from 'vue'
 
-export function usePagination<T>(items: T[], itemsPerPageDefault = 10) {
+export function usePagination<T>(items: T[] | Ref<T[]>, itemsPerPageDefault = 10) {
   const itemsPerPage = ref(itemsPerPageDefault)
   const currentPage = ref(1)
 
-  const totalPages = computed(() => Math.ceil(items.length / itemsPerPage.value))
+  const itemsRef = computed(() => (Array.isArray(items) ? items : items.value))
+
+  const totalPages = computed(() =>
+    Math.ceil(itemsRef.value.length / itemsPerPage.value)
+  )
 
   const paginatedItems = computed(() => {
     const start = (currentPage.value - 1) * itemsPerPage.value
-    return items.slice(start, start + itemsPerPage.value)
+    return itemsRef.value.slice(start, start + itemsPerPage.value)
+  })
+
+  watch(itemsRef, () => {
+    currentPage.value = 1
   })
 
   const goToPage = (page: number) => {

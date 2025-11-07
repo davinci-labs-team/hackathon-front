@@ -2,10 +2,10 @@
   import { ThemesDTO } from '@/types/config'
   import { TeamDTO } from '@/types/team'
   import { TeamStatus } from '@/types/team_status'
-  import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { TeamConstraintViolation } from '@/types/config'
   import { usePagination } from '@/composables/usePagination'
+  import { toRef } from 'vue'
 
   const { t } = useI18n()
 
@@ -16,6 +16,8 @@
     constraintsMap?: Record<string, TeamConstraintViolation[]>
   }>()
 
+  const teamsRef = toRef(props, 'teams')
+
   const emit = defineEmits<{
     (e: 'edit', team: TeamDTO): void
     (e: 'delete', teamId: string): void
@@ -24,7 +26,7 @@
   }>()
 
   const { currentPage, totalPages, paginatedItems, goToPage } = usePagination(
-    props.teams,
+    teamsRef,
     props.itemsPerPage || 10
   )
 

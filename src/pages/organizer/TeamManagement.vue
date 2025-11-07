@@ -242,7 +242,7 @@
     }
   }
 
-  onMounted(async () => {
+  onMounted(() => {
     fetchUsers()
     fetchThemes()
     fetchMatchmakingConfig()
