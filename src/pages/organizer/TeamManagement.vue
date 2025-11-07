@@ -16,7 +16,7 @@
   import { teamService } from '@/services/teamService'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import TeamFilters from '../../components/organizer/team_management/TeamFilters.vue'
-  import { filterTeams, filterUsers } from '@/utils/filterTeams'
+  import { filterTeams, filterUsers } from '@/utils/filterUtils'
   import { TeamStatus } from '@/types/team_status'
 
   const { t } = useI18n()
@@ -242,7 +242,7 @@
     }
   }
 
-  onMounted(() => {
+  onMounted(async () => {
     fetchUsers()
     fetchThemes()
     fetchMatchmakingConfig()

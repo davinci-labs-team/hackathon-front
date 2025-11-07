@@ -2,6 +2,8 @@ import type { TeamDTO } from '@/types/team'
 import type { TeamConstraintViolation } from '@/types/config'
 import type { UserRole } from '@/types/roles'
 import { UserReducedDTO } from '@/types/user'
+import { SubmissionDTO } from '@/types/submission'
+import { SubmissionStatus } from '@/types/submission_status'
 
 export function filterTeams(
   teams: TeamDTO[],
@@ -62,5 +64,40 @@ export function filterUsers(
     if (school) matchesSchool = user.school === school
 
     return matchesName && matchesUserStatus && matchesRole && matchesSchool
+  })
+}
+
+export function filterSubmissions(
+  submissions: SubmissionDTO[],
+  selectedSubmissionStatus: SubmissionStatus | '',
+  selectedJury: string,
+  selectedMentor: string,
+  filterName: string,
+) {
+  const nameQuery = filterName.toLowerCase()
+
+  return submissions.filter(submission => {
+    // Name filter
+    const matchesName =
+      !filterName ||
+      submission.teamName.toLowerCase().includes(nameQuery) ||
+      submission.juries.some(j => (j.firstname + ' ' + j.lastname).toLowerCase().includes(nameQuery)) ||
+      submission.mentors.some(m => (m.firstname + ' ' + m.lastname).toLowerCase().includes(nameQuery))
+
+    // Submission status filter
+    const matchesStatus =
+      !selectedSubmissionStatus || submission.status === selectedSubmissionStatus
+
+    // Jury filter
+    const matchesJury =
+      !selectedJury ||
+      submission.juries.some(j => j.id === selectedJury)
+
+    // Mentor filter
+    const matchesMentor =
+      !selectedMentor ||
+      submission.mentors.some(m => m.id === selectedMentor)
+
+    return matchesName && matchesStatus && matchesJury && matchesMentor
   })
 }
