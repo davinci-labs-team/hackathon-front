@@ -1,5 +1,38 @@
 import { ConfigurationKey } from './configurationKey'
 
+function getDefaultPhases() {
+  const phases = []
+  const today = new Date()
+  let previousEnd: Date | null = null
+
+  for (let i = 1; i <= 6; i++) {
+    let startDate: string | null = null
+    let endDate: string | null = null
+
+    if (i === 1) {
+      startDate = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate()).toISOString()
+      endDate = new Date(new Date(startDate).getTime() + 2 * 24 * 60 * 60 * 1000).toISOString()
+      previousEnd = new Date(endDate)
+    } else if (i === 2) {
+      startDate = null
+      endDate = null
+    } else {
+      startDate = new Date(previousEnd!.getTime() + 1 * 24 * 60 * 60 * 1000).toISOString()
+      endDate = new Date(new Date(startDate).getTime() + 2 * 24 * 60 * 60 * 1000).toISOString()
+      previousEnd = new Date(endDate)
+    }
+
+    phases.push({
+      order: i,
+      startDate,
+      endDate,
+    })
+  }
+
+  return phases
+}
+
+
 export const defaultConfigurations = {
   [ConfigurationKey.LEGAL]: {
     terms: [
@@ -152,18 +185,13 @@ export const defaultConfigurations = {
     hackathonLogoId: null,
   },
   [ConfigurationKey.TEXTS]: {
-    hackathon_name: '',
+    hackathonName: '',
     slogan: '',
-    hackathon_description: '',
+    hackathonDescription: '',
   },
-  [ConfigurationKey.PHASES]: [
-    { order: 1, startDate: null, endDate: null },
-    { order: 2, startDate: null, endDate: null },
-    { order: 3, startDate: null, endDate: null },
-    { order: 4, startDate: null, endDate: null },
-    { order: 5, startDate: null, endDate: null },
-    { order: 6, startDate: null, endDate: null },
-  ],
+  [ConfigurationKey.PHASES]: {
+    phases: getDefaultPhases(),
+  },
   [ConfigurationKey.PARTNERS]: [],
   [ConfigurationKey.MATCHMAKING]: {
     isActive: false,
