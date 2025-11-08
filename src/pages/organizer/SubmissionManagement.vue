@@ -11,8 +11,8 @@
   import SubmissionsTable from '@/components/organizer/submission_management/SubmissionsTable.vue'
   import { mockedSubmissions } from '@/tests/data/submissions'
   import { ThemesDTO } from '@/types/config'
-import { configurationService } from '@/services/configurationService'
-import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import { configurationService } from '@/services/configurationService'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 
   const { t } = useI18n()
 
@@ -52,8 +52,17 @@ import { ConfigurationKey } from '@/utils/configuration/configurationKey'
   }
 
   const fetchThemes = async () => {
-    const response = await configurationService.findOne(ConfigurationKey.THEMES)
-    if (response?.value) themes.value = response.value
+    try {
+      const response = await configurationService.findOne(ConfigurationKey.THEMES)
+      if (response?.value?.themes && Array.isArray(response.value.themes)) {
+        themes.value = response.value.themes as ThemesDTO[]
+      } else {
+        themes.value = []
+      }
+    } catch (error) {
+      console.error('Error fetching themes:', error)
+      themes.value = []
+    }
   }
 
   // Filter submissions

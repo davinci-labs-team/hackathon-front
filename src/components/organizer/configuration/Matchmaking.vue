@@ -3,12 +3,7 @@
   import { ref, onMounted, computed } from 'vue'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
-  import {
-    ConstraintDTO,
-    MatchmakingSettingsDTO,
-    PartnersDTO,
-    UpdateConfigurationDTO,
-  } from '@/types/config'
+  import { ConstraintDTO, MatchmakingSettingsDTO, PartnersDTO } from '@/types/config'
   import Constraints from '@/components/organizer/matchmaking/Constraints.vue'
   import ConstraintForm from '../matchmaking/ConstraintForm.vue'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
@@ -80,26 +75,59 @@
     return errors
   }
 
-  onMounted(async () => {
+  // --- Fetch partners and school names ---
+  const fetchPartners = async () => {
     try {
-      const settings = await getOrCreateConfiguration(ConfigurationKey.PARTNERS)
-      partners.value = settings.value
+      const response = await getOrCreateConfiguration(ConfigurationKey.PARTNERS)
+      if (response?.value && Array.isArray(response.value.partners)) {
+        partners.value = response.value.partners as PartnersDTO[]
+      } else {
+        partners.value = []
+      }
       schoolNames.value = partners.value.filter((p) => p.isParticipatingSchool).map((p) => p.name)
-
-      const matchmaking = await getOrCreateConfiguration(ConfigurationKey.MATCHMAKING)
-      matchmakingSettings.value = matchmaking.value
     } catch (e) {
+      console.error('Error fetching partners:', e)
+      partners.value = []
+      schoolNames.value = []
+    }
+  }
+
+  // --- Fetch matchmaking settings ---
+  const fetchMatchmakingSettings = async () => {
+    try {
+      const response = await getOrCreateConfiguration(ConfigurationKey.MATCHMAKING)
+      if (response?.value) {
+        matchmakingSettings.value = response.value as MatchmakingSettingsDTO
+      }
+    } catch (e) {
+      console.error('Error fetching matchmaking settings:', e)
       text.value = t('common.errorOccurred')
       error.value = true
       snackbar.value = true
     }
+  }
+
+  onMounted(async () => {
+    await fetchPartners()
+    await fetchMatchmakingSettings()
   })
 
   const handleSave = async () => {
     try {
+      const payload = {
+        ...matchmakingSettings.value,
+        teamSizeMin: Number(matchmakingSettings.value.teamSizeMin),
+        teamSizeMax: Number(matchmakingSettings.value.teamSizeMax),
+        constraints: matchmakingSettings.value.constraints.map((c) => ({
+          ...c,
+          value: Number(c.value),
+        })),
+      }
+
       await configurationService.update(ConfigurationKey.MATCHMAKING, {
-        value: matchmakingSettings.value,
+        value: payload,
       })
+
       text.value = t('common.changesSaved')
       error.value = false
       snackbar.value = true
@@ -145,8 +173,8 @@
     handleSave()
   }
 
-  const hasConstraints = computed(() => 
-    matchmakingSettings.value.constraints && matchmakingSettings.value.constraints.length > 0
+  const hasConstraints = computed(
+    () => matchmakingSettings.value.constraints && matchmakingSettings.value.constraints.length > 0
   )
 </script>
 
@@ -223,7 +251,7 @@
           v-model="showCriterionForm"
           :school-names="schoolNames"
           :edit-mode="false"
-          :max-team-size="matchmakingSettings.teamSizeMax"
+          :max-team-size="Number(matchmakingSettings.teamSizeMax)"
           @save="addConstraint"
         />
       </v-container>

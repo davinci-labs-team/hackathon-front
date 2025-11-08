@@ -7,14 +7,13 @@
   import { UserDTO } from '@/types/user'
   import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
   import CsvImportDialog from '@/components/organizer/user_management/CsvImportDialog.vue'
-import { configurationService } from '@/services/configurationService'
-import { ConfigurationKey } from '@/utils/configuration/configurationKey'
-import { PartnersDTO } from '@/types/config'
+  import { configurationService } from '@/services/configurationService'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import { PartnersDTO } from '@/types/config'
 
   const { t } = useI18n()
 
   const { users, createUser, updateUser, deleteUser } = useUser()
-
 
   const roles = computed(() => [
     { title: t('organizer.userManagement.roleAll'), value: '' },
@@ -24,19 +23,19 @@ import { PartnersDTO } from '@/types/config'
     { title: t('roles.participant'), value: 'PARTICIPANT' },
   ])
 
-  
-  const schools = ref<{ title: string; value: string }[]>([{ title: t('organizer.userManagement.schoolAll'), value: '' }])
+  const schools = ref<{ title: string; value: string }[]>([
+    { title: t('organizer.userManagement.schoolAll'), value: '' },
+  ])
 
   const fetchSchools = async () => {
     const response = await configurationService.findOne(ConfigurationKey.PARTNERS)
-    if (response?.value) {
-      const partners : PartnersDTO[] = response.value
+    if (response?.value?.partners && Array.isArray(response.value.partners)) {
+      const partners: PartnersDTO[] = response.value.partners
       schools.value.push(
         ...partners.map((partner) => ({
           title: partner.name,
           value: partner.name,
         }))
-
       )
     }
   }
@@ -113,16 +112,12 @@ import { PartnersDTO } from '@/types/config'
   }
 
   const inviteSelected = () => {
-    const usersToInvite = users.value.filter(
-      (u) => selectedUserIds.value.includes(u.id)
-    )
+    const usersToInvite = users.value.filter((u) => selectedUserIds.value.includes(u.id))
     usersToInvite.forEach((u) => onInviteUser(u))
   }
 
   const deleteSelected = () => {
-    const usersToDelete = users.value.filter(
-      (u) => selectedUserIds.value.includes(u.id)
-    )
+    const usersToDelete = users.value.filter((u) => selectedUserIds.value.includes(u.id))
     usersToDelete.forEach((u) => onDeleteUser(u))
     selectedUserIds.value = []
   }
@@ -132,8 +127,7 @@ import { PartnersDTO } from '@/types/config'
   })
 
   const schoolsList = computed(() =>
-    schools.value.map((school) => school.value)
-    .filter((value) => value !== '')
+    schools.value.map((school) => school.value).filter((value) => value !== '')
   )
 </script>
 
@@ -206,7 +200,7 @@ import { PartnersDTO } from '@/types/config'
             </v-btn>
           </div>
         </div>
-        
+
         <Users
           :users="filteredUsers"
           :items-per-page="30"

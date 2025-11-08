@@ -225,8 +225,17 @@
   }
 
   const fetchThemes = async () => {
-    const response = await configurationService.findOne(ConfigurationKey.THEMES)
-    if (response?.value) themes.value = response.value
+    try {
+      const response = await configurationService.findOne(ConfigurationKey.THEMES)
+      if (response?.value?.themes && Array.isArray(response.value.themes)) {
+        themes.value = response.value.themes as ThemesDTO[]
+      } else {
+        themes.value = []
+      }
+    } catch (error) {
+      console.error('Error fetching themes:', error)
+      themes.value = []
+    }
   }
 
   const fetchMatchmakingConfig = async () => {
@@ -235,10 +244,17 @@
   }
 
   const fetchSchools = async () => {
-    const response = await configurationService.findOne(ConfigurationKey.PARTNERS)
-    if (response?.value) {
-      const partners: PartnersDTO[] = response.value
-      schools.value = partners.filter((p) => p.isParticipatingSchool).map((p) => p.name)
+    try {
+      const response = await configurationService.findOne(ConfigurationKey.PARTNERS)
+      if (response?.value?.partners && Array.isArray(response.value.partners)) {
+        const partners: PartnersDTO[] = response.value.partners
+        schools.value = partners.filter((p) => p.isParticipatingSchool).map((p) => p.name)
+      } else {
+        schools.value = []
+      }
+    } catch (error) {
+      console.error('Error fetching schools:', error)
+      schools.value = []
     }
   }
 
