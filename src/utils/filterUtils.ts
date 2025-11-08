@@ -2,8 +2,8 @@ import type { TeamDTO } from '@/types/team'
 import type { TeamConstraintViolation } from '@/types/config'
 import type { UserRole } from '@/types/roles'
 import { UserReducedDTO } from '@/types/user'
-import { SubmissionDTO } from '@/types/submission'
 import { SubmissionStatus } from '@/types/submission_status'
+import { SubmissionDTO } from '@/types/submission'
 
 export function filterTeams(
   teams: TeamDTO[],
@@ -69,10 +69,10 @@ export function filterUsers(
 
 export function filterSubmissions(
   submissions: SubmissionDTO[],
-  selectedSubmissionStatus: SubmissionStatus | '',
-  selectedJury: string,
-  selectedMentor: string,
   filterName: string,
+  submissionStatus: SubmissionStatus | '',
+  selectedJuryId: string | '',
+  selectedMentorId: string | ''
 ) {
   const nameQuery = filterName.toLowerCase()
 
@@ -80,23 +80,16 @@ export function filterSubmissions(
     // Name filter
     const matchesName =
       !filterName ||
-      submission.teamName.toLowerCase().includes(nameQuery) ||
-      submission.juries.some(j => (j.firstname + ' ' + j.lastname).toLowerCase().includes(nameQuery)) ||
-      submission.mentors.some(m => (m.firstname + ' ' + m.lastname).toLowerCase().includes(nameQuery))
+      submission.teamName.toLowerCase().includes(nameQuery)
 
     // Submission status filter
-    const matchesStatus =
-      !selectedSubmissionStatus || submission.status === selectedSubmissionStatus
+    const matchesStatus = !submissionStatus || submission.status === submissionStatus
 
     // Jury filter
-    const matchesJury =
-      !selectedJury ||
-      submission.juries.some(j => j.id === selectedJury)
+    const matchesJury = !selectedJuryId || submission.juries?.some(jury => jury.id === selectedJuryId)
 
     // Mentor filter
-    const matchesMentor =
-      !selectedMentor ||
-      submission.mentors.some(m => m.id === selectedMentor)
+    const matchesMentor = !selectedMentorId || submission.mentors?.some(mentor => mentor.id === selectedMentorId)
 
     return matchesName && matchesStatus && matchesJury && matchesMentor
   })
