@@ -56,6 +56,13 @@
     }
     return ''
   }
+
+  const getPendingJuries = (submission: SubmissionDTO) => {
+    const missingJuries = submission.juries.filter((jury) => {
+      return !submission.comments.some((comment) => comment.userId === jury.id)
+    })
+    return missingJuries
+  }
 </script>
 
 <template>
@@ -122,7 +129,7 @@
               {{ t('organizer.submissionManagement.noGrade') }}
             </div>
           </td>
-          <td class="px-4 py-3 text-left">
+          <td class="px-4 py-3 text-left max-w-[350px] break-words">
             <SubmissionComments :submission="submission" />
           </td>
         </tr>

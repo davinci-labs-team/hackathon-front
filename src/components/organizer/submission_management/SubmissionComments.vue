@@ -25,7 +25,7 @@ const getPendingJuries = () => {
       :key="index"
       class="mb-3 p-2 border rounded bg-gray-50"
     >
-      <div class="flex justify-between items-center mb-1">
+      <div class="flex justify-between items-center mb-1 max-w-full">
         <div class="font-medium">
           • {{ comment.userName }}
           <span v-if="comment.role === 'JURY'" class="text-xs text-gray-600">(Jury)</span>

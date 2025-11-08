@@ -125,7 +125,7 @@ export const mockedSubmissions: SubmissionDTO[] = [
         userId: "mentor-005",
         userName: "Laura Fournier",
         role: UserRole.MENTOR,
-        content: "Très bonne progression, équipe investie.",
+        content: "Très bonne progression, équipe investie. Félicitations ! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
         createdAt: "2025-11-05T11:00:00Z",
       },
     ],
