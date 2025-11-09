@@ -39,11 +39,24 @@
     return message.replace(/:\s*/g, ':\n')
   }
 
-  const getThemeAndSubject = (team: TeamDTO) => {
-    const theme = props.themes.find((theme) => theme.id === team.themeId)
-    if (!theme) return ''
-    const subject = theme.subjects.find((subject) => subject.id === team.subjectId)
-    return subject ? `${theme.name} - ${subject.name}` : theme.name
+  const getSubject = (subjectId: string) => {
+    for (const theme of props.themes) {
+      const subject = theme.subjects.find((subj) => subj.id === subjectId)
+      if (subject) {
+        return subject.name
+      }
+    }
+    return ''
+  }
+
+  const getTheme = (subjectId: string) => {
+    for (const theme of props.themes) {
+      const subject = theme.subjects.find((subj) => subj.id === subjectId)
+      if (subject) {
+        return theme.name
+      }
+    }
+    return ''
   }
 
   const getChipPadding = (text: string) => {
@@ -100,7 +113,12 @@
             </div>
           </td>
           <td class="px-4 py-2">
-            {{ getThemeAndSubject(team) }}
+            <div class="font-medium">
+              {{ getTheme(team.subjectId) }}
+            </div>
+            <div class="text-sm text-gray-600">
+              {{ getSubject(team.subjectId) }}
+            </div>
           </td>
 
           <td class="px-4 py-2 text-center">

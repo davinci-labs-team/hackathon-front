@@ -45,13 +45,24 @@
     showWithdrawTeamDialog.value = false
   }
 
-  const getThemeAndSubject = (subjectId: string) => {
-    const theme = props.themes.find((theme) =>
-      theme.subjects.some((subject) => subject.id === subjectId)
-    )
-    if (!theme) return '-'
-    const subject = theme.subjects.find((subject) => subject.id === subjectId)
-    return subject ? `${theme.name} - \n${subject.name}` : theme.name
+  const getSubject = (subjectId: string) => {
+    for (const theme of props.themes) {
+      const subject = theme.subjects.find((subj) => subj.id === subjectId)
+      if (subject) {
+        return subject.name
+      }
+    }
+    return ''
+  }
+
+  const getTheme = (subjectId: string) => {
+    for (const theme of props.themes) {
+      const subject = theme.subjects.find((subj) => subj.id === subjectId)
+      if (subject) {
+        return theme.name
+      }
+    }
+    return ''
   }
 
   const getEligibleTeamsToAssign = () => {
@@ -62,9 +73,9 @@
         case UserRole.PARTICIPANT:
           return getEligibleTeamsForUser(props.teams, user, props.config)
         case UserRole.MENTOR:
-          return props.teams.filter((t => !user.mentorTeams?.some(ut => ut.id === t.id)))
+          return props.teams.filter((t) => !user.mentorTeams?.some((ut) => ut.id === t.id))
         case UserRole.JURY:
-          return props.teams.filter((t => !user.juryTeams?.some(ut => ut.id === t.id)))
+          return props.teams.filter((t) => !user.juryTeams?.some((ut) => ut.id === t.id))
         default:
           return []
       }
@@ -78,11 +89,11 @@
     if (user?.role) {
       switch (user.role) {
         case UserRole.PARTICIPANT:
-          return props.teams.filter(t => t.id === user.teamId)
+          return props.teams.filter((t) => t.id === user.teamId)
         case UserRole.MENTOR:
-          return props.teams.filter(t => user.mentorTeams?.some(ut => ut.id === t.id))
+          return props.teams.filter((t) => user.mentorTeams?.some((ut) => ut.id === t.id))
         case UserRole.JURY:
-          return props.teams.filter(t => user.juryTeams?.some(ut => ut.id === t.id))
+          return props.teams.filter((t) => user.juryTeams?.some((ut) => ut.id === t.id))
         default:
           return []
       }
@@ -143,7 +154,15 @@
             ></v-icon>
           </td>
           <td class="px-4 py-2 text-center">
-            {{ user.favoriteSubjectId ? getThemeAndSubject(user.favoriteSubjectId) : '-' }}
+            <div v-if="user.favoriteSubjectId">
+              <div class="font-medium">
+                {{ getTheme(user.favoriteSubjectId) }}
+              </div>
+              <div class="text-sm text-gray-600">
+                {{ getSubject(user.favoriteSubjectId) }}
+              </div>
+            </div>
+            <div v-else>-</div>
           </td>
           <td class="px-4 py-2 text-center">
             <UserTeamActions
