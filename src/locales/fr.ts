@@ -248,6 +248,7 @@ export default {
         assignTeamTo: 'Assigner {name} à l’équipe',
         withdrawTeamFrom: 'Retirer {name} de l’équipe',
         selectTeam: 'Sélectionner une équipe',
+        autogenerate: 'Générer automatiquement des équipes',
       },
       dialog: {
         deleteConfirmTitle: 'Confirmer la suppression',
@@ -259,6 +260,8 @@ export default {
       teamCreated: 'Équipe créée avec succès',
       teamUpdated: 'Équipe mise à jour avec succès',
       lockImpossible: 'Impossible de verrouiller l’équipe avec des violations de contraintes, corrigez-les ou ignorez les contraintes',
+      teamAutogenerateSuccess: 'Équipes générées automatiquement avec succès',
+      teamAutogenerateError: "Erreur lors de la génération automatique des équipes",
     },
     submissionManagement: {
       title: 'Gestion des Dépôts',

@@ -258,6 +258,21 @@
     }
   }
 
+  const autogenerateTeams = async () => {
+    try {
+      await teamService.autogenerateTeams()
+      text.value = t('organizer.teamManagement.teamAutogenerateSuccess')
+      error.value = false
+      snackbar.value = true
+      await Promise.all([fetchUsers(), fetchTeams()])
+    } catch (err) {
+      console.error('Error autogenerating teams:', err)
+      text.value = t('organizer.teamManagement.teamAutogenerateError')
+      error.value = true
+      snackbar.value = true
+    }
+  }
+
   onMounted(() => {
     fetchUsers()
     fetchThemes()
@@ -308,6 +323,15 @@
             </v-btn>
           </div>
         </div>
+
+        <v-btn
+          color="secondary"
+          class="mb-4"
+          @click="autogenerateTeams"
+          :disabled="loadingTeams"
+        >
+            {{ t('organizer.teamManagement.actions.autogenerate') }}
+        </v-btn>
 
         <TeamFilters
           v-model:view-mode="viewMode"
