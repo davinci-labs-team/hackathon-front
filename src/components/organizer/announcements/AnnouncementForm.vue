@@ -126,7 +126,7 @@ const uploadImages = async (): Promise<string[]> => {
 
   try {
     const uploadedPaths = await Promise.all(
-      newImages.value.map((file) => S3BucketService.uploadFile(file))
+      newImages.value.map((file) => S3BucketService.uploadFile(file, 'annonces'))
     )
 
     return uploadedPaths.map((res) => res.path)
@@ -184,7 +184,7 @@ const signedUrls = ref<string[]>([])
 
 const loadImages = async () => {
   if (props.announcement && props.announcement.files && props.announcement.files.length > 0) {
-    signedUrls.value = await generateSignedUrls(props.announcement.files)
+    signedUrls.value = await generateSignedUrls('annonces', props.announcement.files)
   }
 }
 

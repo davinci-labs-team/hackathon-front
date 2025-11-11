@@ -2,36 +2,53 @@
 import { ref, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { getRole, getTPrefix } from '@/utils/user'
-import { depositService } from '@/services/depositService'
 import { userService } from '@/services/userService'
 import { useAuthStore } from '@/stores/auth'
-import type { DepositDTO } from '@/types/deposit'
 import type { UserDTO } from '@/types/user'
+import { SubmissionDTO } from '@/types/submission'
+import { submissionService } from '@/services/submissionService'
+import { teamService } from '@/services/teamService'
+import { TeamDTO } from '@/types/team'
+import { S3BucketService } from '@/services/s3BucketService'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
 
 const userInfo = ref<UserDTO | null>(null)
-const depositInfo = ref<DepositDTO | null>(null)
+const teamInfo = ref<TeamDTO | null>(null)
+const submissionInfo = ref<SubmissionDTO | null>(null)
+const dueDate = ref<Date | null>(null)
+const loading = ref(false)
+
+// État pour l'upload
+const selectedFile = ref<File | null>(null)
+const uploading = ref(false)
+const uploadError = ref('')
+const uploadSuccess = ref(false)
 
 onMounted(async () => {
   if (authStore.user?.id) {
     try {
+      loading.value = true
       const userResponse = await userService.getById(authStore.user.id)
       userInfo.value = userResponse
       if (!userResponse.teamId) return
-      // Handle possibility that getbyTeamId returns an array of deposits
-      const depositResponse = await depositService.getbyTeamId(userResponse.teamId) as DepositDTO | DepositDTO[] | null
-      if (Array.isArray(depositResponse)) {
-        depositInfo.value = depositResponse.length ? depositResponse[0] : null
-      } else {
-        depositInfo.value = depositResponse
+
+      const teamResponse = await teamService.getById(userResponse.teamId)
+      teamInfo.value = teamResponse
+
+      const submissionResponse = await submissionService.getbyTeamId(userResponse.teamId) as SubmissionDTO | null
+      submissionInfo.value = submissionResponse
+      if (!submissionInfo.value) {
+        submissionInfo.value = await submissionService.create(userResponse.teamId)
       }
-      if (!depositInfo.value) {
-        depositInfo.value = await depositService.create(userResponse.teamId)
-      }
+
+      const date = await submissionService.getDueDate()
+      dueDate.value = new Date(date)
     } catch (err) {
       console.error('Error fetching user data:', err)
+    } finally {
+      loading.value = false
     }
   }
 })
@@ -39,144 +56,375 @@ onMounted(async () => {
 const role = getRole()
 const tPrefix = getTPrefix(role, true)
 
-const formattedDueDate = computed(() => {
-  if (!depositInfo.value?.dueDate) return '-'
-  return new Date(depositInfo.value.dueDate).toLocaleString()
+const formatDate = (dateVal?: string | Date | null) => {
+  if (!dateVal) return '-'
+  const date = new Date(dateVal)
+  return date.toLocaleString('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+const statusLabel = computed(() => {
+  if (!submissionInfo.value?.status) return 'Non soumis'
+  const statusMap = {
+    NOT_SUBMITTED: 'Non soumis',
+    PENDING: 'En attente d\'évaluation',
+    GRADED: 'Évalué'
+  }
+  return statusMap[submissionInfo.value.status as unknown as keyof typeof statusMap] || submissionInfo.value.status
 })
 
-const formattedReviewedAt = computed(() => {
-  if (!depositInfo.value?.reviewedAt) return '-'
-  return new Date(depositInfo.value.reviewedAt).toLocaleString()
+const statusColor = computed(() => {
+  if (!submissionInfo.value?.status) return 'grey'
+  const colorMap = {
+    NOT_SUBMITTED: 'grey',
+    PENDING: 'orange',
+    GRADED: 'green'
+  }
+  return colorMap[submissionInfo.value.status as unknown as keyof typeof colorMap] || 'grey'
 })
 
 const timeRemaining = computed(() => {
-  if (!depositInfo.value?.dueDate) return '-'
-  const diff = new Date(depositInfo.value.dueDate).getTime() - Date.now()
+  if (!dueDate.value) return '-'
+  const diff = new Date(dueDate.value).getTime() - Date.now()
   if (diff <= 0) return 'Délai dépassé'
-  const hours = Math.floor(diff / (1000 * 60 * 60))
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-  return `${hours} h ${minutes} min`
+  
+  if (days > 0) return `${days}j ${hours}h ${minutes}min`
+  return `${hours}h ${minutes}min`
 })
+
+const hasEvaluations = computed(() => {
+  return submissionInfo.value?.evaluations && submissionInfo.value.evaluations.length > 0
+})
+
+const hasComments = computed(() => {
+  return submissionInfo.value?.comments && submissionInfo.value.comments.length > 0
+})
+
+// Gestion de l'upload
+const handleUpload = async () => {
+  if (!selectedFile.value) {
+    uploadError.value = 'Veuillez sélectionner un fichier'
+    return
+  }
+
+  // Vérifier l'extension du fichier
+  if (!selectedFile.value.name.endsWith('.zip')) {
+    uploadError.value = 'Seuls les fichiers .zip sont acceptés'
+    return
+  }
+
+  uploading.value = true
+  uploadError.value = ''
+  uploadSuccess.value = false
+
+  try {
+    // Upload du fichier vers S3
+    const result = await S3BucketService.uploadFile(selectedFile.value, 'submissions')
+    
+    // Mettre à jour la soumission avec le chemin du fichier
+    if (submissionInfo.value?.id) {
+      await submissionService.update({
+        teamId: submissionInfo.value.teamId,
+        submissionFilePath: result.path,
+      })
+      
+      // Recharger les informations de soumission
+      if (userInfo.value?.teamId) {
+        submissionInfo.value = await submissionService.getbyTeamId(userInfo.value.teamId) as SubmissionDTO | null
+      }
+    }
+    
+    uploadSuccess.value = true
+    setTimeout(() => {
+      uploadSuccess.value = false
+    }, 3000)
+    
+    console.log('Fichier uploadé avec succès:', result.path)
+  } catch (error) {
+    console.error('Erreur lors de l\'upload:', error)
+    uploadError.value = 'Erreur lors de l\'upload du fichier'
+  } finally {
+    uploading.value = false
+  }
+}
+
+const downloadSubmissionFile = async () => {
+  if (!submissionInfo.value?.submissionFilePath) return
+  
+  try {
+    const { url } = await S3BucketService.getFileUrl('submissions', submissionInfo.value.submissionFilePath)
+    window.open(url, '_blank')
+  } catch (error) {
+    console.error('Erreur lors du téléchargement:', error)
+  }
+}
+
 </script>
 
 <template>
   <v-container class="py-10">
     <h1 class="text-3xl font-bold mb-8">Dépôt de projet</h1>
 
-    <!-- Bloc principal -->
-    <v-card class="pa-6 mb-8">
-      <h2 class="text-xl font-semibold mb-4">Équipe {{ userInfo?.teamId || '-' }}</h2>
+    <v-progress-linear v-if="loading" indeterminate color="primary" class="mb-4" />
 
-      <v-row align="center" class="mb-4">
-        <v-col cols="12" md="8">
-          <v-text-field
-            label="Dépôt GitHub"
-            placeholder="https://github.com/nom/repertoire"
-            variant="outlined"
-            density="comfortable"
-          />
-        </v-col>
-        <v-col cols="12" md="4">
-          <v-btn color="primary">Déposer</v-btn>
+    <!-- Bloc principal - Soumission -->
+    <v-card class="pa-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">Équipe {{ teamInfo?.name || '-' }}</h2>
+
+      <v-row class="mb-4">
+        <v-col cols="12">
+          <h3>
+            <span v-if="submissionInfo?.githubLink">
+              <a
+                :href="submissionInfo.githubLink"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="color: #1e88e5; text-decoration: underline;"
+              >
+                {{ submissionInfo.githubLink }}
+              </a>
+            </span>
+            <span v-else>Aucun lien GitHub fourni</span>
+          </h3>
         </v-col>
       </v-row>
 
-      <h3 class="text-base font-semibold mb-2">Autres fichiers</h3>
+      <h3 class="text-base font-semibold mb-3">Fichiers du projet (.zip)</h3>
       <v-row align="center" class="mb-2">
         <v-col cols="12" md="8">
           <v-file-input
-            label="Choisir un fichier"
+            v-model="selectedFile"
+            label="Choisir un fichier ZIP"
             variant="outlined"
             density="comfortable"
-            hide-details
+            accept=".zip"
+            prepend-icon="mdi-paperclip"
+            :hide-details="!uploadError"
+            :error-messages="uploadError"
+            :disabled="uploading"
           />
         </v-col>
         <v-col cols="12" md="4">
-          <v-btn color="primary">Uploader</v-btn>
+          <v-btn 
+            color="primary" 
+            block
+            @click="handleUpload"
+            :loading="uploading"
+            :disabled="!selectedFile || uploading"
+          >
+            <v-icon left>mdi-upload</v-icon>
+            Uploader
+          </v-btn>
         </v-col>
       </v-row>
 
-      <v-list v-if="depositInfo?.files?.length">
-        <v-list-item
-          v-for="(file, i) in depositInfo.files"
-          :key="i"
-          class="py-1"
-        >
-          <v-list-item-title>{{ file }}</v-list-item-title>
-          <template #append>
-            <v-icon color="green">mdi-check</v-icon>
-          </template>
-        </v-list-item>
-      </v-list>
+      <v-alert
+        v-if="uploadSuccess"
+        type="success"
+        variant="tonal"
+        class="mt-4"
+        closable
+      >
+        <v-icon>mdi-check-circle</v-icon>
+        Fichier uploadé avec succès !
+      </v-alert>
 
-      <v-btn color="success" class="mt-4">Sauvegarder</v-btn>
+      <v-alert
+        v-if="submissionInfo?.submissionFilePath"
+        type="success"
+        variant="tonal"
+        class="mt-4"
+      >
+        <v-row align="center">
+          <v-col cols="auto">
+            <v-icon>mdi-file-check</v-icon>
+          </v-col>
+          <v-col>
+            Fichier uploadé : {{ submissionInfo.submissionFilePath.split('/').pop() }}
+          </v-col>
+          <v-col cols="auto">
+            <v-btn
+              variant="outlined"
+              size="small"
+              prepend-icon="mdi-download"
+              @click="downloadSubmissionFile"
+            >
+              Télécharger
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-alert>
     </v-card>
 
     <!-- Statut de remise -->
-    <v-card class="pa-6 mb-8">
+    <v-card class="pa-6 mb-6">
       <h2 class="text-xl font-semibold mb-4">Statut de remise</h2>
 
-      <v-table density="compact">
+      <v-table density="comfortable">
         <tbody>
           <tr>
-            <td><b>Équipe</b></td>
-            <td>{{ userInfo?.teamId || '-' }}</td>
+            <td class="font-weight-bold">Équipe</td>
+            <td>{{ teamInfo?.name || '-' }}</td>
           </tr>
           <tr>
-            <td><b>Statut des travaux remis</b></td>
-            <td>{{ depositInfo?.depositStatus || 'Aucun document rendu' }}</td>
+            <td class="font-weight-bold">Statut</td>
+            <td>
+              <v-chip :color="statusColor" size="small">
+                {{ statusLabel }}
+              </v-chip>
+            </td>
           </tr>
           <tr>
-            <td><b>Statut de l’évaluation</b></td>
-            <td>{{ depositInfo?.evaluationStatus || '-' }}</td>
+            <td class="font-weight-bold">Temps restant</td>
+            <td>
+              <span :class="{ 'text-red': timeRemaining === 'Délai dépassé' }">
+                {{ timeRemaining }}
+              </span>
+            </td>
           </tr>
           <tr>
-            <td><b>Temps restant</b></td>
-            <td>{{ timeRemaining }}</td>
+            <td class="font-weight-bold">Date limite</td>
+            <td>{{ formatDate(dueDate) }}</td>
           </tr>
           <tr>
-            <td><b>Dernière modification</b></td>
-            <td>{{ formattedDueDate }}</td>
+            <td class="font-weight-bold">Dernière modification</td>
+            <td>{{ formatDate(submissionInfo?.updatedAt) }}</td>
           </tr>
           <tr>
-            <td><b>Commentaires</b></td>
-            <td>{{ depositInfo?.comments || '-' }}</td>
+            <td class="font-weight-bold">Créé le</td>
+            <td>{{ formatDate(submissionInfo?.createdAt) }}</td>
           </tr>
         </tbody>
       </v-table>
     </v-card>
 
-    <!-- Feedback -->
-    <v-card class="pa-6">
-      <h2 class="text-xl font-semibold mb-4">Feedback</h2>
+    <!-- Évaluations -->
+    <v-card class="pa-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">Évaluations</h2>
 
-      <v-table density="compact">
-        <tbody>
-          <tr>
-            <td><b>Note</b></td>
-            <td>{{ depositInfo?.grade ? depositInfo.grade + '/20' : '-' }}</td>
-          </tr>
-          <tr>
-            <td><b>Évalué le</b></td>
-            <td>{{ formattedReviewedAt }}</td>
-          </tr>
-          <tr>
-            <td><b>Évalué par</b></td>
-            <td>{{ depositInfo?.feedback || '-' }}</td>
-          </tr>
-        </tbody>
-      </v-table>
+      <div v-if="!hasEvaluations" class="text-grey text-center py-4">
+        Aucune évaluation disponible pour le moment
+      </div>
+
+      <div v-else>
+        <v-alert type="info" variant="tonal" class="mb-4">
+          <strong>Note moyenne : {{ submissionInfo?.grade }}/20</strong>
+        </v-alert>
+
+        <v-expansion-panels variant="accordion">
+          <v-expansion-panel
+            v-for="(evaluation, index) in submissionInfo?.evaluations"
+            :key="evaluation.id"
+          >
+            <v-expansion-panel-title>
+              <v-row align="center" no-gutters>
+                <v-col cols="8">
+                  <strong>Jury {{ index + 1 }}</strong>
+                </v-col>
+                <v-col cols="4" class="text-right">
+                  <v-chip color="primary" size="small">
+                    {{ evaluation.grade }}/20
+                  </v-chip>
+                </v-col>
+              </v-row>
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <div class="py-2">
+                <p class="text-caption text-grey mb-2">
+                  Évalué le {{ formatDate(evaluation.createdAt) }}
+                </p>
+                
+                <div v-if="evaluation.comment" class="mb-3">
+                  <strong>Commentaire :</strong>
+                  <p class="mt-1">{{ evaluation.comment }}</p>
+                </div>
+
+                <div v-if="evaluation.evaluationFilePath">
+                  <v-btn
+                    variant="outlined"
+                    size="small"
+                    prepend-icon="mdi-file-download"
+                  >
+                    Télécharger le fichier d'évaluation
+                  </v-btn>
+                </div>
+              </div>
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </div>
+    </v-card>
+
+    <!-- Commentaires des mentors -->
+    <v-card class="pa-6">
+      <h2 class="text-xl font-semibold mb-4">Commentaires des mentors</h2>
+
+      <div v-if="!hasComments" class="text-grey text-center py-4">
+        Aucun commentaire pour le moment
+      </div>
+
+      <v-list v-else lines="three">
+        <v-list-item
+          v-for="comment in submissionInfo?.comments"
+          :key="comment.id"
+          class="mb-2 border rounded"
+        >
+          <template #prepend>
+            <v-avatar color="primary">
+              <v-icon>mdi-account</v-icon>
+            </v-avatar>
+          </template>
+
+          <v-list-item-title class="font-weight-bold mb-1">
+            Mentor
+          </v-list-item-title>
+          
+          <v-list-item-subtitle class="text-caption text-grey mb-2">
+            {{ formatDate(comment.createdAt) }}
+          </v-list-item-subtitle>
+
+          <div class="mt-2">
+            {{ comment.content || 'Aucun contenu' }}
+          </div>
+        </v-list-item>
+      </v-list>
     </v-card>
   </v-container>
 </template>
 
 <style scoped>
 .v-table {
-  border: 1px solid #ddd;
   border-radius: 8px;
 }
+
+.v-table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
 td {
-  padding: 8px 12px;
+  padding: 12px 16px !important;
   border-bottom: 1px solid #eee;
+}
+
+td:first-child {
+  width: 200px;
+}
+
+.text-red {
+  color: #d32f2f;
+  font-weight: 600;
+}
+
+.border {
+  border: 1px solid #e0e0e0;
 }
 </style>

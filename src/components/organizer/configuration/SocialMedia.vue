@@ -26,7 +26,7 @@
   const getBannerAndLogoPictureUrl = async () => {
     if (mediaSettings.value?.bannerPictureId) {
       try {
-        const response = await S3BucketService.getFileUrl(mediaSettings.value.bannerPictureId)
+        const response = await S3BucketService.getFileUrl('annonces', mediaSettings.value.bannerPictureId)
         bannerPicture.value = response.url
       } catch (err) {
         console.error('Error fetching banner picture:', err)
@@ -34,7 +34,7 @@
     }
     if (mediaSettings.value?.hackathonLogoId) {
       try {
-        const response = await S3BucketService.getFileUrl(mediaSettings.value.hackathonLogoId)
+        const response = await S3BucketService.getFileUrl('annonces', mediaSettings.value.hackathonLogoId)
         logoPicture.value = response.url
       } catch (err) {
         console.error('Error fetching logo picture:', err)
@@ -59,9 +59,9 @@
   const handleSave = async () => {
     try {
       if (bannerFileInput.value)
-        mediaSettings.value.bannerPictureId = (await S3BucketService.uploadFile(bannerFileInput.value)).path
+        mediaSettings.value.bannerPictureId = (await S3BucketService.uploadFile(bannerFileInput.value, 'annonces')).path
       if (logoFileInput.value)
-        mediaSettings.value.hackathonLogoId = (await S3BucketService.uploadFile(logoFileInput.value)).path
+        mediaSettings.value.hackathonLogoId = (await S3BucketService.uploadFile(logoFileInput.value, 'annonces')).path
 
       await configurationService.update(ConfigurationKey.MEDIA, {
         value: mediaSettings.value,
