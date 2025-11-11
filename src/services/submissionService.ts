@@ -26,8 +26,7 @@ export const submissionService = {
 
   async getDueDate(): Promise<Date> {
     const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/submission/due-date`, { headers: getAuthHeaders() })
-    console.log('API response:', res.data)
-    return new Date(res.data) // Not res.data.dueDate
+    return new Date(res.data)
   },
 
   async update(submission: UpdateSubmissionDto): Promise<SubmissionDTO> {

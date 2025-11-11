@@ -294,6 +294,58 @@ export default {
       projects: 'Dépôt de Projet',
       faq: 'FAQ',
     },
+    submission: {
+      title: 'Dépôt de projet',
+      
+      team: {
+        title: 'Équipe',
+        noGithubLink: 'Aucun lien GitHub fourni',
+      },
+      
+      upload: {
+        title: 'Fichiers du projet (.zip)',
+        chooseFile: 'Choisir un fichier ZIP',
+        uploadButton: 'Envoyer',
+        selectFileError: 'Veuillez sélectionner un fichier',
+        zipOnlyError: 'Seuls les fichiers .zip sont acceptés',
+        uploadError: 'Erreur lors de l\'upload du fichier',
+        uploadSuccess: 'Fichier uploadé avec succès !',
+        fileUploaded: 'Fichier uploadé',
+        download: 'Télécharger',
+      },
+      
+      status: {
+        title: 'Statut de remise',
+        team: 'Équipe',
+        status: 'Statut',
+        timeRemaining: 'Temps restant',
+        deadline: 'Date limite',
+        lastModified: 'Dernière modification',
+        createdAt: 'Créé le',
+        deadlineExceeded: 'Délai dépassé',
+        
+        notSubmitted: 'Non soumis',
+        pending: 'En attente d\'évaluation',
+        graded: 'Évalué',
+      },
+      
+      evaluations: {
+        title: 'Évaluations',
+        noEvaluations: 'Aucune évaluation disponible pour le moment',
+        averageGrade: 'Note moyenne',
+        jury: 'Jury',
+        evaluatedOn: 'Évalué le',
+        comment: 'Commentaire',
+        downloadFile: 'Télécharger le fichier d\'évaluation',
+      },
+      
+      comments: {
+        title: 'Commentaires des mentors',
+        noComments: 'Aucun commentaire pour le moment',
+        mentor: 'Mentor',
+        noContent: 'Aucun contenu',
+      },
+    },
   },
 
   // Header and Footer

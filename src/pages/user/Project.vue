@@ -11,7 +11,6 @@ import { teamService } from '@/services/teamService'
 import { TeamDTO } from '@/types/team'
 import { S3BucketService } from '@/services/s3BucketService'
 
-const { t } = useI18n()
 const authStore = useAuthStore()
 
 const userInfo = ref<UserDTO | null>(null)
@@ -53,6 +52,7 @@ onMounted(async () => {
   }
 })
 
+const { t } = useI18n()
 const role = getRole()
 const tPrefix = getTPrefix(role, true)
 
@@ -69,11 +69,11 @@ const formatDate = (dateVal?: string | Date | null) => {
 }
 
 const statusLabel = computed(() => {
-  if (!submissionInfo.value?.status) return 'Non soumis'
+  if (!submissionInfo.value?.status) return  t(`${tPrefix}.submission.status.notSubmitted`)
   const statusMap = {
-    NOT_SUBMITTED: 'Non soumis',
-    PENDING: 'En attente d\'évaluation',
-    GRADED: 'Évalué'
+    NOT_SUBMITTED: t(`${tPrefix}.submission.status.notSubmitted`),
+    PENDING: t(`${tPrefix}.submission.status.pending`),
+    GRADED: t(`${tPrefix}.submission.status.graded`)
   }
   return statusMap[submissionInfo.value.status as unknown as keyof typeof statusMap] || submissionInfo.value.status
 })
@@ -91,7 +91,7 @@ const statusColor = computed(() => {
 const timeRemaining = computed(() => {
   if (!dueDate.value) return '-'
   const diff = new Date(dueDate.value).getTime() - Date.now()
-  if (diff <= 0) return 'Délai dépassé'
+  if (diff <= 0) return t(`${tPrefix}.submission.status.deadlineExceeded`)
   
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))
   const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
@@ -118,7 +118,7 @@ const handleUpload = async () => {
 
   // Vérifier l'extension du fichier
   if (!selectedFile.value.name.endsWith('.zip')) {
-    uploadError.value = 'Seuls les fichiers .zip sont acceptés'
+    uploadError.value = t(`${tPrefix}.submission.upload.zipOnlyError`)
     return
   }
 
@@ -147,11 +147,11 @@ const handleUpload = async () => {
     setTimeout(() => {
       uploadSuccess.value = false
     }, 3000)
-    
-    console.log('Fichier uploadé avec succès:', result.path)
+
+    console.log('File uploaded successfully:', result.path)
   } catch (error) {
-    console.error('Erreur lors de l\'upload:', error)
-    uploadError.value = 'Erreur lors de l\'upload du fichier'
+    console.error('Error uploading file:', error)
+    uploadError.value = t(`${tPrefix}.submission.upload.uploadError`)
   } finally {
     uploading.value = false
   }
@@ -164,7 +164,7 @@ const downloadSubmissionFile = async () => {
     const { url } = await S3BucketService.getFileUrl('submissions', submissionInfo.value.submissionFilePath)
     window.open(url, '_blank')
   } catch (error) {
-    console.error('Erreur lors du téléchargement:', error)
+    console.error('Error downloading file:', error)
   }
 }
 
@@ -172,13 +172,13 @@ const downloadSubmissionFile = async () => {
 
 <template>
   <v-container class="py-10">
-    <h1 class="text-3xl font-bold mb-8">Dépôt de projet</h1>
+    <h1 class="text-3xl font-bold mb-8">{{ t(`${tPrefix}.submission.title`) }}</h1>
 
     <v-progress-linear v-if="loading" indeterminate color="primary" class="mb-4" />
 
     <!-- Bloc principal - Soumission -->
     <v-card class="pa-6 mb-6">
-      <h2 class="text-xl font-semibold mb-4">Équipe {{ teamInfo?.name || '-' }}</h2>
+      <h2 class="text-xl font-semibold mb-4">{{ t(`${tPrefix}.submission.team.title`) }} {{ teamInfo?.name || '-' }}</h2>
 
       <v-row class="mb-4">
         <v-col cols="12">
@@ -193,17 +193,17 @@ const downloadSubmissionFile = async () => {
                 {{ submissionInfo.githubLink }}
               </a>
             </span>
-            <span v-else>Aucun lien GitHub fourni</span>
+            <span v-else>{{ t(`${tPrefix}.submission.team.noGithubLink`) }}</span>
           </h3>
         </v-col>
       </v-row>
 
-      <h3 class="text-base font-semibold mb-3">Fichiers du projet (.zip)</h3>
+      <h3 class="text-base font-semibold mb-3">{{ t(`${tPrefix}.submission.upload.title`) }}</h3>
       <v-row align="center" class="mb-2">
         <v-col cols="12" md="8">
           <v-file-input
             v-model="selectedFile"
-            label="Choisir un fichier ZIP"
+            :label="t(`${tPrefix}.submission.upload.chooseFile`)"
             variant="outlined"
             density="comfortable"
             accept=".zip"
@@ -222,7 +222,7 @@ const downloadSubmissionFile = async () => {
             :disabled="!selectedFile || uploading"
           >
             <v-icon left>mdi-upload</v-icon>
-            Uploader
+            {{ t(`${tPrefix}.submission.upload.uploadButton`) }}
           </v-btn>
         </v-col>
       </v-row>
@@ -235,7 +235,7 @@ const downloadSubmissionFile = async () => {
         closable
       >
         <v-icon>mdi-check-circle</v-icon>
-        Fichier uploadé avec succès !
+        {{ t(`${tPrefix}.submission.upload.uploadSuccess`) }}
       </v-alert>
 
       <v-alert
@@ -249,7 +249,8 @@ const downloadSubmissionFile = async () => {
             <v-icon>mdi-file-check</v-icon>
           </v-col>
           <v-col>
-            Fichier uploadé : {{ submissionInfo.submissionFilePath.split('/').pop() }}
+                    {{ t(`${tPrefix}.submission.upload.fileUploaded`) }}
+ : {{ submissionInfo.submissionFilePath.split('/').pop() }}
           </v-col>
           <v-col cols="auto">
             <v-btn
@@ -258,7 +259,7 @@ const downloadSubmissionFile = async () => {
               prepend-icon="mdi-download"
               @click="downloadSubmissionFile"
             >
-              Télécharger
+              {{ t(`${tPrefix}.submission.upload.download`) }}
             </v-btn>
           </v-col>
         </v-row>
@@ -267,16 +268,16 @@ const downloadSubmissionFile = async () => {
 
     <!-- Statut de remise -->
     <v-card class="pa-6 mb-6">
-      <h2 class="text-xl font-semibold mb-4">Statut de remise</h2>
+      <h2 class="text-xl font-semibold mb-4">{{ t(`${tPrefix}.submission.status.title`) }}</h2>
 
       <v-table density="comfortable">
         <tbody>
           <tr>
-            <td class="font-weight-bold">Équipe</td>
+            <td class="font-weight-bold">{{ t(`${tPrefix}.submission.status.team`) }}</td>
             <td>{{ teamInfo?.name || '-' }}</td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Statut</td>
+            <td class="font-weight-bold">{{ t(`${tPrefix}.submission.status.status`) }}</td>
             <td>
               <v-chip :color="statusColor" size="small">
                 {{ statusLabel }}
@@ -284,7 +285,7 @@ const downloadSubmissionFile = async () => {
             </td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Temps restant</td>
+            <td class="font-weight-bold">{{ t(`${tPrefix}.submission.status.timeRemaining`) }}</td>
             <td>
               <span :class="{ 'text-red': timeRemaining === 'Délai dépassé' }">
                 {{ timeRemaining }}
@@ -292,15 +293,15 @@ const downloadSubmissionFile = async () => {
             </td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Date limite</td>
+            <td class="font-weight-bold">{{ t(`${tPrefix}.submission.status.deadline`) }}</td>
             <td>{{ formatDate(dueDate) }}</td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Dernière modification</td>
+            <td class="font-weight-bold">{{ t(`${tPrefix}.submission.status.lastModified`) }}</td>
             <td>{{ formatDate(submissionInfo?.updatedAt) }}</td>
           </tr>
           <tr>
-            <td class="font-weight-bold">Créé le</td>
+            <td class="font-weight-bold">{{ t(`${tPrefix}.submission.status.createdAt`) }}</td>
             <td>{{ formatDate(submissionInfo?.createdAt) }}</td>
           </tr>
         </tbody>
@@ -309,15 +310,15 @@ const downloadSubmissionFile = async () => {
 
     <!-- Évaluations -->
     <v-card class="pa-6 mb-6">
-      <h2 class="text-xl font-semibold mb-4">Évaluations</h2>
+      <h2 class="text-xl font-semibold mb-4">{{ t(`${tPrefix}.submission.evaluations.title`) }}</h2>
 
       <div v-if="!hasEvaluations" class="text-grey text-center py-4">
-        Aucune évaluation disponible pour le moment
+        {{ t(`${tPrefix}.submission.evaluations.noEvaluations`) }}
       </div>
 
       <div v-else>
         <v-alert type="info" variant="tonal" class="mb-4">
-          <strong>Note moyenne : {{ submissionInfo?.grade }}/20</strong>
+          <strong>{{ t(`${tPrefix}.submission.evaluations.averageGrade`) }} : {{ submissionInfo?.grade }}/20</strong>
         </v-alert>
 
         <v-expansion-panels variant="accordion">
@@ -328,7 +329,7 @@ const downloadSubmissionFile = async () => {
             <v-expansion-panel-title>
               <v-row align="center" no-gutters>
                 <v-col cols="8">
-                  <strong>Jury {{ index + 1 }}</strong>
+                  <strong>{{ t(`${tPrefix}.submission.evaluations.jury`) }} {{ index + 1 }}</strong>
                 </v-col>
                 <v-col cols="4" class="text-right">
                   <v-chip color="primary" size="small">
@@ -340,11 +341,11 @@ const downloadSubmissionFile = async () => {
             <v-expansion-panel-text>
               <div class="py-2">
                 <p class="text-caption text-grey mb-2">
-                  Évalué le {{ formatDate(evaluation.createdAt) }}
+                  {{ t(`${tPrefix}.submission.evaluations.evaluatedOn`) }} {{ formatDate(evaluation.createdAt) }}
                 </p>
                 
                 <div v-if="evaluation.comment" class="mb-3">
-                  <strong>Commentaire :</strong>
+                  <strong>{{ t(`${tPrefix}.submission.evaluations.comment`) }} :</strong>
                   <p class="mt-1">{{ evaluation.comment }}</p>
                 </div>
 
@@ -354,7 +355,7 @@ const downloadSubmissionFile = async () => {
                     size="small"
                     prepend-icon="mdi-file-download"
                   >
-                    Télécharger le fichier d'évaluation
+                    {{ t(`${tPrefix}.submission.evaluations.downloadFile`) }}
                   </v-btn>
                 </div>
               </div>
@@ -366,10 +367,10 @@ const downloadSubmissionFile = async () => {
 
     <!-- Commentaires des mentors -->
     <v-card class="pa-6">
-      <h2 class="text-xl font-semibold mb-4">Commentaires des mentors</h2>
+      <h2 class="text-xl font-semibold mb-4">{{ t(`${tPrefix}.submission.comments.title`) }}</h2>
 
       <div v-if="!hasComments" class="text-grey text-center py-4">
-        Aucun commentaire pour le moment
+        {{ t(`${tPrefix}.submission.comments.noComments`) }}
       </div>
 
       <v-list v-else lines="three">
@@ -385,7 +386,7 @@ const downloadSubmissionFile = async () => {
           </template>
 
           <v-list-item-title class="font-weight-bold mb-1">
-            Mentor
+            {{ t(`${tPrefix}.submission.comments.mentor`) }}
           </v-list-item-title>
           
           <v-list-item-subtitle class="text-caption text-grey mb-2">
@@ -393,7 +394,7 @@ const downloadSubmissionFile = async () => {
           </v-list-item-subtitle>
 
           <div class="mt-2">
-            {{ comment.content || 'Aucun contenu' }}
+            {{ comment.content || t(`${tPrefix}.submission.comments.noContent`) }}
           </div>
         </v-list-item>
       </v-list>

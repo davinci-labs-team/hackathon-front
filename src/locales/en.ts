@@ -287,10 +287,57 @@ export default {
     nav: {
       dashboard: 'Dashboard',
       teams: 'My Team',
-      projects: 'Project submission',
+      projects: 'Project Submission',
       faq: 'FAQ',
     },
+    submission: {
+      title: 'Project Submission',
+      team: {
+        title: 'Team',
+        noGithubLink: 'No GitHub link provided',
+      },
+      upload: {
+        title: 'Project Files (.zip)',
+        chooseFile: 'Choose a ZIP file',
+        uploadButton: 'Upload',
+        selectFileError: 'Please select a file',
+        zipOnlyError: 'Only .zip files are accepted',
+        uploadError: 'Error while uploading the file',
+        uploadSuccess: 'File uploaded successfully!',
+        fileUploaded: 'File uploaded',
+        download: 'Download',
+      },
+      status: {
+        title: 'Submission Status',
+        team: 'Team',
+        status: 'Status',
+        timeRemaining: 'Time Remaining',
+        deadline: 'Deadline',
+        lastModified: 'Last Modified',
+        createdAt: 'Created At',
+        deadlineExceeded: 'Deadline Exceeded',
+        notSubmitted: 'Not Submitted',
+        pending: 'Pending Evaluation',
+        graded: 'Graded',
+      },
+      evaluations: {
+        title: 'Evaluations',
+        noEvaluations: 'No evaluations available yet',
+        averageGrade: 'Average Grade:',
+        jury: 'Jury',
+        evaluatedOn: 'Evaluated On',
+        comment: 'Comment',
+        downloadFile: 'Download Evaluation File',
+      },
+      comments: {
+        title: 'Mentor Comments',
+        noComments: 'No comments yet',
+        mentor: 'Mentor',
+        noContent: 'No content',
+      },
+    },
   },
+
   // Header and Footer
   header: {
     public: 'Public Header',
