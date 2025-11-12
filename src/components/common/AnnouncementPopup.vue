@@ -24,7 +24,7 @@
 
   const loadImages = async () => {
   if (props.announcement.files && props.announcement.files.length > 0) {
-    signedUrls.value = await generateSignedUrls(props.announcement.files)
+    signedUrls.value = await generateSignedUrls('annonces', props.announcement.files)
   }
 }
 

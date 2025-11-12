@@ -29,7 +29,7 @@
   const getBannerAndLogoPictureUrl = async () => {
     if (mediaSettings.value?.bannerPictureId) {
       try {
-        const response = await S3BucketService.getFileUrl(mediaSettings.value.bannerPictureId)
+        const response = await S3BucketService.getFileUrl('annonces', mediaSettings.value.bannerPictureId)
         bannerPicture.value = response.url
       } catch (err) {
         console.error('Error fetching banner picture:', err)
@@ -37,7 +37,7 @@
     }
     if (mediaSettings.value?.hackathonLogoId) {
       try {
-        const response = await S3BucketService.getFileUrl(mediaSettings.value.hackathonLogoId)
+        const response = await S3BucketService.getFileUrl('annonces', mediaSettings.value.hackathonLogoId)
         logoPicture.value = response.url
       } catch (err) {
         console.error('Error fetching logo picture:', err)
