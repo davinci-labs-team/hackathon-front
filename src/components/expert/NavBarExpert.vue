@@ -51,7 +51,7 @@
     <!-- Actions (Language + Profile) -->
     <div class="flex items-center gap-4">
       <LanguageSelector />
-      <RouterLink to="/user/profile">
+      <RouterLink to="/expert/profile">
         <v-btn icon class="bg-transparent">
           <v-icon size="36">mdi-account-circle</v-icon>
         </v-btn>

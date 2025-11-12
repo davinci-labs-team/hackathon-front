@@ -61,3 +61,8 @@ export interface SocialMediaDTO {
   id: string
   username: string
 }
+
+export interface ExpertTeamsResponse {
+  juryTeams: TeamDTO[]
+  mentorTeams: TeamDTO[]
+}

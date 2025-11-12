@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
-import type { UserDTO, UserReducedDTO } from '@/types/user'
+import type { ExpertTeamsResponse, UserDTO, UserReducedDTO } from '@/types/user'
 
 function getAuthHeaders() {
   const authStore = useAuthStore()
@@ -27,6 +27,12 @@ export const userService = {
 
   async getById(userId: string): Promise<UserDTO> {
     const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/${userId}`,
+      { headers: getAuthHeaders() })
+    return res.data
+  },
+
+  async getExpertTeamsById(userId: string): Promise<ExpertTeamsResponse> {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/${userId}/expertTeams`,
       { headers: getAuthHeaders() })
     return res.data
   },

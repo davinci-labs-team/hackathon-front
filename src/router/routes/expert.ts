@@ -13,31 +13,31 @@ export default [
     children: [
       {
         path: 'dashboard',
-        name: 'JuryDashboard',
+        name: 'ExpertDashboard',
         component: Dashboard,
         meta: { requiresAuth: true, roles: [UserRole.JURY, UserRole.ORGANIZER, UserRole.MENTOR] },
       },
       {
         path: 'team',
-        name: 'TeamPage',
+        name: 'ExpertTeamPage',
         component: Team,
         meta: { requiresAuth: true, roles: [UserRole.JURY, UserRole.ORGANIZER, UserRole.MENTOR] },
       },
       {
         path: 'project',
-        name: 'ProjectPage',
+        name: 'ExpertProjectPage',
         component: Project,
         meta: { requiresAuth: true, roles: [UserRole.JURY, UserRole.ORGANIZER, UserRole.MENTOR] },
       },
       {
         path: 'faq',
-        name: 'FaqPage',
+        name: 'ExpertFaqPage',
         component: FAQ,
         meta: { requiresAuth: true, roles: [UserRole.JURY, UserRole.ORGANIZER, UserRole.MENTOR] },
       },
       {
         path: 'profile',
-        name: 'OrganizerProfilePage',
+        name: 'ExpertProfilePage',
         component: Profile,
         meta: { requiresAuth: true },
       },

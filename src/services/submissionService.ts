@@ -32,5 +32,15 @@ export const submissionService = {
   async update(submission: UpdateSubmissionDto): Promise<SubmissionDTO> {
     const res = await axios.put(`${import.meta.env.VITE_API_URL}/api/submission`, submission, { headers: getAuthHeaders() })
     return res.data
-  }
+  },
+
+  async evaluate(submissionId: string, grade: number, comment: string, evaluationFilePath: string): Promise<SubmissionDTO> {
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/submission/evaluate`, {
+      submissionId,
+      grade,
+      comment,
+      evaluationFilePath,
+    }, { headers: getAuthHeaders() })
+    return res.data
+  },
 }
