@@ -6,7 +6,7 @@ import { useAuthStore } from '@/stores/auth'
 import { logout } from '@/services/authService'
 import { userService } from '@/services/userService'
 import { S3BucketService } from '@/services/s3BucketService'
-import { getRole, getTPrefix } from '@/utils/user'
+import { getRole } from '@/utils/user'
 import type { UserDTO } from '@/types/user'
 
 import ProfileCard from '@/components/common/profile/ProfileCard.vue'
@@ -30,7 +30,6 @@ const showConfirmDeleteAccountDialog = ref(false)
 
 const role = getRole()
 const isAdminPlatform = computed(() => route.path.startsWith('/organizer'))
-const tPrefix = getTPrefix(role, !isAdminPlatform.value)
 
 const editMode = ref(false)
 const userInfo = ref<UserDTO | null>(null)

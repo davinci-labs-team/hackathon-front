@@ -41,6 +41,7 @@ export interface HackathonTextDTO {
 export interface HackathonMediaDTO {
   bannerPictureId: string | null
   hackathonLogoId: string | null
+  evaluationGridId: string | null
   instagram: string | null
   linkedin: string | null
   facebook: string | null

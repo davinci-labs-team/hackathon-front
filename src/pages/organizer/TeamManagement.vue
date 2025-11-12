@@ -86,7 +86,7 @@
       error.value = false
       snackbar.value = true
       teams.value = teams.value.filter((t: TeamDTO) => t.id !== teamId)
-      await fetchTeams()
+      await Promise.all([fetchUsers(), fetchTeams()])
     } catch (err) {
       console.error('Error deleting team:', err)
       text.value = t('organizer.teamManagement.teamDeleteError')

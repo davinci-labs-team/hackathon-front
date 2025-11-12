@@ -1,73 +1,101 @@
 <script setup lang="ts">
-import { defineProps, ref, watch } from 'vue'
-import type { UserDTO } from '@/types/user'
-import { useI18n } from 'vue-i18n';
-import { S3BucketService } from '@/services/s3BucketService'
-import { UserRole } from '@/types/roles';
+  import { defineProps, ref, watch } from 'vue'
+  import type { UserDTO } from '@/types/user'
+  import { useI18n } from 'vue-i18n'
+  import { S3BucketService } from '@/services/s3BucketService'
+  import { UserRole } from '@/types/roles'
 
-const { t } = useI18n()
+  const { t } = useI18n()
 
-const props = defineProps<{
-  user: UserDTO
-  profilePicture: string
-  editMode: boolean
-}>()
-const emit = defineEmits<{ (e: 'update:user', value: UserDTO): void }>()
+  const props = defineProps<{
+    user: UserDTO
+    profilePicture: string
+    editMode: boolean
+  }>()
+  const emit = defineEmits<{ (e: 'update:user', value: UserDTO): void }>()
 
-const localUser = ref<UserDTO>({ ...props.user })
-const preview = ref(props.profilePicture)
-const fileInput = ref<HTMLInputElement>()
-const fileInputRef = ref<File | null>(null)
+  const localUser = ref<UserDTO>({ ...props.user })
+  const preview = ref(props.profilePicture)
+  const fileInput = ref<HTMLInputElement>()
+  const fileInputRef = ref<File | null>(null)
+  const oldProfilePicturePath = ref(props.user.profilePicturePath || '')
 
-// Réinitialiser localUser si parent change
-watch(() => props, (val) => {
-  localUser.value = { ...val.user }
-  preview.value = val.profilePicture
-}, { deep: true })
+  // Watch for prop changes to update local state
+  watch(
+    () => props,
+    (val) => {
+      localUser.value = { ...val.user }
+      preview.value = val.profilePicture
+      oldProfilePicturePath.value = val.user.profilePicturePath || ''
+    },
+    { deep: true }
+  )
 
-// Expose méthode save
-const saveChanges = async () => {
-  let path = localUser.value.profilePicturePath
-  if (fileInputRef.value) {
-    path = (await S3BucketService.uploadFile(fileInputRef.value)).path
-  }
-  if (!fileInputRef.value && !preview.value) {
-    path = ""
-  }
-  emit('update:user', { 
-      id: localUser.value.id, 
-      firstname: localUser.value.firstname, 
-      lastname: localUser.value.lastname, 
-      email: localUser.value.email, 
-      role: localUser.value.role, 
+  // TODO: handle delete and upload with backend calls
+  const saveChanges = async () => {
+    let path = localUser.value.profilePicturePath
+
+    if (fileInputRef.value) {
+      if (oldProfilePicturePath.value) {
+        try {
+          //await S3BucketService.deleteFile(oldProfilePicturePath.value)
+        } catch (err) {
+          console.error('Erreur lors de la suppression de l’ancienne image :', err)
+        }
+      }
+
+      // Upload de la nouvelle photo
+      const uploadResult = await S3BucketService.uploadFile(fileInputRef.value)
+      path = uploadResult.path
+    }
+
+    if (!fileInputRef.value && !preview.value && oldProfilePicturePath.value) {
+      try {
+        //await S3BucketService.deleteFile(oldProfilePicturePath.value)
+      } catch (err) {
+        console.error('Erreur lors de la suppression de la photo :', err)
+      }
+      path = ''
+    }
+
+    emit('update:user', {
+      id: localUser.value.id,
+      firstname: localUser.value.firstname,
+      lastname: localUser.value.lastname,
+      email: localUser.value.email,
+      role: localUser.value.role,
       school: localUser.value.school,
-      profilePicturePath: path })
-}
+      profilePicturePath: path,
+    })
 
-const resetLocalUser = () => {
-  localUser.value = { ...props.user }
-}
-defineExpose({ saveChanges, resetLocalUser })
+    oldProfilePicturePath.value = path || ''
+  }
 
-const onFileChange = async (e: Event) => {
-  console.log('File input changed')
+  const resetLocalUser = () => {
+    localUser.value = { ...props.user }
+  }
 
-  const target = e.target as HTMLInputElement
-  let file = target.files?.[0]
-  if (!file) return
+  defineExpose({ saveChanges, resetLocalUser })
 
-  // Prévisualisation locale
-  preview.value = URL.createObjectURL(file)
-  fileInputRef.value = file
-}
+  const onFileChange = async (e: Event) => {
+    console.log('File input changed')
 
-const deleteProfilePicture = () => {
-  preview.value = ''
-  fileInputRef.value = null
-  localUser.value.profilePicturePath = undefined
-}
+    const target = e.target as HTMLInputElement
+    let file = target.files?.[0]
+    if (!file) return
 
-const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
+    // Prévisualisation locale
+    preview.value = URL.createObjectURL(file)
+    fileInputRef.value = file
+  }
+
+  const deleteProfilePicture = () => {
+    preview.value = ''
+    fileInputRef.value = null
+    localUser.value.profilePicturePath = undefined
+  }
+
+  const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
 </script>
 
 <template>
@@ -96,27 +124,27 @@ const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
             @change="onFileChange"
           />
 
-            <v-icon
+          <v-icon
             v-if="props.editMode"
             class="delete-icon"
             color="red"
             @click="deleteProfilePicture"
-            >
+          >
             mdi-delete-circle
-            </v-icon>
-
+          </v-icon>
         </div>
 
         <div>
           <div class="user-name">{{ user.firstname }} {{ user.lastname }}</div>
           <div class="user-role">{{ t(`roles.${role}`) }}</div>
-          <v-textarea 
-            v-model="localUser.school" 
+          <v-textarea
+            v-model="localUser.school"
             :placeholder="t('profile.personalInfo.school')"
-            rows="1" 
-            v-if="props.editMode && localUser.role !== UserRole.PARTICIPANT" 
+            rows="1"
+            v-if="props.editMode && localUser.role !== UserRole.PARTICIPANT"
             auto-grow
-            variant="solo"/>
+            variant="solo"
+          />
           <div v-else class="user-school">{{ localUser.school || 'No info yet' }}</div>
         </div>
       </v-col>
@@ -125,48 +153,57 @@ const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
 </template>
 
 <style scoped>
-.avatar-container {
-  position: relative;
-  display: inline-block;
-}
+  .avatar-container {
+    position: relative;
+    display: inline-block;
+  }
 
-.edit-icon {
-  position: absolute;
-  bottom: -5px;
-  right: 70px;
-  cursor: pointer;
-  background-color: white;
-  border-radius: 50%;
-  padding: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease;
-}
+  .edit-icon {
+    position: absolute;
+    bottom: -5px;
+    right: 70px;
+    cursor: pointer;
+    background-color: white;
+    border-radius: 50%;
+    padding: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+  }
 
-.edit-icon:hover {
-  transform: scale(1.1);
-}
+  .edit-icon:hover {
+    transform: scale(1.1);
+  }
 
-.edit-icon, .delete-icon {
-  font-size: 35px;
-}
+  .edit-icon,
+  .delete-icon {
+    font-size: 35px;
+  }
 
+  .delete-icon {
+    position: absolute;
+    bottom: -5px;
+    right: 30px;
+    cursor: pointer;
+    background-color: white;
+    border-radius: 50%;
+    padding: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+  }
 
-.delete-icon {
-  position: absolute;
-  bottom: -5px;
-  right: 30px;
-  cursor: pointer;
-  background-color: white;
-  border-radius: 50%;
-  padding: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease;
-}
-
-.delete-icon:hover {
-  transform: scale(1.1);
-}
-.user-name { font-size: 2rem; font-weight: bold;}
-.user-role { font-size: 1.8rem; color: gray; padding-bottom: 0.5rem; }
-.user-school { font-size: 1.4rem; }
+  .delete-icon:hover {
+    transform: scale(1.1);
+  }
+  .user-name {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  .user-role {
+    font-size: 1.8rem;
+    color: gray;
+    padding-bottom: 0.5rem;
+  }
+  .user-school {
+    font-size: 1.4rem;
+  }
 </style>

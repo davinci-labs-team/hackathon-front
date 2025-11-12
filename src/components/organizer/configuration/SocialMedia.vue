@@ -10,12 +10,15 @@
 
   const { t } = useI18n()
 
-  const mediaSettings = ref<HackathonMediaDTO>({...defaultConfigurations[ConfigurationKey.MEDIA]})
+  const mediaSettings = ref<HackathonMediaDTO>({ ...defaultConfigurations[ConfigurationKey.MEDIA] })
 
   const bannerFileInput = ref<File | null>(null)
   const logoFileInput = ref<File | null>(null)
-  const bannerPicture = ref('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/NZ_default_banner.jpg/640px-NZ_default_banner.jpg')
+  const bannerPicture = ref(
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/NZ_default_banner.jpg/640px-NZ_default_banner.jpg'
+  )
   const logoPicture = ref('https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg')
+  const evaluationGridFileInput = ref<File | null>(null)
 
   // Snackbar
   const snackbar = ref(false)
@@ -56,19 +59,75 @@
 
   const getPreviewUrl = (file: File) => URL.createObjectURL(file)
 
+  // TODO: wait for backend support to delete files
+  /*const deleteOldFileIfNeeded = async (oldFileId?: string) => {
+      if (!oldFileId) return
+      try {
+        await S3BucketService.deleteFile(oldFileId)
+      } catch (err) {
+        console.warn(`Erreur lors de la suppression du fichier ${oldFileId} :`, err)
+      }
+    }*/
+
+  const uploadFileAndReplace = async (
+    file: File | null,
+    oldFileId?: string | null
+  ): Promise<string | null> => {
+    if (!file) return oldFileId ?? null
+    //await deleteOldFileIfNeeded(oldFileId ?? undefined)
+    const uploaded = await S3BucketService.uploadFile(file)
+    return uploaded.path
+  }
+
+  const handleBannerUpdate = async () => {
+    mediaSettings.value.bannerPictureId = await uploadFileAndReplace(
+      bannerFileInput.value,
+      mediaSettings.value.bannerPictureId
+    )
+  }
+
+  const handleLogoUpdate = async () => {
+    mediaSettings.value.hackathonLogoId = await uploadFileAndReplace(
+      logoFileInput.value,
+      mediaSettings.value.hackathonLogoId
+    )
+  }
+
+  const handleEvaluationGridUpdate = async () => {
+    mediaSettings.value.evaluationGridId = await uploadFileAndReplace(
+      evaluationGridFileInput.value,
+      mediaSettings.value.evaluationGridId
+    )
+  }
+
   const handleSave = async () => {
+    if (
+      (!mediaSettings.value.bannerPictureId && !bannerFileInput.value) ||
+      (!mediaSettings.value.hackathonLogoId && !logoFileInput.value) ||
+      (!mediaSettings.value.evaluationGridId && !evaluationGridFileInput.value)
+    ) {
+      snackbar.value = true
+      text.value = t('mediaSettings.missingFiles')
+      error.value = true
+      return
+    }
     try {
-      if (bannerFileInput.value)
-        mediaSettings.value.bannerPictureId = (await S3BucketService.uploadFile(bannerFileInput.value)).path
-      if (logoFileInput.value)
-        mediaSettings.value.hackathonLogoId = (await S3BucketService.uploadFile(logoFileInput.value)).path
+      await handleBannerUpdate()
+      await handleLogoUpdate()
+      await handleEvaluationGridUpdate()
 
       await configurationService.update(ConfigurationKey.MEDIA, {
         value: mediaSettings.value,
       })
+
       snackbar.value = true
       text.value = t('common.changesSaved')
       error.value = false
+
+      await getBannerAndLogoPictureUrl()
+      bannerFileInput.value = null
+      logoFileInput.value = null
+      evaluationGridFileInput.value = null
     } catch (err) {
       console.error(err)
       snackbar.value = true
@@ -91,6 +150,7 @@
     <v-container>
       <p class="mb-4 text-lg font-semibold text-gray-700">
         {{ t('mediaSettings.platformImages') }}
+        <span class="text-red-500">*</span>
       </p>
 
       <div class="mb-4 flex flex-row items-center gap-4">
@@ -201,6 +261,23 @@
           />
         </v-col>
       </v-row>
+
+      <p class="mb-4 text-lg font-semibold text-gray-700">
+        {{ t('mediaSettings.evaluationGrid') }}
+        <span class="text-red-500">*</span>
+      </p>
+
+      <div class="mb-4 flex flex-row items-center gap-4">
+        <!-- File input -->
+        <v-file-input
+          v-model="evaluationGridFileInput"
+          :label="t('mediaSettings.uploadEvaluationGrid')"
+          :hint="t('mediaSettings.uploadHint')"
+          prepend-icon="mdi-file-upload"
+          accept=".docx,.xlsx"
+          class="flex-1"
+        />
+      </div>
     </v-container>
   </v-container>
 </template>
