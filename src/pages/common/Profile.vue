@@ -43,7 +43,7 @@ const profileCard = ref<any>(null)
 const getProfilePictureUrl = async () => {
   if (userInfo.value?.profilePicturePath) {
     try {
-      const response = await S3BucketService.getFileUrl(userInfo.value.profilePicturePath)
+      const response = await S3BucketService.getFileUrl('users', userInfo.value.profilePicturePath)
       profilePicture.value = response.url
     } catch (err) {
       console.error('Error fetching profile picture:', err)

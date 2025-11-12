@@ -1,4 +1,5 @@
 import { UserRole } from '@/types/roles'
+import { TeamDTO } from './team'
 
 export interface UserDTO {
   id: string
