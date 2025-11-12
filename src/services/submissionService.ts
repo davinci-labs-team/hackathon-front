@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 import { SubmissionDTO, UpdateSubmissionDto } from '@/types/submission'
-import { Update } from 'vite'
 
 function getAuthHeaders() {
   const authStore = useAuthStore()
@@ -43,4 +42,12 @@ export const submissionService = {
     }, { headers: getAuthHeaders() })
     return res.data
   },
+
+  async comment(submissionId: string, content: string): Promise<SubmissionDTO> {
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/submission/comment`, {
+      submissionId,
+      content,
+    }, { headers: getAuthHeaders() })
+    return res.data
+  }
 }

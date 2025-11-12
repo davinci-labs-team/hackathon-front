@@ -298,10 +298,13 @@ export default {
     },
     submission: {
       project: 'Project',
-      title: 'Project Evaluation',
+      title: 'Project Feedback',
       noGithubLink: 'No GitHub link provided',
       fileUploaded: 'File uploaded by the team',
       download: 'Download',
+      comment: 'Comment',
+      submit: 'Submit Feedback',
+      yourComment: 'Your comment',
     },
   },
   participant: {

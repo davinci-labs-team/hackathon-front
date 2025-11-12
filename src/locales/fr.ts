@@ -302,10 +302,13 @@ export default {
     },
     submission: {
       project: 'Projet',
-      title: 'Évaluation du Projet',
+      title: 'Feedback du Projet',
       noGithubLink: 'Aucun lien GitHub fourni',
       fileUploaded: 'Fichier uploadé par l’équipe',
       download: 'Télécharger',
+      comment: 'Commentaire',
+      submit: 'Soumettre le feedback',
+      yourComment: 'Votre commentaire',
     },
   },
   participant: {

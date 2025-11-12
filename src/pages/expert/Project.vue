@@ -40,6 +40,14 @@ const currentJuryEvaluation = computed(() => {
   )
 })
 
+// Évaluation du mentor connecté
+const currentMentorEvaluation = computed(() => {
+  if (!submissionInfo.value?.comments || !authStore.user?.id) return null
+  return submissionInfo.value.comments.find(
+    (comment) => comment.mentorId === authStore.user?.id
+  )
+})
+
 const loadSubmission = async (teamId: string) => {
   try {
     loading.value = true
@@ -181,8 +189,6 @@ const submitEvaluation = async () => {
     comment.value = ''
     evaluationFile.value = null
     
-    // Recharger l'évaluation mise à jour
-    // loadExistingEvaluation()
     // Reload the page to reflect the updated evaluation
     window.location.reload()
     
@@ -190,6 +196,36 @@ const submitEvaluation = async () => {
   } catch (error) {
     console.error('Error submitting evaluation:', error)
     alert('Erreur lors de la soumission de l\'évaluation')
+  } finally {
+    evaluating.value = false
+  }
+}
+
+const submitComment = async () => {
+  if (!submissionInfo.value?.id) {
+    alert('Veuillez remplir tous les champs obligatoires')
+    return
+  }
+
+  try {
+    evaluating.value = true
+
+    // Soumission du commentaire
+    const updatedSubmission = await submissionService.comment(
+      submissionInfo.value.id,
+      comment.value
+    )
+
+    submissionInfo.value = updatedSubmission
+
+    // Reset du formulaire
+    comment.value = ''
+
+    // Reload the page to reflect the updated comment
+    window.location.reload()
+  } catch (error) {
+    console.error('Error submitting comment:', error)
+    alert('Erreur lors de la soumission du commentaire')
   } finally {
     evaluating.value = false
   }
@@ -381,8 +417,51 @@ const submitEvaluation = async () => {
     <!-- Bloc secondaire pour Mentor - Commentaire -->
     <v-card v-if="role === UserRole.MENTOR" class="pa-6 mb-6">
       <h2 class="text-xl font-semibold mb-4">
-        {{ t(`${tPrefix}.comment.title`) }}
+        {{ t(`${tPrefix}.submission.title`) }}
       </h2>
+
+      <v-form v-if="!currentMentorEvaluation" @submit.prevent="submitComment">
+        <v-row>
+          <!-- Commentaire -->
+          <v-col cols="12">
+            <v-textarea
+              v-model="comment"
+              :label="t(`${tPrefix}.submission.comment`)"
+              variant="outlined"
+              rows="4"
+              :disabled="evaluating"
+            />
+          </v-col>
+
+          <!-- Bouton de soumission -->
+          <v-col cols="12">
+            <v-btn
+              type="submit"
+              color="primary"
+              size="large"
+              :loading="evaluating || uploading"
+              :disabled="comment === null"
+            >
+              {{ t(`${tPrefix}.submission.submit`) }}
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-form>
+
+      <v-divider v-if="currentMentorEvaluation" class="my-6" />
+      
+      <v-alert
+        v-if="currentMentorEvaluation"
+        type="info"
+        variant="tonal"
+      >
+        <v-row>
+          <v-col v-if="currentMentorEvaluation.content" cols="12">
+            <strong>{{ t(`${tPrefix}.submission.yourComment`) }} :</strong> {{ currentMentorEvaluation.content }}
+          </v-col>
+        
+        </v-row>
+      </v-alert>
     </v-card>
   </v-container>
 </template>

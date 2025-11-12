@@ -11,10 +11,10 @@
   const tPrefix = getTPrefix(role, true)
 
   const menuItems = [
-    { path: '/expert/dashboard', label: `jury.nav.dashboard` },
-    { path: '/expert/team', label: `jury.nav.teams` },
-    { path: '/expert/project', label: `jury.nav.projects` },
-    { path: '/expert/faq', label: `jury.nav.faq` },
+    { path: '/expert/dashboard', label: `${tPrefix}.nav.dashboard` },
+    { path: '/expert/team', label: `${tPrefix}.nav.teams` },
+    { path: '/expert/project', label: `${tPrefix}.nav.projects` },
+    { path: '/expert/faq', label: `${tPrefix}.nav.faq` },
   ]
 
   const getLinkClasses = (path: string) => {
