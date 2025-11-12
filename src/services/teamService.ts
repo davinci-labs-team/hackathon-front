@@ -63,4 +63,8 @@ export const teamService = {
     })
     return res.data
   },
+
+  async autogenerateTeams(): Promise<void> {
+    await axios.post(`${API_URL}/autogenerate`, {}, { headers: getAuthHeaders() })
+  }
 }

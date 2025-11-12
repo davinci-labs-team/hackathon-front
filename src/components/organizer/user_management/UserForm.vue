@@ -11,6 +11,7 @@
   const props = defineProps<{
     modelValue: boolean
     editMode?: boolean
+    schools: string[]
     user?: UserDTO | null
   }>()
 
@@ -37,9 +38,6 @@
   const email = ref('')
   const role = ref('')
   const school = ref('')
-
-  // TODO: récupérer dynamiquement les écoles
-  const schools = [{ title: 'Polytech' }, { title: 'INSA' }]
 
   // -----------------------------
   // Validation
@@ -164,7 +162,7 @@
           </v-radio-group>
 
           <!-- TODO: Get the right naming for this field -->
-          <label class="block mb-1 text-m">{{ t('users.school') }}</label>
+          <label class="block mb-1 text-m">{{ t('users.affiliation') }}</label>
           <template v-if="role === 'PARTICIPANT'">
             <v-select
               v-model="school"

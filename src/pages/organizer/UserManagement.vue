@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { ref, computed, onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
   import Users from '@/components/common/Users.vue'
   import { useUser } from '@/composables/useUser'
@@ -7,6 +7,9 @@
   import { UserDTO } from '@/types/user'
   import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
   import CsvImportDialog from '@/components/organizer/user_management/CsvImportDialog.vue'
+  import { configurationService } from '@/services/configurationService'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import { PartnersDTO } from '@/types/config'
 
   const { t } = useI18n()
 
@@ -20,12 +23,22 @@
     { title: t('roles.participant'), value: 'PARTICIPANT' },
   ])
 
-  // TODO: récupérer dynamiquement les écoles
-  const schools = computed(() => [
+  const schools = ref<{ title: string; value: string }[]>([
     { title: t('organizer.userManagement.schoolAll'), value: '' },
-    { title: 'Polytech' },
-    { title: 'INSA' },
   ])
+
+  const fetchSchools = async () => {
+    const response = await configurationService.findOne(ConfigurationKey.PARTNERS)
+    if (response?.value?.partners && Array.isArray(response.value.partners)) {
+      const partners: PartnersDTO[] = response.value.partners
+      schools.value.push(
+        ...partners.map((partner) => ({
+          title: partner.name,
+          value: partner.name,
+        }))
+      )
+    }
+  }
 
   const selectedRole = ref('')
   const selectedSchool = ref('')
@@ -99,19 +112,23 @@
   }
 
   const inviteSelected = () => {
-    const usersToInvite = users.value.filter(
-      (u) => selectedUserIds.value.includes(u.id)
-    )
+    const usersToInvite = users.value.filter((u) => selectedUserIds.value.includes(u.id))
     usersToInvite.forEach((u) => onInviteUser(u))
   }
 
   const deleteSelected = () => {
-    const usersToDelete = users.value.filter(
-      (u) => selectedUserIds.value.includes(u.id)
-    )
+    const usersToDelete = users.value.filter((u) => selectedUserIds.value.includes(u.id))
     usersToDelete.forEach((u) => onDeleteUser(u))
     selectedUserIds.value = []
   }
+
+  onMounted(() => {
+    fetchSchools()
+  })
+
+  const schoolsList = computed(() =>
+    schools.value.map((school) => school.value).filter((value) => value !== '')
+  )
 </script>
 
 <template>
@@ -183,7 +200,7 @@
             </v-btn>
           </div>
         </div>
-        
+
         <Users
           :users="filteredUsers"
           :items-per-page="30"
@@ -198,6 +215,7 @@
           @save="handleSave"
           :edit-mode="editMode"
           :user="selectedUser"
+          :schools="schoolsList"
         />
         <ConfirmDialog
           v-model="showConfirmDialog"

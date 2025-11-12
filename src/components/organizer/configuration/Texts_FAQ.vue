@@ -94,9 +94,9 @@ const handleSaveTexts = async () => {
 
   const updateDto: UpdateConfigurationDTO = {
     value: {
-      hackathon_name: hackathonTexts.value.hackathonName,
+      hackathonName: hackathonTexts.value.hackathonName,
       slogan: hackathonTexts.value.slogan,
-      hackathon_description: hackathonTexts.value.hackathonDescription,
+      hackathonDescription: hackathonTexts.value.hackathonDescription,
       location: hackathonTexts.value.location,
     },
   }

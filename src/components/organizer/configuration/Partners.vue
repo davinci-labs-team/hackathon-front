@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import { PartnersDTO, UpdateConfigurationDTO } from '@/types/config'
+  import { PartnersDTO, PartnersSettingsDTO, UpdateConfigurationDTO } from '@/types/config'
   import { useI18n } from 'vue-i18n'
   import PartnerCard from '../partners/PartnerCard.vue'
   import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
@@ -9,24 +9,29 @@
 
   const { t } = useI18n()
 
-  /* TODO in this file
-    - check if pictures have changed, if yes upload them to backend and get their urls
-  */
-
   const partners = ref<PartnersDTO[]>([])
 
-  onMounted(async () => {
+  const fetchPartners = async () => {
     try {
       const response = await getOrCreateConfiguration(ConfigurationKey.PARTNERS)
-      partners.value = response.value as PartnersDTO[]
+      if (response && response.value && Array.isArray(response.value.partners)) {
+        partners.value = response.value.partners as PartnersDTO[]
+      } else {
+        partners.value = []
+      }
     } catch (error) {
       console.error('Error fetching partners:', error)
+      partners.value = []
     }
+  }
+
+  onMounted(async () => {
+    await fetchPartners()
   })
 
   const savePartners = async () => {
     const updateDto: UpdateConfigurationDTO = {
-      value: partners.value,
+      value: { partners: partners.value } as PartnersSettingsDTO, // on enveloppe ici
     }
 
     try {
@@ -51,8 +56,6 @@
       savePartners()
     }
   }
-
-  // TODO: fetch all images from backend to display logos
 
   const addPartner = () => {
     partners.value.push({

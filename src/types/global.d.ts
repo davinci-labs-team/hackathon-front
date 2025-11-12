@@ -11,6 +11,7 @@ declare global {
     session_id: string
     is_anonymous: boolean
     accessToken: string
+    profilePicturePath?: string
   }
 }
 

@@ -2,9 +2,10 @@
   import { ThemesDTO } from '@/types/config'
   import { TeamDTO } from '@/types/team'
   import { TeamStatus } from '@/types/team_status'
-  import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { TeamConstraintViolation } from '@/types/config'
+  import { usePagination } from '@/composables/usePagination'
+  import { toRef } from 'vue'
 
   const { t } = useI18n()
 
@@ -15,6 +16,8 @@
     constraintsMap?: Record<string, TeamConstraintViolation[]>
   }>()
 
+  const teamsRef = toRef(props, 'teams')
+
   const emit = defineEmits<{
     (e: 'edit', team: TeamDTO): void
     (e: 'delete', teamId: string): void
@@ -22,21 +25,10 @@
     (e: 'toggle-constraints', ignoreConstraints: boolean, teamId: string): void
   }>()
 
-  const itemsPerPage = props.itemsPerPage || 5
-  const currentPage = ref(1)
-
-  const totalPages = computed(() => Math.ceil(props.teams.length / itemsPerPage))
-
-  const paginatedTeams = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage
-    return props.teams.slice(start, start + itemsPerPage)
-  })
-
-  const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages.value) {
-      currentPage.value = page
-    }
-  }
+  const { currentPage, totalPages, paginatedItems, goToPage } = usePagination(
+    teamsRef,
+    props.itemsPerPage || 10
+  )
 
   const formatViolationMessage = (violation: TeamConstraintViolation) => {
     const message = t(`matchmakingViolations.${violation.type}`, {
@@ -47,11 +39,24 @@
     return message.replace(/:\s*/g, ':\n')
   }
 
-  const getThemeAndSubject = (team: TeamDTO) => {
-    const theme = props.themes.find((theme) => theme.id === team.themeId)
-    if (!theme) return ''
-    const subject = theme.subjects.find((subject) => subject.id === team.subjectId)
-    return subject ? `${theme.name} - ${subject.name}` : theme.name
+  const getSubject = (subjectId: string) => {
+    for (const theme of props.themes) {
+      const subject = theme.subjects.find((subj) => subj.id === subjectId)
+      if (subject) {
+        return subject.name
+      }
+    }
+    return ''
+  }
+
+  const getTheme = (subjectId: string) => {
+    for (const theme of props.themes) {
+      const subject = theme.subjects.find((subj) => subj.id === subjectId)
+      if (subject) {
+        return theme.name
+      }
+    }
+    return ''
   }
 
   const getChipPadding = (text: string) => {
@@ -94,7 +99,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="team in paginatedTeams" :key="team.id" class="border-b">
+        <tr v-for="team in paginatedItems" :key="team.id" class="border-b">
           <td class="px-4 py-2">{{ team.name }}</td>
           <td class="px-4 py-2">
             <div v-for="member in team.members" :key="member.id">
@@ -108,7 +113,12 @@
             </div>
           </td>
           <td class="px-4 py-2">
-            {{ getThemeAndSubject(team) }}
+            <div class="font-medium">
+              {{ getTheme(team.subjectId) }}
+            </div>
+            <div class="text-sm text-gray-600">
+              {{ getSubject(team.subjectId) }}
+            </div>
           </td>
 
           <td class="px-4 py-2 text-center">

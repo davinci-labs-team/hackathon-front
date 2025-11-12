@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { UserRole } from '@/types/roles'
 
 export const useAuthStore = defineStore('auth', {
   state: (): { user: SupabaseDecodedUser | null } => ({
