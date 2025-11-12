@@ -183,7 +183,7 @@ export const defaultConfigurations = {
     youtube: null,
     bannerPictureId: null,
     hackathonLogoId: null,
-    evaluationGridId: null,
+    evaluationGridPath: null,
   },
   [ConfigurationKey.TEXTS]: {
     hackathonName: '',

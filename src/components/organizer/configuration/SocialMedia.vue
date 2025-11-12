@@ -94,9 +94,9 @@
   }
 
   const handleEvaluationGridUpdate = async () => {
-    mediaSettings.value.evaluationGridId = await uploadFileAndReplace(
+    mediaSettings.value.evaluationGridPath = await uploadFileAndReplace(
       evaluationGridFileInput.value,
-      mediaSettings.value.evaluationGridId
+      mediaSettings.value.evaluationGridPath
     )
   }
 
@@ -104,7 +104,7 @@
     if (
       (!mediaSettings.value.bannerPictureId && !bannerFileInput.value) ||
       (!mediaSettings.value.hackathonLogoId && !logoFileInput.value) ||
-      (!mediaSettings.value.evaluationGridId && !evaluationGridFileInput.value)
+      (!mediaSettings.value.evaluationGridPath && !evaluationGridFileInput.value)
     ) {
       snackbar.value = true
       text.value = t('mediaSettings.missingFiles')
