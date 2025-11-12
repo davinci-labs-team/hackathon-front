@@ -45,7 +45,7 @@
       }
 
       // Upload de la nouvelle photo
-      const uploadResult = await S3BucketService.uploadFile(fileInputRef.value)
+      const uploadResult = await S3BucketService.uploadFile(fileInputRef.value, 'users')
       path = uploadResult.path
     }
 
