@@ -1,4 +1,5 @@
 import { UserRole } from '@/types/roles'
+import { TeamDTO } from './team'
 
 export interface UserDTO {
   id: string
@@ -59,4 +60,9 @@ export interface UserReducedDTO {
 export interface SocialMediaDTO {
   id: string
   username: string
+}
+
+export interface ExpertTeamsResponse {
+  juryTeams: TeamDTO[]
+  mentorTeams: TeamDTO[]
 }
