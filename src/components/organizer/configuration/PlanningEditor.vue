@@ -26,16 +26,10 @@
   onMounted(async () => {
     try {
       const response = await getOrCreateConfiguration(ConfigurationKey.PHASES)
-      phasesFromDB.value = response.value.map((phase: any) => ({
-        order: phase.order,
-        startDate: phase.startDate,
-        endDate: phase.endDate,
-      }))
+      const rawPhases: HackathonPhaseDTO[] = Array.isArray(response.value?.phases)
+        ? response.value.phases
+        : []
 
-      const rawPhases: HackathonPhaseDTO[] = Array.isArray(response.value)
-      ? response.value
-      : []
-      
       hackathonPhases.value = rawPhases.map((phase) => ({
         order: phase.order,
         startDate: phase.startDate ?? null,
@@ -83,11 +77,13 @@
       return
     }
 
-    const payload = hackathonPhases.value.map((phase) => ({
-      order: phase.order,
-      startDate: phase.startDateObj?.toISOString() ?? null,
-      endDate: phase.endDateObj?.toISOString() ?? null,
-    }))
+    const payload = {
+      phases: hackathonPhases.value.map((phase) => ({
+        order: phase.order,
+        startDate: phase.startDateObj?.toISOString() ?? null,
+        endDate: phase.endDateObj?.toISOString() ?? null,
+      })),
+    }
 
     try {
       await configurationService.update(ConfigurationKey.PHASES, { value: payload })

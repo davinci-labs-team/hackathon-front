@@ -13,16 +13,19 @@ const props = defineProps<{
 
 const emit = defineEmits(['assign', 'withdraw'])
 
-const isParticipant = computed(() => props.user.role === UserRole.PARTICIPANT)
 const hasTeam = computed(() => !!props.user.teamId)
 
 const showAssign = computed(() => {
-  if (isParticipant.value) {
-    return !hasTeam.value
-  } else{
-    return props.teamAvailable
-  }
-})
+    switch (props.user.role) {
+      case UserRole.PARTICIPANT:
+        return !hasTeam.value
+      case UserRole.MENTOR:
+        return !props.user.mentorTeams || props.user.mentorTeams.length === 0
+      case UserRole.JURY:
+        return !props.user.juryTeams || props.user.juryTeams.length === 0
+      default:
+        return false
+}})
 
 const showWithdraw = computed(() => {
     switch (props.user.role) {

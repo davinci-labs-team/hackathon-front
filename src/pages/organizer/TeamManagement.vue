@@ -16,10 +16,12 @@
   import { teamService } from '@/services/teamService'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import TeamFilters from '../../components/organizer/team_management/TeamFilters.vue'
-  import { filterTeams, filterUsers } from '@/utils/filterTeams'
+  import { filterTeams, filterUsers } from '@/utils/filterUtils'
   import { TeamStatus } from '@/types/team_status'
 
   const { t } = useI18n()
+
+  const loadingTeams = ref<boolean>(false)
 
   // Snackbar
   const snackbar = ref(false)
@@ -84,7 +86,7 @@
       error.value = false
       snackbar.value = true
       teams.value = teams.value.filter((t: TeamDTO) => t.id !== teamId)
-      await fetchTeams()
+      await Promise.all([fetchUsers(), fetchTeams()])
     } catch (err) {
       console.error('Error deleting team:', err)
       text.value = t('organizer.teamManagement.teamDeleteError')
@@ -105,7 +107,7 @@
       error.value = false
       snackbar.value = true
       await fetchUsers()
-      await fetchTeams()
+      await fetchUpdatedTeam(teamId)
     } catch (err) {
       console.error('Error assigning user to team:', err)
       text.value = t('organizer.teamManagement.userAssignToTeamError')
@@ -123,7 +125,7 @@
       error.value = false
       snackbar.value = true
       await fetchUsers()
-      await fetchTeams()
+      await fetchUpdatedTeam(teamId)
     } catch (err) {
       console.error('Error withdrawing user from team:', err)
       text.value = t('organizer.teamManagement.userWithdrawFromTeamError')
@@ -135,7 +137,7 @@
   const toggleConstraints = async (ignoreConstraints: boolean, teamId: string) => {
     try {
       await teamService.toggleIgnoreConstraints(teamId, ignoreConstraints)
-      await fetchTeams()
+      await fetchUpdatedTeam(teamId)
     } catch (err) {
       console.error('Error toggling team constraints:', err)
       text.value = t('organizer.teamManagement.teamConstraintsToggleError')
@@ -154,9 +156,8 @@
     }
     try {
       await teamService.updateStatus(teamId, status)
-      await fetchTeams()
-    }
-    catch (err) {
+      await fetchUpdatedTeam(teamId)
+    } catch (err) {
       console.error('Error updating team lock status:', err)
       text.value = t('organizer.teamManagement.teamLockStatusUpdateError')
       error.value = true
@@ -188,8 +189,30 @@
   // FETCH
   // ----------------------
   const fetchTeams = async () => {
-    const response = await teamService.getAll()
-    if (response) teams.value = response
+    loadingTeams.value = true
+    try {
+      const response = await teamService.getAll()
+      if (response) teams.value = response
+    } catch (err) {
+      console.error('Error fetching teams:', err)
+      text.value = t('organizer.teamManagement.teamFetchError')
+      error.value = true
+      snackbar.value = true
+    } finally {
+      loadingTeams.value = false
+    }
+  }
+
+  const fetchUpdatedTeam = async (teamId: string) => {
+    const updatedTeam = await teamService.getById(teamId)
+    if (updatedTeam) {
+      const index = teams.value.findIndex((t) => t.id === teamId)
+      if (index !== -1) {
+        teams.value.splice(index, 1, updatedTeam)
+      } else {
+        teams.value.push(updatedTeam)
+      }
+    }
   }
 
   const fetchUsers = async () => {
@@ -202,8 +225,17 @@
   }
 
   const fetchThemes = async () => {
-    const response = await configurationService.findOne(ConfigurationKey.THEMES)
-    if (response?.value) themes.value = response.value
+    try {
+      const response = await configurationService.findOne(ConfigurationKey.THEMES)
+      if (response?.value?.themes && Array.isArray(response.value.themes)) {
+        themes.value = response.value.themes as ThemesDTO[]
+      } else {
+        themes.value = []
+      }
+    } catch (error) {
+      console.error('Error fetching themes:', error)
+      themes.value = []
+    }
   }
 
   const fetchMatchmakingConfig = async () => {
@@ -212,10 +244,32 @@
   }
 
   const fetchSchools = async () => {
-    const response = await configurationService.findOne(ConfigurationKey.PARTNERS)
-    if (response?.value) {
-      const partners: PartnersDTO[] = response.value
-      schools.value = partners.filter((p) => p.isParticipatingSchool).map((p) => p.name)
+    try {
+      const response = await configurationService.findOne(ConfigurationKey.PARTNERS)
+      if (response?.value?.partners && Array.isArray(response.value.partners)) {
+        const partners: PartnersDTO[] = response.value.partners
+        schools.value = partners.filter((p) => p.isParticipatingSchool).map((p) => p.name)
+      } else {
+        schools.value = []
+      }
+    } catch (error) {
+      console.error('Error fetching schools:', error)
+      schools.value = []
+    }
+  }
+
+  const autogenerateTeams = async () => {
+    try {
+      await teamService.autogenerateTeams()
+      text.value = t('organizer.teamManagement.teamAutogenerateSuccess')
+      error.value = false
+      snackbar.value = true
+      await Promise.all([fetchUsers(), fetchTeams()])
+    } catch (err) {
+      console.error('Error autogenerating teams:', err)
+      text.value = t('organizer.teamManagement.teamAutogenerateError')
+      error.value = true
+      snackbar.value = true
     }
   }
 
@@ -270,6 +324,15 @@
           </div>
         </div>
 
+        <v-btn
+          color="secondary"
+          class="mb-4"
+          @click="autogenerateTeams"
+          :disabled="loadingTeams"
+        >
+            {{ t('organizer.teamManagement.actions.autogenerate') }}
+        </v-btn>
+
         <TeamFilters
           v-model:view-mode="viewMode"
           v-model:selectedTeamStatus="selectedTeamStatus"
@@ -298,7 +361,7 @@
     <v-row justify="center" class="mb-12">
       <div class="w-full md:w-8/12 lg:w-9/12 px-4">
         <TeamTable
-          v-if="viewMode === 'team' && filteredTeams.length > 0"
+          v-if="viewMode === 'team' && !loadingTeams && filteredTeams.length > 0"
           :teams="filteredTeams"
           :themes="themes"
           :constraints-map="teamConstraintsMap"
@@ -306,12 +369,18 @@
           @toggle-constraints="toggleConstraints"
           @toggle-lock="updateLockStatus"
         />
+
+        <div v-else-if="viewMode === 'team' && loadingTeams" class="text-center py-12">
+          <v-progress-circular indeterminate color="primary" size="48"></v-progress-circular>
+        </div>
+
         <div
-          v-else-if="viewMode === 'team' && filteredTeams.length === 0"
+          v-else-if="viewMode === 'team' && !loadingTeams && filteredTeams.length === 0"
           class="text-center py-12"
         >
           {{ t('organizer.teamManagement.noTeams') }}
         </div>
+
         <UsersTable
           v-if="viewMode === 'individual'"
           :users="filteredUsers"
