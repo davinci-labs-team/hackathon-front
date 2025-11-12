@@ -29,7 +29,7 @@ watch(() => props, (val) => {
 const saveChanges = async () => {
   let path = localUser.value.profilePicturePath
   if (fileInputRef.value) {
-    path = (await S3BucketService.uploadFile(fileInputRef.value, 'annonces')).path
+    path = (await S3BucketService.uploadFile(fileInputRef.value, 'users')).path
   }
   if (!fileInputRef.value && !preview.value) {
     path = ""
