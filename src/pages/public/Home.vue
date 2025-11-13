@@ -2,14 +2,10 @@
   import HackathonExample from '@/assets/images/hackathon-example.jpg'
   import Partners from '@/components/public/Partners.vue'
   import Announcements from '@/components/common/Announcements.vue'
-  import { announcements } from '@/tests/data/announcements'
   import Info from '@/components/public/Info.vue'
   import { useI18n } from 'vue-i18n'
-import { AnnouncementDTO } from '@/types/announcement'
 
   const { t } = useI18n()
-
-  const publicAnnouncements : AnnouncementDTO[] = announcements.filter(a => !a.isPrivate)
 </script>
 
 <template>
@@ -37,7 +33,7 @@ import { AnnouncementDTO } from '@/types/announcement'
         <h2 class="text-3xl font-semibold mt-2 mb-3">
           {{ t('announcements.lastAnnouncements') }}
         </h2>
-        <Announcements :announcements="publicAnnouncements" :items-per-page="5" />
+        <Announcements :items-per-page="5" />
       </div>
     </div>
   </v-container>
