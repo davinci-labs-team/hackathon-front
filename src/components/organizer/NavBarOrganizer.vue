@@ -3,7 +3,7 @@
   import { RouterLink, useRoute } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { useHackathonLogo } from '@/composables/useHackathonLogo'
-  import { ref, onMounted} from 'vue'
+  import { watch, ref, onMounted } from 'vue'
   import { S3BucketService } from '@/services/s3BucketService'
   import { useAuthStore } from '@/stores/auth'
 
@@ -39,7 +39,10 @@
     if (authStore.user?.profilePicturePath) {
       try {
         console.log('Fetching profile picture from path:', authStore.user.profilePicturePath)
-        const response = await S3BucketService.getFileUrl('users', authStore.user.profilePicturePath)
+        const response = await S3BucketService.getFileUrl(
+          'users',
+          authStore.user.profilePicturePath
+        )
         // si ton service retourne { url: string }
         profilePicture.value = response.url
       } catch (err) {
@@ -51,6 +54,14 @@
   onMounted(() => {
     loadProfilePicture()
   })
+
+  watch(
+    () => authStore.user,
+    () => {
+      loadProfilePicture()
+    },
+    { deep: true }
+  )
 </script>
 
 <template>
