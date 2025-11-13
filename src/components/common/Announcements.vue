@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { AnnouncementDTO } from '@/types/announcement'
 import AnnouncementPopup from '@/components/common/AnnouncementPopup.vue'
 import AnnouncementCard from '@/components/common/AnnouncementCard.vue'
+import { AnnouncementService } from '@/services/announcementService'
 
 const { t } = useI18n()
 
 // Props
 const props = defineProps<{
-  announcements: AnnouncementDTO[]
   itemsPerPage?: number
   canDelete?: boolean
 }>()
@@ -18,12 +18,22 @@ const props = defineProps<{
 const emit = defineEmits(['edit', 'delete'])
 
 // Pagination
+const allAnnouncements = ref<AnnouncementDTO[]>([])
+
+onMounted(async () => {
+  try {
+    allAnnouncements.value = await AnnouncementService.getAllPublic()
+  } catch (error) {
+    console.error('Error fetching announcements:', error)
+  }
+})
+
 const itemsPerPage = props.itemsPerPage || 5
 const currentPage = ref(1)
-const totalPages = computed(() => Math.ceil(props.announcements.length / itemsPerPage))
+const totalPages = computed(() => Math.ceil(allAnnouncements.value.length / itemsPerPage))
 const paginatedAnnouncements = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage
-  return props.announcements.slice(start, start + itemsPerPage)
+  return allAnnouncements.value.slice(start, start + itemsPerPage)
 })
 const goToPage = (page: number) => {
   if (page >= 1 && page <= totalPages.value) currentPage.value = page
