@@ -20,7 +20,10 @@
   const pagination = ref({ page: 1, itemsPerPage: 10 })
 
   const props = defineProps<{addUser: (user: UserDTO) => void}>()
-  const emit = defineEmits<{(e: 'close'): void}>()
+  const emit = defineEmits<{
+    (e: 'close'): void,
+    (e: 'toast', message: string, error: boolean): void
+  }>()
 
   const csvPreview = ref<Row[]>([])
   const showDialog = ref(false)
@@ -70,7 +73,7 @@
   const checkValidity = () => {
     validationErrors.value = []
     csvPreview.value.forEach((user, index) => {
-      if (!user.firstname || !user.lastname || !user.email || !user.role) {
+      if (!user.firstname || !user.lastname || !user.email || !user.role || (user.role === UserRole.PARTICIPANT && !user.school)) {
         validationErrors.value.push({index, message: `${t('organizer.userManagement.rowN', { n: index + 1 })}${t('organizer.userManagement.missingRequiredFields')}`})
       }
       if (user.email && !emailRule(user.email)) {
@@ -84,8 +87,16 @@
 
   // Check if a row is invalid (for highlighting)
   const isRowInvalid = (user: Row) => {
-    return !user.firstname || !user.lastname || !emailRule(user.email) || !Object.values(UserRole).includes(user.role)
-  }
+  return (
+    !user.firstname ||
+    !user.lastname ||
+    !emailRule(user.email) ||
+    !Object.values(UserRole).includes(user.role) ||
+    (user.role === UserRole.PARTICIPANT && !user.school) ||
+    validationErrors.value.some(err => csvPreview.value[err.index].id === user.id)
+  )
+}
+
 
   // Add new empty row
   const addEmptyRow = () => {
@@ -109,15 +120,47 @@
   }
 
   // Add all valid users
-  const addAllUsers = () => {
-    checkValidity() // Check validity before adding
+  const addAllUsers = async () => {
+    checkValidity()
     if (validationErrors.value.length > 0) return
-    csvPreview.value.forEach(user => props.addUser(user as UserDTO))
-    csvPreview.value = []
-    csvLoaded.value = false
-    showDialog.value = false
-    emit('close')
+
+    const failedUsers: Row[] = []
+    const newValidationErrors: { index: number; message: string }[] = []
+    let successCount = 0
+
+    for (let i = 0; i < csvPreview.value.length; i++) {
+      const user = csvPreview.value[i]
+      try {
+        await props.addUser(user as UserDTO)
+        successCount++
+      } catch (error: any) {
+        failedUsers.push(user)
+        newValidationErrors.push({
+          index: newValidationErrors.length,
+          message: `${t('organizer.userManagement.alreadyExists', {name: `${user.firstname} ${user.lastname}`})}`,
+        })
+      }
+    }
+
+    // Afficher le toast pour les succès
+    if (successCount > 0) {
+      emit('toast', t('organizer.userManagement.usersCreated', { count: successCount }), false)
+    }
+
+    if (failedUsers.length > 0) {
+      csvPreview.value = failedUsers
+      validationErrors.value = newValidationErrors
+      emit('toast', t('organizer.userManagement.usersNotAdded', { count: failedUsers.length }), true)
+    } else {
+      // tout est ok, fermer le dialog
+      csvPreview.value = []
+      validationErrors.value = []
+      csvLoaded.value = false
+      showDialog.value = false
+      emit('close')
+    }
   }
+
 
   // Go to specified row
   const goToRow = (index: number) => {
@@ -230,6 +273,7 @@
         <v-btn color="blue" variant="outlined" @click="checkValidity" :disabled="!csvLoaded">{{ t('organizer.userManagement.checkValidity') }}</v-btn>
         <v-btn color="primary" variant="flat" @click="addAllUsers" :disabled="!csvLoaded || validationErrors.length > 0">{{ t('organizer.userManagement.addAll') }}</v-btn>
       </v-card-actions>
+
     </v-card>
   </v-dialog>
 </template>
