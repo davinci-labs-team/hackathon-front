@@ -84,7 +84,7 @@
         </v-card-text>
 
         <v-card-actions class="px-4 pb-4 justify-center">
-          <router-link to="/login">
+          <router-link to="/first-login">
             <v-btn color="primary" variant="flat" class="text-white px-6 py-2" rounded>
               {{ t('hackathon.firstLoginBtn') }}
             </v-btn>

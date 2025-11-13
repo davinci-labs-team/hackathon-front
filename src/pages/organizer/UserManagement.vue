@@ -10,6 +10,7 @@
   import { configurationService } from '@/services/configurationService'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
   import { PartnersDTO } from '@/types/config'
+import { userService } from '@/services/userService'
 
   const { t } = useI18n()
 
@@ -100,11 +101,16 @@
 
   const selectedUserIds = ref<string[]>([])
 
-  const onInviteUser = (user: UserDTO) => {
-    // TODO: envoyer l'invitation par email
+  const onInviteUser = async (user: UserDTO) => {
+    try {
+      await userService.inviteUser(user.id)
 
-    const updatedUser = { ...user, invitationSent: true }
-    updateUser(user.id, updatedUser)
+      const updatedUser = { ...user, invitationSent: true }
+      updateUser(user.id, updatedUser)
+    } catch (error) {
+      console.error('Error inviting user:', error)
+    }
+
   }
 
   const onSelectionChange = (ids: string[]) => {
