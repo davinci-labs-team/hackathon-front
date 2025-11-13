@@ -14,7 +14,9 @@
   onMounted(async () => {
     try {
       const response = await configurationService.findOne(ConfigurationKey.PARTNERS)
-      partners.value = response.value as PartnersDTO[]
+      if (response?.value?.partners && Array.isArray(response.value.partners)) {
+        partners.value = response.value.partners
+      }
     } catch (error) {
       console.error('Error fetching partners:', error)
     }

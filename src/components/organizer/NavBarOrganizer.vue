@@ -38,7 +38,8 @@
   const loadProfilePicture = async () => {
     if (authStore.user?.profilePicturePath) {
       try {
-        const response = await S3BucketService.getFileUrl(authStore.user.profilePicturePath)
+        console.log('Fetching profile picture from path:', authStore.user.profilePicturePath)
+        const response = await S3BucketService.getFileUrl('users', authStore.user.profilePicturePath)
         // si ton service retourne { url: string }
         profilePicture.value = response.url
       } catch (err) {

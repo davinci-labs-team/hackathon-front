@@ -4,6 +4,7 @@
   import { useI18n } from 'vue-i18n'
   import { S3BucketService } from '@/services/s3BucketService'
   import { UserRole } from '@/types/roles'
+import { useAuthStore } from '@/stores/auth'
 
   const { t } = useI18n()
 
@@ -47,6 +48,8 @@
       // Upload de la nouvelle photo
       const uploadResult = await S3BucketService.uploadFile(fileInputRef.value, 'users')
       path = uploadResult.path
+
+      useAuthStore().updateProfilePicture(path)
     }
 
     if (!fileInputRef.value && !preview.value && oldProfilePicturePath.value) {

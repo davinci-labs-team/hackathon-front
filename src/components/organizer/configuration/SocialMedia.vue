@@ -75,7 +75,7 @@
   ): Promise<string | null> => {
     if (!file) return oldFileId ?? null
     //await deleteOldFileIfNeeded(oldFileId ?? undefined)
-    const uploaded = await S3BucketService.uploadFile(file)
+    const uploaded = await S3BucketService.uploadFile(file, 'public')
     return uploaded.path
   }
 

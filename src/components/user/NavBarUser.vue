@@ -4,7 +4,7 @@
   import { useI18n } from 'vue-i18n'
   import { getRole, getTPrefix } from '@/utils/user'
   import { useHackathonLogo } from '@/composables/useHackathonLogo'
-  import { ref, onMounted} from 'vue'
+  import { ref, watch, onMounted} from 'vue'
   import { S3BucketService } from '@/services/s3BucketService'
   import { useAuthStore } from '@/stores/auth'
 
@@ -37,7 +37,7 @@
   const loadProfilePicture = async () => {
     if (authStore.user?.profilePicturePath) {
       try {
-        const response = await S3BucketService.getFileUrl(authStore.user.profilePicturePath)
+        const response = await S3BucketService.getFileUrl('users', authStore.user.profilePicturePath)
         // si ton service retourne { url: string }
         profilePicture.value = response.url
       } catch (err) {
@@ -49,6 +49,14 @@
   onMounted(() => {
     loadProfilePicture()
   })
+
+  watch(
+      () => authStore.user,
+      () => {
+        loadProfilePicture()
+      },
+      { deep: true }
+    )
 </script>
 
 <template>
