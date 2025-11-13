@@ -10,6 +10,8 @@
   import { configurationService } from '@/services/configurationService'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
   import { PartnersDTO } from '@/types/config'
+  import { userService } from '@/services/userService'
+  import AppSnackbar from '@/components/common/AppSnackbar.vue'
 
   const { t } = useI18n()
 
@@ -44,6 +46,18 @@
   const selectedSchool = ref('')
   const filterName = ref('')
 
+  // Snackbar
+  const snackbar = ref(false)
+  const text = ref('')
+  const timeout = ref(1500)
+  const error = ref(false)
+
+  const showSnackbar = (message: string, isError = false) => {
+    text.value = message
+    error.value = isError
+    snackbar.value = true
+  }
+
   const showUserForm = ref(false)
 
   const userToDelete = ref<UserDTO | null>(null)
@@ -71,12 +85,24 @@
 
   const handleSave = (user: UserDTO) => {
     if (editMode.value) {
-      updateUser(user.id, user)
+      updateUser(user.id, user).then(() => {
+        showUserForm.value = false
+        selectedUser.value = null
+        showSnackbar(t('organizer.userManagement.userUpdated'), false)
+      }).catch((error) => {
+        console.error('Error updating user:', error)
+        showSnackbar(t('organizer.userManagement.userUpdateFailed'), true)
+      })
     } else {
-      createUser(user)
+      createUser(user).then(() => {
+        showUserForm.value = false
+        selectedUser.value = null
+        showSnackbar(t('organizer.userManagement.userCreated'), false)
+      }).catch((error) => {
+        console.error('Error creating user:', error)
+        showSnackbar(t('organizer.userManagement.userCreateFailed'), true)
+      })
     }
-    showUserForm.value = false
-    selectedUser.value = null
   }
 
   const onEditUser = (user: UserDTO) => {
@@ -100,11 +126,16 @@
 
   const selectedUserIds = ref<string[]>([])
 
-  const onInviteUser = (user: UserDTO) => {
-    // TODO: envoyer l'invitation par email
-
-    const updatedUser = { ...user, invitationSent: true }
-    updateUser(user.id, updatedUser)
+  const onInviteUser = async (user: UserDTO) => {
+    try {
+      await userService.inviteUser(user.id)
+      showSnackbar(t('organizer.userManagement.userInvited'), false)
+      const updatedUser = { ...user, invitationSent: true }
+      updateUser(user.id, updatedUser)
+    } catch (error) {
+      console.error('Error inviting user:', error)
+      showSnackbar(t('organizer.userManagement.userInviteFailed'), true)
+    }
   }
 
   const onSelectionChange = (ids: string[]) => {
@@ -120,6 +151,7 @@
     const usersToDelete = users.value.filter((u) => selectedUserIds.value.includes(u.id))
     usersToDelete.forEach((u) => onDeleteUser(u))
     selectedUserIds.value = []
+    showSnackbar(t('organizer.userManagement.usersDeleted', { count: usersToDelete.length }), false)
   }
 
   onMounted(() => {
@@ -138,7 +170,7 @@
         <div class="flex w-full justify-between items-center mb-6">
           <h1 class="text-3xl font-bold">{{ t('organizer.nav.users') }}</h1>
           <div class="flex">
-            <CsvImportDialog :addUser="createUser" />
+            <CsvImportDialog :addUser="createUser" @toast="showSnackbar"/>
             <v-btn color="primary" class="h-full" @click="onAddUser">
               {{ t('organizer.userManagement.addButton') }}
             </v-btn>
@@ -209,6 +241,8 @@
           @invite="onInviteUser"
           @selection-change="onSelectionChange"
         />
+
+        <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
 
         <UserForm
           v-model="showUserForm"

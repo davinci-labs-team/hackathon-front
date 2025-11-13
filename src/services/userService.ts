@@ -57,4 +57,22 @@ export const userService = {
     })
     return res.data
   },
+
+  async inviteUser(userId: string): Promise<void> {
+    await axios.post(`${import.meta.env.VITE_API_URL}/api/user/invite/${userId}`, {}, {
+      headers: getAuthHeaders(),
+    })
+  },
+
+  async requestPasswordReset(email: string): Promise<void> {
+    await axios.post(`${import.meta.env.VITE_API_URL}/api/user/requestPasswordReset`, { email })
+  },
+
+  async resetPassword(email: string, token: string, newPassword: string): Promise<void> {
+    await axios.put(`${import.meta.env.VITE_API_URL}/api/user/resetPassword`, {
+      email,
+      token,
+      newPassword,
+    })
+  },
 }
