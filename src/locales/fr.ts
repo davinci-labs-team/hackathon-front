@@ -34,6 +34,8 @@ export default {
     contacts: 'Contacts',
     connectDiscord: 'Connectez votre Discord',
     connectGithub: 'Connectez votre GitHub',
+    noInterests: 'Aucun centre d’intérêt ajouté pour le moment.',
+    noPersonalInfo: 'Aucune information personnelle disponible.',
     personalInfo: {
       title: 'Informations Personnelles',
       editButton: 'Modifier les Informations',

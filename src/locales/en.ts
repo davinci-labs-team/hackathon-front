@@ -36,6 +36,8 @@ export default {
     contacts: 'Contacts',
     connectDiscord: 'Connect your Discord',
     connectGithub: 'Connect your GitHub',
+    noInterests: 'No interests added yet.',
+    noPersonalInfo: 'No personal information available.',
     personalInfo: {
       title: 'Personal Information',
       editButton: 'Edit Information',

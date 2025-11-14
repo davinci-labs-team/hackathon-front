@@ -185,7 +185,7 @@ const handleSaveTexts = async () => {
     <h1 class="text-3xl font-bold mb-2">{{ t('faqSettings.title') }}</h1>
     <div class="flex flex-row mb-5 items-center justify-between">
       <p class="mb-0 text-lg text-gray-600">{{ t('faqSettings.subtitle') }}</p>
-      <v-btn color="primary" @click="showFAQForm = true">
+      <v-btn color="primary" @click="() => { editFAQItem = null; showFAQForm = true }">
         {{ t('faqSettings.addQuestionBtn') }}
       </v-btn>
     </div>
