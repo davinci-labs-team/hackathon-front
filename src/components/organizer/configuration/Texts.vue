@@ -2,14 +2,9 @@
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import AppSnackbar from '@/components/common/AppSnackbar.vue'
-import FAQForm from '@/components/organizer/faq/FAQForm.vue'
-import FAQItemCard from '@/components/organizer/faq/FAQItemCard.vue'
-import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
-import { useFaq } from '@/composables/useFaq'
 import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
 import { HackathonTextDTO, UpdateConfigurationDTO } from '@/types/config'
 import { ConfigurationKey } from '@/utils/configuration/configurationKey'
-import { FAQItemDTO } from '@/types/faq'
 
 const { t } = useI18n()
 
@@ -33,34 +28,6 @@ onMounted(async () => {
     console.error('Error fetching hackathon texts:', error)
   }
 })
-
-// --- FAQ ---
-const { faqs, createFaq, updateFaq, deleteFaq } = useFaq()
-const showFAQForm = ref(false)
-const editFAQItem = ref<FAQItemDTO | null>(null)
-const faqToDelete = ref<FAQItemDTO | null>(null)
-const showConfirmDialog = ref(false)
-
-const confirmDelete = (faq: FAQItemDTO) => {
-  faqToDelete.value = faq
-  showConfirmDialog.value = true
-}
-
-const handleDelete = async () => {
-  if (!faqToDelete.value?.id) return
-  await deleteFaq(faqToDelete.value.id)
-  showConfirmDialog.value = false
-  faqToDelete.value = null
-}
-
-const handleSaveFAQ = async (faqItem: FAQItemDTO) => {
-  if (editFAQItem.value?.id) {
-    await updateFaq(editFAQItem.value.id, faqItem)
-  } else {
-    await createFaq(faqItem)
-  }
-  editFAQItem.value = null
-}
 
 // --- Validation & Limits ---
 const hackathonNameMaxLength = 60
@@ -180,44 +147,5 @@ const handleSaveTexts = async () => {
         :error="snackbarError"
       />
     </v-container>
-
-    <!-- FAQ Section -->
-    <h1 class="text-3xl font-bold mb-2">{{ t('faqSettings.title') }}</h1>
-    <div class="flex flex-row mb-5 items-center justify-between">
-      <p class="mb-0 text-lg text-gray-600">{{ t('faqSettings.subtitle') }}</p>
-      <v-btn color="primary" @click="() => { editFAQItem = null; showFAQForm = true }">
-        {{ t('faqSettings.addQuestionBtn') }}
-      </v-btn>
-    </div>
-
-    <div v-if="faqs.length === 0" class="text-center text-gray-600 my-10">
-      {{ t('faqSettings.noQuestions') }}
-    </div>
-
-    <FAQItemCard
-      v-for="faq in faqs"
-      :key="faq.id"
-      :faqItem="faq"
-      @click="(item: FAQItemDTO) => { editFAQItem = item; showFAQForm = true }"
-      @delete="confirmDelete(faq)"
-    />
-
-    <FAQForm
-      v-model="showFAQForm"
-      :editMode="!!editFAQItem"
-      :faqItem="editFAQItem"
-      @close="editFAQItem = null"
-      @save="handleSaveFAQ"
-    />
-
-    <ConfirmDialog
-      v-model="showConfirmDialog"
-      :title="t('faqSettings.confirmTitle')"
-      :text="`${t('faqSettings.confirmText')} : ${faqToDelete?.question}`"
-      :confirmLabel="t('common.delete')"
-      :cancelLabel="t('common.cancel')"
-      @confirm="handleDelete"
-      @cancel="faqToDelete = null"
-    />
   </v-container>
 </template>

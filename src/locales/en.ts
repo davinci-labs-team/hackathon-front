@@ -308,6 +308,7 @@ export default {
     },
     nav: {
       announcements: 'Announcements',
+      faq: "FAQ",
       users: 'User Management',
       teams: 'Team Management',
       projects: 'Projects Management',
@@ -466,7 +467,7 @@ export default {
     },
     alertExport: 'JSON generated in the console.',
   },
-  texts_faq_title: 'Texts & FAQ',
+  texts_title: 'Texts',
   textsSettings: {
     title: 'Texts',
     subtitle: 'Manage the texts displayed on the user interface',
