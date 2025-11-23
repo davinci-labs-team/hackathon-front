@@ -29,4 +29,11 @@ export const S3BucketService = {
         const res = await axios.get(`${API_URL}/api/s3-bucket/download/public/${bucketName}/${encodeURIComponent(filePath)}`);
         return res.data;
     },
+
+    deleteFile: async (bucketName: string, filePath: string): Promise<{ message: string }> => {
+        const res = await axios.delete(`${API_URL}/api/s3-bucket/delete/${bucketName}/${encodeURIComponent(filePath)}`, {
+          headers: getAuthHeaders(),
+        });
+        return res.data;
+    }
 }

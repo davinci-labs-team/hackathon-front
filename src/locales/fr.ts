@@ -536,7 +536,9 @@ export default {
   partnersSettings: {
     title: 'Partenaires & Écoles',
     subtitle: "Gérez les partenaires affichés dans l'application et les écoles participantes",
+    nameTitle: 'Nom du partenaire',
     namePlaceholder: 'Nom du partenaire',
+    websiteTitle: 'Site web',
     websitePlaceholder: 'https://www.exemple.com',
     logo: 'Logo du partenaire',
     addPartner: '+ Ajouter un partenaire',
@@ -544,6 +546,8 @@ export default {
     confirmTitle: 'Confirmer la suppression',
     confirmText: 'Êtes-vous sûr de vouloir supprimer ce partenaire ?',
     noPartners: 'Aucun partenaire disponible.',
+    editTitle: 'Modifier le partenaire',
+    addTitle: 'Ajouter un partenaire'
   },
   faqSettings: {
     title: 'FAQ',
