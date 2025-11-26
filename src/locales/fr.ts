@@ -312,6 +312,7 @@ export default {
     },
     nav: {
       announcements: 'Annonces',
+      faq: "FAQ",
       users: 'Gestion des utilisateurs',
       teams: 'Gestion des équipes',
       projects: 'Gestion des dépôts',
@@ -503,7 +504,7 @@ export default {
     },
     alertExport: 'JSON généré dans la console.',
   },
-  texts_faq_title: 'Textes & FAQ',
+  texts_title: 'Textes',
   textsSettings: {
     title: 'Textes',
     subtitle: "Gérez les textes affichés sur l'interface utilisateur",

@@ -15,6 +15,7 @@
 
   const menuItems = [
     { path: '/organizer/announcements', label: 'organizer.nav.announcements' },
+    { path: '/organizer/faq', label: 'organizer.nav.faq' },
     { path: '/organizer/users', label: 'organizer.nav.users' },
     { path: '/organizer/teams', label: 'organizer.nav.teams' },
     { path: '/organizer/projects', label: 'organizer.nav.projects' },

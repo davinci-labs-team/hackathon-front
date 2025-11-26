@@ -7,6 +7,7 @@ import Settings from '@/pages/organizer/Settings.vue'
 import Profile from '@/pages/common/Profile.vue'
 import Announcements from '@/pages/organizer/Announcements.vue'
 import ThemesManagement from '@/pages/organizer/ThemesManagement.vue'
+import FAQ from '@/pages/organizer/FAQ.vue'
 
 export default [
   {
@@ -17,6 +18,12 @@ export default [
         path: 'announcements',
         name: 'Announcements',
         component: Announcements,
+        meta: { requiresAuth: true, role: UserRole.ORGANIZER },
+      },
+      {
+        path: 'faq',
+        name: 'FAQ',
+        component: FAQ,
         meta: { requiresAuth: true, role: UserRole.ORGANIZER },
       },
       {
