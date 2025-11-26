@@ -55,14 +55,6 @@
   onMounted(() => {
     loadProfilePicture()
   })
-
-  watch(
-    () => authStore.user,
-    () => {
-      loadProfilePicture()
-    },
-    { deep: true }
-  )
 </script>
 
 <template>

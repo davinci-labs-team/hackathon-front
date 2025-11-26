@@ -204,6 +204,7 @@ onMounted(loadImages)
 
       <v-card-text>
         <v-form @submit.prevent="onSubmit">
+          <label class="block mb-1 text-m">{{ t('announcements.title') }}</label>
           <v-text-field
             v-model="title"
             :placeholder="t('announcements.title')"
@@ -212,6 +213,7 @@ onMounted(loadImages)
             variant="solo"
             class="mb-4"
           />
+          <label class="block mb-1 text-m">{{ t('announcements.content') }}</label>
           <v-textarea
             v-model="description"
             :placeholder="t('announcements.content')"
@@ -220,6 +222,7 @@ onMounted(loadImages)
             variant="solo"
             class="mb-4"
           />
+          <label class="block mb-1 text-m">{{ t('announcements.tags') }}</label>
           <v-text-field
             v-model="tags"
             :placeholder="t('announcements.tags')"
@@ -228,6 +231,7 @@ onMounted(loadImages)
             class="mb-4"
           />
 
+          <label class="block mb-1 text-m">{{ t('announcements.images') }}</label>
           <v-file-input
             accept=".png, .jpg, .jpeg"
             multiple
