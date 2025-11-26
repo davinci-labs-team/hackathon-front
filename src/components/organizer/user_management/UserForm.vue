@@ -62,7 +62,7 @@
   }
 
   // -----------------------------
-  // Save user (via backend => TODO)
+  // Save user
   // -----------------------------
   const save = async () => {
     if (
@@ -74,7 +74,7 @@
     )
       return
 
-    // Création de FormData pour envoyer au backend
+    // FormData creation to send to Backend
     const userData = {
       id: props.user?.id,
       firstname: firstname.value,
@@ -121,30 +121,35 @@
 
       <v-card-text>
         <v-form @submit.prevent="save">
-          <label class="block mb-1 text-m">{{ t('organizer.userManagement.name') }}</label>
-          <div class="flex gap-8">
-            <v-text-field
-              v-model="firstname"
-              :placeholder="t('users.firstname')"
-              :rules="[required]"
-              required
-              variant="solo"
-              class="mb-4"
-            />
-
-            <v-text-field
-              v-model="lastname"
-              :placeholder="t('users.lastname')"
-              :rules="[required]"
-              required
-              variant="solo"
-              class="mb-4"
-            />
+          <div class="flex w-full gap-8">
+            <div class="flex-col w-1/2">
+              <label class="block mb-1 text-m">{{ t('users.firstname') }}</label>
+              <v-text-field
+                v-model="firstname"
+                :placeholder="t('organizer.userManagement.firstnamePlaceholder')"
+                :rules="[required]"
+                required
+                variant="solo"
+                class="mb-4"
+              />
+            </div>
+            <div class="flex-col w-1/2">
+              <label class="block mb-1 text-m">{{ t('users.lastname') }}</label>
+              <v-text-field
+                v-model="lastname"
+                :placeholder="t('organizer.userManagement.lastnamePlaceholder')"
+                :rules="[required]"
+                required
+                variant="solo"
+                class="mb-4"
+              />
+            </div>
           </div>
 
           <label class="block mb-1 text-m">{{ t('organizer.userManagement.email') }}</label>
           <v-text-field
             v-model="email"
+            :placeholder="t('organizer.userManagement.emailPlaceholder')"
             :rules="[required, emailRule]"
             required
             variant="solo"
@@ -160,10 +165,9 @@
               <div><v-radio :label="t('roles.organizer')" value="ORGANIZER" /></div>
             </div>
           </v-radio-group>
-
-          <!-- TODO: Get the right naming for this field -->
-          <label class="block mb-1 text-m">{{ t('users.affiliation') }}</label>
+          
           <template v-if="role === 'PARTICIPANT'">
+            <label class="block mb-1 text-m">{{ t('users.school') }}</label>
             <v-select
               v-model="school"
               :items="schools"
@@ -175,9 +179,10 @@
             />
           </template>
           <template v-else>
+            <label class="block mb-1 text-m">{{ t('users.affiliation') }}</label>
             <v-text-field
               v-model="school"
-              :placeholder="t('users.school')"
+              :placeholder="t('users.affiliation')"
               variant="solo"
               class="mb-4"
             />
