@@ -500,14 +500,18 @@ export default {
   partnersSettings: {
     title: 'Partners & Schools',
     subtitle: 'Manage the partners displayed in the application and participating schools',
+    nameTitle: 'Partner Name',
     namePlaceholder: 'Partner Name',
-    websitePlaceholder: 'Partner Website',
+    websiteTitle: 'Partner Website',
+    websitePlaceholder: 'https://www.example.com',
     logo: 'Partner Logo',
     addPartner: '+ Add Partner',
     participatingSchool: 'Participating School',
     confirmTitle: 'Confirm Deletion',
     confirmText: 'Are you sure you want to delete this partner?',
     noPartners: 'No partners available.',
+    editTitle: 'Edit Patner',
+    addTitle: 'Add Partner'
   },
   faqSettings: {
     title: 'FAQ',

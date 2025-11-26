@@ -17,11 +17,12 @@ export interface HackathonPhase extends HackathonPhaseDTO {
   endDateObj: Date | null
 }
 
-// ---- PARNTERS ------
+// ---- PARTNERS ------
 export interface PartnersDTO {
   id: string
   name: string
   logoId: string
+  logoKey: string
   websiteUrl: string
   isParticipatingSchool: boolean
 }
@@ -29,6 +30,16 @@ export interface PartnersDTO {
 export interface PartnersSettingsDTO {
   partners: PartnersDTO[];
 }
+
+export interface CreatePartnersDTO {
+  name: string
+  logoId: string
+  logoKey: string
+  websiteUrl: string
+  isParticipatingSchool: boolean
+}
+
+export type UpdatePartnersDTO = Partial<CreatePartnersDTO>
 
 // ---- TEXTS & MEDIA -----
 export interface HackathonTextDTO {
