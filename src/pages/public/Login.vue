@@ -1,16 +1,17 @@
 <script setup lang="ts">
   import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { loginWithSupabase } from '@/services/authService'
   import { usePhaseStore } from '@/stores/phase'
 
   const { t } = useI18n()
   const router = useRouter()
+  const route = useRoute()
   const phaseStore = usePhaseStore()
 
   // Fields of the login form
-  const email = ref('')
+  const email = ref(route.query.email?.toString() || '')
   const password = ref('')
   const error = ref(false)
   const formRef = ref()

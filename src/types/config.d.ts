@@ -17,14 +17,31 @@ export interface HackathonPhase extends HackathonPhaseDTO {
   endDateObj: Date | null
 }
 
+// ---- PARTNERS ------
 export interface PartnersDTO {
   id: string
   name: string
   logoId: string
+  logoKey: string
   websiteUrl: string
   isParticipatingSchool: boolean
 }
 
+export interface PartnersSettingsDTO {
+  partners: PartnersDTO[];
+}
+
+export interface CreatePartnersDTO {
+  name: string
+  logoId: string
+  logoKey: string
+  websiteUrl: string
+  isParticipatingSchool: boolean
+}
+
+export type UpdatePartnersDTO = Partial<CreatePartnersDTO>
+
+// ---- TEXTS & MEDIA -----
 export interface HackathonTextDTO {
   hackathonName: string
   slogan? : string
@@ -35,6 +52,7 @@ export interface HackathonTextDTO {
 export interface HackathonMediaDTO {
   bannerPictureId: string | null
   hackathonLogoId: string | null
+  evaluationGridPath: string | null
   instagram: string | null
   linkedin: string | null
   facebook: string | null
@@ -42,6 +60,8 @@ export interface HackathonMediaDTO {
   youtube: string | null
 }
 
+
+// ---- CONFIGURATIONS -----
 export interface ConfigurationResponse {
   id: string
   key: string
@@ -59,6 +79,8 @@ export interface UpdateConfigurationDTO {
   key?: string
   value?: any
 }
+
+// ---- MATCHMAKING -----
 
 export interface ConstraintDTO {
   rule: 'MIN' | 'MAX' | 'EQUAL'
@@ -80,6 +102,7 @@ export interface TeamConstraintViolation {
   schools?: string
 }
 
+// ---- THEMES & SUBJECTS -----
 export interface SubjectDTO {
   id: string
   name: string
@@ -91,4 +114,8 @@ export interface ThemesDTO {
   name: string
   description: string
   subjects: SubjectDTO[]
+}
+
+export interface ThemesSettingsDTO {
+  themes: ThemesDTO[]
 }

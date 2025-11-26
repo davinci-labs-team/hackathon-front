@@ -1,32 +1,45 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import { PartnersDTO, UpdateConfigurationDTO } from '@/types/config'
+  import { CreatePartnersDTO, PartnersDTO, PartnersSettingsDTO, UpdateConfigurationDTO, UpdatePartnersDTO } from '@/types/config'
   import { useI18n } from 'vue-i18n'
   import PartnerCard from '../partners/PartnerCard.vue'
   import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
   import { v4 as uuidv4 } from 'uuid'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import PartnerForm from '../partners/PartnerForm.vue'
+  import { S3BucketService } from '@/services/s3BucketService'
+import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
   const { t } = useI18n()
 
-  /* TODO in this file
-    - check if pictures have changed, if yes upload them to backend and get their urls
-  */
-
   const partners = ref<PartnersDTO[]>([])
+  const showForm = ref(false) // une seule popup pour create/update
+  const selectedPartner = ref<PartnersDTO | null>(null)
+  const editMode = ref(false)
+  const partnerToDelete = ref<PartnersDTO | null>(null)
+  const showConfirmDialog = ref(false)
 
-  onMounted(async () => {
+  const fetchPartners = async () => {
     try {
       const response = await getOrCreateConfiguration(ConfigurationKey.PARTNERS)
-      partners.value = response.value as PartnersDTO[]
+      if (response && response.value && Array.isArray(response.value.partners)) {
+        partners.value = response.value.partners as PartnersDTO[]
+      } else {
+        partners.value = []
+      }
     } catch (error) {
       console.error('Error fetching partners:', error)
+      partners.value = []
     }
+  }
+
+  onMounted(async () => {
+    await fetchPartners()
   })
 
   const savePartners = async () => {
     const updateDto: UpdateConfigurationDTO = {
-      value: partners.value,
+      value: { partners: partners.value } as PartnersSettingsDTO, // on enveloppe ici
     }
 
     try {
@@ -36,33 +49,74 @@
     }
   }
 
+  const handleSave = async (data: CreatePartnersDTO | UpdatePartnersDTO) => {
+    if (editMode.value && selectedPartner.value) {
+      // update
+      const newPartners = partners.value.map(partner =>
+        partner.id === selectedPartner.value?.id ? { ...partner, ...data } : partner
+      )
+      const updateDto: UpdateConfigurationDTO = {
+        value: { partners: newPartners } as PartnersSettingsDTO, // on enveloppe ici
+      }
+      try {
+        await configurationService.update(ConfigurationKey.PARTNERS, updateDto)
+        if (selectedPartner.value.logoKey !== data.logoKey)
+          await S3BucketService.deleteFile('public_files', selectedPartner.value.logoKey) 
+        partners.value = newPartners
+      } catch (error) {
+        console.error('Error updating partner:', error)
+      }
+    } else {
+      // create
+      const newPartners = [...partners.value, { ...data, id: uuidv4() } as PartnersDTO]
+      const updateDto: UpdateConfigurationDTO = {
+        value: { partners: newPartners } as PartnersSettingsDTO, // on enveloppe ici
+      }
+      try {
+        await configurationService.update(ConfigurationKey.PARTNERS, updateDto)
+
+        partners.value = newPartners
+      } catch (error) {
+        console.error('Error creating partner:', error)
+      }
+    }
+    // Reset popup
+    showForm.value = false
+    selectedPartner.value = null
+    editMode.value = false
+  }
+
   function onDeletePartner(partner: PartnersDTO) {
-    const index = partners.value.findIndex((p) => p.id === partner.id)
-    if (index !== -1) {
-      partners.value.splice(index, 1)
-      savePartners()
-    }
+    partnerToDelete.value = partner
+    showConfirmDialog.value = true
   }
 
-  function onUpdatePartner(updatedPartner: PartnersDTO) {
-    const index = partners.value.findIndex((p) => p.id === updatedPartner.id)
-    if (index !== -1) {
-      partners.value[index] = { ...updatedPartner }
-      savePartners()
+  const confirmDeletePartner = async () => {
+    if (!partnerToDelete.value) return
+    try {
+      await savePartners()
+      await S3BucketService.deleteFile('public_files', partnerToDelete.value.logoKey) 
+      const index = partners.value.findIndex((p) => p.id === partnerToDelete.value!.id)
+      if (index !== -1) {
+        partners.value.splice(index, 1)
+      }
+    } catch (error) {
+      console.error('Error deleting parter')
     }
+    showConfirmDialog.value = false
+    partnerToDelete.value = null
   }
 
-  // TODO: fetch all images from backend to display logos
+  function onEditPartner(partner: PartnersDTO) {
+    selectedPartner.value = partner
+    editMode.value = true
+    showForm.value = true
+  }
 
   const addPartner = () => {
-    partners.value.push({
-      id: uuidv4(),
-      name: '',
-      websiteUrl: '',
-      logoId: '',
-      isParticipatingSchool: false,
-    })
-    savePartners()
+    selectedPartner.value = null
+    editMode.value = false
+    showForm.value = true
   }
 </script>
 
@@ -86,7 +140,24 @@
       :partner="partner"
       class="mb-4"
       @delete="onDeletePartner"
-      @update="onUpdatePartner"
+      @edit="onEditPartner"
+    />
+    
+    <PartnerForm
+      v-model="showForm"
+      :editMode="editMode"
+      :partner="selectedPartner"
+      @save="handleSave"
+    />
+
+    <ConfirmDialog
+      v-model="showConfirmDialog"
+      :title="t('partnersSettings.confirmTitle')"
+      :text="`${t('partnersSettings.confirmText')} : ${partnerToDelete?.name}`"
+      :confirmLabel="t('common.delete')"
+      :cancelLabel="t('common.cancel')"
+      @confirm="confirmDeletePartner"
+      @cancel="partnerToDelete = null"
     />
   </v-container>
 </template>

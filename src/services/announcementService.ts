@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CreateAnnouncementDTO, UpdateAnnouncementDTO, AnnouncementDTO } from "@/types/announcement";
+import { CreateAnnouncementDTO, UpdateAnnouncementDTO } from "@/types/announcement";
 import { getAuthHeaders } from "@/stores/auth";
 
 export enum VisibilityType {
@@ -18,12 +18,16 @@ export const AnnouncementService = {
         return res.data;
       },
     
-      // Demander comment gérer le cas où on n'est pas connecté
       getAll: async (visibilityType: VisibilityType = VisibilityType.BOTH) => {
         const res = await axios.get(`${API_URL}/api/announcement`, {
           params: { visibilityType },
           headers: getAuthHeaders(),
         });
+        return res.data;
+      },
+
+      getAllPublic: async () => {
+        const res = await axios.get(`${API_URL}/api/announcement/public`);
         return res.data;
       },
     

@@ -2,6 +2,8 @@ import exampleImg from '@/assets/images/example.jpg'
 import epitaLogo from '@/assets/images/epita.png'
 import { AnnouncementDTO } from '@/types/announcement'
 
+// TODO : supprimer le fichier une fois inutilisé
+
 const getPastDate = (ms: number): string => {
   return new Date(Date.now() - ms).toISOString()
 }

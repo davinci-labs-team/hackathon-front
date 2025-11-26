@@ -33,6 +33,7 @@ export function useUser() {
       users.value.push(newUser)
     } catch (e: any) {
       error.value = e.message
+      throw e
     }
   }
 

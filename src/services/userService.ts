@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
-import type { UserDTO, UserReducedDTO } from '@/types/user'
+import type { ExpertTeamsResponse, UserDTO, UserReducedDTO } from '@/types/user'
 
 function getAuthHeaders() {
   const authStore = useAuthStore()
@@ -31,6 +31,12 @@ export const userService = {
     return res.data
   },
 
+  async getExpertTeamsById(userId: string): Promise<ExpertTeamsResponse> {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/${userId}/expertTeams`,
+      { headers: getAuthHeaders() })
+    return res.data
+  },
+
   async remove(userId: string): Promise<UserDTO> {
     const res = await axios.delete(`${import.meta.env.VITE_API_URL}/api/user/${userId}`, {
       headers: getAuthHeaders(),
@@ -50,5 +56,23 @@ export const userService = {
       headers: getAuthHeaders(),
     })
     return res.data
+  },
+
+  async inviteUser(userId: string): Promise<void> {
+    await axios.post(`${import.meta.env.VITE_API_URL}/api/user/invite/${userId}`, {}, {
+      headers: getAuthHeaders(),
+    })
+  },
+
+  async requestPasswordReset(email: string): Promise<void> {
+    await axios.post(`${import.meta.env.VITE_API_URL}/api/user/requestPasswordReset`, { email })
+  },
+
+  async resetPassword(email: string, token: string, newPassword: string): Promise<void> {
+    await axios.put(`${import.meta.env.VITE_API_URL}/api/user/resetPassword`, {
+      email,
+      token,
+      newPassword,
+    })
   },
 }

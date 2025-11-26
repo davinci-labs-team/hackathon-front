@@ -2,12 +2,13 @@
   import { UserReducedDTO } from '@/types/user'
   import { MatchmakingSettingsDTO, ThemesDTO } from '@/types/config'
   import { useI18n } from 'vue-i18n'
-  import { ref, computed } from 'vue'
+  import { ref, toRef } from 'vue'
   import { TeamDTO } from '@/types/team'
   import UserTeamActions from './UserTeamActions.vue'
   import UserTeamDialog from './UserTeamDialog.vue'
   import { getEligibleTeamsForUser } from '@/utils/teamConstraints'
-import { UserRole } from '@/types/roles'
+  import { UserRole } from '@/types/roles'
+  import { usePagination } from '@/composables/usePagination'
 
   const { t } = useI18n()
 
@@ -19,23 +20,14 @@ import { UserRole } from '@/types/roles'
     itemsPerPage?: number
   }>()
 
+  const users = toRef(props, 'users')
+
   const emit = defineEmits(['assign-team', 'withdraw-team'])
 
-  const itemsPerPage = props.itemsPerPage || 10
-  const currentPage = ref(1)
-
-  const totalPages = computed(() => Math.ceil(props.users.length / itemsPerPage))
-
-  const paginatedUsers = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage
-    return props.users.slice(start, start + itemsPerPage)
-  })
-
-  const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages.value) {
-      currentPage.value = page
-    }
-  }
+  const { currentPage, totalPages, paginatedItems, goToPage } = usePagination(
+    users,
+    props.itemsPerPage || 10
+  )
 
   const selectedUserId = ref<string>()
 
@@ -53,13 +45,24 @@ import { UserRole } from '@/types/roles'
     showWithdrawTeamDialog.value = false
   }
 
-  const getThemeAndSubject = (subjectId: string) => {
-    const theme = props.themes.find((theme) =>
-      theme.subjects.some((subject) => subject.id === subjectId)
-    )
-    if (!theme) return '-'
-    const subject = theme.subjects.find((subject) => subject.id === subjectId)
-    return subject ? `${theme.name} - \n${subject.name}` : theme.name
+  const getSubject = (subjectId: string) => {
+    for (const theme of props.themes) {
+      const subject = theme.subjects.find((subj) => subj.id === subjectId)
+      if (subject) {
+        return subject.name
+      }
+    }
+    return ''
+  }
+
+  const getTheme = (subjectId: string) => {
+    for (const theme of props.themes) {
+      const subject = theme.subjects.find((subj) => subj.id === subjectId)
+      if (subject) {
+        return theme.name
+      }
+    }
+    return ''
   }
 
   const getEligibleTeamsToAssign = () => {
@@ -70,9 +73,9 @@ import { UserRole } from '@/types/roles'
         case UserRole.PARTICIPANT:
           return getEligibleTeamsForUser(props.teams, user, props.config)
         case UserRole.MENTOR:
-          return props.teams.filter((t => !user.mentorTeams?.some(ut => ut.id === t.id)))
+          return props.teams.filter((t) => !user.mentorTeams?.some((ut) => ut.id === t.id))
         case UserRole.JURY:
-          return props.teams.filter((t => !user.juryTeams?.some(ut => ut.id === t.id)))
+          return props.teams.filter((t) => !user.juryTeams?.some((ut) => ut.id === t.id))
         default:
           return []
       }
@@ -86,11 +89,11 @@ import { UserRole } from '@/types/roles'
     if (user?.role) {
       switch (user.role) {
         case UserRole.PARTICIPANT:
-          return props.teams.filter(t => t.id === user.teamId)
+          return props.teams.filter((t) => t.id === user.teamId)
         case UserRole.MENTOR:
-          return props.teams.filter(t => user.mentorTeams?.some(ut => ut.id === t.id))
+          return props.teams.filter((t) => user.mentorTeams?.some((ut) => ut.id === t.id))
         case UserRole.JURY:
-          return props.teams.filter(t => user.juryTeams?.some(ut => ut.id === t.id))
+          return props.teams.filter((t) => user.juryTeams?.some((ut) => ut.id === t.id))
         default:
           return []
       }
@@ -125,7 +128,7 @@ import { UserRole } from '@/types/roles'
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in paginatedUsers" :key="user.id" class="border-b">
+        <tr v-for="user in paginatedItems" :key="user.id" class="border-b">
           <td class="px-4 py-2">{{ user.firstname }} {{ user.lastname }}</td>
           <td class="px-4 py-2">{{ t(`roles.${user.role.toLowerCase()}`) }}</td>
           <td class="px-4 py-2 text-center">{{ user.school ?? '-' }}</td>
@@ -151,7 +154,15 @@ import { UserRole } from '@/types/roles'
             ></v-icon>
           </td>
           <td class="px-4 py-2 text-center">
-            {{ user.favoriteSubjectId ? getThemeAndSubject(user.favoriteSubjectId) : '-' }}
+            <div v-if="user.favoriteSubjectId">
+              <div class="font-medium">
+                {{ getTheme(user.favoriteSubjectId) }}
+              </div>
+              <div class="text-sm text-gray-600">
+                {{ getSubject(user.favoriteSubjectId) }}
+              </div>
+            </div>
+            <div v-else>-</div>
           </td>
           <td class="px-4 py-2 text-center">
             <UserTeamActions

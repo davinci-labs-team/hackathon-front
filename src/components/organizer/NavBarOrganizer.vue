@@ -1,32 +1,68 @@
 <script setup lang="ts">
-import LanguageSelector from '../common/LanguageSelector.vue'
-import { RouterLink, useRoute } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import { useHackathonLogo } from '@/composables/useHackathonLogo'
+  import LanguageSelector from '../common/LanguageSelector.vue'
+  import { RouterLink, useRoute } from 'vue-router'
+  import { useI18n } from 'vue-i18n'
+  import { useHackathonLogo } from '@/composables/useHackathonLogo'
+  import { watch, ref, onMounted } from 'vue'
+  import { S3BucketService } from '@/services/s3BucketService'
+  import { useAuthStore } from '@/stores/auth'
 
-const { t } = useI18n()
-const route = useRoute()
+  const { t } = useI18n()
+  const route = useRoute()
 
-// Utilisation du composable
-const { logoPicture } = useHackathonLogo()
+  // Utilisation du composable
+  const { logoPicture } = useHackathonLogo()
 
-const menuItems = [
-  { path: '/organizer/announcements', label: 'organizer.nav.announcements' },
-  { path: '/organizer/users', label: 'organizer.nav.users' },
-  { path: '/organizer/teams', label: 'organizer.nav.teams' },
-  { path: '/organizer/projects', label: 'organizer.nav.projects' },
-  { path: '/organizer/themes', label: 'organizer.nav.themes' },
-  { path: '/organizer/settings', label: 'organizer.nav.settings' },
-]
+  const menuItems = [
+    { path: '/organizer/announcements', label: 'organizer.nav.announcements' },
+    { path: '/organizer/faq', label: 'organizer.nav.faq' },
+    { path: '/organizer/users', label: 'organizer.nav.users' },
+    { path: '/organizer/teams', label: 'organizer.nav.teams' },
+    { path: '/organizer/projects', label: 'organizer.nav.projects' },
+    { path: '/organizer/themes', label: 'organizer.nav.themes' },
+    { path: '/organizer/settings', label: 'organizer.nav.settings' },
+  ]
 
-const getLinkClasses = (path: string) => {
-  const base = 'rounded px-2 py-1 transition-transform transition-colors duration-200'
-  return [
-    base,
-    route.path === path ? 'font-bold bg-green-700 scale-102' : '',
-    'hover:bg-green-800 hover:scale-105',
-  ].join(' ')
-}
+  const getLinkClasses = (path: string) => {
+    const base = 'rounded px-2 py-1 transition-transform transition-colors duration-200'
+    return [
+      base,
+      route.path === path ? 'font-bold bg-green-700 scale-102' : '',
+      'hover:bg-green-800 hover:scale-105',
+    ].join(' ')
+  }
+
+  const authStore = useAuthStore()
+
+  const profilePicture = ref('https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg')
+
+  const loadProfilePicture = async () => {
+    if (authStore.user?.profilePicturePath) {
+      try {
+        console.log('Fetching profile picture from path:', authStore.user.profilePicturePath)
+        const response = await S3BucketService.getFileUrl(
+          'users',
+          authStore.user.profilePicturePath
+        )
+        // si ton service retourne { url: string }
+        profilePicture.value = response.url
+      } catch (err) {
+        console.error('Error fetching profile picture:', err)
+      }
+    }
+  }
+
+  onMounted(() => {
+    loadProfilePicture()
+  })
+
+  watch(
+    () => authStore.user,
+    () => {
+      loadProfilePicture()
+    },
+    { deep: true }
+  )
 </script>
 
 <template>
@@ -53,7 +89,14 @@ const getLinkClasses = (path: string) => {
       <LanguageSelector />
       <RouterLink to="/organizer/profile">
         <v-btn icon class="bg-transparent">
-          <v-icon size="36">mdi-account-circle</v-icon>
+          <v-img
+            :src="profilePicture"
+            alt="Profile"
+            class="rounded-full"
+            width="32"
+            height="32"
+            cover
+          />
         </v-btn>
       </RouterLink>
     </div>

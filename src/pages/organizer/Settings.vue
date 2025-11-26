@@ -4,7 +4,7 @@
   import Partners from '@/components/organizer/configuration/Partners.vue'
   import PlanningEditor from '@/components/organizer/configuration/PlanningEditor.vue'
   import SocialMedia from '@/components/organizer/configuration/SocialMedia.vue'
-  import Texts from '@/components/organizer/configuration/Texts_FAQ.vue'
+  import Texts from '@/components/organizer/configuration/Texts.vue'
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   const { t } = useI18n()
@@ -25,7 +25,7 @@
         <v-list-item
           v-for="(label, key) in {
             media: t('mediaSettings.title'),
-            texts: t('texts_faq_title'),
+            texts: t('texts_title'),
             partners: t('partnersSettings.title'),
             dates: t('planningSettings.title'),
             legal: t('legal.title'),

@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { UserRole } from '@/types/roles'
 
 export const useAuthStore = defineStore('auth', {
   state: (): { user: SupabaseDecodedUser | null } => ({
@@ -26,6 +25,12 @@ export const useAuthStore = defineStore('auth', {
     updateAccessToken(newAccessToken: string) {
       if (this.user) {
         this.user.accessToken = newAccessToken
+        localStorage.setItem('authUser', JSON.stringify(this.user))
+      }
+    },
+    updateProfilePicture(newProfilePicturePath: string) {
+      if (this.user) {
+        this.user.profilePicturePath = newProfilePicturePath
         localStorage.setItem('authUser', JSON.stringify(this.user))
       }
     },

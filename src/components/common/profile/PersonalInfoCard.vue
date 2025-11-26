@@ -63,7 +63,7 @@ defineExpose({ saveChanges, resetLocalUser })
         v-if="props.editMode"
         auto-grow
         variant="solo"/>
-      <div v-else>{{ localUser.bio || 'No info yet' }}</div>
+      <div v-else>{{ localUser.bio || t('profile.noPersonalInfo') }}</div>
 
       <!-- Interests -->
       <h2 class="text-xl font-bold mt-6 mb-2">{{ t('profile.personalInfo.interests') }}</h2>
@@ -82,7 +82,9 @@ defineExpose({ saveChanges, resetLocalUser })
           </template>
         </v-chip>
 
-        <div v-if="!localUser.interests || localUser.interests.length === 0">Add interest</div>
+        <div v-if="!localUser.interests || localUser.interests.length === 0">
+          {{ t('profile.noInterests') }}
+        </div>
 
         <!-- Champ de saisie avec bouton + pour ajouter un intérêt -->
         <div v-if="props.editMode" class="d-flex align-center mt-2" style="max-width: 350px;">
