@@ -574,6 +574,24 @@ export default {
     invalidPhases: 'Please correct the errors in the phases before saving.',
     mustNotOverlap: 'Phases must not overlap.',
   },
+  mailingSettings: {
+    title: 'Emails Templates',
+    subtitle: 'Manage the email templates sent to users',
+    firstConnection: 'First Connection Email',
+    passwordReset: 'Password Reset Email',
+    emailObject: 'Email Subject',
+    emailTitle: 'Email Title',
+    introParagraph: 'Introductory Paragraph',
+    actionPrompt: 'Action Prompt',
+    buttonText: 'Button Text',
+    closingNote: 'Closing Note',
+    signatureSalutation: 'Signature Salutation',
+    signatureName: 'Signature Name',
+    errors: {
+      maxLength: 'Maximum length reached',
+      fixErrors: 'Please fix the errors before saving.',
+    },
+  },
 
   // FAQ Section
   faq: {

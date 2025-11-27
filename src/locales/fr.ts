@@ -611,6 +611,24 @@ export default {
     invalidPhases: 'Veuillez corriger les erreurs dans les phases avant de sauvegarder.',
     mustNotOverlap: 'Les phases ne doivent pas se chevaucher.',
   },
+  mailingSettings: {
+    title: 'Modèles d\'Emails',
+    subtitle: 'Gérez les modèles d\'emails envoyés aux utilisateurs',
+    firstConnection: 'Email de Première Connexion',
+    passwordReset: 'Email de Réinitialisation de Mot de Passe',
+    emailObject: "Objet de l'Email",
+    emailTitle: "Titre de l'Email",
+    introParagraph: "Paragraphe d'Introduction",
+    actionPrompt: "Texte du Bouton d'Action",
+    buttonText: "Texte du Bouton",
+    closingNote: "Paragraphe de Clôture",
+    signatureSalutation: 'Salutation de la Signature',
+    signatureName: 'Nom de la Signature',
+    errors: {
+      maxLength: 'Longueur maximale atteinte',
+      fixErrors: 'Veuillez corriger les erreurs avant de sauvegarder.',
+    },
+  },
 
   // FAQ Section
   faq: {

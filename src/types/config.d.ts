@@ -28,7 +28,7 @@ export interface PartnersDTO {
 }
 
 export interface PartnersSettingsDTO {
-  partners: PartnersDTO[];
+  partners: PartnersDTO[]
 }
 
 export interface CreatePartnersDTO {
@@ -44,7 +44,7 @@ export type UpdatePartnersDTO = Partial<CreatePartnersDTO>
 // ---- TEXTS & MEDIA -----
 export interface HackathonTextDTO {
   hackathonName: string
-  slogan? : string
+  slogan?: string
   hackathonDescription: string
   location?: string
 }
@@ -59,7 +59,6 @@ export interface HackathonMediaDTO {
   x: string | null
   youtube: string | null
 }
-
 
 // ---- CONFIGURATIONS -----
 export interface ConfigurationResponse {
