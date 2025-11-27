@@ -87,7 +87,7 @@
           <th class="px-4 py-2 text-left font-semibold">
             {{ t('organizer.teamManagement.themeAndSubject') }}
           </th>
-          <th class="px-4 py-2 text-center font-semibold">
+          <th class="px-4 py-2 text-center font-semibold min-w-[250px]">
             {{ t('organizer.teamManagement.constraints.label') }}
           </th>
           <th class="px-4 py-2 text-center font-semibold">
