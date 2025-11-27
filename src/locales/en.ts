@@ -80,7 +80,7 @@ export default {
     inscriptionMessage: 'Welcome! To join the event, please register below.',
     firstLoginBtn: 'First login',
     locationText: 'Register to see the exact location',
-    dateText: '{numberOfDays} intensive day(s) of coding)',
+    dateText: '{count} intensive day of coding | {count} intensive days of coding',
     phases: {
       1: {
         name: 'Publication of themes and subjects',

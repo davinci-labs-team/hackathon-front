@@ -7,3 +7,13 @@ export enum ConfigurationKey {
   MATCHMAKING = 'MATCHMAKING',
   THEMES = 'THEMES',
 }
+
+export enum PublicConfigurationKey {
+  LEGAL = 'LEGAL',
+  MEDIA = 'MEDIA',
+  TEXTS = 'TEXTS',
+  PHASES = 'PHASES',
+  PARTNERS = 'PARTNERS',
+  THEMES = 'THEMES',
+}
+
