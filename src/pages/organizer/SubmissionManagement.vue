@@ -16,6 +16,7 @@
 
   import { useTeamStore } from '@/stores/teamStore'
   import { completeSubmission } from '@/utils/submissionUtils'
+import { submissionService } from '@/services/submissionService'
 
   // Init Store
   const teamsStore = useTeamStore()
@@ -50,9 +51,7 @@
     loadingSubmissions.value = true
     await teamsStore.fetchTeams()
 
-    const rawSubmissions = await new Promise<SubmissionDTO[]>((resolve) => {
-      setTimeout(() => resolve(mockedSubmissions), 500)
-    })
+    const rawSubmissions = await submissionService.getAll()
     const teamsData = teamsStore.teams
     submissions.value = rawSubmissions.map((sub) => completeSubmission(sub, teamsData))
 
