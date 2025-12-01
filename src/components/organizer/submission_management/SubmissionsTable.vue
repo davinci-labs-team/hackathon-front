@@ -56,13 +56,6 @@
     }
     return ''
   }
-
-  const getPendingJuries = (submission: SubmissionDTO) => {
-    const missingJuries = submission.juries.filter((jury) => {
-      return !submission.comments.some((comment) => comment.userId === jury.id)
-    })
-    return missingJuries
-  }
 </script>
 
 <template>

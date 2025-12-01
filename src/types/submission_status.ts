@@ -1,5 +1,5 @@
 export enum SubmissionStatus {
-    GRADED = "graded",
-    PENDING = "pending",
-    NOT_SUBMITTED = "not_submitted",
+    GRADED = "GRADED",
+    PENDING = "PENDING",
+    NOT_SUBMITTED = "NOT_SUBMITTED",
 }

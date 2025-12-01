@@ -1,44 +1,47 @@
-import { UserRole } from '@/types/roles'
-
-export interface SubmissionStatus {
-    GRADED: 'GRADED'
-    PENDING: 'PENDING'
-    NOT_SUBMITTED: 'NOT_SUBMITTED'
-}
+import { SubmissionStatus } from "./submission_status"
+import { UserPreviewDTO } from "./team"
 
 export interface SubmissionDTO {
   id: string
   teamId: string
-  grade?: number | null
+  teamName: string // to set
+  subjectId: string // to set
+  grade: number | null
   status: SubmissionStatus
-  createdAt?: Date | null
-  updatedAt?: Date | null
-  submissionFilePath?: string | null
-  githubLink?: string | null
-  evaluations?: EvaluationDTO[] | null
-  comments?: CommentDTO[] | null
-}
+  createdAt: Date 
+  updatedAt: Date 
+  submissionFilePath: string | null
+  githubLink: string | null
 
-export interface UpdateSubmissionDto {
-  teamId: string
-  submissionFilePath?: string | null
+  juries: UserPreviewDTO[] // to set
+  mentors: UserPreviewDTO[] // to set
+
+  evaluations: EvaluationDTO[] | null
+  comments: CommentDTO[] | null
 }
 
 export interface EvaluationDTO {
   id: string
   submissionId: string
   juryId: string
+  juryName: string // to set
   grade: number
-  comment?: string | null
-  createdAt?: Date | null
-  evaluationFilePath?: string | null
+  comment: string | null 
+  createdAt: Date
+  evaluationFilePath: string | null
 }
 
 export interface CommentDTO {
   id: string
   submissionId: string
   mentorId: string
-  content?: string | null
-  createdAt?: Date | null
+  mentorName: string // to set
+  content: string
+  createdAt: Date
 }
 
+export interface UpdateSubmissionDto {
+  teamId?: string
+  submissionFilePath?: string | null
+  githubLink?: string | null
+}
