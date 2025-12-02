@@ -12,7 +12,7 @@
 
   const menuItems = [
     { path: '/expert/dashboard', label: `${tPrefix}.nav.dashboard` },
-    { path: '/expert/team', label: `${tPrefix}.nav.teams` },
+    { path: '/expert/teams', label: `${tPrefix}.nav.teams` },
     { path: '/expert/project', label: `${tPrefix}.nav.projects` },
     { path: '/expert/faq', label: `${tPrefix}.nav.faq` },
   ]

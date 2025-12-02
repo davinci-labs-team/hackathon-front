@@ -1,6 +1,6 @@
 import { UserRole } from '@/types/roles'
 import Dashboard from '@/pages/expert/Dashboard.vue'
-import Team from '@/pages/expert/Team.vue'
+import Teams from '@/pages/expert/Teams.vue'
 import Project from '@/pages/expert/Project.vue'
 import FAQ from '@/pages/expert/FAQ.vue'
 import Profile from '@/pages/common/Profile.vue'
@@ -18,9 +18,9 @@ export default [
         meta: { requiresAuth: true, roles: [UserRole.JURY, UserRole.ORGANIZER, UserRole.MENTOR] },
       },
       {
-        path: 'team',
-        name: 'ExpertTeamPage',
-        component: Team,
+        path: 'teams',
+        name: 'ExpertTeamsPage',
+        component: Teams,
         meta: { requiresAuth: true, roles: [UserRole.JURY, UserRole.ORGANIZER, UserRole.MENTOR] },
       },
       {
