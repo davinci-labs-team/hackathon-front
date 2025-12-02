@@ -27,6 +27,7 @@ export default {
     individual: 'Individuel',
     multiple: 'Multiple',
     noDataText: 'Aucune donnée disponible',
+    download: 'Télécharger',
   },
   profile: {
     mainTitle: 'Mon Profil',
@@ -224,7 +225,7 @@ export default {
       school: 'École',
       mail: 'Email',
       namePlaceholder: 'Rechercher par nom, équipe',
-      constraints : 
+      constraints:
       {
         label: 'Contraintes',
         valid: 'Valide',
@@ -345,6 +346,16 @@ export default {
       yourGrade: 'Note donnée',
       yourComment: 'Votre commentaire',
       yourFile: 'Votre fichier d’évaluation',
+      confirmation: {
+        title: 'Confirmer l’évaluation',
+        text: 'Voulez-vous vraiment soumettre cette évaluation ? Vous ne pourrez plus la modifier par la suite.',
+        grade: 'Note :',
+        comment: 'Commentaire :',
+        file: 'Fichier :',
+        noFile: 'Aucun fichier',
+        confirm: 'Confirmer',
+        cancel: 'Annuler',
+      },
     },
   },
   mentor: {
@@ -376,12 +387,12 @@ export default {
     },
     submission: {
       title: 'Dépôt de projet',
-      
+
       team: {
         title: 'Équipe',
         noGithubLink: 'Aucun lien GitHub fourni',
       },
-      
+
       upload: {
         title: 'Fichiers du projet (.zip)',
         chooseFile: 'Choisir un fichier ZIP',
@@ -393,7 +404,7 @@ export default {
         fileUploaded: 'Fichier uploadé',
         download: 'Télécharger',
       },
-      
+
       status: {
         title: 'Statut de remise',
         team: 'Équipe',
@@ -403,12 +414,12 @@ export default {
         lastModified: 'Dernière modification',
         createdAt: 'Créé le',
         deadlineExceeded: 'Délai dépassé',
-        
+
         notSubmitted: 'Non soumis',
         pending: 'En attente d\'évaluation',
         graded: 'Évalué',
       },
-      
+
       evaluations: {
         title: 'Évaluations',
         noEvaluations: 'Aucune évaluation disponible pour le moment',
@@ -418,7 +429,7 @@ export default {
         comment: 'Commentaire',
         downloadFile: 'Télécharger le fichier d\'évaluation',
       },
-      
+
       comments: {
         title: 'Commentaires des mentors',
         noComments: 'Aucun commentaire pour le moment',
@@ -527,7 +538,7 @@ export default {
     banner: 'Bannière',
     socialMediaLinks: 'Liens des Réseaux Sociaux',
     platformImages: 'Images de la Plateforme',
-    uploadEvaluationGrid: 'Télécharger la grille d’évaluation',
+    uploadEvaluationGrid: 'Envoyer la grille d’évaluation',
     evaluationGrid: 'Grille d’Évaluation',
     uploadHint: 'Vous pouvez télécharger des fichiers aux formats : .docx, .xlsx.',
     linkedin: 'LinkedIn',

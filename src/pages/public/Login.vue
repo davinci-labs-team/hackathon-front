@@ -32,7 +32,11 @@
       phaseStore.scheduleNextRefresh()
       
       error.value = false
-      router.push('/user/dashboard')
+      if (user?.role === 'JURY' || user?.role === 'MENTOR') {
+        router.push('/expert/dashboard')
+      } else {
+        router.push('/user/dashboard')
+      }
     } catch (err) {
       console.error('Login error:', err)
       error.value = true

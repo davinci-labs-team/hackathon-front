@@ -29,6 +29,7 @@ export default {
     individual: 'Individual',
     multiple: 'Multiple',
     noDataText: 'No data available',
+    download: 'Download',
   },
   profile: {
     mainTitle: 'My Profile',
@@ -221,7 +222,7 @@ export default {
       school: 'School',
       mail: 'Email',
       namePlaceholder: 'Search by name, team',
-      constraints : 
+      constraints:
       {
         label: 'Constraints',
         valid: 'Valid',
@@ -341,6 +342,16 @@ export default {
       yourGrade: 'Given grade',
       yourComment: 'Your comment',
       yourFile: 'Your evaluation file',
+      confirmation: {
+        title: 'Confirm Evaluation',
+        text: 'Are you sure you want to submit this evaluation? You will not be able to edit it afterwards.',
+        grade: 'Grade:',
+        comment: 'Comment:',
+        file: 'File:',
+        noFile: 'No file',
+        confirm: 'Confirm',
+        cancel: 'Cancel',
+      },
     },
   },
   mentor: {
@@ -609,7 +620,7 @@ export default {
     theme: 'Theme',
     topic: 'Subject',
     newTheme: 'New Theme',
-    newSubject : 'New Subject',
+    newSubject: 'New Subject',
     description: 'Description',
     addThemeBtn: '+ Add Theme',
     addTopicBtn: '+ Add Subject',

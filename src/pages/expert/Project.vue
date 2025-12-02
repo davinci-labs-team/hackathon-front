@@ -12,8 +12,13 @@ import { TeamDTO } from '@/types/team'
 import { S3BucketService } from '@/services/s3BucketService'
 import { computed } from 'vue'
 import { UserRole } from '@/types/roles'
+import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+import { HackathonMediaDTO } from '@/types/config'
+import { getOrCreateConfiguration } from '@/services/configurationService'
+import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
 
 const authStore = useAuthStore()
+const mediaSettings = ref<HackathonMediaDTO>({ ...defaultConfigurations[ConfigurationKey.MEDIA] })  
 
 const role = getRole()
 const tPrefix = getTPrefix(role, true)
@@ -25,6 +30,7 @@ const evaluating = ref(false)
 const grade = ref<number | null>(null)
 const comment = ref('')
 const evaluationFile = ref<File | null>(null)
+const showConfirmationDialog = ref(false)
 
 const userInfo = ref<ExpertTeamsResponse | null>(null)
 const teamInfo = ref<TeamDTO | null>(null)
@@ -51,7 +57,7 @@ const currentMentorEvaluation = computed(() => {
 const loadSubmission = async (teamId: string) => {
   try {
     loading.value = true
-    const submissionResponse = await submissionService.getbyTeamId(teamId) as SubmissionDTO | null
+    const submissionResponse = await submissionService.getbyTeamId(teamId)
     submissionInfo.value = submissionResponse
   } catch (err) {
     submissionInfo.value = null
@@ -64,6 +70,11 @@ const loadSubmission = async (teamId: string) => {
 onMounted(async () => {
   if (authStore.user?.id) {
     try {
+      const response = await getOrCreateConfiguration(ConfigurationKey.MEDIA)
+      if (response && response.value) {
+        mediaSettings.value = response.value as HackathonMediaDTO
+      }
+
       loading.value = true
       const userResponse = await userService.getExpertTeamsById(authStore.user.id)
       userInfo.value = userResponse
@@ -125,7 +136,8 @@ const downloadSubmissionFile = async () => {
 const downloadEvaluationGrid = async () => {
   try {
     // Télécharge le template de grille de notation
-    const { url } = await S3BucketService.getFileUrl('templates', 'grille-notation.pdf')
+    if (!mediaSettings.value.evaluationGridPath) return
+    const { url } = await S3BucketService.getFileUrl('public_files', mediaSettings.value.evaluationGridPath)
     window.open(url, '_blank')
   } catch (error) {
     console.error('Error downloading evaluation grid:', error)
@@ -159,6 +171,12 @@ const submitEvaluation = async () => {
     alert('Veuillez remplir tous les champs obligatoires')
     return
   }
+  showConfirmationDialog.value = true
+}
+
+const confirmSubmission = async () => {
+  showConfirmationDialog.value = false
+  if (!submissionInfo.value?.id || grade.value === null) return
 
   try {
     evaluating.value = true
@@ -390,6 +408,47 @@ const submitComment = async () => {
           </v-col>
         </v-row>
       </v-form>
+
+      <!-- Modal de confirmation -->
+      <v-dialog v-model="showConfirmationDialog" max-width="500">
+        <v-card>
+          <v-card-title class="text-h5">
+            {{ t(`${tPrefix}.submission.confirmation.title`) }}
+          </v-card-title>
+          
+          <v-card-text>
+            <p class="mb-4">{{ t(`${tPrefix}.submission.confirmation.text`) }}</p>
+            
+            <div class="bg-grey-lighten-4 pa-4 rounded">
+              <p><strong>{{ t(`${tPrefix}.submission.confirmation.grade`) }}</strong> {{ grade }}/20</p>
+              <p v-if="comment"><strong>{{ t(`${tPrefix}.submission.confirmation.comment`) }}</strong> {{ comment }}</p>
+              <p>
+                <strong>{{ t(`${tPrefix}.submission.confirmation.file`) }}</strong> 
+                {{ evaluationFile ? evaluationFile.name : t(`${tPrefix}.submission.confirmation.noFile`) }}
+              </p>
+            </div>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer />
+            <v-btn
+              color="grey-darken-1"
+              variant="text"
+              @click="showConfirmationDialog = false"
+            >
+              {{ t(`${tPrefix}.submission.confirmation.cancel`) }}
+            </v-btn>
+            <v-btn
+              color="primary"
+              variant="elevated"
+              :loading="evaluating || uploading"
+              @click="confirmSubmission"
+            >
+              {{ t(`${tPrefix}.submission.confirmation.confirm`) }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
       <!-- Affichage de l'évaluation du jury connecté -->
       <v-divider v-if="currentJuryEvaluation" class="my-6" />

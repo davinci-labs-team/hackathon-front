@@ -11,7 +11,7 @@
   <v-container>
     <v-row justify="center" class="mt-8">
       <v-col cols="12" md="8" lg="6">
-        <h1 class="text-3xl font-bold">{{ t(`jury.nav.teams`) }}</h1>
+        <h1 class="text-3xl font-bold">{{ t(`${tPrefix}.nav.teams`) }}</h1>
       </v-col>
     </v-row>
   </v-container>
