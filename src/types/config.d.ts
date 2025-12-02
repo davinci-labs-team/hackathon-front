@@ -6,8 +6,13 @@ export interface HackathonGeneralInfoDTO {
   description: string
 }
 
+export type PhaseStatus = 'NOT_STARTED' | 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'SKIPPED' 
+
 export interface HackathonPhaseDTO {
   order: number
+  name: string
+  status: PhaseStatus
+  optionalPhase: boolean
   startDate: string | null
   endDate: string | null
 }

@@ -31,7 +31,7 @@ import { usePhaseStore } from '@/stores/phase'
       phaseStore.scheduleNextRefresh()
 
       if (user.role === UserRole.ORGANIZER) {
-        router.push('/organizer/announcements')
+        router.push('/organizer/hackathon')
       } else {
         router.push('/')
       }

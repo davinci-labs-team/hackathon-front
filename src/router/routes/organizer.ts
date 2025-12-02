@@ -8,12 +8,19 @@ import Profile from '@/pages/common/Profile.vue'
 import Announcements from '@/pages/organizer/Announcements.vue'
 import ThemesManagement from '@/pages/organizer/ThemesManagement.vue'
 import FAQ from '@/pages/organizer/FAQ.vue'
+import HackathonManagement from '@/pages/organizer/HackathonManagement.vue'
 
 export default [
   {
     path: '/organizer',
     component: OrganizerLayout,
     children: [
+      {
+        path: 'hackathon',
+        name: 'HackathonManagement',
+        component: HackathonManagement,
+        meta: { requiresAuth: true, role: UserRole.ORGANIZER },
+      },
       {
         path: 'announcements',
         name: 'Announcements',

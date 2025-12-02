@@ -82,30 +82,30 @@ export default {
     dateText: '{numberOfDays} jours intensif(s) de code',
     phases: {
       1: {
-        name: 'Publication des thèmes et sujets',
+        defaultName: 'Complétion de Profil',
         description:
-          'Phase de lancement du hackathon. Les participants découvrent les thèmes et sujets proposés. Ils doivent en choisir 3 qui les intéressent le plus pour orienter leurs idées de projet.',
+          'Phase de lancement du hackathon. Les participants doivent réinitialiser leur mot de passe et compléter leur profil.',
       },
       2: {
-        name: 'Formation des équipes',
-        description: 'Phase facultative si le matchmaking automatique est activé.',
+        defaultName: 'Sélection du Sujet',
+        description: 'Phase où les participants doivent sélectionner leur sujet préféré',
       },
       3: {
-        name: 'Hackathon',
+        defaultName: 'Formation des Équipes',
         description:
-          'Phase pendant laquelle les équipes travaillent intensivement sur leurs projets.',
+          'Phase de formation des équipes (peut être effectuée par les organisateurs ou par les participants eux-mêmes).',
       },
       4: {
-        name: 'Soumission et Présentation des Projets',
-        description: 'Phase de clôture de la période de développement.',
+        defaultName: 'Hackathon',
+        description:  'Phase pendant laquelle les équipes travaillent intensivement sur leurs projets.',
       },
       5: {
-        name: 'Evaluation des projets',
+        defaultName: 'Évaluation & Feedback',
         description:
-          'Phase où le jury évalue les projets soumis en fonction de contraintes prédéfinis.',
+          'Phase où le jury évalue les projets soumis et les mentors rendent leurs feedbacks.',
       },
       6: {
-        name: 'Annonce des résultats',
+        defaultName: 'Clôture & Annonces',
         description: 'Phase finale où les résultats sont annoncés.',
       },
     },
@@ -314,6 +314,7 @@ export default {
       downloadEvaluation: 'Télécharger la grille d’évaluation',
     },
     nav: {
+      hackathon: 'Gestion du Hackathon',
       announcements: 'Annonces',
       faq: "FAQ",
       users: 'Gestion des utilisateurs',
@@ -607,9 +608,8 @@ export default {
     title: 'Dates & Planning',
     subtitle: "Gérez le planning de l'événement et les sessions",
     selectDateAndTime: "Sélectionner la date & l'heure",
-    endAfterStart: 'La date de fin doit être postérieure à la date de début',
-    invalidPhases: 'Veuillez corriger les erreurs dans les phases avant de sauvegarder.',
-    mustNotOverlap: 'Les phases ne doivent pas se chevaucher.',
+    deadline: "Deadline de rendu le ",
+    phaseNameRequired: 'Le nom de chaque phase est obligatoire.',
   },
   mailingSettings: {
     title: 'Modèles d\'Emails',
@@ -684,5 +684,10 @@ export default {
     schoolsMax: "{count} membre(s) en trop d'une des écoles  : {schools}",
     schoolsEqualTooMany: "{count} en trop ({schools})",
     schoolsEqualTooFew: "{count} manquant(s) ({schools})",
-  }
+  },
+
+  hackathonManagement : {
+    title: 'Gestion du Hackathon',
+    subtitle: 'Contrôlez et suivez l\'avancement de votre hackathon',
+  },
 }

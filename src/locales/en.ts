@@ -83,29 +83,29 @@ export default {
     dateText: '{numberOfDays} intensive day(s) of coding)',
     phases: {
       1: {
-        name: 'Publication of themes and subjects',
+        defaultName: 'Profile Completion',
         description:
-          'Kick-off phase of the hackathon. Participants discover the proposed themes and subjects. They must choose 3 that interest them the most to guide their project ideas.',
+          'Kick-off phase of the hackathon. Participants have to reset their password and complete their profile.',
       },
       2: {
-        name: 'Team formation',
-        description: 'Optional phase if automatic matchmaking is enabled.',
+        defaultName: 'Subject Selection',
+        description: 'Participants have to select their favorite topic',
       },
       3: {
-        name: 'Hackathon',
-        description: 'Phase during which teams work intensively on their projects.',
+        defaultName: 'Team Formation',
+        description: 'Team formation phase (can be done by the organizers or by the participants themselves).',
       },
       4: {
-        name: 'Project submission and presentation',
-        description: 'Closing phase of the development period.',
+        defaultName: 'Hackathon',
+        description: 'Hackathon phase where participants work on their projects.',
       },
       5: {
-        name: 'Project evaluation',
+        defaultName: 'Jury Evaluation & Feedback',
         description:
           'Phase where the jury evaluates submitted projects based on predefined criteria.',
       },
       6: {
-        name: 'Results announcement',
+        defaultName: 'Closure & Announcements',
         description: 'Final phase where the results are announced.',
       },
     },
@@ -310,6 +310,7 @@ export default {
       downloadEvaluation: 'Download Evaluation Grid',
     },
     nav: {
+      hackathon: 'Hackathon Management',
       announcements: 'Announcements',
       faq: "FAQ",
       users: 'User Management',
@@ -570,9 +571,8 @@ export default {
     title: 'Dates & Schedule',
     subtitle: 'Manage the event schedule and sessions',
     selectDateAndTime: 'Select date & time',
-    endAfterStart: 'End date must be after start date',
-    invalidPhases: 'Please correct the errors in the phases before saving.',
-    mustNotOverlap: 'Phases must not overlap.',
+    deadline: "Submission deadline on ",
+    phaseNameRequired: 'Please provide names for all phases.',
   },
   mailingSettings: {
     title: 'Emails Templates',
@@ -647,5 +647,10 @@ export default {
     schoolsMax: "{count} member(s) too many from one of these schools: {schools}",
     schoolsEqualTooMany: "{count} member(s) too many from one of these schools: {schools}",
     schoolsEqualTooFew: "{count} member(s) missing from one of these schools: {schools}",
-  }
+  },
+
+  hackathonManagement: {
+    title: 'Hackathon Management',
+    subtitle: 'Control and monitor the progress of your hackathon',
+  },
 }
