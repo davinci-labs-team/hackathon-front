@@ -13,6 +13,11 @@ function getAuthHeaders() {
 }
 
 export const submissionService = {
+  async getAll(): Promise<SubmissionDTO[]> {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/submission`, { headers: getAuthHeaders() })
+    return res.data
+  },
+  
   async getbyTeamId(teamId: string): Promise<SubmissionDTO | null> {
     const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/submission?teamId=${teamId}`, { headers: getAuthHeaders() })
     return res.data

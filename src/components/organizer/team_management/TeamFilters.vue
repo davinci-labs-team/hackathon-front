@@ -64,10 +64,9 @@ const schoolsOptions = computed(() => {
 
 <template>
   <div class="mb-6 p-4 border rounded-lg shadow-sm">
-    <div class="flex gap-8 flex-wrap">
-      <!-- Status -->
-      <div class="flex-1 min-w-[150px]">
-        <label class="block mb-2 text-sm font-medium">
+    <div class="flex gap-4 items-end flex-nowrap overflow-x-auto pb-2">
+      <div class="w-[150px] flex-shrink-0">
+        <label class="block mb-2 text-sm font-medium whitespace-nowrap">
           {{ t('organizer.teamManagement.status.name') }}
         </label>
         <v-select
@@ -90,9 +89,8 @@ const schoolsOptions = computed(() => {
         />
       </div>
 
-      <!-- Constraints / Roles -->
-      <div class="flex-1 min-w-[150px]">
-        <label class="block mb-2 text-sm font-medium">
+      <div class="w-[150px] flex-shrink-0">
+        <label class="block mb-2 text-sm font-medium whitespace-nowrap">
           {{ viewMode === 'individual'
             ? t('organizer.teamManagement.role')
             : t('organizer.teamManagement.constraints.label') }}
@@ -117,9 +115,8 @@ const schoolsOptions = computed(() => {
         />
       </div>
 
-      <!-- School -->
-      <div class="flex-1 min-w-[200px]" v-if="viewMode === 'individual'">
-        <label class="block mb-2 text-sm font-medium">
+      <div class="w-[200px] flex-shrink-0" v-if="viewMode === 'individual'">
+        <label class="block mb-2 text-sm font-medium whitespace-nowrap">
           {{ t('organizer.teamManagement.school') }}
         </label>
         <v-select
@@ -132,9 +129,8 @@ const schoolsOptions = computed(() => {
         />
       </div>
 
-      <!-- Search -->
-      <div class="flex-[2] min-w-[200px]">
-        <label class="block mb-2 text-sm font-medium">
+      <div class="w-[250px] flex-grow">
+        <label class="block mb-2 text-sm font-medium whitespace-nowrap">
           {{ t('organizer.userManagement.name') }}
         </label>
         <v-text-field
@@ -148,9 +144,8 @@ const schoolsOptions = computed(() => {
         />
       </div>
 
-      <!-- View Mode -->
-      <div class="flex-1 min-w-[250px]">
-        <label class="block mb-2 text-sm font-medium">
+      <div class="flex-shrink-0">
+        <label class="block mb-2 text-sm font-medium whitespace-nowrap">
           {{ t('organizer.teamManagement.viewMode.label') }}
         </label>
         <v-btn-toggle

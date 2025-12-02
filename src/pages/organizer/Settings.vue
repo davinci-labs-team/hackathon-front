@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import LegalEditor from '@/components/organizer/configuration/LegalEditor.vue'
+  import MailingEditor from '@/components/organizer/configuration/MailingEditor.vue'
   import Matchmaking from '@/components/organizer/configuration/Matchmaking.vue'
   import Partners from '@/components/organizer/configuration/Partners.vue'
   import PlanningEditor from '@/components/organizer/configuration/PlanningEditor.vue'
@@ -30,6 +31,7 @@
             dates: t('planningSettings.title'),
             legal: t('legal.title'),
             matchmaking: t('matchmakingSettings.title'),
+            mailing: t('mailingSettings.title')
           }"
           :key="key"
           @click="currentSection = key"
@@ -68,6 +70,8 @@
         return Matchmaking
       case 'legal':
         return LegalEditor
+      case 'mailing':
+       return MailingEditor
       default:
         return SocialMedia
     }

@@ -14,6 +14,13 @@
   import { configurationService } from '@/services/configurationService'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 
+  import { useTeamStore } from '@/stores/teamStore'
+  import { completeSubmission } from '@/utils/submissionUtils'
+import { submissionService } from '@/services/submissionService'
+
+  // Init Store
+  const teamsStore = useTeamStore()
+
   const { t } = useI18n()
 
   const loadingSubmissions = ref<boolean>(false)
@@ -42,13 +49,13 @@
   // ----- FETCH SUBMISSIONS -----
   const fetchSubmissions = async () => {
     loadingSubmissions.value = true
-    // Simulate API call
-    setTimeout(() => {
-      // Here you would normally fetch data from an API
-      // For demonstration, we use mocked data
-      submissions.value = mockedSubmissions
-      loadingSubmissions.value = false
-    }, 500)
+    await teamsStore.fetchTeams()
+
+    const rawSubmissions = await submissionService.getAll()
+    const teamsData = teamsStore.teams
+    submissions.value = rawSubmissions.map((sub) => completeSubmission(sub, teamsData))
+
+    loadingSubmissions.value = false
   }
 
   const fetchThemes = async () => {

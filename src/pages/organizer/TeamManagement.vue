@@ -13,15 +13,17 @@
   import UsersTable from '@/components/organizer/team_management/UsersTable.vue'
   import { calculateAllTeamsConstraints } from '@/utils/teamConstraints'
   import { TeamConstraintViolation } from '@/types/config'
-  import { teamService } from '@/services/teamService'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import TeamFilters from '../../components/organizer/team_management/TeamFilters.vue'
   import { filterTeams, filterUsers } from '@/utils/filterUtils'
   import { TeamStatus } from '@/types/team_status'
+  import { useTeamStore } from '@/stores/teamStore'
 
   const { t } = useI18n()
 
-  const loadingTeams = ref<boolean>(false)
+  // ---- PINIA STORE ----
+  const teamStore = useTeamStore()
+  const loadingTeams = computed(() => teamStore.loading)
 
   // Snackbar
   const snackbar = ref(false)
@@ -48,11 +50,9 @@
   const juries = ref<UserReducedDTO[]>([])
   const mentors = ref<UserReducedDTO[]>([])
   const themes = ref<ThemesDTO[]>([])
-  const teams = ref<TeamDTO[]>([])
+  const teams = computed(() => teamStore.teams)
 
-  // ----------------------
-  // ACTIONS
-  // ----------------------
+  // ----- TEAM FORM HANDLERS -----
   const onAddTeam = () => {
     showTeamForm.value = true
     editMode.value = false
@@ -65,28 +65,35 @@
   }
 
   const onSaveTeam = async (teamId: string, team: TeamFormDTO) => {
-    if (editMode.value) {
-      await teamService.update(teamId, team)
-      text.value = t('organizer.teamManagement.teamUpdated')
-    } else {
-      await teamService.create(team)
-      text.value = t('organizer.teamManagement.teamCreated')
+    try {
+      if (editMode.value) {
+        await teamStore.updateTeam(teamId, team)
+        text.value = t('organizer.teamManagement.teamUpdated')
+      } else {
+        await teamStore.createTeam(team)
+        text.value = t('organizer.teamManagement.teamCreated')
+      }
+      error.value = false
+      snackbar.value = true
+
+      await fetchUsers() 
+      showTeamForm.value = false
+      selectedTeam.value = null
+    } catch (err) {
+      console.error('Error saving team:', err)
+      text.value = t(editMode.value ? 'organizer.teamManagement.teamUpdateError' : 'organizer.teamManagement.teamCreateError')
+      error.value = true
+      snackbar.value = true
     }
-    error.value = false
-    snackbar.value = true
-    await Promise.all([fetchUsers(), fetchTeams()])
-    showTeamForm.value = false
-    selectedTeam.value = null
   }
 
   const deleteTeam = async (teamId: string) => {
     try {
-      await teamService.delete(teamId)
+      await teamStore.deleteTeam(teamId)
       text.value = t('organizer.teamManagement.teamDeleted')
       error.value = false
       snackbar.value = true
-      teams.value = teams.value.filter((t: TeamDTO) => t.id !== teamId)
-      await Promise.all([fetchUsers(), fetchTeams()])
+      await fetchUsers()
     } catch (err) {
       console.error('Error deleting team:', err)
       text.value = t('organizer.teamManagement.teamDeleteError')
@@ -100,14 +107,12 @@
 
   const assignToTeam = async (payload: { userId: string; teamId: string }) => {
     const { userId, teamId } = payload
-    console.log('assigning', userId, teamId)
     try {
-      await teamService.assignUserToTeam(teamId, userId)
+      await teamStore.assignUserToTeam(teamId, userId)
       text.value = t('organizer.teamManagement.userAssignedToTeam')
       error.value = false
       snackbar.value = true
       await fetchUsers()
-      await fetchUpdatedTeam(teamId)
     } catch (err) {
       console.error('Error assigning user to team:', err)
       text.value = t('organizer.teamManagement.userAssignToTeamError')
@@ -118,14 +123,12 @@
 
   const withdrawFromTeam = async (payload: { userId: string; teamId: string }) => {
     const { userId, teamId } = payload
-    console.log('withdrawing', userId, teamId)
     try {
-      await teamService.withdrawUserFromTeam(teamId, userId)
+      await teamStore.withdrawUserFromTeam(teamId, userId)
       text.value = t('organizer.teamManagement.userWithdrawnFromTeam')
       error.value = false
       snackbar.value = true
       await fetchUsers()
-      await fetchUpdatedTeam(teamId)
     } catch (err) {
       console.error('Error withdrawing user from team:', err)
       text.value = t('organizer.teamManagement.userWithdrawFromTeamError')
@@ -136,8 +139,7 @@
 
   const toggleConstraints = async (ignoreConstraints: boolean, teamId: string) => {
     try {
-      await teamService.toggleIgnoreConstraints(teamId, ignoreConstraints)
-      await fetchUpdatedTeam(teamId)
+      await teamStore.toggleIgnoreConstraints(teamId, ignoreConstraints)
     } catch (err) {
       console.error('Error toggling team constraints:', err)
       text.value = t('organizer.teamManagement.teamConstraintsToggleError')
@@ -155,8 +157,7 @@
       return
     }
     try {
-      await teamService.updateStatus(teamId, status)
-      await fetchUpdatedTeam(teamId)
+      await teamStore.updateTeamStatus(teamId, status)
     } catch (err) {
       console.error('Error updating team lock status:', err)
       text.value = t('organizer.teamManagement.teamLockStatusUpdateError')
@@ -165,9 +166,7 @@
     }
   }
 
-  // ----------------------
-  // CONSTRAINTS
-  // ----------------------
+  // ------ CONSTRAINTS ------
   const matchmakingConfig = ref<MatchmakingSettingsDTO | null>(null)
   const teamConstraintsMap = ref<Record<string, TeamConstraintViolation[]>>({})
 
@@ -185,35 +184,7 @@
 
   watch([teams, matchmakingConfig], updateConstraints, { deep: true, immediate: true })
 
-  // ----------------------
-  // FETCH
-  // ----------------------
-  const fetchTeams = async () => {
-    loadingTeams.value = true
-    try {
-      const response = await teamService.getAll()
-      if (response) teams.value = response
-    } catch (err) {
-      console.error('Error fetching teams:', err)
-      text.value = t('organizer.teamManagement.teamFetchError')
-      error.value = true
-      snackbar.value = true
-    } finally {
-      loadingTeams.value = false
-    }
-  }
-
-  const fetchUpdatedTeam = async (teamId: string) => {
-    const updatedTeam = await teamService.getById(teamId)
-    if (updatedTeam) {
-      const index = teams.value.findIndex((t) => t.id === teamId)
-      if (index !== -1) {
-        teams.value.splice(index, 1, updatedTeam)
-      } else {
-        teams.value.push(updatedTeam)
-      }
-    }
-  }
+  // ----- FETCH DATA -----
 
   const fetchUsers = async () => {
     const response = await userService.getAllReduced()
@@ -260,11 +231,11 @@
 
   const autogenerateTeams = async () => {
     try {
-      await teamService.autogenerateTeams()
+      await teamStore.autogenerateTeams()
       text.value = t('organizer.teamManagement.teamAutogenerateSuccess')
       error.value = false
       snackbar.value = true
-      await Promise.all([fetchUsers(), fetchTeams()])
+      await fetchUsers()
     } catch (err) {
       console.error('Error autogenerating teams:', err)
       text.value = t('organizer.teamManagement.teamAutogenerateError')
@@ -278,12 +249,10 @@
     fetchThemes()
     fetchMatchmakingConfig()
     fetchSchools()
-    fetchTeams()
+    teamStore.fetchTeams()
   })
 
-  // ----------------------
   // FILTERED TEAMS OR USERS
-  // ----------------------
   const filteredTeams = computed(() =>
     filterTeams(
       teams.value.sort((a: TeamDTO, b: TeamDTO) => a.name.localeCompare(b.name)),

@@ -1,6 +1,11 @@
 import { SubmissionDTO } from "@/types/submission";
 import { SubmissionStatus } from "@/types/submission_status";
-import { UserRole } from "@/types/roles";
+import { UserReducedDTO } from "@/types/user";
+
+export enum UserRole {
+  JURY = 'JURY',
+  MENTOR = 'MENTOR',
+}
 
 export const mockedSubmissions: SubmissionDTO[] = [
   // --- 1️⃣ Not Submitted ---
@@ -25,11 +30,23 @@ export const mockedSubmissions: SubmissionDTO[] = [
         role: UserRole.JURY,
       },
     ],
+    mentors: [
+      {
+        id: "mentor-001",
+        firstname: "Claire",
+        lastname: "Moreau",
+        role: UserRole.MENTOR,
+        school: "INSA",
+      },
+    ],
     status: SubmissionStatus.NOT_SUBMITTED,
     grade: null,
+    evaluations: [],
     comments: [],
-    createdAt: "2025-11-01T10:00:00Z",
-    updatedAt: "2025-11-01T10:00:00Z",
+    submissionFilePath: null,
+    githubLink: null,
+    createdAt: new Date("2025-11-01T10:00:00Z"),
+    updatedAt: new Date("2025-11-01T10:00:00Z"),
   },
 
   // --- 2️⃣ Pending ---
@@ -54,28 +71,46 @@ export const mockedSubmissions: SubmissionDTO[] = [
         role: UserRole.JURY,
       },
     ],
+    mentors: [
+      {
+        id: "mentor-002",
+        firstname: "Fabien",
+        lastname: "Lopez",
+        role: UserRole.MENTOR,
+        school: "UTC",
+      }
+    ],
     status: SubmissionStatus.PENDING,
     grade: null,
-    comments: [
+    submissionFilePath: null,
+    githubLink: null,
+    
+    evaluations: [
       {
-        userId: "jury-003",
-        userName: "David Roux",
-        role: UserRole.JURY,
-        content: "Bonne approche, encore des points à préciser sur la méthodologie.",
+        id: "eval-001",
+        submissionId: "22222222-2222-2222-2222-222222222222",
+        juryId: "jury-003",
+        juryName: "David Roux",
         grade: 13.5,
+        comment: "Bonne approche, encore des points à préciser sur la méthodologie.",
         evaluationFilePath: "https://static.islcollective.com/storage/preview/201103/766x1084/speech-evaluation-grid_4297_1.jpg",
-        createdAt: "2025-11-03T09:00:00Z",
-      },
-      {
-        userId: "mentor-002",
-        userName: "Fabien Lopez",
-        role: UserRole.MENTOR,
-        content: "Continuez comme ça, bon potentiel d’amélioration.",
-        createdAt: "2025-11-03T09:30:00Z",
+        createdAt: new Date("2025-11-03T09:00:00Z"),
       },
     ],
-    createdAt: "2025-11-02T10:00:00Z",
-    updatedAt: "2025-11-03T09:30:00Z",
+    
+    comments: [
+      {
+        id: "comm-001",
+        submissionId: "22222222-2222-2222-2222-222222222222",
+        mentorId: "mentor-002",
+        mentorName: "Fabien Lopez",
+        content: "Continuez comme ça, bon potentiel d’amélioration.",
+        createdAt: new Date("2025-11-03T09:30:00Z"),
+      },
+    ],
+
+    createdAt: new Date("2025-11-02T10:00:00Z"),
+    updatedAt: new Date("2025-11-03T09:30:00Z"),
   },
 
   // --- 3️⃣ Graded ---
@@ -100,38 +135,59 @@ export const mockedSubmissions: SubmissionDTO[] = [
         role: UserRole.JURY,
       },
     ],
+    mentors: [
+       {
+        id: "mentor-005",
+        firstname: "Laura",
+        lastname: "Fournier",
+        role: UserRole.MENTOR,
+        school: "ENSTA",
+      }
+    ],
     status: SubmissionStatus.GRADED,
     grade: 16.25,
-    comments: [
+    submissionFilePath: null,
+    githubLink: null,
+
+    evaluations: [
       {
-        userId: "jury-005",
-        userName: "Hugo Petit",
-        role: UserRole.JURY,
-        content: "Projet très bien structuré, démonstration convaincante.",
+        id: "eval-002",
+        submissionId: "33333333-3333-3333-3333-333333333333",
+        juryId: "jury-005",
+        juryName: "Hugo Petit",
         grade: 17,
+        comment: "Projet très bien structuré, démonstration convaincante.",
         evaluationFilePath: "https://i.ytimg.com/vi/AElLUXB8mPc/maxresdefault.jpg",
-        createdAt: "2025-11-05T10:00:00Z",
+        createdAt: new Date("2025-11-05T10:00:00Z"),
       },
       {
-        userId: "jury-006",
-        userName: "Inès Garcia",
-        role: UserRole.JURY,
-        content: "Excellent rendu, belle application des concepts quantiques.",
+        id: "eval-003",
+        submissionId: "33333333-3333-3333-3333-333333333333",
+        juryId: "jury-006",
+        juryName: "Inès Garcia",
         grade: 15.5,
+        comment: "Excellent rendu, belle application des concepts quantiques.",
         evaluationFilePath: "https://d1ymz67w5raq8g.cloudfront.net/Pictures/1024x536/8/1/0/134810_self-assessment_MCQ_anwer_grid_image--1-.jpg",
-        createdAt: "2025-11-05T10:05:00Z",
-      },
-      {
-        userId: "mentor-005",
-        userName: "Laura Fournier",
-        role: UserRole.MENTOR,
-        content: "Très bonne progression, équipe investie. Félicitations ! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        createdAt: "2025-11-05T11:00:00Z",
+        createdAt: new Date("2025-11-05T10:05:00Z"),
       },
     ],
-    createdAt: "2025-11-04T09:00:00Z",
-    updatedAt: "2025-11-05T11:00:00Z",
+    
+    comments: [
+      {
+        id: "comm-002",
+        submissionId: "33333333-3333-3333-3333-333333333333",
+        mentorId: "mentor-005",
+        mentorName: "Laura Fournier",
+        content: "Très bonne progression, équipe investie. Félicitations ! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        createdAt: new Date("2025-11-05T11:00:00Z"),
+      },
+    ],
+
+    createdAt: new Date("2025-11-04T09:00:00Z"),
+    updatedAt: new Date("2025-11-05T11:00:00Z"),
   },
+  
+  // --- 4️⃣ Pending (No submission file) ---
   {
     id: "44444444-4444-4444-4444-444444444444",
     teamId: "team-004",
@@ -153,10 +209,22 @@ export const mockedSubmissions: SubmissionDTO[] = [
         role: UserRole.JURY,
       },
     ],
+    mentors: [
+      {
+        id: "mentor-003",
+        firstname: "Nina",
+        lastname: "Bernard",
+        role: UserRole.MENTOR,
+        school: "UTC",
+      }
+    ],  
     status: SubmissionStatus.PENDING,
     grade: null,
+    evaluations: [],
     comments: [],
-    createdAt: "2025-11-06T10:00:00Z",
-    updatedAt: "2025-11-06T10:00:00Z",
+    submissionFilePath: null,
+    githubLink: null,
+    createdAt: new Date("2025-11-06T10:00:00Z"),
+    updatedAt: new Date("2025-11-06T10:00:00Z"),
   },  
 ]

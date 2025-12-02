@@ -6,4 +6,5 @@ export enum ConfigurationKey {
   PARTNERS = 'PARTNERS',
   MATCHMAKING = 'MATCHMAKING',
   THEMES = 'THEMES',
+  MAILING = 'MAILING',
 }

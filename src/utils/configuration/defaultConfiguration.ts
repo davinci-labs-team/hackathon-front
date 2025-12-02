@@ -201,4 +201,26 @@ export const defaultConfigurations = {
     constraints: [],
   },
   [ConfigurationKey.THEMES]: [],
+  [ConfigurationKey.MAILING]: {
+    firstConnectionTemplate: {
+      object: 'Welcome to {{hackathonName}}!',
+      title: 'Welcome to {{hackathonName}}',
+      introParagraph: 'You are invited to participate in {{hackathonName}}. We are excited to have you on board!',
+      actionPrompt: 'To confirm your participation and access your account, please click the button below:',
+      buttonText: 'Access to my account',
+      closingNote: 'If you have any questions, our team is here to help you.',
+      signatureSalutation: 'Best regards,',
+      signatureName: 'The {{hackathonName}} Team',
+    },
+    passwordResetTemplate: {
+      object: 'Password Reset Request for {{hackathonName}}',
+      title: 'Password Reset Request',
+      introParagraph: 'We received a request to reset your password for your account at {{hackathonName}}.',
+      actionPrompt: 'To reset your password, please click the button below:',
+      buttonText: 'Reset My Password',  
+      closingNote: 'If you did not request a password reset, please ignore this email.',
+      signatureSalutation: 'Best regards,',
+      signatureName: 'The {{hackathonName}} Team',
+    },
+  },
 }
