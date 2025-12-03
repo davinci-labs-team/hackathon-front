@@ -20,6 +20,6 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     host: '0.0.0.0',
-    allowedHosts: ['localhost', 'intriqathon-frontend-dhu8bm-9b4abe-51-15-223-131.traefik.me', '51.15.223.131'],
+    allowedHosts: ['localhost', 'intriqathon.app.mixup.my', '51.15.223.131'],
   },
 })
