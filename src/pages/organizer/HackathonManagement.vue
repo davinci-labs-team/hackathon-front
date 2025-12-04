@@ -1,7 +1,12 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
+  import { HackathonPhaseDTO } from '@/types/config'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import { onMounted, ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
+
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
+  import CurrentPhase from '@/components/organizer/hackathon/CurrentPhase.vue'
 
   const { t } = useI18n()
 
@@ -10,18 +15,88 @@
   const text = ref('')
   const timeout = ref(1500)
   const error = ref(false)
+
+  const snackbarMessage = computed(() => text.value)
+
+  // Phases
+  const hackathonPhases = ref<HackathonPhaseDTO[]>([])
+  const pendingOrCurrentPhase = ref<HackathonPhaseDTO>(null!)
+
+  const getPendingOrCurrentPhase = () => {
+    const phase =  hackathonPhases.value.find(
+      (phase) => phase.status === 'PENDING' || phase.status === 'IN_PROGRESS'
+    )!
+
+    if (!phase) {
+      return hackathonPhases.value[hackathonPhases.value.length - 1]
+    }
+    return phase
+  }
+
+  const getAction = () => {
+    return pendingOrCurrentPhase.value?.status === 'PENDING' ? 'begin' : 'end'
+  }
+
+  const handleSkipPhase = async () => {
+    try {
+      await configurationService.skipPhase()
+      await fetchPhases()
+    } catch (e) {
+      text.value = t('hackathonManagement.errors.phaseSkipError')
+      error.value = true
+      snackbar.value = true
+    }
+  }
+
+  const handleBeginPhase = async () => {
+    try {
+      await configurationService.beginPhase()
+      await fetchPhases()
+    } catch (e) {
+      text.value = t('hackathonManagement.errors.phaseBeginError')
+      error.value = true
+      snackbar.value = true
+    }
+  }
+
+  const handleCompletePhase = async () => {
+    try {
+      await configurationService.completePhase()
+      await fetchPhases()
+    } catch (e) {
+      text.value = t('hackathonManagement.errors.phaseCompleteError')
+      error.value = true
+      snackbar.value = true
+    }
+  }
+
+  const fetchPhases = async () => {
+    try {
+      const response = await getOrCreateConfiguration(ConfigurationKey.PHASES)
+      hackathonPhases.value = Array.isArray(response.value?.phases) ? response.value.phases : []
+      pendingOrCurrentPhase.value = getPendingOrCurrentPhase()
+    } catch (e) {
+      text.value = t('common.fetchError')
+      error.value = true
+      snackbar.value = true
+    }
+  }
+
+  onMounted(async () => {
+    await fetchPhases()
+  })
 </script>
 
 <template>
-  <v-container>
-    <v-row justify="center" class="mt-8">
-      <div class="w-full md:w-8/12 lg:w-8/12 px-4">
-        <h1 class="text-3xl font-bold">{{ t('hackathonManagement.title') }}</h1>
-        <p class="text-gray-600 text-lg mb-0">{{ t('hackathonManagement.subtitle') }}</p>
-
-        <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
-
-      </div>
-    </v-row>
+  <v-container class="py-10 max-w-7xl mx-auto">
+    <CurrentPhase
+      v-if="hackathonPhases.length > 0"
+      :currentPhase="pendingOrCurrentPhase"
+      :action="getAction()"
+      :skipPhase="handleSkipPhase"
+      :beginPhase="handleBeginPhase"
+      :endPhase="handleCompletePhase"
+    />
+    <AppSnackbar v-model="snackbar" :message="snackbarMessage" :timeout="timeout" :error="error" />
   </v-container>
 </template>

@@ -29,6 +29,7 @@ export default {
     individual: 'Individual',
     multiple: 'Multiple',
     noDataText: 'No data available',
+    fetchError: 'Error fetching data, please try again later.',
   },
   profile: {
     mainTitle: 'My Profile',
@@ -652,5 +653,16 @@ export default {
   hackathonManagement: {
     title: 'Hackathon Management',
     subtitle: 'Control and monitor the progress of your hackathon',
+    currentPhase: 'Current Phase',
+    actions : {
+      begin: 'Begin',
+      end: 'End',
+      skip: 'Skip',
+    },
+    errors: {
+      phaseSkipError: 'Error skipping phase, please try again later.',
+      phaseBeginError: 'Error beginning phase, please try again later.',
+      phaseCompleteError: 'Error completing phase, please try again later.',
+    }
   },
 }

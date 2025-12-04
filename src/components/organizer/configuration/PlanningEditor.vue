@@ -42,7 +42,7 @@
         endDateObj: phase.endDate ? new Date(phase.endDate) : null,
       }))
     } catch (e) {
-      text.value = t('planningSettings.fetchError')
+      text.value = t('common.fetchError')
       error.value = true
       snackbar.value = true
     }

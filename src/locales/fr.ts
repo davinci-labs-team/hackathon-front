@@ -27,6 +27,7 @@ export default {
     individual: 'Individuel',
     multiple: 'Multiple',
     noDataText: 'Aucune donnée disponible',
+    fetchError: 'Erreur lors de la récupération des données, veuillez réessayer plus tard.',
   },
   profile: {
     mainTitle: 'Mon Profil',
@@ -689,5 +690,16 @@ export default {
   hackathonManagement : {
     title: 'Gestion du Hackathon',
     subtitle: 'Contrôlez et suivez l\'avancement de votre hackathon',
-  },
+    currentPhase: 'Phase Actuelle',
+    actions : {
+      begin: 'Commencer',
+      end: 'Terminer',
+      skip: 'Passer',
+    },
+    errors: {
+      phaseSkipError: 'Impossible de passer la phase actuelle.',
+      phaseBeginError: 'Impossible de commencer la phase sélectionnée.',
+      phaseCompleteError: 'Impossible de terminer la phase actuelle.',
+    },
+  }
 }

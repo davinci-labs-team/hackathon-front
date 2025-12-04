@@ -1,0 +1,55 @@
+<script setup lang="ts">
+  import { HackathonPhaseDTO } from '@/types/config'
+  import { useI18n } from 'vue-i18n'
+
+  const { t } = useI18n()
+
+  // Props
+  defineProps<{
+    currentPhase: HackathonPhaseDTO
+    action: 'begin' | 'end' | 'skip'
+    skipPhase?: () => void
+    endPhase?: () => void
+    beginPhase?: () => void
+  }>()
+</script>
+
+<template>
+  <v-card class="my-6 pa-4 rounded-lg elevation-4">
+    <v-row align="center" justify="space-between" no-gutters>
+      <v-col cols="auto" class="d-flex align-center">
+        <v-avatar color="blue" size="48" class="mr-4"></v-avatar>
+
+        <div>
+          <div class="text-caption text-uppercase text-medium-emphasis">
+            {{ t('hackathonManagement.currentPhase') }}
+          </div>
+          <div class="text-h6 font-weight-bold">
+            {{ currentPhase.name }}
+          </div>
+        </div>
+      </v-col>
+
+      <v-col cols="auto">
+        <v-btn
+          v-if="currentPhase.optionalPhase && currentPhase.status === 'PENDING'"
+          text
+          color="secondary"
+          size="large"
+          class="mr-4"
+          @click="skipPhase"
+        >
+          {{ t('hackathonManagement.actions.skip') }}
+        </v-btn>
+        <v-btn
+          v-if="currentPhase.status === 'PENDING' || currentPhase.status === 'IN_PROGRESS'"
+          color="primary"
+          size="large"
+          @click="action === 'begin' ? beginPhase && beginPhase() : endPhase && endPhase()"
+        >
+          {{ t(`hackathonManagement.actions.${action}`) }}
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-card>
+</template>
