@@ -75,7 +75,7 @@
   ): Promise<string | null> => {
     if (!file) return oldFileId ?? null
     //await deleteOldFileIfNeeded(oldFileId ?? undefined)
-    const uploaded = await S3BucketService.uploadFile(file, 'public')
+    const uploaded = await S3BucketService.uploadFile(file, 'public_files')
     return uploaded.path
   }
 
@@ -131,7 +131,7 @@
     } catch (err) {
       console.error(err)
       snackbar.value = true
-      text.value = t('common.errorSaving')
+      text.value = t('common.error')
       error.value = true
     }
   }

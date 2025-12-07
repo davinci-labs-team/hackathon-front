@@ -7,6 +7,9 @@
 
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import CurrentPhase from '@/components/organizer/hackathon/CurrentPhase.vue'
+  import PhaseProgress from '@/components/organizer/hackathon/PhaseProgress.vue'
+  import OrganizerActions from '@/components/organizer/hackathon/OrganizerActions.vue'
+  import PhaseStats from '@/components/organizer/hackathon/stats/PhaseStats.vue'
 
   const { t } = useI18n()
 
@@ -20,10 +23,10 @@
 
   // Phases
   const hackathonPhases = ref<HackathonPhaseDTO[]>([])
-  const pendingOrCurrentPhase = ref<HackathonPhaseDTO>(null!)
+  const currentPhase = ref<HackathonPhaseDTO>(null!)
 
   const getPendingOrCurrentPhase = () => {
-    const phase =  hackathonPhases.value.find(
+    const phase = hackathonPhases.value.find(
       (phase) => phase.status === 'PENDING' || phase.status === 'IN_PROGRESS'
     )!
 
@@ -34,7 +37,7 @@
   }
 
   const getAction = () => {
-    return pendingOrCurrentPhase.value?.status === 'PENDING' ? 'begin' : 'end'
+    return currentPhase.value?.status === 'PENDING' ? 'begin' : 'end'
   }
 
   const handleSkipPhase = async () => {
@@ -74,7 +77,7 @@
     try {
       const response = await getOrCreateConfiguration(ConfigurationKey.PHASES)
       hackathonPhases.value = Array.isArray(response.value?.phases) ? response.value.phases : []
-      pendingOrCurrentPhase.value = getPendingOrCurrentPhase()
+      currentPhase.value = getPendingOrCurrentPhase()
     } catch (e) {
       text.value = t('common.fetchError')
       error.value = true
@@ -91,11 +94,18 @@
   <v-container class="py-10 max-w-7xl mx-auto">
     <CurrentPhase
       v-if="hackathonPhases.length > 0"
-      :currentPhase="pendingOrCurrentPhase"
+      :currentPhase="currentPhase"
       :action="getAction()"
       :skipPhase="handleSkipPhase"
       :beginPhase="handleBeginPhase"
       :endPhase="handleCompletePhase"
+    />
+    <OrganizerActions v-if="hackathonPhases.length > 0" :currentPhase="currentPhase" />
+    <PhaseProgress v-if="hackathonPhases.length > 0" :phases="hackathonPhases" />
+    <PhaseStats
+      v-if="hackathonPhases.length > 0 && currentPhase.order != 6"
+      :phases="hackathonPhases"
+      :currentPhase="currentPhase"
     />
     <AppSnackbar v-model="snackbar" :message="snackbarMessage" :timeout="timeout" :error="error" />
   </v-container>

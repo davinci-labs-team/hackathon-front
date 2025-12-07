@@ -18,7 +18,18 @@
   <v-card class="my-6 pa-4 rounded-lg elevation-4">
     <v-row align="center" justify="space-between" no-gutters>
       <v-col cols="auto" class="d-flex align-center">
-        <v-avatar color="blue" size="48" class="mr-4"></v-avatar>
+        <v-icon
+          v-if="currentPhase.status === 'IN_PROGRESS'"
+          color="primary"
+          size="36"
+          class="mr-3"
+        >mdi-progress-clock</v-icon>
+        <v-icon
+          v-else
+          color="secondary"
+          size="36"
+          class="mr-3"
+        >mdi-timer-sand</v-icon>
 
         <div>
           <div class="text-caption text-uppercase text-medium-emphasis">

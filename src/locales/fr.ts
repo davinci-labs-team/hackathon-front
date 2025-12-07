@@ -701,5 +701,64 @@ export default {
       phaseBeginError: 'Impossible de commencer la phase sélectionnée.',
       phaseCompleteError: 'Impossible de terminer la phase actuelle.',
     },
+    progress: {
+      title: 'Avancement',
+      noPhaseInProgress: 'Aucune phase en cours actuellement.',
+      skipped: 'Passée',
+      inProgress: 'En cours',
+    },
+    stats: {
+      noData: 'Aucune donnée statistique disponible pour le moment.',
+      title: 'Statistiques',
+      topicDistribution: 'Répartition des Sujets',
+      completed: 'Complété',
+      total: 'Total',
+      teamsFormed: 'Équipes formées',
+      projectsSubmitted: 'Projets soumis',
+      projectsEvaluated: 'Projets évalués',
+    },
+    organizerActions: {
+      title: 'Actions Organisateur',
+      blockingChip: "BLOQUANT",
+      alertPending: "Préparation avant le lancement : Ces étapes sont nécessaires pour commencer la phase.",
+      
+      tasks: {
+        1: { 
+          PENDING: [
+            { text: "Créer les comptes utilisateurs", required: true, key: 'create_accounts' },
+            { text: "Envoyer les invitations par email", required: true, key: 'send_invitations' },
+          ],
+          IN_PROGRESS: [],
+        },
+        2: {
+          PENDING: [
+            { text: "Créer et publier la liste des sujets", required: true, key: 'create_topics' },
+          ],
+          IN_PROGRESS: [],
+        },
+        3: {
+          PENDING: [],
+          IN_PROGRESS: [
+            { text: "Vérifier que tous les étudiants sont dans une équipe", required: true, key: 'check_teams' },
+          ],
+        },
+        4: {
+          PENDING: [
+            { text: "Lancer la commande Discord `teamautorole`", required: true, key: 'discord_autorole' },
+          ],
+          IN_PROGRESS: [],
+        },
+        5: {
+          PENDING: [],
+          IN_PROGRESS: [
+            { text: "Suivre la complétion des notes par les jurys", required: true, key: 'check_scoring' },
+          ],
+        },
+        6: {
+          PENDING: [],
+          IN_PROGRESS: [], 
+        }
+      },
+    }
   }
 }
