@@ -4,6 +4,9 @@
   import { useI18n } from 'vue-i18n'
   import { getRole, getTPrefix } from '@/utils/user'
   import { useHackathonLogo } from '@/composables/useHackathonLogo'
+  import { ref, onMounted } from 'vue'
+  import { S3BucketService } from '@/services/s3BucketService'
+  import { useAuthStore } from '@/stores/auth'
 
   const { t } = useI18n()
   const route = useRoute()
@@ -27,6 +30,24 @@
   }
 
   const { logoPicture } = useHackathonLogo()
+  const authStore = useAuthStore()
+
+  const profilePicture = ref('https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg')
+
+  const loadProfilePicture = async () => {
+    if (authStore.user?.profilePicturePath) {
+      try {
+        const response = await S3BucketService.getFileUrl('users', authStore.user.profilePicturePath)
+        profilePicture.value = response.url
+      } catch (err) {
+        console.error('Error fetching profile picture:', err)
+      }
+    }
+  }
+
+  onMounted(() => {
+    loadProfilePicture()
+  })
 </script>
 
 <template>
@@ -53,7 +74,14 @@
       <LanguageSelector />
       <RouterLink to="/expert/profile">
         <v-btn icon class="bg-transparent">
-          <v-icon size="36">mdi-account-circle</v-icon>
+          <v-img
+            :src="profilePicture"
+            alt="Profile"
+            class="rounded-full"
+            width="32"
+            height="32"
+            cover
+          />
         </v-btn>
       </RouterLink>
     </div>
