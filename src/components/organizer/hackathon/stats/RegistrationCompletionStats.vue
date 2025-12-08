@@ -38,7 +38,7 @@
 </script>
 
 <template>
-  <v-card class="pa-4 rounded-lg elevation-4">
+  <v-card variant="flat">
     <v-card-title class="text-title-2 pb-0">
       {{ phaseName }}
     </v-card-title>
@@ -61,7 +61,7 @@
       ></v-progress-linear>
 
       <div class="text-caption text-medium-emphasis">
-        {{ completionPercentage }}% {{ t('hackathonManagement.stats.completed') }}
+        {{ completionPercentage }}% {{ t('hackathonManagement.stats.completed.profileCompletion') }}
       </div>
     </v-card-text>
   </v-card>

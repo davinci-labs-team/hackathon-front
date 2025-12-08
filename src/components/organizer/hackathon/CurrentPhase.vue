@@ -21,13 +21,13 @@
         <v-icon
           v-if="currentPhase.status === 'IN_PROGRESS'"
           color="primary"
-          size="36"
+          size="45"
           class="mr-3"
         >mdi-progress-clock</v-icon>
         <v-icon
           v-else
           color="secondary"
-          size="36"
+          size="45"
           class="mr-3"
         >mdi-timer-sand</v-icon>
 
@@ -35,7 +35,7 @@
           <div class="text-caption text-uppercase text-medium-emphasis">
             {{ t('hackathonManagement.currentPhase') }}
           </div>
-          <div class="text-h6 font-weight-bold">
+          <div class="text-h4 font-weight-bold">
             {{ currentPhase.name }}
           </div>
         </div>

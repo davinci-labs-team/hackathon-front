@@ -33,7 +33,7 @@
 </script>
 
 <template>
-  <v-card class="my-6 pa-4 rounded-lg elevation-4">
+  <v-card class="my-4 pa-4 rounded-lg elevation-4">
     <v-card-title>
       <v-icon class="mr-2">mdi-chart-box-outline</v-icon>
       {{ t('hackathonManagement.stats.title') }}
@@ -42,24 +42,26 @@
     <v-container fluid v-if="maxOrderToDisplay > 0">
       <v-row>
         <v-col cols="12" v-if="maxOrderToDisplay >= 1">
-          <RegistrationCompletionStats
-            :phase-name="getPhaseName(1)"
-          />
+          <RegistrationCompletionStats :phase-name="getPhaseName(1)" />
         </v-col>
 
         <v-col cols="12" v-if="maxOrderToDisplay >= 2">
+          <div class="border-t border-solid border-red mx-auto w-50 mb-4"></div>
           <TopicSelectionStats :phase-name="getPhaseName(2)" />
         </v-col>
 
         <v-col cols="12" v-if="maxOrderToDisplay >= 3">
+          <div class="border-t border-solid border-black mx-auto w-50 mb-4"></div>
           <TeamFormationStats :phase-name="getPhaseName(3)" />
         </v-col>
 
         <v-col cols="12" v-if="maxOrderToDisplay >= 4">
+          <div class="border-t border-solid border-black mx-auto w-50 mb-4"></div>
           <SubmissionStats :phase-name="getPhaseName(4)" />
         </v-col>
 
         <v-col cols="12" v-if="maxOrderToDisplay >= 5">
+          <div class="border-t border-solid border-black mx-auto w-50 mb-4"></div>
           <ProjectEvaluationStats :phase-name="getPhaseName(5)" />
         </v-col>
       </v-row>

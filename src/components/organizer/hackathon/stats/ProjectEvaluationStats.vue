@@ -9,7 +9,7 @@
 </script>
 
 <template>
-  <v-card class="my-6 pa-4 rounded-lg elevation-4">
+  <v-card variant="flat">
     <v-card-title>
       {{ phaseName }}
     </v-card-title>

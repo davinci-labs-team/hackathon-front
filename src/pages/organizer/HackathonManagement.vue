@@ -112,7 +112,7 @@
       <OrganizerActions v-if="hackathonPhases.length > 0" :currentPhase="currentPhase" />
       <PhaseProgress v-if="hackathonPhases.length > 0" :phases="hackathonPhases" />
       <PhaseStats
-        v-if="hackathonPhases.length > 0 && currentPhase.order != 6"
+        v-if="hackathonPhases.length > 0"
         :phases="hackathonPhases"
         :currentPhase="currentPhase"
       />
