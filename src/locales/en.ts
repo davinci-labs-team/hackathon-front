@@ -680,6 +680,8 @@ export default {
       noData: 'No statistical data available at the moment.',
       title: 'Phase Statistics',
       topicDistribution: 'Topic Distribution',
+      noTopicsSelected: 'No topic selected',
+      noDataAvailable: 'No data available',
       completed: {
         profileCompletion: 'of participants have completed their profile',
         topicSelection: 'of participants have selected a topic',

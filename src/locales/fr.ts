@@ -718,6 +718,8 @@ export default {
       noData: 'Aucune donnée statistique disponible pour le moment.',
       title: 'Statistiques',
       topicDistribution: 'Répartition des Sujets',
+      noTopicsSelected: 'Aucun sujet sélectionné',
+      noDataAvailable: 'Aucune donnée disponible',
       completed: {
         profileCompletion: 'des participants ont complété leur profil',
         topicSelection: 'des participants ont sélectionné un sujet',
