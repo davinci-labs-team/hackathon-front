@@ -58,6 +58,31 @@ const getStatus = (teamId: string) => {
 const navigateToProject = (teamId: string) => {
   router.push({ path: '/expert/project', query: { teamId } })
 }
+
+const getChipColor = (status: string) => {
+  switch (status) {
+    case 'evaluated':
+    case 'commented':
+      return 'green lighten-4'
+    case 'pending':
+      return 'warning'
+    default:
+      return 'red'
+  }
+}
+
+const getChipText = (status: string) => {
+  switch (status) {
+    case 'evaluated':
+      return t('expert.teams.evaluated')
+    case 'commented':
+      return t('expert.teams.commented')
+    case 'pending':
+      return t('expert.teams.pending')
+    default:
+      return t('expert.teams.notSubmitted')
+  }
+}
 </script>
 
 <template>
@@ -98,32 +123,13 @@ const navigateToProject = (teamId: string) => {
           </td>
           <td class="px-4 py-3 text-center">
             <v-chip
-              v-if="getStatus(team.id) === 'evaluated'"
-              color="success"
+              variant="flat"
+              :color="getChipColor(getStatus(team.id))"
               size="small"
             >
-              {{ t('expert.teams.evaluated') }}
-            </v-chip>
-            <v-chip
-              v-else-if="getStatus(team.id) === 'commented'"
-              color="success"
-              size="small"
-            >
-              {{ t('expert.teams.commented') }}
-            </v-chip>
-            <v-chip
-              v-else-if="getStatus(team.id) === 'pending'"
-              color="warning"
-              size="small"
-            >
-              {{ t('expert.teams.pending') }}
-            </v-chip>
-             <v-chip
-              v-else
-              color="grey"
-              size="small"
-            >
-              {{ t('expert.teams.notSubmitted') }}
+              <span class="block whitespace-pre-line leading-snug">
+                {{ getChipText(getStatus(team.id)) }}
+              </span>
             </v-chip>
           </td>
           <td class="px-4 py-3 text-center">
