@@ -1,11 +1,12 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
   import { useUser } from '@/composables/useUser'
-  import { computed, onMounted, ref } from 'vue'
+  import { computed, ref } from 'vue'
   import { UserRole } from '@/types/roles'
   import { ThemesDTO } from '@/types/config'
-  import { getOrCreateConfiguration } from '@/services/configurationService'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import { useConfiguration } from '@/composables/useConfiguration'
+  import type { ConfigurationResponse } from '@/types/config'
 
   const { t } = useI18n()
 
@@ -36,7 +37,21 @@
   // ---- DATA AND COMPUTED PROPERTIES ----
 
   const { users } = useUser()
-  const themes = ref<ThemesDTO[]>([])
+
+  const {
+    configuration: themesConfiguration,
+    loading: themesLoading,
+    error: themesError,
+  } = useConfiguration(ConfigurationKey.THEMES)
+
+  const themes = computed<ThemesDTO[]>(() => {
+    const config = themesConfiguration.value as ConfigurationResponse | null
+
+    if (config?.value?.themes && Array.isArray(config.value.themes)) {
+      return config.value.themes as ThemesDTO[]
+    }
+    return []
+  })
 
   const topicSelectedCount = computed(() => {
     return users.value.filter(
@@ -99,24 +114,6 @@
     })
 
     return distribution.sort((a, b) => b.count - a.count)
-  })
-
-  const fetchThemes = async () => {
-    try {
-      const response = await getOrCreateConfiguration(ConfigurationKey.THEMES)
-      if (response?.value?.themes && Array.isArray(response.value.themes)) {
-        themes.value = response.value.themes as ThemesDTO[]
-      } else {
-        themes.value = []
-      }
-    } catch (error) {
-      console.error('Error fetching themes:', error)
-      themes.value = []
-    }
-  }
-
-  onMounted(() => {
-    fetchThemes()
   })
 </script>
 
