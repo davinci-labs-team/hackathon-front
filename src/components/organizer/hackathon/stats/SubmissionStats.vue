@@ -16,7 +16,7 @@
 
     <v-card-text>
       <div class="text-center">
-        {{ t('hackathonManagement.stats.submission.noData') }}
+        {{ t('hackathonManagement.stats.noData') }}
       </div>
     </v-card-text>
   </v-card>

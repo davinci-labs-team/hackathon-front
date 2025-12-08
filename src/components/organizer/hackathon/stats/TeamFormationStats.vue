@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onMounted } from 'vue'
+  import { computed, onMounted, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useTeamStore } from '@/stores/teamStore'
   import { useUser } from '@/composables/useUser'
@@ -11,6 +11,8 @@
   defineProps<{
     phaseName: string
   }>()
+
+  const emit = defineEmits(['update:teamsFormed'])
 
   const teamStore = useTeamStore()
   const teams = computed(() => teamStore.teams)
@@ -80,6 +82,19 @@
   onMounted(() => {
     teamStore.fetchTeams()
   })
+
+  // ---- UPDATE TEAMS FORMED STATUS ----
+  const isTeamsFormedCondition = computed(() => {
+    return mentorPercentage.value === 100 && juryPercentage.value === 100 && participantPercentage.value === 100 && numberOfTeams.value > 0
+  })
+
+  watch(
+    isTeamsFormedCondition,
+    (newValue) => {
+      emit('update:teamsFormed', newValue)
+    },
+    { immediate: true }
+  )
 </script>
 
 <template>

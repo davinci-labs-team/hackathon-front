@@ -12,6 +12,11 @@
   import PhaseStats from '@/components/organizer/hackathon/stats/PhaseStats.vue'
 
   const { t } = useI18n()
+  const isActionDisabled = ref(false)
+  const profileCompletion = ref(false)
+  const topicSelection = ref(false)
+  const teamsFormed = ref(false)
+  const evaluationsCompleted = ref(false)
 
   // --- Hooks ---
 
@@ -22,13 +27,12 @@
   } = useConfiguration(ConfigurationKey.PHASES)
 
   const {
-    phaseActionLoading,
     skipPhase: executeSkipPhase,
     beginPhase: executeBeginPhase,
     completePhase: executeCompletePhase,
   } = useConfiguration(ConfigurationKey.PHASES)
 
-  // --- État Local ---
+  // --- LOCAL STATE ---
   const snackbar = ref(false)
   const text = ref('')
   const timeout = ref(1500)
@@ -38,7 +42,6 @@
 
   const hackathonPhases = ref<HackathonPhaseDTO[]>([])
   const currentPhase = ref<HackathonPhaseDTO>(null!)
-
 
   watch(
     phasesConfig,
@@ -100,22 +103,40 @@
 
 <template>
   <v-container class="py-10 max-w-7xl mx-auto">
-      <CurrentPhase
-        v-if="hackathonPhases.length > 0"
-        :currentPhase="currentPhase"
-        :action="getAction()"
-        :skipPhase="handleSkipPhase"
-        :beginPhase="handleBeginPhase"
-        :endPhase="handleCompletePhase"
-        :isActionLoading="phaseActionLoading"
-      />
-      <OrganizerActions v-if="hackathonPhases.length > 0" :currentPhase="currentPhase" />
-      <PhaseProgress v-if="hackathonPhases.length > 0" :phases="hackathonPhases" />
-      <PhaseStats
-        v-if="hackathonPhases.length > 0"
-        :phases="hackathonPhases"
-        :currentPhase="currentPhase"
-      />
+    <CurrentPhase
+      v-if="hackathonPhases.length > 0"
+      :currentPhase="currentPhase"
+      :action="getAction()"
+      :skipPhase="handleSkipPhase"
+      :beginPhase="handleBeginPhase"
+      :endPhase="handleCompletePhase"
+      :isDisabled="isActionDisabled"
+    />
+    <OrganizerActions
+      v-if="hackathonPhases.length > 0"
+      :currentPhase="currentPhase"
+      :actionDisabled="isActionDisabled"
+
+      :profile-completion="profileCompletion"
+      :topic-selection="topicSelection"
+      :teams-formed="teamsFormed"
+      :evaluations-completed="evaluationsCompleted"
+    />
+    <PhaseProgress v-if="hackathonPhases.length > 0" :phases="hackathonPhases" />
+    <PhaseStats
+      v-if="hackathonPhases.length > 0"
+      :phases="hackathonPhases"
+      :currentPhase="currentPhase"
+
+      :profileCompletion="profileCompletion"
+      @update:profileCompletion="profileCompletion = $event"
+      :topicSelection="topicSelection"
+      @update:topicSelection="topicSelection = $event"
+      :teamsFormed="teamsFormed"
+      @update:teamsFormed="teamsFormed = $event"
+      :evaluationsCompleted="evaluationsCompleted"
+      @update:evaluationsCompleted="evaluationsCompleted = $event"
+    />
 
     <AppSnackbar v-model="snackbar" :message="snackbarMessage" :timeout="timeout" :error="error" />
   </v-container>

@@ -6,6 +6,8 @@
   defineProps<{
     phaseName: string
   }>()
+
+  const emit = defineEmits(['update:evaluationsCompleted'])
 </script>
 
 <template>

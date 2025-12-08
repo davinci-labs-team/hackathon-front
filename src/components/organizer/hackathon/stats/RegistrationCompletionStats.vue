@@ -1,18 +1,18 @@
 <script setup lang="ts">
   import { useUser } from '@/composables/useUser'
   import { useI18n } from 'vue-i18n'
-  import { computed } from 'vue'
+  import { computed, watch } from 'vue'
   import { UserRole } from '@/types/roles'
 
   const { t } = useI18n()
 
-  defineProps<{
+  const props = defineProps<{
     phaseName: string
   }>()
 
-  const { users } = useUser()
+  const emit = defineEmits(['update:profileCompleted'])
 
-  console.log(users)
+  const { users } = useUser()
 
   const completedCount = computed(() => {
     return users.value.filter(
@@ -35,6 +35,18 @@
     }
     return Math.round((completedCount.value / totalCount.value) * 100)
   })
+
+  const isProfileCompleteCondition = computed(() => {
+    return completionPercentage.value === 100
+  })
+
+  watch(
+    isProfileCompleteCondition,
+    (newValue) => {
+      emit('update:profileCompleted', newValue)
+    },
+    { immediate: true }
+  )
 </script>
 
 <template>

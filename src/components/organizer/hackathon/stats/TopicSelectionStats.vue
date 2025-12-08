@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
   import { useUser } from '@/composables/useUser'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
   import { UserRole } from '@/types/roles'
   import { ThemesDTO } from '@/types/config'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
@@ -13,6 +13,8 @@
   defineProps<{
     phaseName: string
   }>()
+
+  const emit = defineEmits(['update:topicSelection'])
 
   // ---- COLORS ----
   const chartColors = [
@@ -40,8 +42,6 @@
 
   const {
     configuration: themesConfiguration,
-    loading: themesLoading,
-    error: themesError,
   } = useConfiguration(ConfigurationKey.THEMES)
 
   const themes = computed<ThemesDTO[]>(() => {
@@ -69,6 +69,18 @@
     }
     return Math.round((topicSelectedCount.value / totalCount.value) * 100)
   })
+
+  const isTopicSelectionCompleteCondition = computed(() => {
+    return completionPercentage.value === 100
+  })
+
+  watch(
+    isTopicSelectionCompleteCondition,
+    (newValue) => {
+      emit('update:topicSelection', newValue)
+    },
+    { immediate: true }
+  )
 
   // ---- SUBJECT DISTRIBUTION ----
 
