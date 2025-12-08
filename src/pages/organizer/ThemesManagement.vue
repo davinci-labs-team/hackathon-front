@@ -1,16 +1,27 @@
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
+  import { ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { ThemesDTO, SubjectDTO, UpdateConfigurationDTO } from '@/types/config'
-  import ThemeCard from '@/components/organizer/themes/ThemeCard.vue'
-  import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
-  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
-  import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { v4 as uuidv4 } from 'uuid'
+
+  import { ThemesDTO, SubjectDTO, UpdateConfigurationDTO } from '@/types/config'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import { useConfiguration } from '@/composables/useConfiguration'
+
+  import AppSnackbar from '@/components/common/AppSnackbar.vue'
+  import ThemeCard from '@/components/organizer/themes/ThemeCard.vue'
 
   const { t } = useI18n()
 
+  // --- Hooks ---
+  const {
+    configuration: themesConfig,
+    loading: themesLoading,
+    error: themesError,
+    updateConfiguration: updateThemesConfig,
+  } = useConfiguration(ConfigurationKey.THEMES)
+
   const themes = ref<ThemesDTO[]>([])
+  const isSaving = ref(false)
 
   // Snackbar
   const snackbar = ref(false)
@@ -18,27 +29,30 @@
   const timeout = ref(1500)
   const error = ref(false)
 
-  onMounted(async () => {
-    try {
-      const response = await getOrCreateConfiguration(ConfigurationKey.THEMES)
-      if (response?.value?.themes && Array.isArray(response.value.themes)) {
-        themes.value = response.value.themes as ThemesDTO[]
+  watch(
+    themesConfig,
+    (newConfig) => {
+      if (newConfig?.value?.themes && Array.isArray(newConfig.value.themes)) {
+        themes.value = newConfig.value.themes as ThemesDTO[]
       } else {
         themes.value = []
       }
-    } catch (error) {
-      console.error('Error fetching themes:', error)
-      themes.value = []
-    }
-  })
+
+      if (themesError.value) {
+        console.error('Error fetching themes from hook:', themesError.value)
+      }
+    },
+    { immediate: true }
+  )
 
   const saveThemes = async () => {
     const updateDto: UpdateConfigurationDTO = {
       value: { themes: themes.value },
     }
 
+    isSaving.value = true
     try {
-      await configurationService.update(ConfigurationKey.THEMES, updateDto)
+      await updateThemesConfig(updateDto)
       text.value = t('common.changesSaved')
       error.value = false
       snackbar.value = true
@@ -47,6 +61,8 @@
       text.value = t('common.error')
       error.value = true
       snackbar.value = true
+    } finally {
+      isSaving.value = false
     }
   }
 
@@ -112,7 +128,11 @@
         <div class="flex items-center justify-between mb-5">
           <p class="text-gray-600 text-lg mb-0">{{ t('themes.subtitle') }}</p>
           <div class="flex items-center justify-end mb-5">
-            <v-btn color="primary" @click="saveThemes" :disabled="!validThemes()">
+            <v-btn
+              color="primary"
+              @click="saveThemes"
+              :disabled="!validThemes() || themesLoading || isSaving"
+            >
               {{ t('common.saveChanges') }}
             </v-btn>
           </div>

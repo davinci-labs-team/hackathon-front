@@ -1,15 +1,22 @@
 <script setup lang="ts">
-  import { ref, onMounted, computed } from 'vue'
+  import { ref, watch, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { HackathonPhaseDTO, HackathonPhase } from '@/types/config'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import VueDatePicker from '@vuepic/vue-datepicker'
   import '@vuepic/vue-datepicker/dist/main.css'
   import { enUS, fr } from 'date-fns/locale'
-  import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import { useConfiguration } from '@/composables/useConfiguration'
 
   const { t, locale } = useI18n()
+
+  const {
+    configuration: phasesConfig,
+    loading: phasesLoading,
+    error: phasesError,
+    updateConfiguration: updatePhasesConfig,
+  } = useConfiguration(ConfigurationKey.PHASES)
 
   // Snackbar
   const snackbar = ref(false)
@@ -18,35 +25,42 @@
   const error = ref(false)
 
   const snackbarMessage = computed(() => text.value)
+  
+  const isSaving = ref(false)
 
   // Phases
   const hackathonPhases = ref<HackathonPhase[]>([])
 
-  onMounted(async () => {
-    try {
-      const response = await getOrCreateConfiguration(ConfigurationKey.PHASES)
-      const rawPhases: HackathonPhaseDTO[] = Array.isArray(response.value?.phases)
-        ? response.value.phases
+  const mapDTOToLocal = (rawPhases: HackathonPhaseDTO[]): HackathonPhase[] => {
+    return rawPhases.map((phase) => ({
+      order: phase.order,
+      name: phase.name,
+      status: phase.status,
+      optionalPhase: phase.optionalPhase,
+      startDate: phase.startDate ?? null,
+      endDate: phase.endDate ?? null,
+      startDateObj: phase.startDate ? new Date(phase.startDate) : null,
+      endDateObj: phase.endDate ? new Date(phase.endDate) : null,
+    }))
+  }
+
+  watch(
+    phasesConfig,
+    (newConfig) => {
+      const rawPhases: HackathonPhaseDTO[] = Array.isArray(newConfig?.value?.phases)
+        ? (newConfig.value.phases as HackathonPhaseDTO[])
         : []
 
-        console.log('Fetched phases:', rawPhases)
+      hackathonPhases.value = mapDTOToLocal(rawPhases)
 
-      hackathonPhases.value = rawPhases.map((phase) => ({
-        order: phase.order,
-        name: phase.name,
-        status: phase.status,
-        optionalPhase: phase.optionalPhase,
-        startDate: phase.startDate ?? null,
-        endDate: phase.endDate ?? null,
-        startDateObj: phase.startDate ? new Date(phase.startDate) : null,
-        endDateObj: phase.endDate ? new Date(phase.endDate) : null,
-      }))
-    } catch (e) {
-      text.value = t('common.fetchError')
-      error.value = true
-      snackbar.value = true
-    }
-  })
+      if (phasesError.value) {
+        text.value = t('common.fetchError')
+        error.value = true
+        snackbar.value = true
+      }
+    },
+    { immediate: true }
+  )
 
   const handleSave = async () => {
     if (hackathonPhases.value.some(phase => !phase.name || phase.name.trim() === '')) {
@@ -67,8 +81,9 @@
       })),
     }
 
+    isSaving.value = true
     try {
-      await configurationService.update(ConfigurationKey.PHASES, { value: payload })
+      await updatePhasesConfig({value: payload})
       text.value = t('common.changesSaved')
       error.value = false
       snackbar.value = true
@@ -77,6 +92,8 @@
       text.value = t('planningSettings.saveError')
       error.value = true
       snackbar.value = true
+    } finally {
+      isSaving.value = false
     }
   }
 </script>
@@ -87,7 +104,7 @@
 
     <div class="flex justify-between items-center mb-8">
       <p class="text-lg text-gray-600 mb-0">{{ t('planningSettings.subtitle') }}</p>
-      <v-btn color="primary" @click="handleSave">{{ t('common.saveChanges') }}</v-btn>
+      <v-btn color="primary" @click="handleSave" :disabled="phasesLoading || isSaving">{{ t('common.saveChanges') }}</v-btn>
     </div>
 
     <AppSnackbar v-model="snackbar" :message="snackbarMessage" :timeout="timeout" :error="error" />
