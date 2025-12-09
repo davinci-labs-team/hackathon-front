@@ -40,9 +40,7 @@
 
   const { users } = useUser()
 
-  const {
-    configuration: themesConfiguration,
-  } = useConfiguration(ConfigurationKey.THEMES)
+  const { configuration: themesConfiguration } = useConfiguration(ConfigurationKey.THEMES)
 
   const themes = computed<ThemesDTO[]>(() => {
     const config = themesConfiguration.value as ConfigurationResponse | null
@@ -137,11 +135,13 @@
 
     <v-card-text>
       <div>
-        <div class="d-flex align-baseline text-h3 font-weight-bold mb-4">
-          <span class="mr-2">{{ topicSelectedCount }}</span>
-
+        <div class="text-subtitle-1 font-weight-bold mb-2">
+          {{ t('hackathonManagement.stats.topicChoice') }}
+        </div>
+        <div class="d-flex align-baseline text-h4 font-weight-bold mb-4">
+          <span class="mr-2 text-green-darken-2">{{ completionPercentage }}%</span>
           <span class="text-subtitle-1 font-weight-regular text-medium-emphasis">
-            / {{ totalCount }}
+            ({{ topicSelectedCount }} / {{ totalCount }})
           </span>
         </div>
 
@@ -152,16 +152,12 @@
           color="green-darken-2"
           class="mb-2"
         ></v-progress-linear>
-
-        <div class="text-caption text-medium-emphasis mb-6">
-          {{ completionPercentage }}% {{ t('hackathonManagement.stats.completed.topicSelection') }}
-        </div>
       </div>
 
       <v-divider class="mb-6"></v-divider>
 
       <div>
-        <div class="text-subtitle-1 font-weight-medium mb-4">
+        <div class="text-subtitle-1 font-weight-bold mb-2">
           {{ t('hackathonManagement.stats.topicDistribution') }}
         </div>
 

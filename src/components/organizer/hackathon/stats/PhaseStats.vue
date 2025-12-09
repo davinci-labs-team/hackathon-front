@@ -25,14 +25,12 @@
     | 'profileCompletion'
     | 'topicSelection'
     | 'teamsFormed'
-    | 'submissionsMade'
     | 'evaluationsCompleted'
 
   const emit = defineEmits([
     'update:profileCompletion',
     'update:topicSelection',
     'update:teamsFormed',
-    'update:submissionsMade',
     'update:evaluationsCompleted',
   ])
 
@@ -74,7 +72,6 @@
         </v-col>
 
         <v-col cols="12" v-if="maxOrderToDisplay >= 2">
-          <div class="border-t border-solid border-red mx-auto w-50 mb-4"></div>
           <TopicSelectionStats
             :phase-name="getPhaseName(2)"
             :topic-selection="topicSelection"
@@ -83,7 +80,6 @@
         </v-col>
 
         <v-col cols="12" v-if="maxOrderToDisplay >= 3">
-          <div class="border-t border-solid border-black mx-auto w-50 mb-4"></div>
           <TeamFormationStats
             :phase-name="getPhaseName(3)"
             :teams-formed="teamsFormed"
@@ -92,14 +88,12 @@
         </v-col>
 
         <v-col cols="12" v-if="maxOrderToDisplay >= 4">
-          <div class="border-t border-solid border-black mx-auto w-50 mb-4"></div>
-          <SubmissionStats :phase-name="getPhaseName(4)"
-          />
+          <SubmissionStats :phase-name="getPhaseName(4)" />
         </v-col>
 
         <v-col cols="12" v-if="maxOrderToDisplay >= 5">
-          <div class="border-t border-solid border-black mx-auto w-50 mb-4"></div>
-          <ProjectEvaluationStats :phase-name="getPhaseName(5)" 
+          <ProjectEvaluationStats
+            :phase-name="getPhaseName(5)"
             :evaluations-completed="evaluationsCompleted"
             @update:evaluationsCompleted="handleUpdate('evaluationsCompleted', $event)"
           />

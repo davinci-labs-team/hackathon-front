@@ -85,7 +85,12 @@
 
   // ---- UPDATE TEAMS FORMED STATUS ----
   const isTeamsFormedCondition = computed(() => {
-    return mentorPercentage.value === 100 && juryPercentage.value === 100 && participantPercentage.value === 100 && numberOfTeams.value > 0
+    return (
+      mentorPercentage.value === 100 &&
+      juryPercentage.value === 100 &&
+      participantPercentage.value === 100 &&
+      numberOfTeams.value > 0
+    )
   })
 
   watch(
@@ -104,21 +109,20 @@
     </v-card-title>
 
     <v-card-text>
-      <v-row dense class="mb-4">
+      <v-row dense>
         <v-col cols="12">
           <v-card variant="flat" class="pa-4 rounded-lg">
-            <div class="d-flex align-baseline text-h4 font-weight-bold mb-4">
+            <div class="d-flex align-baseline text-h4 font-weight-bold">
               <span class="mr-2 text-blue-darken-2">{{ numberOfTeams }}</span>
-            </div>
-            <div class="text-subtitle-1 text-medium-emphasis">
-              {{ t('hackathonManagement.stats.team.teamsCreated') }}
+              <span class="text-subtitle-1 font-weight-bold">{{
+                t('hackathonManagement.stats.team.teamsCreated')
+              }}</span>
             </div>
           </v-card>
         </v-col>
       </v-row>
-      
+
       <v-row dense>
-        
         <v-col cols="12" md="4" sm="6">
           <v-card variant="flat" class="pa-4 rounded-lg">
             <div class="text-subtitle-1 font-weight-bold mb-2">

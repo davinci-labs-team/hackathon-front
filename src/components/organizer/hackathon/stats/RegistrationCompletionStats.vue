@@ -51,16 +51,15 @@
 
 <template>
   <v-card variant="flat">
-    <v-card-title class="text-title-2 pb-0">
+    <v-card-title>
       {{ phaseName }}
     </v-card-title>
 
     <v-card-text>
-      <div class="d-flex align-baseline text-h3 font-weight-bold mb-4">
-        <span class="mr-2">{{ completedCount }}</span>
-
+      <div class="d-flex align-baseline text-h4 font-weight-bold mb-4">
+        <span class="mr-2 text-blue-darken-2">{{ completionPercentage }}%</span>
         <span class="text-subtitle-1 font-weight-regular text-medium-emphasis">
-          / {{ totalCount }}
+          ({{ completedCount }} / {{ totalCount }})
         </span>
       </div>
 
@@ -71,10 +70,6 @@
         color="blue-darken-2"
         class="mb-2"
       ></v-progress-linear>
-
-      <div class="text-caption text-medium-emphasis">
-        {{ completionPercentage }}% {{ t('hackathonManagement.stats.completed.profileCompletion') }}
-      </div>
     </v-card-text>
   </v-card>
 </template>
