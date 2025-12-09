@@ -56,6 +56,7 @@
                 v-if="currentPhase.status === 'PENDING' || currentPhase.status === 'IN_PROGRESS'"
                 color="primary"
                 size="large"
+                :disabled="isDisabled"
                 @click="action === 'begin' ? beginPhase && beginPhase() : endPhase && endPhase()"
               >
                 {{ t(`hackathonManagement.actions.${action}`) }}
