@@ -8,10 +8,13 @@
   import { S3BucketService } from '@/services/s3BucketService'
   import { useAuthStore } from '@/stores/auth'
 
+  import { userService } from '@/services/userService'
+
   const { t } = useI18n()
   const route = useRoute()
   const role = getRole()
   const tPrefix = getTPrefix(role, true)
+  const userTeamId = ref<string | null>(null)
 
   const menuItems = [
     { path: '/user/dashboard', label: `${tPrefix}.nav.dashboard` },
@@ -34,20 +37,31 @@
 
   const profilePicture = ref('https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg')
 
-  const loadProfilePicture = async () => {
-    if (authStore.user?.profilePicturePath) {
-      try {
-        const response = await S3BucketService.getFileUrl('users', authStore.user.profilePicturePath)
-        // si ton service retourne { url: string }
-        profilePicture.value = response.url
-      } catch (err) {
-        console.error('Error fetching profile picture:', err)
-      }
+  const loadData = async () => {
+    if (authStore.user?.id) {
+       try {
+        // Fetch full user to get teamId
+        const user = await userService.getById(authStore.user.id)
+        if (user.teamId) {
+            userTeamId.value = user.teamId
+        }
+
+        if (user.profilePicturePath) {
+             const response = await S3BucketService.getFileUrl('users', user.profilePicturePath)
+             profilePicture.value = response.url
+        } else if (authStore.user.profilePicturePath) {
+             // Fallback to auth store path if not updated or different
+             const response = await S3BucketService.getFileUrl('users', authStore.user.profilePicturePath)
+             profilePicture.value = response.url
+        }
+       } catch (e) {
+        console.error("Error loading user data in navbar", e)
+       }
     }
   }
 
   onMounted(() => {
-    loadProfilePicture()
+    loadData()
   })
 </script>
 
@@ -63,8 +77,18 @@
       <RouterLink
         v-for="item in menuItems"
         :key="item.path"
-        :to="item.path"
-        :class="getLinkClasses(item.path)"
+        :to="
+          item.path === '/user/team' && !userTeamId
+            ? '/user/find-team'
+            : item.path
+        "
+        :class="
+          getLinkClasses(
+            item.path === '/user/team' && !userTeamId
+              ? '/user/find-team'
+              : item.path
+          )
+        "
       >
         {{ t(item.label) }}
       </RouterLink>

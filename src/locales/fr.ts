@@ -224,7 +224,7 @@ export default {
       school: 'École',
       mail: 'Email',
       namePlaceholder: 'Rechercher par nom, équipe',
-      constraints : 
+      constraints:
       {
         label: 'Contraintes',
         valid: 'Valide',
@@ -374,14 +374,41 @@ export default {
       projects: 'Dépôt de Projet',
       faq: 'FAQ',
     },
+    team: {
+      myTeam: 'Mon Équipe',
+      leaveTeam: "Quitter l'équipe",
+      noTeam: "Vous n'avez pas encore rejoint d'équipe.",
+      searchTeam: "Rechercher une équipe",
+      teamName: "Equipe {name}",
+      subject: "Sujet",
+      unknownSubject: "Sujet inconnu",
+      noDescription: "Aucune description pour cette équipe.",
+      members: "Membres",
+      mentors: "Mentors",
+      jury: "Jury",
+      mentor: "Mentor",
+      confirmLeaveTitle: "Quitter l'équipe",
+      confirmLeaveText: "Êtes-vous sûr de vouloir quitter cette équipe ? Cette action est irréversible.",
+      confirmLeaveButton: "Quitter",
+      // Team Search
+      title: "Choix d'équipes",
+      searchPlaceholder: "Rechercher des équipes par sujet, compétences",
+      createTeam: "Créer une équipe",
+      activeFilters: "Filtres actifs",
+      all: "Tous",
+      searchResults: "Résultats de recherche ({count} équipes)",
+      join: "Rejoindre",
+      placesRemaining: "{count} places restantes",
+      placesRemainingSingular: "{count} place restante",
+    },
     submission: {
       title: 'Dépôt de projet',
-      
+
       team: {
         title: 'Équipe',
         noGithubLink: 'Aucun lien GitHub fourni',
       },
-      
+
       upload: {
         title: 'Fichiers du projet (.zip)',
         chooseFile: 'Choisir un fichier ZIP',
@@ -393,7 +420,7 @@ export default {
         fileUploaded: 'Fichier uploadé',
         download: 'Télécharger',
       },
-      
+
       status: {
         title: 'Statut de remise',
         team: 'Équipe',
@@ -403,12 +430,12 @@ export default {
         lastModified: 'Dernière modification',
         createdAt: 'Créé le',
         deadlineExceeded: 'Délai dépassé',
-        
+
         notSubmitted: 'Non soumis',
         pending: 'En attente d\'évaluation',
         graded: 'Évalué',
       },
-      
+
       evaluations: {
         title: 'Évaluations',
         noEvaluations: 'Aucune évaluation disponible pour le moment',
@@ -418,7 +445,7 @@ export default {
         comment: 'Commentaire',
         downloadFile: 'Télécharger le fichier d\'évaluation',
       },
-      
+
       comments: {
         title: 'Commentaires des mentors',
         noComments: 'Aucun commentaire pour le moment',
