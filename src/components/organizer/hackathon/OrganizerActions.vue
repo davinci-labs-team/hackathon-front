@@ -96,6 +96,7 @@
     evaluationsCompleted: boolean
   }>()
 
+  const emit = defineEmits(['update:actionDisabled'])
   const discordAutoroleCommandExecuted = ref<boolean>(false)
 
   const organizerActionsRaw = computed(() => {
@@ -160,6 +161,24 @@
   const shouldShowCard = computed(() => {
     return tasksWithStatus.value.length > 0
   })
+
+  // --- UPDATE ACTION DISABLED STATE ---
+  const isBlockingTaskPending = computed<boolean>(() => {
+    return tasksWithStatus.value.some((task) => !task.completed)
+  })
+
+  watch(
+    isBlockingTaskPending,
+    (newValue) => {
+      emit('update:actionDisabled', newValue)
+    },
+    { immediate: true }
+  )
+
+  // DISCORD AUTOROLE COMMAND CHECKBOX HANDLER
+  const isDiscordAutoroleTask = (taskKey: TaskKey) => {
+    return taskKey === TaskKey.DISCORD_AUTOROLE
+  }
 </script>
 
 <template>
@@ -195,6 +214,16 @@
           <v-list-item-title class="text-wrap font-weight-bold text-base">
             {{ task.text }}
           </v-list-item-title>
+
+          <template v-slot:append v-if="isDiscordAutoroleTask(task.key)">
+            <v-checkbox
+              v-model="discordAutoroleCommandExecuted"
+              hide-details
+              class="ma-0 pa-0"
+              color="success"
+              density="compact"
+            ></v-checkbox>
+          </template>
         </v-list-item>
       </v-list>
     </v-card-text>

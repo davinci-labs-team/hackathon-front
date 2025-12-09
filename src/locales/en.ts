@@ -24,6 +24,7 @@ export default {
     from: 'From',
     to: 'To',
     toBis: 'to',
+    done: 'Done',
     fullname: '{firstname} {lastname}',
     minimum: 'Minimum',
     maximum: 'Maximum',
@@ -664,6 +665,7 @@ export default {
       begin: 'Begin',
       end: 'End',
       skip: 'Skip',
+      disabledReason: "Make sure all organizer actions are completed before proceeding.",
     },
     errors: {
       phaseSkipError: 'Error skipping phase, please try again later.',
@@ -706,14 +708,14 @@ export default {
       alertPending: 'There are pending actions required before proceeding to the next phase.',
 
       create_accounts: 'Create user accounts',
-      send_invitations: 'Send email invitations',
+      send_invitations: 'Send email invitations (User Management)',
       profile_completion: 'User Profile Completion',
       create_topics: 'Create themes and topics',
       topic_selection: 'Topic selection by participants',
       define_team_constraints: 'Define team formation constraints (Matchmaking Tab in Settings)',
       teams_formed:
         'All participants are in a team, and every judge and mentor is assigned to at least one team',
-      discord_autorole: 'Execute the /teamautorole command on the hackathon Discord server',
+      discord_autorole: 'Execute the /team_autorole command on the hackathon Discord server',
       define_submission_deadline:
         'Define the project submission deadline (Dates & Planning Tab in Settings)',
       upload_evaluation_grid: 'Upload the evaluation grid (Media & Files Tab in Settings)',

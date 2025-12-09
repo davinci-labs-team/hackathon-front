@@ -116,7 +116,7 @@
       v-if="hackathonPhases.length > 0"
       :currentPhase="currentPhase"
       :actionDisabled="isActionDisabled"
-
+      @update:actionDisabled="isActionDisabled = $event"
       :profile-completion="profileCompletion"
       :topic-selection="topicSelection"
       :teams-formed="teamsFormed"
@@ -127,7 +127,6 @@
       v-if="hackathonPhases.length > 0"
       :phases="hackathonPhases"
       :currentPhase="currentPhase"
-
       :profileCompletion="profileCompletion"
       @update:profileCompletion="profileCompletion = $event"
       :topicSelection="topicSelection"

@@ -45,12 +45,13 @@ export const TaskMapByPhase: {
 
   // PHASE 2
   [PhaseOrder.TOPIC_SELECTION]: {
-    PENDING: [TaskKey.CREATE_TOPICS, TaskKey.DEFINE_TEAM_CONSTRAINTS],
+    PENDING: [TaskKey.CREATE_TOPICS],
     IN_PROGRESS: [TaskKey.TOPIC_SELECTION],
   },
 
   // PHASE 3
   [PhaseOrder.TEAM_FORMATION]: {
+    PENDING: [TaskKey.DEFINE_TEAM_CONSTRAINTS],
     IN_PROGRESS: [TaskKey.TEAMS_FORMED],
   },
 

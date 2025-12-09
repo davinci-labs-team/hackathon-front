@@ -21,6 +21,7 @@ export default {
     from: 'De',
     to: 'À',
     toBis: 'au',
+    done: 'Fait',
     fullname: '{firstname} {lastname}',
     minimum: 'Minimum',
     maximum: 'Maximum',
@@ -702,6 +703,7 @@ export default {
       begin: 'Commencer',
       end: 'Terminer',
       skip: 'Passer',
+      disabledReason: "Assurez-vous que toutes les actions organisateur sont complétées avant de continuer.",
     },
     errors: {
       phaseSkipError: 'Impossible de passer la phase actuelle.',
@@ -746,7 +748,7 @@ export default {
 
       // Task key phrases
       create_accounts: 'Créer tous les comptes utilisateurs',
-      send_invitations: 'Envoyer toutes les invitations par email',
+      send_invitations: 'Envoyer toutes les invitations par email (Gestion des Utilisateurs)',
       profile_completion: 'Tous les participants ont complété leur profil',
       create_topics: 'Créer les thèmes et sujets',
       topic_selection: 'Sélection des sujets par les participants',
@@ -754,7 +756,7 @@ export default {
         'Définir les contraintes de formation des équipes (Onglet Matchmaking dans les Paramètres)',
       teams_formed:
         'Tous les participants sont dans une équipe et chaque jury et mentor est assigné à au moins une équipe',
-      discord_autorole: 'Exécuter la commande /teamautorole sur le serveur Discord du hackathon',
+      discord_autorole: 'Exécuter la commande /team_autorole sur le serveur Discord du hackathon',
       define_submission_deadline:
         'Définir la date limite de dépôt des projets (Onglet Dates & Planning dans les Paramètres)',
       upload_evaluation_grid:
