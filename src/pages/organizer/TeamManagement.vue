@@ -52,6 +52,10 @@
   const themes = ref<ThemesDTO[]>([])
   const teams = computed(() => teamStore.teams)
 
+  const teamsCreated = ref<number>(0)
+  const autogenerating = ref(false)
+  const showAutogenerateResult = ref(false)
+
   // ----- TEAM FORM HANDLERS -----
   const onAddTeam = () => {
     showTeamForm.value = true
@@ -76,12 +80,16 @@
       error.value = false
       snackbar.value = true
 
-      await fetchUsers() 
+      await fetchUsers()
       showTeamForm.value = false
       selectedTeam.value = null
     } catch (err) {
       console.error('Error saving team:', err)
-      text.value = t(editMode.value ? 'organizer.teamManagement.teamUpdateError' : 'organizer.teamManagement.teamCreateError')
+      text.value = t(
+        editMode.value
+          ? 'organizer.teamManagement.teamUpdateError'
+          : 'organizer.teamManagement.teamCreateError'
+      )
       error.value = true
       snackbar.value = true
     }
@@ -230,18 +238,31 @@
   }
 
   const autogenerateTeams = async () => {
+    autogenerating.value = true
+    showAutogenerateResult.value = false
+    teamsCreated.value = 0
     try {
-      await teamStore.autogenerateTeams()
-      text.value = t('organizer.teamManagement.teamAutogenerateSuccess')
+      const res = await teamStore.autogenerateTeams()
+      teamsCreated.value = res
+
+      text.value = t('organizer.teamManagement.teamAutogenerateSuccess', { count: res })
       error.value = false
       snackbar.value = true
+
       await fetchUsers()
     } catch (err) {
       console.error('Error autogenerating teams:', err)
       text.value = t('organizer.teamManagement.teamAutogenerateError')
       error.value = true
       snackbar.value = true
+    } finally {
+      autogenerating.value = false
+      showAutogenerateResult.value = true
     }
+  }
+
+  const closeAutogenerateResult = () => {
+    showAutogenerateResult.value = false
   }
 
   onMounted(() => {
@@ -293,13 +314,8 @@
           </div>
         </div>
 
-        <v-btn
-          color="secondary"
-          class="mb-4"
-          @click="autogenerateTeams"
-          :disabled="loadingTeams"
-        >
-            {{ t('organizer.teamManagement.actions.autogenerate') }}
+        <v-btn color="secondary" class="mb-4" @click="autogenerateTeams" :disabled="loadingTeams">
+          {{ t('organizer.teamManagement.actions.autogenerate') }}
         </v-btn>
 
         <TeamFilters
@@ -363,5 +379,40 @@
     </v-row>
 
     <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
+
+    <!-- AUTOGENERATE DIALOGS -->
+    <v-dialog v-model="autogenerating" persistent width="auto">
+      <v-card>
+        <v-card-title class="text-h6">{{ t('organizer.teamManagement.autogenerate.inProgressTitle') }}</v-card-title>
+        <v-card-text>
+          {{ t('organizer.teamManagement.autogenerate.inProgressText') }}
+          <v-progress-linear
+            color="blue-darken-2"
+            indeterminate
+            class="mt-3"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="showAutogenerateResult" persistent width="auto">
+      <v-card>
+        <v-card-title class="text-h6">{{ t('organizer.teamManagement.autogenerate.resultTitle') }}</v-card-title>
+        <v-card-text>
+          <p v-if="teamsCreated > 0">
+            {{ t('organizer.teamManagement.autogenerate.resultSuccess', { count: teamsCreated }) }}
+          </p>
+          <p v-else>
+            {{ t('organizer.teamManagement.autogenerate.resultNoChange') }}
+          </p>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="closeAutogenerateResult">
+            {{ t('common.close') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>

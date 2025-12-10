@@ -233,6 +233,13 @@ export default {
       school: 'École',
       mail: 'Email',
       namePlaceholder: 'Rechercher par nom, équipe',
+      autogenerate: {
+        inProgressTitle: 'Génération Automatique des Équipes',
+        inProgressText: "Veuillez patienter pendant que les équipes sont générées automatiquement...",
+        resultTitle: 'Résultat de la Génération Automatique des Équipes',
+        resultSuccess: '{count} équipe(s) créée(s) avec succès',
+        resultNoChange: 'Aucune équipe n’a été créée',
+      },
       constraints: {
         label: 'Contraintes',
         valid: 'Valide',
