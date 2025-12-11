@@ -4,6 +4,7 @@
   import { useI18n } from 'vue-i18n'
   import { loginWithSupabase } from '@/services/authService'
   import { usePhaseStore } from '@/stores/phase'
+import { UserRole } from '@/types/roles'
 
   const { t } = useI18n()
   const router = useRouter()
@@ -32,7 +33,7 @@
       phaseStore.scheduleNextRefresh()
       
       error.value = false
-      if (user?.role === 'JURY' || user?.role === 'MENTOR') {
+      if (user?.role === UserRole.JURY || user?.role === UserRole.MENTOR) {
         router.push('/expert/dashboard')
       } else {
         router.push('/user/dashboard')
