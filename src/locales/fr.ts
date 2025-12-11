@@ -84,7 +84,7 @@ export default {
       "Bienvenue ! Pour rejoindre l'événement, veuillez vous inscrire ci-dessous.",
     firstLoginBtn: 'Première connexion',
     locationText: 'Inscrivez-vous pour connaître le lieu exact',
-    dateText: '{numberOfDays} jours intensif(s) de code',
+    dateText: '{count} jour intensif de code | {count} jour intensif de code | {count} jours intensifs de code',
     phases: {
       1: {
         defaultName: 'Complétion de Profil',

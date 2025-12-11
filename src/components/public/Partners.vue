@@ -2,9 +2,9 @@
   import basicImg from '@/assets/images/basic.jpg'
   import { configurationService } from '@/services/configurationService'
   import { PartnersDTO } from '@/types/config'
+  import { PublicConfigurationKey } from '@/utils/configuration/configurationKey'
   import { ref, onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 
 
   const { t } = useI18n()
@@ -13,7 +13,7 @@
 
   onMounted(async () => {
     try {
-      const response = await configurationService.findOne(ConfigurationKey.PARTNERS)
+      const response = await configurationService.findOnePublic(PublicConfigurationKey.PARTNERS)
       if (response?.value?.partners && Array.isArray(response.value.partners)) {
         partners.value = response.value.partners
       }
