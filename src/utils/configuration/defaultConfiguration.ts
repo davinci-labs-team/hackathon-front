@@ -1,37 +1,42 @@
+import { HackathonPhaseDTO } from '@/types/config';
 import { ConfigurationKey } from './configurationKey'
 
 function getDefaultPhases() {
-  const phases = []
-  const today = new Date()
-  let previousEnd: Date | null = null
+  const phaseNames = [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ];
 
-  for (let i = 1; i <= 6; i++) {
-    let startDate: string | null = null
-    let endDate: string | null = null
+  const phases = phaseNames.map((name, index) => {
+    const order = index + 1;
+    
+    const status = (order === 1) ? 'PENDING' : 'NOT_STARTED';
 
-    if (i === 1) {
-      startDate = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate()).toISOString()
-      endDate = new Date(new Date(startDate).getTime() + 2 * 24 * 60 * 60 * 1000).toISOString()
-      previousEnd = new Date(endDate)
-    } else if (i === 2) {
-      startDate = null
-      endDate = null
-    } else {
-      startDate = new Date(previousEnd!.getTime() + 1 * 24 * 60 * 60 * 1000).toISOString()
-      endDate = new Date(new Date(startDate).getTime() + 2 * 24 * 60 * 60 * 1000).toISOString()
-      previousEnd = new Date(endDate)
+    const optional = [3, 5, 6].includes(order);
+
+    const phase : HackathonPhaseDTO = {
+      order: order,
+      name: name,
+      status: status,
+      optionalPhase: optional,
+      startDate: null,
+      endDate: null,
+    };
+
+    if (order === 4) {
+      const today = new Date();
+      const defaultDeadline = new Date(today.getFullYear() + 1, 11, 1).toISOString();
+      phase.endDate = defaultDeadline; 
     }
+    return phase;
+  });
 
-    phases.push({
-      order: i,
-      startDate,
-      endDate,
-    })
-  }
-
-  return phases
+  return phases;
 }
-
 
 export const defaultConfigurations = {
   [ConfigurationKey.LEGAL]: {

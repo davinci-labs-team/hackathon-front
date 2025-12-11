@@ -2,6 +2,8 @@ export default {
   common: {
     close: 'Fermer',
     loading: 'Chargement...',
+    pending: 'En attente',
+    completed: 'Terminé',
     error: 'Une erreur est survenue, veuillez réessayer plus tard.',
     success: 'Opération réussie avec succès.',
     fieldRequired: 'Ce champ est obligatoire',
@@ -19,6 +21,7 @@ export default {
     from: 'De',
     to: 'À',
     toBis: 'au',
+    done: 'Fait',
     fullname: '{firstname} {lastname}',
     minimum: 'Minimum',
     maximum: 'Maximum',
@@ -27,6 +30,7 @@ export default {
     individual: 'Individuel',
     multiple: 'Multiple',
     noDataText: 'Aucune donnée disponible',
+    fetchError: 'Erreur lors de la récupération des données, veuillez réessayer plus tard.',
     download: 'Télécharger',
   },
   profile: {
@@ -57,7 +61,8 @@ export default {
     },
     otherUserInfoTitle: "Informations de l'Utilisateur",
     deleteAccount: 'Supprimer le Compte',
-    deleteAccountText: 'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
+    deleteAccountText:
+      'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
     deleteAccountConfirm: 'Oui, supprimer mon compte',
 
     logoutConfirmTitle: 'Confirmer la Déconnexion',
@@ -80,33 +85,34 @@ export default {
       "Bienvenue ! Pour rejoindre l'événement, veuillez vous inscrire ci-dessous.",
     firstLoginBtn: 'Première connexion',
     locationText: 'Inscrivez-vous pour connaître le lieu exact',
-    dateText: '{numberOfDays} jours intensif(s) de code',
+    dateText: '{count} jour intensif de code | {count} jour intensif de code | {count} jours intensifs de code',
     phases: {
       1: {
-        name: 'Publication des thèmes et sujets',
+        defaultName: 'Complétion de Profil',
         description:
-          'Phase de lancement du hackathon. Les participants découvrent les thèmes et sujets proposés. Ils doivent en choisir 3 qui les intéressent le plus pour orienter leurs idées de projet.',
+          'Phase de lancement du hackathon. Les participants doivent réinitialiser leur mot de passe et compléter leur profil.',
       },
       2: {
-        name: 'Formation des équipes',
-        description: 'Phase facultative si le matchmaking automatique est activé.',
+        defaultName: 'Sélection du Sujet',
+        description: 'Phase où les participants doivent sélectionner leur sujet préféré',
       },
       3: {
-        name: 'Hackathon',
+        defaultName: 'Formation des Équipes',
+        description:
+          'Phase de formation des équipes (peut être effectuée par les organisateurs ou par les participants eux-mêmes).',
+      },
+      4: {
+        defaultName: 'Hackathon',
         description:
           'Phase pendant laquelle les équipes travaillent intensivement sur leurs projets.',
       },
-      4: {
-        name: 'Soumission et Présentation des Projets',
-        description: 'Phase de clôture de la période de développement.',
-      },
       5: {
-        name: 'Evaluation des projets',
+        defaultName: 'Évaluation & Feedback',
         description:
-          'Phase où le jury évalue les projets soumis en fonction de contraintes prédéfinis.',
+          'Phase où le jury évalue les projets soumis et les mentors rendent leurs feedbacks.',
       },
       6: {
-        name: 'Annonce des résultats',
+        defaultName: 'Clôture & Annonces',
         description: 'Phase finale où les résultats sont annoncés.',
       },
     },
@@ -117,7 +123,7 @@ export default {
     firstLoginTitle: 'Première connexion',
     resetTitle: 'Réinitialiser votre mot de passe',
     btn_login: 'Se connecter',
-    btnSendFirstLogin: 'Envoyer l\'email de première connexion',
+    btnSendFirstLogin: "Envoyer l'email de première connexion",
     organizer: 'Espace Organisateur',
     user: 'Espace Utilisateur',
     email: 'Email',
@@ -125,7 +131,8 @@ export default {
     confirmPassword: 'Confirmer le mot de passe',
     invalidCredentials: 'Email ou mot de passe invalide',
     passwordsDoNotMatch: 'Les mots de passe ne correspondent pas',
-    passwordComplexity: 'Le mot de passe doit contenir au moins 8 caractères, incluant une majuscule, une minuscule, un chiffre et un caractère spécial.',
+    passwordComplexity:
+      'Le mot de passe doit contenir au moins 8 caractères, incluant une majuscule, une minuscule, un chiffre et un caractère spécial.',
     accessDenied: 'Accès refusé. Espace organisateur uniquement.',
     resetFailed: 'Échec de la réinitialisation du mot de passe. Veuillez réessayer.',
     firstLoginEmailSent: "L'email a été envoyé. Veuillez vérifier votre boîte de réception.",
@@ -195,11 +202,12 @@ export default {
       dropCsvOrSelect: 'Déposez votre fichier CSV ici ou sélectionnez-le',
       selectFile: 'Sélectionner un fichier',
       exampleCsvText: 'Exemple de CSV :',
-      exampleCsv: 'firstname,lastname,email,role,school\nJohn,Doe,john@example.com,PARTICIPANT,EPITA\nJane,Smith,jane@example.com,MENTOR,',
+      exampleCsv:
+        'firstname,lastname,email,role,school\nJohn,Doe,john@example.com,PARTICIPANT,EPITA\nJane,Smith,jane@example.com,MENTOR,',
       selectAllPending: 'Sélectionner tous les utilisateurs non invités',
       inviteSelected: 'Inviter la sélection ({count})',
       deleteSelected: 'Supprimer la sélection ({count})',
-      invite: 'Envoyer l\'email d\'invitation',
+      invite: "Envoyer l'email d'invitation",
       alreadyExists: "L'utilisateur existe déjà ({name})",
       usersCreated: '{count} utilisateur(s) créé(s) avec succès',
       usersNotAdded: '{count} utilisateur(s) non ajoutés en raison d’erreurs',
@@ -214,7 +222,8 @@ export default {
     teamManagement: {
       title: 'Gestion des Équipes',
       noTeams: 'Aucune équipe correspondant aux critères.',
-      noTeamAvailable: "Aucune équipe disponible éligible pour cet utilisateur. Créez une autre équipe ou modifiez les contraintes.",
+      noTeamAvailable:
+        'Aucune équipe disponible éligible pour cet utilisateur. Créez une autre équipe ou modifiez les contraintes.',
       noTeamAssigned: 'Aucune équipe assignée',
       team: 'Équipe',
       members: 'Membres',
@@ -225,8 +234,14 @@ export default {
       school: 'École',
       mail: 'Email',
       namePlaceholder: 'Rechercher par nom, équipe',
-      constraints:
-      {
+      autogenerate: {
+        inProgressTitle: 'Génération Automatique des Équipes',
+        inProgressText: "Veuillez patienter pendant que les équipes sont générées automatiquement...",
+        resultTitle: 'Résultat de la Génération Automatique des Équipes',
+        resultSuccess: '{count} équipe(s) créée(s) avec succès',
+        resultNoChange: 'Aucune équipe n’a été créée',
+      },
+      constraints: {
         label: 'Contraintes',
         valid: 'Valide',
         invalid: 'Invalide',
@@ -258,7 +273,7 @@ export default {
       },
       actions: {
         label: 'Actions',
-        create: "Créer",
+        create: 'Créer',
         add: 'Créer une Équipe',
         edit: 'Modifier l’Équipe',
         lock: 'Verrouiller',
@@ -283,9 +298,10 @@ export default {
       teamDeleteError: "Erreur lors de la suppression de l'équipe",
       teamCreated: 'Équipe créée avec succès',
       teamUpdated: 'Équipe mise à jour avec succès',
-      lockImpossible: 'Impossible de verrouiller l’équipe avec des violations de contraintes, corrigez-les ou ignorez les contraintes',
+      lockImpossible:
+        'Impossible de verrouiller l’équipe avec des violations de contraintes, corrigez-les ou ignorez les contraintes',
       teamAutogenerateSuccess: 'Équipes générées automatiquement avec succès',
-      teamAutogenerateError: "Erreur lors de la génération automatique des équipes",
+      teamAutogenerateError: 'Erreur lors de la génération automatique des équipes',
     },
     submissionManagement: {
       title: 'Gestion des Dépôts',
@@ -315,8 +331,9 @@ export default {
       downloadEvaluation: 'Télécharger la grille d’évaluation',
     },
     nav: {
+      hackathon: 'Gestion du Hackathon',
       announcements: 'Annonces',
-      faq: "FAQ",
+      faq: 'FAQ',
       users: 'Gestion des utilisateurs',
       teams: 'Gestion des équipes',
       projects: 'Gestion des dépôts',
@@ -413,7 +430,7 @@ export default {
         uploadButton: 'Envoyer',
         selectFileError: 'Veuillez sélectionner un fichier',
         zipOnlyError: 'Seuls les fichiers .zip sont acceptés',
-        uploadError: 'Erreur lors de l\'upload du fichier',
+        uploadError: "Erreur lors de l'upload du fichier",
         uploadSuccess: 'Fichier uploadé avec succès !',
         fileUploaded: 'Fichier uploadé',
         download: 'Télécharger',
@@ -430,7 +447,7 @@ export default {
         deadlineExceeded: 'Délai dépassé',
 
         notSubmitted: 'Non soumis',
-        pending: 'En attente d\'évaluation',
+        pending: "En attente d'évaluation",
         graded: 'Évalué',
       },
 
@@ -441,7 +458,7 @@ export default {
         jury: 'Jury',
         evaluatedOn: 'Évalué le',
         comment: 'Commentaire',
-        downloadFile: 'Télécharger le fichier d\'évaluation',
+        downloadFile: "Télécharger le fichier d'évaluation",
       },
 
       comments: {
@@ -576,7 +593,7 @@ export default {
     confirmText: 'Êtes-vous sûr de vouloir supprimer ce partenaire ?',
     noPartners: 'Aucun partenaire disponible.',
     editTitle: 'Modifier le partenaire',
-    addTitle: 'Ajouter un partenaire'
+    addTitle: 'Ajouter un partenaire',
   },
   faqSettings: {
     title: 'FAQ',
@@ -632,21 +649,20 @@ export default {
     title: 'Dates & Planning',
     subtitle: "Gérez le planning de l'événement et les sessions",
     selectDateAndTime: "Sélectionner la date & l'heure",
-    endAfterStart: 'La date de fin doit être postérieure à la date de début',
-    invalidPhases: 'Veuillez corriger les erreurs dans les phases avant de sauvegarder.',
-    mustNotOverlap: 'Les phases ne doivent pas se chevaucher.',
+    deadline: 'Deadline de rendu le ',
+    phaseNameRequired: 'Le nom de chaque phase est obligatoire.',
   },
   mailingSettings: {
-    title: 'Modèles d\'Emails',
-    subtitle: 'Gérez les modèles d\'emails envoyés aux utilisateurs',
+    title: "Modèles d'Emails",
+    subtitle: "Gérez les modèles d'emails envoyés aux utilisateurs",
     firstConnection: 'Email de Première Connexion',
     passwordReset: 'Email de Réinitialisation de Mot de Passe',
     emailObject: "Objet de l'Email",
     emailTitle: "Titre de l'Email",
     introParagraph: "Paragraphe d'Introduction",
     actionPrompt: "Texte du Bouton d'Action",
-    buttonText: "Texte du Bouton",
-    closingNote: "Paragraphe de Clôture",
+    buttonText: 'Texte du Bouton',
+    closingNote: 'Paragraphe de Clôture',
     signatureSalutation: 'Salutation de la Signature',
     signatureName: 'Nom de la Signature',
     errors: {
@@ -691,14 +707,14 @@ export default {
       maxLength: 'Longueur maximale atteinte',
       fixErrors: 'Veuillez corriger les erreurs avant de sauvegarder.',
     },
-    noName: "Nom non renseigné",
-    noDescription: "Description non renseignée"
+    noName: 'Nom non renseigné',
+    noDescription: 'Description non renseignée',
   },
   matchmakingViolations: {
-    teamSizeMin: "Il manque {count} membre(s)",
-    teamSizeMax: "{count} membre(s) en trop",
-    mentorMissing: "Il faut au moins 1 mentor",
-    juryMissing: "Il faut au moins 1 jury",
+    teamSizeMin: 'Il manque {count} membre(s)',
+    teamSizeMax: '{count} membre(s) en trop',
+    mentorMissing: 'Il faut au moins 1 mentor',
+    juryMissing: 'Il faut au moins 1 jury',
     // Contraintes sur une école
     schoolMin: "Il manque {count} membre(s) de l'école {school}",
     schoolMax: "{count} membre(s) en trop de l'école {school}",
@@ -707,7 +723,73 @@ export default {
     // Contraintes sur plusieurs écoles (OU)
     schoolsMin: "Il manque {count} membre(s) d'une des écoles : {schools}",
     schoolsMax: "{count} membre(s) en trop d'une des écoles  : {schools}",
-    schoolsEqualTooMany: "{count} en trop ({schools})",
-    schoolsEqualTooFew: "{count} manquant(s) ({schools})",
-  }
+    schoolsEqualTooMany: '{count} en trop ({schools})',
+    schoolsEqualTooFew: '{count} manquant(s) ({schools})',
+  },
+
+  hackathonManagement: {
+    title: 'Gestion du Hackathon',
+    subtitle: "Contrôlez et suivez l'avancement de votre hackathon",
+    currentPhase: 'Phase Actuelle',
+    actions: {
+      begin: 'Commencer',
+      end: 'Terminer',
+      skip: 'Passer',
+      disabledReason: "Assurez-vous que toutes les actions organisateur sont complétées avant de continuer.",
+    },
+    errors: {
+      phaseSkipError: 'Impossible de passer la phase actuelle.',
+      phaseBeginError: 'Impossible de commencer la phase sélectionnée.',
+      phaseCompleteError: 'Impossible de terminer la phase actuelle.',
+    },
+    progress: {
+      title: 'Avancement',
+      noPhaseInProgress: 'Aucune phase en cours actuellement.',
+      skipped: 'Passée',
+      inProgress: 'En cours',
+    },
+    stats: {
+      noData: 'Aucune donnée statistique disponible pour le moment.',
+      title: 'Statistiques',
+      topicDistribution: 'Répartition des Sujets',
+      topicChoice: 'Choix des Sujets',
+      noTopicsSelected: 'Aucun sujet sélectionné',
+      noDataAvailable: 'Aucune donnée disponible',
+      team: {
+        participants: 'Participants assignés à une équipe',
+        juries: 'Jury assignés à une équipe',
+        mentors: 'Mentors assignés à une équipe',
+        teamsCreated: 'Équipe(s) créée(s)',
+      },
+      submissions: "Projets soumis",
+      evaluations: 'Projets évalués',
+      total: 'Total',
+      teamsFormed: 'Équipes formées',
+      projectsSubmitted: 'Projets soumis',
+      projectsEvaluated: 'Projets évalués',
+    },
+    organizerActions: {
+      noActions: "Aucune action requise pour le moment.",
+      title: 'Actions Organisateur',
+      alertPending:
+        'Préparation avant le lancement : Ces étapes sont nécessaires pour commencer la phase.',
+
+      // Task key phrases
+      create_accounts: 'Créer tous les comptes utilisateurs',
+      send_invitations: 'Envoyer toutes les invitations par email (Gestion des Utilisateurs)',
+      profile_completion: 'Tous les participants ont complété leur profil',
+      create_topics: 'Créer les thèmes et sujets',
+      topic_selection: 'Sélection des sujets par les participants',
+      define_team_constraints:
+        'Définir les contraintes de formation des équipes (Onglet Matchmaking dans les Paramètres)',
+      teams_formed:
+        'Tous les participants sont dans une équipe et chaque jury et mentor est assigné à au moins une équipe',
+      discord_autorole: 'Exécuter la commande /team_autorole sur le serveur Discord du hackathon',
+      define_submission_deadline:
+        'Définir la date limite de dépôt des projets (Onglet Dates & Planning dans les Paramètres)',
+      upload_evaluation_grid:
+        "Télécharger la grille d'évaluation (Onglet Médias & Fichiers dans les Paramètres)",
+      evaluations_completed: 'Toutes les équipes ont été évaluées par au moins un membre du jury',
+    },
+  },
 }

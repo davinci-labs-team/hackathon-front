@@ -19,7 +19,7 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
-    host: true,
-    allowedHosts: ['localhost'],
+    host: '0.0.0.0',
+    allowedHosts: ['localhost', 'intriqathon.app.mixup.my', '51.15.223.131'],
   },
 })

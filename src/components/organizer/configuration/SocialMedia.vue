@@ -1,16 +1,26 @@
 <script setup lang="ts">
-  import { onMounted, ref, computed } from 'vue'
+  import { onMounted, watch, ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { HackathonMediaDTO } from '@/types/config'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
   import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
   import { S3BucketService } from '@/services/s3BucketService'
+  import { useConfiguration } from '@/composables/useConfiguration'
+import { getOrCreateConfiguration } from '@/services/configurationService'
 
   const { t } = useI18n()
 
+  const {
+    configuration: mediaConfig,
+    loading: mediaLoading,
+    error: mediaError,
+    updateConfiguration: updateMediaConfig,
+  } = useConfiguration(ConfigurationKey.MEDIA)
+
   const mediaSettings = ref<HackathonMediaDTO>({ ...defaultConfigurations[ConfigurationKey.MEDIA] })
+
+  const isSaving = ref(false)
 
   const bannerFileInput = ref<File | null>(null)
   const logoFileInput = ref<File | null>(null)
@@ -40,7 +50,7 @@
   const fetchMediaUrls = async () => {
     if (mediaSettings.value?.bannerPictureId) {
       try {
-        const response = await S3BucketService.getFileUrl('public_files', mediaSettings.value.bannerPictureId)
+        const response = await S3BucketService.getFileUrlPublic('public_files', mediaSettings.value.bannerPictureId)
         bannerPicture.value = response.url
       } catch (err) {
         console.error('Error fetching banner picture:', err)
@@ -48,7 +58,7 @@
     }
     if (mediaSettings.value?.hackathonLogoId) {
       try {
-        const response = await S3BucketService.getFileUrl('public_files', mediaSettings.value.hackathonLogoId)
+        const response = await S3BucketService.getFileUrlPublic('public_files', mediaSettings.value.hackathonLogoId)
         logoPicture.value = response.url
       } catch (err) {
         console.error('Error fetching logo picture:', err)
@@ -143,14 +153,14 @@
       error.value = true
       return
     }
+
+    isSaving.value = true
     try {
       await handleBannerUpdate()
       await handleLogoUpdate()
       await handleEvaluationGridUpdate()
 
-      await configurationService.update(ConfigurationKey.MEDIA, {
-        value: mediaSettings.value,
-      })
+      await updateMediaConfig({ value: mediaSettings.value })
 
       snackbar.value = true
       text.value = t('common.changesSaved')
@@ -163,8 +173,10 @@
     } catch (err) {
       console.error(err)
       snackbar.value = true
-      text.value = t('common.errorSaving')
+      text.value = t('common.error')
       error.value = true
+    } finally {
+      isSaving.value = false
     }
   }
 </script>
@@ -174,7 +186,9 @@
     <h1 class="text-3xl font-bold mb-2">{{ t('mediaSettings.title') }}</h1>
     <div class="flex-direction-row mb-5 flex items-center justify-between">
       <p class="mb-0 text-lg text-gray-600">{{ t('mediaSettings.subtitle') }}</p>
-      <v-btn color="primary" @click="handleSave">{{ t('common.saveChanges') }}</v-btn>
+      <v-btn color="primary" @click="handleSave" :disabled="mediaLoading || isSaving">{{
+        t('common.saveChanges')
+      }}</v-btn>
     </div>
 
     <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
