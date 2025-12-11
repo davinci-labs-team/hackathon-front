@@ -29,6 +29,23 @@ export const configurationService = {
     return res.data
   },
 
+  // --- Hackathon Phase Management Methods ---
+
+  async skipPhase(): Promise<void> {
+    const url = `${API_URL}/phase/skip`
+    await axios.patch(url, {}, { headers: getAuthHeaders() })
+  },
+
+  async beginPhase(): Promise<void> {
+    const url = `${API_URL}/phase/begin`
+    await axios.patch(url, {}, { headers: getAuthHeaders() })
+  },
+
+  async completePhase(): Promise<void> {
+    const url = `${API_URL}/phase/complete`
+    await axios.patch(url, {}, { headers: getAuthHeaders() })
+  },
+  
   async findOnePublic(key: PublicConfigurationKey): Promise<ConfigurationResponse> {
     const url = `${API_URL}/${key}/public`
     const res = await axios.get(url)

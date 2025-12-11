@@ -1,13 +1,20 @@
 <script setup lang="ts">
-  import { ref, computed, watch, onMounted } from 'vue'
+  import { ref, computed, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
   import type { LegalText, Section } from '@/types/legal_texts'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import { useConfiguration } from '@/composables/useConfiguration'
 
   const { t, locale } = useI18n()
+  const activeLocale = computed<'en' | 'fr'>(() => locale.value as 'en' | 'fr')
   const documentType = ref<'privacy' | 'terms'>('privacy')
+
+  const {
+    configuration: legalConfig,
+    error: legalError,
+    updateConfiguration,
+  } = useConfiguration(ConfigurationKey.LEGAL)
 
   // Snackbar
   const snackbar = ref(false)
@@ -18,22 +25,27 @@
   const sections = ref<Section[]>([])
   const loaded = ref(false)
 
-  const legalData = ref<LegalText>({ privacy: [], terms: [] })
-
-  onMounted(async () => {
-    try {
-      const response = await getOrCreateConfiguration(ConfigurationKey.LEGAL)
-      if (response && response.value) {
-        legalData.value = response.value as LegalText
-        sections.value = legalData.value[documentType.value]
-        loaded.value = true
-      }
-    } catch (e) {
-      console.error('Error fetching legal documents:', e)
+  const legalData = computed<LegalText>(() => {
+    if (legalConfig.value && legalConfig.value.value) {
+      return legalConfig.value.value as LegalText
     }
+    return { privacy: [], terms: [] }
   })
 
-  // Ajouter une section dynamique
+  watch(
+    [legalConfig, documentType],
+    ([newConfig, newType]) => {
+      if (newConfig && newConfig.value) {
+        sections.value = legalData.value[newType]
+
+        if (legalError.value) {
+          console.error('Error fetching legal documents from useConfiguration:', legalError.value)
+        }
+      }
+    },
+    { immediate: true }
+  )
+
   const addSection = () => {
     const newSection: Section = {
       id: `custom_${Date.now()}`,
@@ -73,7 +85,6 @@
   }
 
   const save = async () => {
-    // Vérification que toutes les sections ont du contenu
     const emptySection = sections.value.find((s) => !s.content[activeLocale.value]?.trim())
 
     if (emptySection) {
@@ -86,19 +97,18 @@
     const data = exportJSON()
 
     try {
-      await configurationService.update(ConfigurationKey.LEGAL, { value: data })
+      await updateConfiguration({ value: data })
+
       text.value = t('common.changesSaved')
       error.value = false
       snackbar.value = true
     } catch (e) {
-      console.error('Error saving legal documents:', e)
+      console.error('Error saving legal documents:', legalError.value || e)
       text.value = t('common.error')
       error.value = true
       snackbar.value = true
     }
   }
-
-  const activeLocale = computed<'en' | 'fr'>(() => locale.value as 'en' | 'fr')
 
   watch(documentType, (newType) => {
     if (loaded.value) {

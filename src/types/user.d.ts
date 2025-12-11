@@ -16,6 +16,7 @@ export interface UserDTO {
   discord?: SocialMediaDTO 
   profilePicturePath?: string
   teamId?: string
+  favoriteSubjectId?: string
 }
 
 export interface UserReducedDTO {

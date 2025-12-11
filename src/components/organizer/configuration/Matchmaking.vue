@@ -1,14 +1,25 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
-  import { ref, onMounted, computed } from 'vue'
+  import { ref, computed, watch } from 'vue'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
-  import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
   import { ConstraintDTO, MatchmakingSettingsDTO, PartnersDTO } from '@/types/config'
   import Constraints from '@/components/organizer/matchmaking/Constraints.vue'
   import ConstraintForm from '../matchmaking/ConstraintForm.vue'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import { useConfiguration } from '@/composables/useConfiguration'
 
   const { t } = useI18n()
+
+  const {
+    configuration: matchmakingConfig,
+    loading: matchmakingLoading,
+    error: matchmakingError,
+    updateConfiguration: updateMatchmaking,
+  } = useConfiguration(ConfigurationKey.MATCHMAKING)
+
+  const { configuration: partnersConfig, loading: partnersLoading } = useConfiguration(
+    ConfigurationKey.PARTNERS
+  )
 
   // Snackbar
   const snackbar = ref(false)
@@ -17,6 +28,10 @@
   const error = ref(false)
 
   const errorMessage = ref<string>('')
+
+  const isSaving = ref(false)
+
+  const isLoading = computed(() => matchmakingLoading.value || partnersLoading.value)
 
   // Matchmaking settings
   const showCriterionForm = ref(false)
@@ -27,7 +42,6 @@
     constraints: [],
   })
 
-  const partners = ref<PartnersDTO[]>([])
   const schoolNames = ref<string[]>([])
 
   const validateConstraints = (constraints: ConstraintDTO[]) => {
@@ -75,44 +89,8 @@
     return errors
   }
 
-  // --- Fetch partners and school names ---
-  const fetchPartners = async () => {
-    try {
-      const response = await getOrCreateConfiguration(ConfigurationKey.PARTNERS)
-      if (response?.value && Array.isArray(response.value.partners)) {
-        partners.value = response.value.partners as PartnersDTO[]
-      } else {
-        partners.value = []
-      }
-      schoolNames.value = partners.value.filter((p) => p.isParticipatingSchool).map((p) => p.name)
-    } catch (e) {
-      console.error('Error fetching partners:', e)
-      partners.value = []
-      schoolNames.value = []
-    }
-  }
-
-  // --- Fetch matchmaking settings ---
-  const fetchMatchmakingSettings = async () => {
-    try {
-      const response = await getOrCreateConfiguration(ConfigurationKey.MATCHMAKING)
-      if (response?.value) {
-        matchmakingSettings.value = response.value as MatchmakingSettingsDTO
-      }
-    } catch (e) {
-      console.error('Error fetching matchmaking settings:', e)
-      text.value = t('common.errorOccurred')
-      error.value = true
-      snackbar.value = true
-    }
-  }
-
-  onMounted(async () => {
-    await fetchPartners()
-    await fetchMatchmakingSettings()
-  })
-
   const handleSave = async () => {
+    isSaving.value = true
     try {
       const payload = {
         ...matchmakingSettings.value,
@@ -124,9 +102,7 @@
         })),
       }
 
-      await configurationService.update(ConfigurationKey.MATCHMAKING, {
-        value: payload,
-      })
+      await updateMatchmaking({ value: payload })
 
       text.value = t('common.changesSaved')
       error.value = false
@@ -136,6 +112,8 @@
       text.value = t('common.errorOccurred')
       error.value = true
       snackbar.value = true
+    } finally {
+      isSaving.value = false
     }
   }
 
@@ -176,6 +154,35 @@
   const hasConstraints = computed(
     () => matchmakingSettings.value.constraints && matchmakingSettings.value.constraints.length > 0
   )
+
+  watch(
+    partnersConfig,
+    (newConfig) => {
+      if (newConfig && newConfig.value && Array.isArray(newConfig.value.partners)) {
+        const partners = newConfig.value.partners as PartnersDTO[]
+        schoolNames.value = partners.filter((p) => p.isParticipatingSchool).map((p) => p.name)
+      } else {
+        schoolNames.value = []
+      }
+    },
+    { immediate: true }
+  )
+
+  watch(
+    matchmakingConfig,
+    (newConfig) => {
+      if (newConfig && newConfig.value) {
+        matchmakingSettings.value = newConfig.value as MatchmakingSettingsDTO
+
+        if (matchmakingError.value) {
+          text.value = t('common.errorOccurred')
+          error.value = true
+          snackbar.value = true
+        }
+      }
+    },
+    { immediate: true }
+  )
 </script>
 
 <template>
@@ -183,10 +190,12 @@
     <h1 class="text-3xl font-bold mb-2">{{ t('matchmakingSettings.title') }}</h1>
     <div class="flex-direction-row mb-5 flex items-center justify-between">
       <p class="mb-0 text-lg text-gray-600">{{ t('matchmakingSettings.subtitle') }}</p>
-      <v-btn color="primary" @click="handleSave">{{ t('common.saveChanges') }}</v-btn>
+      <v-btn color="primary" @click="handleSave" :disabled="isLoading || isSaving">{{ t('common.saveChanges') }}</v-btn>
     </div>
 
     <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
+
+    <v-alert v-if="isLoading" type="info" class="mb-4"> {{ t('common.loading') }}... </v-alert>
 
     <v-container>
       <v-switch
