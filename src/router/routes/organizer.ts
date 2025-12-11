@@ -16,6 +16,10 @@ export default [
     component: OrganizerLayout,
     children: [
       {
+        path: '',
+        redirect: { name: 'HackathonManagement' }
+      },
+      {
         path: 'hackathon',
         name: 'HackathonManagement',
         component: HackathonManagement,

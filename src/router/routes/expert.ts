@@ -12,6 +12,10 @@ export default [
     component: ExpertLayout,
     children: [
       {
+        path: '',
+        redirect: { name: 'ExpertDashboard' }
+      },
+      {
         path: 'dashboard',
         name: 'ExpertDashboard',
         component: Dashboard,
