@@ -4,7 +4,7 @@ import {
   UpdateConfigurationDTO,
   CreateConfigurationDTO,
 } from '@/types/config'
-import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+import { ConfigurationKey, PublicConfigurationKey } from '@/utils/configuration/configurationKey'
 import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
 import { getAuthHeaders } from '@/stores/auth'
 
@@ -28,6 +28,12 @@ export const configurationService = {
     const res = await axios.get(url, { headers: getAuthHeaders() })
     return res.data
   },
+
+  async findOnePublic(key: PublicConfigurationKey): Promise<ConfigurationResponse> {
+    const url = `${API_URL}/${key}/public`
+    const res = await axios.get(url)
+    return res.data
+  }
 }
 
 export async function getOrCreateConfiguration(key: ConfigurationKey) {
