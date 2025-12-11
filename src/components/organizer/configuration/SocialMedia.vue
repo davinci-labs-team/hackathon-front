@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { watch, ref } from 'vue'
+  import { onMounted, watch, ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { HackathonMediaDTO } from '@/types/config'
@@ -7,6 +7,7 @@
   import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
   import { S3BucketService } from '@/services/s3BucketService'
   import { useConfiguration } from '@/composables/useConfiguration'
+import { getOrCreateConfiguration } from '@/services/configurationService'
 
   const { t } = useI18n()
 
@@ -28,6 +29,17 @@
   )
   const logoPicture = ref('https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg')
   const evaluationGridFileInput = ref<File | null>(null)
+  const evaluationGridUrl = ref<string | null>(null)
+
+  const evaluationGridLabel = computed(() => {
+    if (evaluationGridFileInput.value) {
+      return t('mediaSettings.uploadEvaluationGrid')
+    }
+    if (mediaSettings.value.evaluationGridPath) {
+      return mediaSettings.value.evaluationGridPath
+    }
+    return t('mediaSettings.uploadEvaluationGrid')
+  })
 
   // Snackbar
   const snackbar = ref(false)
@@ -35,13 +47,10 @@
   const timeout = ref(1500)
   const error = ref(false)
 
-  const getBannerAndLogoPictureUrl = async () => {
+  const fetchMediaUrls = async () => {
     if (mediaSettings.value?.bannerPictureId) {
       try {
-        const response = await S3BucketService.getFileUrl(
-          'annonces',
-          mediaSettings.value.bannerPictureId
-        )
+        const response = await S3BucketService.getFileUrlPublic('public_files', mediaSettings.value.bannerPictureId)
         bannerPicture.value = response.url
       } catch (err) {
         console.error('Error fetching banner picture:', err)
@@ -49,31 +58,36 @@
     }
     if (mediaSettings.value?.hackathonLogoId) {
       try {
-        const response = await S3BucketService.getFileUrl(
-          'annonces',
-          mediaSettings.value.hackathonLogoId
-        )
+        const response = await S3BucketService.getFileUrlPublic('public_files', mediaSettings.value.hackathonLogoId)
         logoPicture.value = response.url
       } catch (err) {
         console.error('Error fetching logo picture:', err)
       }
     }
+    if (mediaSettings.value?.evaluationGridPath) {
+      try {
+        const response = await S3BucketService.getFileUrl(
+          'public_files',
+          mediaSettings.value.evaluationGridPath
+        )
+        evaluationGridUrl.value = response.url
+      } catch (err) {
+        console.error('Error fetching evaluation grid:', err)
+      }
+    }
   }
 
-  watch(
-    mediaConfig,
-    (newConfig) => {
-      if (newConfig?.value) {
-        mediaSettings.value = newConfig.value as HackathonMediaDTO
-        getBannerAndLogoPictureUrl()
+  onMounted(async () => {
+    try {
+      const response = await getOrCreateConfiguration(ConfigurationKey.MEDIA)
+      if (response && response.value) {
+        mediaSettings.value = response.value as HackathonMediaDTO
+        fetchMediaUrls()
       }
-
-      if (mediaError.value) {
-        console.error('Error fetching media settings from hook:', mediaError.value)
-      }
-    },
-    { immediate: true }
-  )
+    } catch (error) {
+      console.error('Error fetching media settings:', error)
+    }
+  })
 
   const getPreviewUrl = (file: File) => URL.createObjectURL(file)
 
@@ -86,6 +100,16 @@
         console.warn(`Erreur lors de la suppression du fichier ${oldFileId} :`, err)
       }
     }*/
+
+  const downloadEvaluationGridFile = async () => {
+    if (!mediaSettings.value?.evaluationGridPath) return
+    try {
+      const { url } = await S3BucketService.getFileUrl('public_files', mediaSettings.value.evaluationGridPath)
+      window.open(url, '_blank')
+    } catch (error) {
+      console.error('Error downloading file:', error)
+    }
+  }
 
   const uploadFileAndReplace = async (
     file: File | null,
@@ -142,7 +166,7 @@
       text.value = t('common.changesSaved')
       error.value = false
 
-      await getBannerAndLogoPictureUrl()
+      await fetchMediaUrls()
       bannerFileInput.value = null
       logoFileInput.value = null
       evaluationGridFileInput.value = null
@@ -293,12 +317,27 @@
         <!-- File input -->
         <v-file-input
           v-model="evaluationGridFileInput"
-          :label="t('mediaSettings.uploadEvaluationGrid')"
+          :label="evaluationGridLabel"
           :hint="t('mediaSettings.uploadHint')"
           prepend-icon="mdi-file-upload"
           accept=".docx,.xlsx"
           class="flex-1"
         />
+
+        <!-- Preview -->
+        <div
+          v-if="evaluationGridUrl && !evaluationGridFileInput"
+          class="flex flex-col items-center"
+        >
+          <v-btn
+            variant="outlined"
+            size="small"
+            prepend-icon="mdi-download"
+            @click="downloadEvaluationGridFile"
+          >
+            {{ t('common.download') }}
+          </v-btn>
+        </div>
       </div>
     </v-container>
   </v-container>
