@@ -4,7 +4,7 @@
   import { useI18n } from 'vue-i18n'
   import { UserRole } from '@/types/roles'
   import { loginWithSupabase } from '@/services/authService'
-import { usePhaseStore } from '@/stores/phase'
+  import { usePhaseStore } from '@/stores/phase'
 
   const { t } = useI18n()
   const router = useRouter()
