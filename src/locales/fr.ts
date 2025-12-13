@@ -32,6 +32,7 @@ export default {
     noDataText: 'Aucune donnée disponible',
     fetchError: 'Erreur lors de la récupération des données, veuillez réessayer plus tard.',
     download: 'Télécharger',
+    showMore: 'Afficher plus',
   },
   profile: {
     mainTitle: 'Mon Profil',

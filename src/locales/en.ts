@@ -35,6 +35,7 @@ export default {
     noDataText: 'No data available',
     fetchError: 'Error fetching data, please try again later.',
     download: 'Download',
+    showMore: 'Show More',
   },
   profile: {
     mainTitle: 'My Profile',

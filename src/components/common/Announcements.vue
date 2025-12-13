@@ -1,79 +1,79 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { AnnouncementDTO } from '@/types/announcement'
-import AnnouncementPopup from '@/components/common/AnnouncementPopup.vue'
-import AnnouncementCard from '@/components/common/AnnouncementCard.vue'
-import { AnnouncementService } from '@/services/announcementService'
+  import { ref, computed, onMounted, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
+  import { AnnouncementDTO } from '@/types/announcement'
+  import AnnouncementPopup from '@/components/common/AnnouncementPopup.vue'
+  import AnnouncementCard from '@/components/common/AnnouncementCard.vue'
+  import { AnnouncementService } from '@/services/announcementService'
 
-const { t } = useI18n()
+  const { t } = useI18n()
 
-// Props
-const props = defineProps<{
-  announcements?: AnnouncementDTO[]
-  isPublic?: boolean
-  itemsPerPage?: number
-  canDelete?: boolean
-}>()
+  // Props
+  const props = defineProps<{
+    announcements?: AnnouncementDTO[]
+    isPublic?: boolean
+    itemsPerPage?: number
+    canDelete?: boolean
+  }>()
 
-// Events pour le parent
-const emit = defineEmits(['edit', 'delete'])
+  // Events pour le parent
+  const emit = defineEmits(['edit', 'delete'])
 
-// Pagination
-const allAnnouncements = ref<AnnouncementDTO[]>([])
+  // Pagination
+  const allAnnouncements = ref<AnnouncementDTO[]>([])
 
-onMounted(async () => {
-  if (!props.isPublic) {
-    allAnnouncements.value = props.announcements || []
-    return
-  }
-  
-  try {
-    allAnnouncements.value = await AnnouncementService.getAllPublic()
-  } catch (error) {
-    console.error('Error fetching announcements:', error)
-  }
-})
-
-watch(
-  () => props.announcements,
-  (newAnnouncements) => {
+  onMounted(async () => {
     if (!props.isPublic) {
-      allAnnouncements.value = newAnnouncements || []
+      allAnnouncements.value = props.announcements || []
+      return
     }
-  },
-  { immediate: true }
-)
 
-const itemsPerPage = props.itemsPerPage || 5
-const currentPage = ref(1)
-const totalPages = computed(() => Math.ceil(allAnnouncements.value.length / itemsPerPage))
-const paginatedAnnouncements = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage
-  return allAnnouncements.value.slice(start, start + itemsPerPage)
-})
-const goToPage = (page: number) => {
-  if (page >= 1 && page <= totalPages.value) currentPage.value = page
-}
+    try {
+      allAnnouncements.value = await AnnouncementService.getAllPublic()
+    } catch (error) {
+      console.error('Error fetching announcements:', error)
+    }
+  })
 
-// Popup interne
-const showPopup = ref(false)
-const selectedAnnouncement = ref<AnnouncementDTO | null>(null)
-const openPopup = (announcement: AnnouncementDTO) => {
-  selectedAnnouncement.value = announcement
-  showPopup.value = true
-}
+  watch(
+    () => props.announcements,
+    (newAnnouncements) => {
+      if (!props.isPublic) {
+        allAnnouncements.value = newAnnouncements || []
+      }
+    },
+    { immediate: true }
+  )
 
-// Actions déléguées au parent
-const onEdit = (announcement: AnnouncementDTO) => emit('edit', announcement)
-const onDelete = (announcement: AnnouncementDTO) => emit('delete', announcement)
+  const itemsPerPage = props.itemsPerPage || 5
+  const currentPage = ref(1)
+  const totalPages = computed(() => Math.ceil(allAnnouncements.value.length / itemsPerPage))
+  const paginatedAnnouncements = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage
+    return allAnnouncements.value.slice(start, start + itemsPerPage)
+  })
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages.value) currentPage.value = page
+  }
+
+  // Popup interne
+  const showPopup = ref(false)
+  const selectedAnnouncement = ref<AnnouncementDTO | null>(null)
+  const openPopup = (announcement: AnnouncementDTO) => {
+    selectedAnnouncement.value = announcement
+    showPopup.value = true
+  }
+
+  // Actions déléguées au parent
+  const onEdit = (announcement: AnnouncementDTO) => emit('edit', announcement)
+  const onDelete = (announcement: AnnouncementDTO) => emit('delete', announcement)
 </script>
 
 <style scoped>
-.announcement-card:hover {
-  box-shadow: 0 6px 18px rgb(0 0 0 / 0.15);
-  cursor: pointer;
-}
+  .announcement-card:hover {
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.15);
+    cursor: pointer;
+  }
 </style>
 
 <template>
@@ -113,9 +113,9 @@ const onDelete = (announcement: AnnouncementDTO) => emit('delete', announcement)
       </div>
 
       <!-- Popup -->
-      <AnnouncementPopup 
-        v-model:show="showPopup" 
-        :announcement="selectedAnnouncement" 
+      <AnnouncementPopup
+        v-model:show="showPopup"
+        :announcement="selectedAnnouncement"
         :key="selectedAnnouncement?.id"
         v-if="selectedAnnouncement"
       />

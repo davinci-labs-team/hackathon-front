@@ -8,6 +8,7 @@
   import { S3BucketService } from '@/services/s3BucketService'
   import { getOrCreateConfiguration } from '@/services/configurationService'
   import { useAuthStore } from '@/stores/auth'
+  import LatestAnnouncementsPreview from '@/components/common/LatestAnnouncementsPreview.vue'
 
   const { t } = useI18n()
 
@@ -64,6 +65,7 @@
         <h3 class="text-3xl font-semibold mt-2 mb-3">
           {{ t('dashboard.welcome', { firstname: user?.firstname }) }}
         </h3>
+        <LatestAnnouncementsPreview />
       </div>
     </div>
     <div class="flex w-full gap-6 mb-6 min-h-[400px]">
