@@ -4,7 +4,7 @@
   import { useI18n } from 'vue-i18n'
   import { getRole, getTPrefix } from '@/utils/user'
   import { useHackathonLogo } from '@/composables/useHackathonLogo'
-  import { ref, watch, onMounted} from 'vue'
+  import { ref, onMounted} from 'vue'
   import { S3BucketService } from '@/services/s3BucketService'
   import { useAuthStore } from '@/stores/auth'
 
@@ -15,6 +15,7 @@
 
   const menuItems = [
     { path: '/user/dashboard', label: `${tPrefix}.nav.dashboard` },
+    { path: '/user/announcements', label: `${tPrefix}.nav.announcements` },
     { path: '/user/team', label: `${tPrefix}.nav.teams` },
     { path: '/user/project', label: `${tPrefix}.nav.projects` },
     { path: '/user/faq', label: `${tPrefix}.nav.faq` },

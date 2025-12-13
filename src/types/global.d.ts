@@ -6,7 +6,8 @@ declare global {
     supabaseUserId: string
     sub: string
     email: string
-    name: string
+    firstname: string
+    lastname: string
     role: UserRole
     session_id: string
     is_anonymous: boolean

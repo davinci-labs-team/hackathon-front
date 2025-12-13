@@ -407,6 +407,7 @@ export default {
     dashboard: 'Participant Dashboard',
     nav: {
       dashboard: 'Dashboard',
+      announcements: 'Announcements',
       teams: 'My Team',
       projects: 'Project Submission',
       faq: 'FAQ',
@@ -749,5 +750,8 @@ export default {
       upload_evaluation_grid: 'Upload the evaluation grid (Media & Files Tab in Settings)',
       evaluations_completed: 'All teams have been evaluated by at least one judge',
     },
+  },
+  dashboard: {
+    welcome: 'Welcome to your dashboard {firstname}!',
   },
 }

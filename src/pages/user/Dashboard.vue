@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
-  import { getRole, getTPrefix } from '@/utils/user'
   import Partners from '@/components/public/Partners.vue'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
   import { HackathonMediaDTO } from '@/types/config'
@@ -8,8 +7,11 @@
   import { ref, onMounted } from 'vue'
   import { S3BucketService } from '@/services/s3BucketService'
   import { getOrCreateConfiguration } from '@/services/configurationService'
+  import { useAuthStore } from '@/stores/auth'
 
   const { t } = useI18n()
+
+  const { user } = useAuthStore()
 
   const mediaSettings = ref<HackathonMediaDTO>({ ...defaultConfigurations[ConfigurationKey.MEDIA] })
 
@@ -59,7 +61,9 @@
       </div>
 
       <div class="w-3/4 flex flex-col gap-6 rounded p-6 h-auto" style="height: 100%">
-        Carousel d'annonces
+        <h3 class="text-3xl font-semibold mt-2 mb-3">
+          {{ t('dashboard.welcome', { firstname: user?.firstname }) }}
+        </h3>
       </div>
     </div>
     <div class="flex w-full gap-6 mb-6 min-h-[400px]">

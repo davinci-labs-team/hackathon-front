@@ -85,7 +85,8 @@ export default {
       "Bienvenue ! Pour rejoindre l'événement, veuillez vous inscrire ci-dessous.",
     firstLoginBtn: 'Première connexion',
     locationText: 'Inscrivez-vous pour connaître le lieu exact',
-    dateText: '{count} jour intensif de code | {count} jour intensif de code | {count} jours intensifs de code',
+    dateText:
+      '{count} jour intensif de code | {count} jour intensif de code | {count} jours intensifs de code',
     phases: {
       1: {
         defaultName: 'Complétion de Profil',
@@ -236,7 +237,8 @@ export default {
       namePlaceholder: 'Rechercher par nom, équipe',
       autogenerate: {
         inProgressTitle: 'Génération Automatique des Équipes',
-        inProgressText: "Veuillez patienter pendant que les équipes sont générées automatiquement...",
+        inProgressText:
+          'Veuillez patienter pendant que les équipes sont générées automatiquement...',
         resultTitle: 'Résultat de la Génération Automatique des Équipes',
         resultSuccess: '{count} équipe(s) créée(s) avec succès',
         resultNoChange: 'Aucune équipe n’a été créée',
@@ -355,7 +357,7 @@ export default {
       noGithubLink: 'Aucun lien GitHub fourni',
       fileUploaded: 'Fichier rendu',
       download: 'Télécharger',
-      downloadGrid: 'Télécharger la grille d\'évaluation',
+      downloadGrid: "Télécharger la grille d'évaluation",
       grade: 'Note (/20)',
       uploadGrid: 'Uploader la grille remplie',
       comment: 'Commentaire',
@@ -412,6 +414,7 @@ export default {
     dashboard: 'Tableau de bord Participant',
     nav: {
       dashboard: 'Dashboard',
+      announcements: 'Annonces',
       teams: 'Mon Équipe',
       projects: 'Dépôt de Projet',
       faq: 'FAQ',
@@ -735,7 +738,8 @@ export default {
       begin: 'Commencer',
       end: 'Terminer',
       skip: 'Passer',
-      disabledReason: "Assurez-vous que toutes les actions organisateur sont complétées avant de continuer.",
+      disabledReason:
+        'Assurez-vous que toutes les actions organisateur sont complétées avant de continuer.',
     },
     errors: {
       phaseSkipError: 'Impossible de passer la phase actuelle.',
@@ -761,7 +765,7 @@ export default {
         mentors: 'Mentors assignés à une équipe',
         teamsCreated: 'Équipe(s) créée(s)',
       },
-      submissions: "Projets soumis",
+      submissions: 'Projets soumis',
       evaluations: 'Projets évalués',
       total: 'Total',
       teamsFormed: 'Équipes formées',
@@ -769,7 +773,7 @@ export default {
       projectsEvaluated: 'Projets évalués',
     },
     organizerActions: {
-      noActions: "Aucune action requise pour le moment.",
+      noActions: 'Aucune action requise pour le moment.',
       title: 'Actions Organisateur',
       alertPending:
         'Préparation avant le lancement : Ces étapes sont nécessaires pour commencer la phase.',
@@ -791,5 +795,8 @@ export default {
         "Télécharger la grille d'évaluation (Onglet Médias & Fichiers dans les Paramètres)",
       evaluations_completed: 'Toutes les équipes ont été évaluées par au moins un membre du jury',
     },
+  },
+  dashboard: {
+    welcome: 'Bienvenue sur votre tableau de bord, {firstname} !',
   },
 }
