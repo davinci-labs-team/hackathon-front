@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { AnnouncementDTO } from '@/types/announcement'
 import AnnouncementPopup from '@/components/common/AnnouncementPopup.vue'
@@ -10,6 +10,8 @@ const { t } = useI18n()
 
 // Props
 const props = defineProps<{
+  announcements?: AnnouncementDTO[]
+  isPublic?: boolean
   itemsPerPage?: number
   canDelete?: boolean
 }>()
@@ -21,12 +23,27 @@ const emit = defineEmits(['edit', 'delete'])
 const allAnnouncements = ref<AnnouncementDTO[]>([])
 
 onMounted(async () => {
+  if (!props.isPublic) {
+    allAnnouncements.value = props.announcements || []
+    return
+  }
+  
   try {
     allAnnouncements.value = await AnnouncementService.getAllPublic()
   } catch (error) {
     console.error('Error fetching announcements:', error)
   }
 })
+
+watch(
+  () => props.announcements,
+  (newAnnouncements) => {
+    if (!props.isPublic) {
+      allAnnouncements.value = newAnnouncements || []
+    }
+  },
+  { immediate: true }
+)
 
 const itemsPerPage = props.itemsPerPage || 5
 const currentPage = ref(1)
