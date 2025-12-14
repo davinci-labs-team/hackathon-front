@@ -24,6 +24,7 @@ export enum TaskKey {
   // PHASE 4
   DISCORD_AUTOROLE = 'discord_autorole',
   DEFINE_SUBMISSION_DEADLINE = 'define_submission_deadline',
+  PROJECT_SUBMISSION = 'project_submission',
 
   // PHASE 5
   UPLOAD_EVALUATION_GRID = 'upload_evaluation_grid',
@@ -31,6 +32,36 @@ export enum TaskKey {
 }
 
 export type PhaseStatus = 'PENDING' | 'IN_PROGRESS'
+
+export const ParticipantTaskMapByPhase: {
+  [key in PhaseOrder]:  TaskKey[]
+} = {
+  // PHASE 1
+  [PhaseOrder.REGISTRATION]: [
+    TaskKey.PROFILE_COMPLETION,
+  ],
+
+  // PHASE 2
+  [PhaseOrder.TOPIC_SELECTION]: [
+    TaskKey.TOPIC_SELECTION,
+  ],
+
+  // PHASE 3
+  [PhaseOrder.TEAM_FORMATION]: [
+    TaskKey.TEAMS_FORMED,
+  ],
+
+  // PHASE 4
+  [PhaseOrder.DEVELOPMENT]: [
+    TaskKey.PROJECT_SUBMISSION,
+  ],
+
+  // PHASE 5
+  [PhaseOrder.EVALUATION]: [],
+
+  // PHASE 6
+  [PhaseOrder.CLOSING]: [],
+}
 
 export const TaskMapByPhase: {
   [key in PhaseOrder]: {

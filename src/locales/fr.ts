@@ -33,6 +33,8 @@ export default {
     fetchError: 'Erreur lors de la récupération des données, veuillez réessayer plus tard.',
     download: 'Télécharger',
     showMore: 'Afficher plus',
+    details: 'Détails',
+    information: 'Informations',
   },
   profile: {
     mainTitle: 'Mon Profil',
@@ -799,5 +801,36 @@ export default {
   },
   dashboard: {
     welcome: 'Bienvenue sur votre tableau de bord, {firstname} !',
+    currentPhase: 'Phase Actuelle : {phaseName}',
+    nothing_todo: "Il n'y a rien à faire pour le moment. Revenez plus tard !",
+    participant: {
+      tasks: "Vos Tâches",
+      profile_completion: {
+        title: 'Compléter votre profil',
+        description: 'Ajoutez des informations personnelles pour mieux vous connaître.',
+        addBio: 'Ajouter une bio',
+        addInterests: 'Ajouter des centres d’intérêt',
+        addDiscord: 'Connecter votre Discord',
+        addGithub: 'Connecter votre GitHub',
+        addPicture: 'Ajouter une photo de profil',
+      },
+      topic_selection: {
+        title: 'Sélectionner votre sujet préféré pour le hackathon',
+        description: 'Choisissez un sujet qui vous passionne parmi les options disponibles.',
+        selectedTopic: 'Sujet sélectionné : {topicName}',
+
+      },
+      team_formed: {
+        title: "Rejoindre ou former une équipe",
+        description:
+          "Collaborez avec d'autres participants en rejoignant une équipe ou en formant la vôtre.",
+      },
+      project_submission: {
+        title: 'Soumettre votre projet',
+        hackathonEndsIn: 'Le hackathon se termine dans : ',
+        description:
+          'Partagez votre travail en soumettant votre projet avant la date limite.',
+      },
+    },
   },
 }

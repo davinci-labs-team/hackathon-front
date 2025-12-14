@@ -36,6 +36,8 @@ export default {
     fetchError: 'Error fetching data, please try again later.',
     download: 'Download',
     showMore: 'Show More',
+    details: 'Details',
+    information: 'Information',
   },
   profile: {
     mainTitle: 'My Profile',
@@ -754,5 +756,33 @@ export default {
   },
   dashboard: {
     welcome: 'Welcome to your dashboard {firstname}!',
+    currentPhase: 'Current Phase: {phaseName}',
+    nothing_todo: 'There are **no mandatory actions** for you as a participant during the current phase ({currentPhase}).',
+    participant: {
+      tasks: 'Your Tasks',
+      profile_completion : {
+        title: 'Complete your profile',
+        description: 'Please complete your profile to get the best experience during the hackathon.',
+        addBio: 'Add a bio',
+        addInterests: 'Add your interests',
+        addDiscord: 'Connect your Discord',
+        addGithub: 'Connect your GitHub',
+        addPicture: 'Add a profile picture',
+      },
+      topic_selection : {
+        title: 'Select your favorite topics',
+        description: 'Choose the topics that interest you the most for the hackathon.',
+        selectedTopic: 'Selected Topic: {topic}',
+      },
+      team_formed : {
+        title: 'Join or create a team',
+        description: 'Find teammates or create your own team to participate in the hackathon.',
+      },
+      project_submission : {
+        title: 'Submit your project',
+        hackathonEndsIn: 'The hackathon ends in ',
+        description: 'Upload your project before the submission deadline.',
+      },
+    },
   },
 }

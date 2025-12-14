@@ -13,6 +13,12 @@ declare global {
     is_anonymous: boolean
     accessToken: string
     profilePicturePath?: string
+    bio?: string
+    interests?: string[]
+    github?: SocialMediaDTO
+    discord?: SocialMediaDTO
+    teamId?: string
+    favoriteSubjectId?: string
   }
 }
 

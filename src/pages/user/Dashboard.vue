@@ -9,6 +9,7 @@
   import { getOrCreateConfiguration } from '@/services/configurationService'
   import { useAuthStore } from '@/stores/auth'
   import LatestAnnouncementsPreview from '@/components/common/LatestAnnouncementsPreview.vue'
+  import ParticipantTask from '@/components/user/ParticipantTask.vue'
 
   const { t } = useI18n()
 
@@ -61,8 +62,8 @@
         />
       </div>
 
-      <div class="w-3/4 flex flex-col gap-6 rounded p-6 h-auto" style="height: 100%">
-        <h3 class="text-3xl font-semibold mt-2 mb-3">
+      <div class="w-3/4 flex flex-col gap-6 rounded p-2 h-auto" style="height: 100%">
+        <h3 class="text-3xl font-semibold mt-2">
           {{ t('dashboard.welcome', { firstname: user?.firstname }) }}
         </h3>
         <LatestAnnouncementsPreview />
@@ -72,9 +73,8 @@
       <div class="w-1/4" style="height: 100%">
         <Partners />
       </div>
-
-      <div class="w-3/4 flex flex-col gap-6 rounded p-6 bg-white shadow" style="height: 100%">
-        <h2 class="text-3xl font-semibold mt-2 mb-3">Phase actuelle</h2>
+      <div class="w-3/4 flex flex-col gap-6" style="height: 100%">
+        <ParticipantTask />
       </div>
     </div>
   </v-container>

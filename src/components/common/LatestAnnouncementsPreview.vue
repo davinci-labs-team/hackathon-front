@@ -44,8 +44,7 @@
 
 <template>
   <div class="flex-grow">
-    <h2 class="text-2xl font-semibold mb-4 flex justify-between items-center">
-      {{ t('organizer.nav.announcements') }}
+    <h1 class="text-2xl font-semibold mb-4 flex justify-end items-center">
       <v-btn
         variant="text"
         color="primary"
@@ -57,7 +56,7 @@
         {{ t('common.showMore') }}
         <v-icon end>mdi-arrow-right</v-icon>
       </v-btn>
-    </h2>
+    </h1>
 
     <v-card v-if="isLoading" elevation="2" class="pa-4 text-center">
       <v-progress-circular indeterminate color="primary"></v-progress-circular>

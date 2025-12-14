@@ -35,7 +35,7 @@
     @click="handleClick"
   >
     <div class="flex-grow-1 pa-3 flex flex-col justify-start" style="min-height: 150px">
-      <div class="d-flex justify-space-between items-center m-0">
+      <div class="d-flex justify-space-between items-center mb-2">
         <v-card-title class="text-base font-bold line-clamp-2 leading-tight pr-2 pa-0">
           {{ announcement.title }}
         </v-card-title>
