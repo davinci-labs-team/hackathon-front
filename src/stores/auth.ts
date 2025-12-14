@@ -44,7 +44,6 @@ export const useAuthStore = defineStore('auth', {
         } as SupabaseDecodedUser
 
         localStorage.setItem('authUser', JSON.stringify(this.user))
-        console.log('User profile fields updated in store:', updatedFields)
       } else {
         console.warn('Cannot update user fields: User is not authenticated.')
       }
