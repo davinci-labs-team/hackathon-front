@@ -77,13 +77,15 @@ defineExpose({ saveChanges, resetLocalUser })
         <!-- Email -->
         <v-col cols="12" class="d-flex align-center mb-2">
           <v-icon size="x-large" class="mr-4">mdi-email</v-icon>
-          <div>{{ localUser.email || 'N/A' }}</div>
+          <div v-if="localUser.email">{{ localUser.email }}</div>
+          <div v-else class="text-medium-emphasis">N/A</div>
         </v-col>
 
         <!-- LinkedIn -->
         <v-col cols="12" class="d-flex align-center mb-2">
           <v-icon size="x-large" class="mr-4">mdi-linkedin</v-icon>
-          <div v-if="!props.editMode">{{ localUser.linkedin || 'N/A' }}</div>
+          <div v-if="!props.editMode && localUser.linkedin">{{ localUser.linkedin }}</div>
+          <div v-else-if="!props.editMode" class="text-medium-emphasis">N/A</div>
           <v-text-field v-else
             v-model="localUser.linkedin"
             placeholder="LinkedIn"
