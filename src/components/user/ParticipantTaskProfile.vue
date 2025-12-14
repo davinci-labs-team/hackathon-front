@@ -68,33 +68,35 @@
       </v-chip>
     </div>
 
-    <p class="text-medium-emphasis mb-4">
-      {{ taskData?.description || '' }}
-    </p>
+    <div v-if="!isCompleted">
+      <p class="text-medium-emphasis mb-4">
+        {{ taskData?.description || '' }}
+      </p>
 
-    <div v-if="taskData">
-      <h4 class="text-subtitle-1 font-weight-bold mb-1">{{ t('common.details') }} :</h4>
-      <v-list density="compact" class="mb-4">
-        <v-list-item
-          v-for="subTaskKey in subTasks"
-          :key="subTaskKey"
-          class="px-0"
-          :class="{ 'text-grey-darken-1': getSubTaskCompletionStatus(subTaskKey) }"
-        >
-          <template v-slot:prepend>
-            <v-icon
-              :color="getSubTaskCompletionStatus(subTaskKey) ? 'success' : 'info'"
-              size="small"
-              class="mr-2"
-            >
-              {{ getSubTaskCompletionStatus(subTaskKey) ? 'mdi-check' : 'mdi-minus' }}
-            </v-icon>
-          </template>
-          <v-list-item-title class="text-wrap">
-            {{ taskData[subTaskKey] }}
-          </v-list-item-title>
-        </v-list-item>
-      </v-list>
+      <div v-if="taskData">
+        <h4 class="text-subtitle-1 font-weight-bold mb-1">{{ t('common.details') }} :</h4>
+        <v-list density="compact" class="mb-4">
+          <v-list-item
+            v-for="subTaskKey in subTasks"
+            :key="subTaskKey"
+            class="px-0"
+            :class="{ 'text-grey-darken-1': getSubTaskCompletionStatus(subTaskKey) }"
+          >
+            <template v-slot:prepend>
+              <v-icon
+                :color="getSubTaskCompletionStatus(subTaskKey) ? 'success' : 'info'"
+                size="small"
+                class="mr-2"
+              >
+                {{ getSubTaskCompletionStatus(subTaskKey) ? 'mdi-check' : 'mdi-minus' }}
+              </v-icon>
+            </template>
+            <v-list-item-title class="text-wrap">
+              {{ taskData[subTaskKey] }}
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </div>
     </div>
   </div>
 </template>

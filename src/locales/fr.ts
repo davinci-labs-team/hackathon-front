@@ -818,7 +818,7 @@ export default {
         title: 'Sélectionner votre sujet préféré pour le hackathon',
         description: 'Choisissez un sujet qui vous passionne parmi les options disponibles.',
         selectedTopic: 'Sujet sélectionné : {topicName}',
-
+        actionTitle: 'Sélectionner un sujet',
       },
       team_formed: {
         title: "Rejoindre ou former une équipe",

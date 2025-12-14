@@ -773,6 +773,7 @@ export default {
         title: 'Select your favorite topics',
         description: 'Choose the topics that interest you the most for the hackathon.',
         selectedTopic: 'Selected Topic: {topic}',
+        actionTitle: 'Select a Topic',
       },
       team_formed : {
         title: 'Join or create a team',

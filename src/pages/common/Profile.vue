@@ -72,6 +72,8 @@ const handleSave = async (updatedUser: UserDTO) => {
   try {
     const savedUser = await userService.update(updatedUser.id, updatedUser)
     userInfo.value = savedUser
+
+    authStore.updateUserFields(savedUser)
     getProfilePictureUrl()
     editMode.value = false
     text.value = t('common.changesSaved')

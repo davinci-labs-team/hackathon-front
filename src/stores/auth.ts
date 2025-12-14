@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { UserDTO } from '@/types/user'
 
 export const useAuthStore = defineStore('auth', {
   state: (): { user: SupabaseDecodedUser | null } => ({
@@ -34,9 +35,22 @@ export const useAuthStore = defineStore('auth', {
         localStorage.setItem('authUser', JSON.stringify(this.user))
       }
     },
+
+    updateUserFields(updatedFields: Partial<UserDTO>) {
+      if (this.user) {
+        this.user = {
+          ...this.user,
+          ...updatedFields,
+        } as SupabaseDecodedUser
+
+        localStorage.setItem('authUser', JSON.stringify(this.user))
+        console.log('User profile fields updated in store:', updatedFields)
+      } else {
+        console.warn('Cannot update user fields: User is not authenticated.')
+      }
+    },
   },
 })
-
 
 export function getAuthHeaders() {
   const authStore = useAuthStore()
