@@ -804,7 +804,7 @@ export default {
     currentPhase: 'Phase Actuelle : {phaseName}',
     nothing_todo: "Il n'y a rien à faire pour le moment. Revenez plus tard !",
     participant: {
-      tasks: "Vos Tâches",
+      tasks: 'Vos Tâches',
       profile_completion: {
         title: 'Compléter votre profil',
         description: 'Ajoutez des informations personnelles pour mieux vous connaître.',
@@ -819,17 +819,19 @@ export default {
         description: 'Choisissez un sujet qui vous passionne parmi les options disponibles.',
         selectedTopic: 'Sujet sélectionné : {topicName}',
         actionTitle: 'Sélectionner un sujet',
+        confirmationTitle: 'Confirmer la sélection du sujet',
+        confirmationText: 'Êtes-vous sûr de vouloir sélectionner ce sujet ?',
+        selectedTopicLabel: 'Sujet sélectionné : {topicName}',
       },
       team_formed: {
-        title: "Rejoindre ou former une équipe",
+        title: 'Rejoindre ou former une équipe',
         description:
           "Collaborez avec d'autres participants en rejoignant une équipe ou en formant la vôtre.",
       },
       project_submission: {
         title: 'Soumettre votre projet',
         hackathonEndsIn: 'Le hackathon se termine dans : ',
-        description:
-          'Partagez votre travail en soumettant votre projet avant la date limite.',
+        description: 'Partagez votre travail en soumettant votre projet avant la date limite.',
       },
     },
   },

@@ -772,8 +772,11 @@ export default {
       topic_selection : {
         title: 'Select your favorite topics',
         description: 'Choose the topics that interest you the most for the hackathon.',
-        selectedTopic: 'Selected Topic: {topic}',
+        selectedTopic: 'Selected Topic: {topicName}',
         actionTitle: 'Select a Topic',
+        confirmationTitle: 'Confirm Topic Selection',
+        confirmationText: 'Are you sure you want to select this topic?',
+        selectedTopicLabel: 'Selected Topic: ',
       },
       team_formed : {
         title: 'Join or create a team',

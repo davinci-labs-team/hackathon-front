@@ -11,8 +11,22 @@
   import { UserDTO } from '@/types/user'
   import { userService } from '@/services/userService'
   import AppSnackbar from '../common/AppSnackbar.vue'
+  import ConfirmDialog from '../common/ConfirmDialog.vue'
 
   const { t, tm } = useI18n()
+
+  // Confirmation Dialog
+  const showConfirmModal = ref(false)
+
+  const openConfirmation = () => {
+    if (selectedSubjectId.value && isSelectionChanged.value) {
+      showConfirmModal.value = true
+    }
+  }
+
+  const onConfirmSave = () => {
+    handleSave(user.value!)
+  }
 
   // Snackbar
   const snackbar = ref(false)
@@ -60,6 +74,7 @@
   const handleSave = async (userToUpdate: UserDTO) => {
     if (!selectedSubjectId.value) return
 
+    showConfirmModal.value = false
     isSaving.value = true
     try {
       const updatePayload = {
@@ -179,7 +194,7 @@
           color="primary"
           :loading="isSaving"
           :disabled="!selectedSubjectId || !isSelectionChanged"
-          @click="handleSave(user!)"
+          @click="openConfirmation"
         >
           {{ t('common.save') }}
         </v-btn>
@@ -199,6 +214,21 @@
       </p>
     </div>
   </div>
+
+  <ConfirmDialog
+    v-model="showConfirmModal"
+    :title="t('dashboard.participant.topic_selection.confirmationTitle')"
+    :text="t('dashboard.participant.topic_selection.confirmationText')"
+    :secondary-text="
+      t('dashboard.participant.topic_selection.selectedTopicLabel') +
+      ' ' +
+      (themes.flatMap((theme) => theme.subjects).find((subject) => subject.id === selectedSubjectId)
+        ?.name || '')
+    "
+    :confirm-label="t('common.validate')"
+    :cancel-label="t('common.cancel')"
+    @confirm="onConfirmSave"
+  />
 
   <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
 </template>

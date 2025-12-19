@@ -1,10 +1,9 @@
 <script setup lang="ts">
-  import { defineProps, defineEmits } from 'vue'
-
   const props = defineProps<{
     modelValue: boolean
     title: string
     text: string
+    secondaryText?: string
     confirmLabel?: string
     cancelLabel?: string
   }>()
@@ -34,6 +33,9 @@
       </v-card-title>
       <v-card-text>
         {{ text }}
+        <div v-if="secondaryText" class="mt-4 font-medium">
+          {{ secondaryText }}
+        </div>
       </v-card-text>
       <v-card-actions class="justify-end">
         <v-btn text @click="close">
