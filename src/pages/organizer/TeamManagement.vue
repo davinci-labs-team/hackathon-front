@@ -123,7 +123,7 @@
       await fetchUsers()
     } catch (err) {
       console.error('Error assigning user to team:', err)
-      text.value = t('organizer.teamManagement.userAssignToTeamError')
+      text.value = t('organizer.teamManagement.userAssignError')
       error.value = true
       snackbar.value = true
     }
@@ -139,7 +139,7 @@
       await fetchUsers()
     } catch (err) {
       console.error('Error withdrawing user from team:', err)
-      text.value = t('organizer.teamManagement.userWithdrawFromTeamError')
+      text.value = t('organizer.teamManagement.userWithdrawError')
       error.value = true
       snackbar.value = true
     }

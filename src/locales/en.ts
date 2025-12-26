@@ -224,6 +224,11 @@ export default {
       noTeamAvailable:
         'No teams available eligible for this user. Create another team or modify the constraints.',
       noTeamAssigned: 'No team assigned',
+      userAssignedToTeam: 'User assigned to team successfully',
+      userAssignError: 'Error assigning user to team',
+      userWithdrawnFromTeam: 'User withdrawn from team successfully',
+      userWithdrawError: 'Error withdrawing user from team',
+      noTeamsAvailable: 'No teams available',
       team: 'Team',
       members: 'Members',
       name: 'Name',

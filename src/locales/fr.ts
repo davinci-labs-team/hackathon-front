@@ -229,6 +229,11 @@ export default {
       noTeamAvailable:
         'Aucune équipe disponible éligible pour cet utilisateur. Créez une autre équipe ou modifiez les contraintes.',
       noTeamAssigned: 'Aucune équipe assignée',
+      userWithdrawnFromTeam: 'L\'utilisateur a été retiré de l’équipe avec succès',
+      userWithdrawError: "Erreur lors du retrait de l'utilisateur de l'équipe",
+      userAssignedToTeam: 'L\'utilisateur a été assigné à l’équipe avec succès',
+      userAssignError: "Erreur lors de l'assignation de l'utilisateur à l'équipe",
+      noTeamsAvailable: "Aucune équipe disponible",
       team: 'Équipe',
       members: 'Membres',
       name: 'Nom',
@@ -425,12 +430,10 @@ export default {
     },
     submission: {
       title: 'Dépôt de projet',
-
       team: {
         title: 'Équipe',
         noGithubLink: 'Aucun lien GitHub fourni',
       },
-
       upload: {
         title: 'Fichiers du projet (.zip)',
         chooseFile: 'Choisir un fichier ZIP',
@@ -442,7 +445,6 @@ export default {
         fileUploaded: 'Fichier uploadé',
         download: 'Télécharger',
       },
-
       status: {
         title: 'Statut de remise',
         team: 'Équipe',
@@ -457,7 +459,6 @@ export default {
         pending: "En attente d'évaluation",
         graded: 'Évalué',
       },
-
       evaluations: {
         title: 'Évaluations',
         noEvaluations: 'Aucune évaluation disponible pour le moment',
@@ -467,7 +468,6 @@ export default {
         comment: 'Commentaire',
         downloadFile: "Télécharger le fichier d'évaluation",
       },
-
       comments: {
         title: 'Commentaires des mentors',
         noComments: 'Aucun commentaire pour le moment',
