@@ -38,6 +38,7 @@ export default {
     showMore: 'Show More',
     details: 'Details',
     information: 'Information',
+    search: 'Search',
   },
   profile: {
     mainTitle: 'My Profile',
@@ -172,7 +173,6 @@ export default {
   organizer: {
     dashboard: 'Organizer Dashboard',
     announcements: {
-      searchPlaceholder: 'Search',
       addButton: 'Create Announcement',
       addClicked: 'Add button clicked',
     },
@@ -267,6 +267,7 @@ export default {
         addJury: 'Add Jury',
         addMentors: 'Add Mentors',
         membersPlaceholder: 'Search by name',
+        addDescription: 'Add a description',
         selectTheme: 'Select a theme',
         selectSubject: 'Select a subject',
       },
@@ -772,13 +773,13 @@ export default {
       topic_selection : {
         title: 'Select your favorite topics',
         description: 'Choose the topics that interest you the most for the hackathon.',
-        selectedTopic: 'Selected Topic: {topicName}',
+        selectedTopic: 'Selected Topic: ',
         actionTitle: 'Select a Topic',
         confirmationTitle: 'Confirm Topic Selection',
         confirmationText: 'Are you sure you want to select this topic?',
         selectedTopicLabel: 'Selected Topic: ',
       },
-      team_formed : {
+      teams_formed : {
         title: 'Join or create a team',
         description: 'Find teammates or create your own team to participate in the hackathon.',
       },

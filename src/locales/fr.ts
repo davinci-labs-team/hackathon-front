@@ -35,6 +35,7 @@ export default {
     showMore: 'Afficher plus',
     details: 'Détails',
     information: 'Informations',
+    search: 'Rechercher',
   },
   profile: {
     mainTitle: 'Mon Profil',
@@ -177,7 +178,6 @@ export default {
   organizer: {
     dashboard: 'Tableau de bord Organisateur',
     announcements: {
-      searchPlaceholder: 'Rechercher',
       addButton: 'Créer une annonce',
       addClicked: 'Bouton d’ajout cliqué',
     },
@@ -272,6 +272,7 @@ export default {
         addMembers: 'Ajouter des participants',
         addJury: 'Ajouter des jury',
         addMentors: 'Ajouter des mentors',
+        addDescription: 'Ajouter une description',
         membersPlaceholder: 'Rechercher par nom',
         selectTheme: 'Sélectionner un thème',
         selectSubject: 'Sélectionner un sujet',
@@ -821,9 +822,9 @@ export default {
         actionTitle: 'Sélectionner un sujet',
         confirmationTitle: 'Confirmer la sélection du sujet',
         confirmationText: 'Êtes-vous sûr de vouloir sélectionner ce sujet ?',
-        selectedTopicLabel: 'Sujet sélectionné : {topicName}',
+        selectedTopicLabel: 'Sujet sélectionné :',
       },
-      team_formed: {
+      teams_formed: {
         title: 'Rejoindre ou former une équipe',
         description:
           "Collaborez avec d'autres participants en rejoignant une équipe ou en formant la vôtre.",

@@ -203,14 +203,14 @@
 
     <div v-else>
       <p>
-        {{
-          t('dashboard.participant.topic_selection.selectedTopic', {
-            topicName:
-              themes
-                .flatMap((theme) => theme.subjects)
-                .find((subject) => subject.id === user?.favoriteSubjectId)?.name || '',
-          })
-        }}
+        {{ t('dashboard.participant.topic_selection.selectedTopic') }}
+        <strong>
+          {{
+            themes
+              .flatMap((theme) => theme.subjects)
+              .find((subject) => subject.id === user?.favoriteSubjectId)?.name || ''
+          }}
+        </strong>
       </p>
     </div>
   </div>

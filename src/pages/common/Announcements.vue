@@ -123,7 +123,7 @@
         <div class="flex mb-4 gap-4 items-center">
           <v-text-field
             v-model="searchQuery"
-            :placeholder="t('organizer.announcements.searchPlaceholder')"
+            :placeholder="t('common.search')"
             variant="solo"
             hide-details
             density="comfortable"
