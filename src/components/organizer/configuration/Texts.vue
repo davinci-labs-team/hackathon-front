@@ -1,84 +1,102 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import AppSnackbar from '@/components/common/AppSnackbar.vue'
-import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
-import { HackathonTextDTO, UpdateConfigurationDTO } from '@/types/config'
-import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import { ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
+  import AppSnackbar from '@/components/common/AppSnackbar.vue'
+  import { HackathonTextDTO, UpdateConfigurationDTO } from '@/types/config'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import { useConfiguration } from '@/composables/useConfiguration'
 
-const { t } = useI18n()
+  const { t } = useI18n()
 
-// --- Hackathon Texts ---
-const hackathonTexts = ref<HackathonTextDTO>({
-  hackathonName: '',
-  slogan: '',
-  hackathonDescription: '',
-  location: '',
-})
+  const {
+    configuration: textsConfig,
+    loading: textsLoading,
+    error: textsError,
+    updateConfiguration: updateTextsConfig,
+  } = useConfiguration(ConfigurationKey.TEXTS)
 
-const saveAttempted = ref(false)
+  // --- Hackathon Texts ---
+  const hackathonTexts = ref<HackathonTextDTO>({
+    hackathonName: '',
+    slogan: '',
+    hackathonDescription: '',
+    location: '',
+  })
 
-onMounted(async () => {
-  try {
-    const response = await getOrCreateConfiguration(ConfigurationKey.TEXTS)
-    if (response && response.value) {
-      hackathonTexts.value = response.value
-    }
-  } catch (error) {
-    console.error('Error fetching hackathon texts:', error)
-  }
-})
+  const saveAttempted = ref(false)
+  const isSaving = ref(false)
 
-// --- Validation & Limits ---
-const hackathonNameMaxLength = 60
-const sloganMaxLength = 60
-const hackathonDescriptionMaxLength = 500
+  watch(
+    textsConfig,
+    (newConfig) => {
+      if (newConfig?.value) {
+        hackathonTexts.value = newConfig.value as HackathonTextDTO
+      }
 
-const validateTexts = () => {
-  const texts = hackathonTexts.value
-  if (!texts.hackathonName || texts.hackathonName.length > hackathonNameMaxLength) return false
-  if (texts.slogan && texts.slogan.length > sloganMaxLength) return false
-  if (!texts.hackathonDescription || texts.hackathonDescription.length > hackathonDescriptionMaxLength)
-    return false
-  return true
-}
-
-// --- Snackbar ---
-const snackbar = ref(false)
-const snackbarText = ref(t('common.changesSaved'))
-const snackbarTimeout = ref(1500)
-const snackbarError = ref(false)
-
-const handleSaveTexts = async () => {
-  saveAttempted.value = true
-
-  if (!validateTexts()) {
-    snackbarText.value = t('textsSettings.errors.fixErrors')
-    snackbarError.value = true
-    snackbar.value = true
-    return
-  }
-
-  const updateDto: UpdateConfigurationDTO = {
-    value: {
-      hackathonName: hackathonTexts.value.hackathonName,
-      slogan: hackathonTexts.value.slogan,
-      hackathonDescription: hackathonTexts.value.hackathonDescription,
-      location: hackathonTexts.value.location,
+      // Gérer l'erreur initiale
+      if (textsError.value) {
+        console.error('Error fetching hackathon texts from hook:', textsError.value)
+      }
     },
+    { immediate: true } // Exécuter immédiatement au montage/à l'arrivée des données
+  )
+
+  // --- Validation & Limits ---
+  const hackathonNameMaxLength = 60
+  const sloganMaxLength = 60
+  const hackathonDescriptionMaxLength = 500
+
+  const validateTexts = () => {
+    const texts = hackathonTexts.value
+    if (!texts.hackathonName || texts.hackathonName.length > hackathonNameMaxLength) return false
+    if (texts.slogan && texts.slogan.length > sloganMaxLength) return false
+    if (
+      !texts.hackathonDescription ||
+      texts.hackathonDescription.length > hackathonDescriptionMaxLength
+    )
+      return false
+    return true
   }
 
-  try {
-    await configurationService.update(ConfigurationKey.TEXTS, updateDto)
-    snackbarText.value = t('common.changesSaved')
-    snackbarError.value = false
-    snackbar.value = true
-  } catch (e) {
-    snackbarText.value = t('common.error')
-    snackbarError.value = true
-    snackbar.value = true
+  // --- Snackbar ---
+  const snackbar = ref(false)
+  const snackbarText = ref(t('common.changesSaved'))
+  const snackbarTimeout = ref(1500)
+  const snackbarError = ref(false)
+
+  const handleSaveTexts = async () => {
+    saveAttempted.value = true
+
+    if (!validateTexts()) {
+      snackbarText.value = t('textsSettings.errors.fixErrors')
+      snackbarError.value = true
+      snackbar.value = true
+      return
+    }
+
+    const updateDto: UpdateConfigurationDTO = {
+      value: {
+        hackathonName: hackathonTexts.value.hackathonName,
+        slogan: hackathonTexts.value.slogan,
+        hackathonDescription: hackathonTexts.value.hackathonDescription,
+        location: hackathonTexts.value.location,
+      },
+    }
+
+    isSaving.value = true
+    try {
+      await updateTextsConfig(updateDto)
+      snackbarText.value = t('common.changesSaved')
+      snackbarError.value = false
+      snackbar.value = true
+    } catch (e) {
+      snackbarText.value = t('common.error')
+      snackbarError.value = true
+      snackbar.value = true
+    } finally {
+      isSaving.value = false
+    }
   }
-}
 </script>
 
 <template>
@@ -87,7 +105,9 @@ const handleSaveTexts = async () => {
     <h1 class="text-3xl font-bold mb-2">{{ t('textsSettings.title') }}</h1>
     <div class="flex flex-row mb-5 items-center justify-between">
       <p class="mb-0 text-lg text-gray-600">{{ t('textsSettings.subtitle') }}</p>
-      <v-btn color="primary" @click="handleSaveTexts">{{ t('common.saveChanges') }}</v-btn>
+      <v-btn color="primary" @click="handleSaveTexts" :disabled="textsLoading || isSaving">{{
+        t('common.saveChanges')
+      }}</v-btn>
     </div>
 
     <v-container>
@@ -104,7 +124,10 @@ const handleSaveTexts = async () => {
       <p class="text-red-500 italic mb-5" v-if="!hackathonTexts.hackathonName && saveAttempted">
         {{ t('textsSettings.errors.requiredField') }}
       </p>
-      <p class="text-red-500 italic mb-5" v-if="hackathonTexts.hackathonName.length > hackathonNameMaxLength">
+      <p
+        class="text-red-500 italic mb-5"
+        v-if="hackathonTexts.hackathonName.length > hackathonNameMaxLength"
+      >
         {{ t('textsSettings.errors.maxLength', { max: hackathonNameMaxLength }) }}
       </p>
 
@@ -117,7 +140,10 @@ const handleSaveTexts = async () => {
         dense
         class="mb-2"
       />
-      <p class="text-red-500 italic mb-5" v-if="hackathonTexts.slogan && hackathonTexts.slogan.length > sloganMaxLength">
+      <p
+        class="text-red-500 italic mb-5"
+        v-if="hackathonTexts.slogan && hackathonTexts.slogan.length > sloganMaxLength"
+      >
         {{ t('textsSettings.errors.maxLength', { max: sloganMaxLength }) }}
       </p>
 
@@ -133,10 +159,16 @@ const handleSaveTexts = async () => {
         rows="3"
         class="mb-0"
       />
-      <p class="text-red-500 italic mb-5" v-if="!hackathonTexts.hackathonDescription && saveAttempted">
+      <p
+        class="text-red-500 italic mb-5"
+        v-if="!hackathonTexts.hackathonDescription && saveAttempted"
+      >
         {{ t('textsSettings.errors.requiredField') }}
       </p>
-      <p class="text-red-500 italic mb-5" v-if="hackathonTexts.hackathonDescription.length > hackathonDescriptionMaxLength">
+      <p
+        class="text-red-500 italic mb-5"
+        v-if="hackathonTexts.hackathonDescription.length > hackathonDescriptionMaxLength"
+      >
         {{ t('textsSettings.errors.maxLength', { max: hackathonDescriptionMaxLength }) }}
       </p>
 

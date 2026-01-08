@@ -1,16 +1,26 @@
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue'
+  import { onMounted, watch, ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { HackathonMediaDTO } from '@/types/config'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
   import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
   import { S3BucketService } from '@/services/s3BucketService'
+  import { useConfiguration } from '@/composables/useConfiguration'
+import { getOrCreateConfiguration } from '@/services/configurationService'
 
   const { t } = useI18n()
 
+  const {
+    configuration: mediaConfig,
+    loading: mediaLoading,
+    error: mediaError,
+    updateConfiguration: updateMediaConfig,
+  } = useConfiguration(ConfigurationKey.MEDIA)
+
   const mediaSettings = ref<HackathonMediaDTO>({ ...defaultConfigurations[ConfigurationKey.MEDIA] })
+
+  const isSaving = ref(false)
 
   const bannerFileInput = ref<File | null>(null)
   const logoFileInput = ref<File | null>(null)
@@ -19,6 +29,17 @@
   )
   const logoPicture = ref('https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg')
   const evaluationGridFileInput = ref<File | null>(null)
+  const evaluationGridUrl = ref<string | null>(null)
+
+  const evaluationGridLabel = computed(() => {
+    if (evaluationGridFileInput.value) {
+      return t('mediaSettings.uploadEvaluationGrid')
+    }
+    if (mediaSettings.value.evaluationGridPath) {
+      return mediaSettings.value.evaluationGridPath
+    }
+    return t('mediaSettings.uploadEvaluationGrid')
+  })
 
   // Snackbar
   const snackbar = ref(false)
@@ -26,10 +47,10 @@
   const timeout = ref(1500)
   const error = ref(false)
 
-  const getBannerAndLogoPictureUrl = async () => {
+  const fetchMediaUrls = async () => {
     if (mediaSettings.value?.bannerPictureId) {
       try {
-        const response = await S3BucketService.getFileUrl('annonces', mediaSettings.value.bannerPictureId)
+        const response = await S3BucketService.getFileUrlPublic('public_files', mediaSettings.value.bannerPictureId)
         bannerPicture.value = response.url
       } catch (err) {
         console.error('Error fetching banner picture:', err)
@@ -37,10 +58,21 @@
     }
     if (mediaSettings.value?.hackathonLogoId) {
       try {
-        const response = await S3BucketService.getFileUrl('annonces', mediaSettings.value.hackathonLogoId)
+        const response = await S3BucketService.getFileUrlPublic('public_files', mediaSettings.value.hackathonLogoId)
         logoPicture.value = response.url
       } catch (err) {
         console.error('Error fetching logo picture:', err)
+      }
+    }
+    if (mediaSettings.value?.evaluationGridPath) {
+      try {
+        const response = await S3BucketService.getFileUrl(
+          'public_files',
+          mediaSettings.value.evaluationGridPath
+        )
+        evaluationGridUrl.value = response.url
+      } catch (err) {
+        console.error('Error fetching evaluation grid:', err)
       }
     }
   }
@@ -50,7 +82,7 @@
       const response = await getOrCreateConfiguration(ConfigurationKey.MEDIA)
       if (response && response.value) {
         mediaSettings.value = response.value as HackathonMediaDTO
-        getBannerAndLogoPictureUrl()
+        fetchMediaUrls()
       }
     } catch (error) {
       console.error('Error fetching media settings:', error)
@@ -69,13 +101,23 @@
       }
     }*/
 
+  const downloadEvaluationGridFile = async () => {
+    if (!mediaSettings.value?.evaluationGridPath) return
+    try {
+      const { url } = await S3BucketService.getFileUrl('public_files', mediaSettings.value.evaluationGridPath)
+      window.open(url, '_blank')
+    } catch (error) {
+      console.error('Error downloading file:', error)
+    }
+  }
+
   const uploadFileAndReplace = async (
     file: File | null,
     oldFileId?: string | null
   ): Promise<string | null> => {
     if (!file) return oldFileId ?? null
     //await deleteOldFileIfNeeded(oldFileId ?? undefined)
-    const uploaded = await S3BucketService.uploadFile(file, 'public')
+    const uploaded = await S3BucketService.uploadFile(file, 'public_files')
     return uploaded.path
   }
 
@@ -111,28 +153,30 @@
       error.value = true
       return
     }
+
+    isSaving.value = true
     try {
       await handleBannerUpdate()
       await handleLogoUpdate()
       await handleEvaluationGridUpdate()
 
-      await configurationService.update(ConfigurationKey.MEDIA, {
-        value: mediaSettings.value,
-      })
+      await updateMediaConfig({ value: mediaSettings.value })
 
       snackbar.value = true
       text.value = t('common.changesSaved')
       error.value = false
 
-      await getBannerAndLogoPictureUrl()
+      await fetchMediaUrls()
       bannerFileInput.value = null
       logoFileInput.value = null
       evaluationGridFileInput.value = null
     } catch (err) {
       console.error(err)
       snackbar.value = true
-      text.value = t('common.errorSaving')
+      text.value = t('common.error')
       error.value = true
+    } finally {
+      isSaving.value = false
     }
   }
 </script>
@@ -142,7 +186,9 @@
     <h1 class="text-3xl font-bold mb-2">{{ t('mediaSettings.title') }}</h1>
     <div class="flex-direction-row mb-5 flex items-center justify-between">
       <p class="mb-0 text-lg text-gray-600">{{ t('mediaSettings.subtitle') }}</p>
-      <v-btn color="primary" @click="handleSave">{{ t('common.saveChanges') }}</v-btn>
+      <v-btn color="primary" @click="handleSave" :disabled="mediaLoading || isSaving">{{
+        t('common.saveChanges')
+      }}</v-btn>
     </div>
 
     <AppSnackbar v-model="snackbar" :message="text" :timeout="timeout" :error="error" />
@@ -271,12 +317,27 @@
         <!-- File input -->
         <v-file-input
           v-model="evaluationGridFileInput"
-          :label="t('mediaSettings.uploadEvaluationGrid')"
+          :label="evaluationGridLabel"
           :hint="t('mediaSettings.uploadHint')"
           prepend-icon="mdi-file-upload"
           accept=".docx,.xlsx"
           class="flex-1"
         />
+
+        <!-- Preview -->
+        <div
+          v-if="evaluationGridUrl && !evaluationGridFileInput"
+          class="flex flex-col items-center"
+        >
+          <v-btn
+            variant="outlined"
+            size="small"
+            prepend-icon="mdi-download"
+            @click="downloadEvaluationGridFile"
+          >
+            {{ t('common.download') }}
+          </v-btn>
+        </div>
       </div>
     </v-container>
   </v-container>

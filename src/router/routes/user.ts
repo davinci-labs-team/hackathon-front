@@ -11,6 +11,10 @@ export default [
     component: UserLayout,
     children: [
       {
+        path: '',
+        redirect: { name: 'UserDashboard' }
+      },
+      {
         path: 'dashboard',
         name: 'UserDashboard',
         component: Dashboard,

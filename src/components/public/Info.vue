@@ -4,7 +4,7 @@
   import { formatDate, getDaysBetween } from '@/utils/dateUtils'
   import { HackathonPhaseDTO, HackathonTextDTO } from '@/types/config'
   import { configurationService } from '@/services/configurationService'
-  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import { PublicConfigurationKey } from '@/utils/configuration/configurationKey'
   import { HackathonPhaseOrder } from '@/utils/phases'
 
   const infos = ref<HackathonTextDTO>({
@@ -24,11 +24,11 @@
 
   onMounted(async () => {
   try {
-    const textsResponse = await configurationService.findOne(ConfigurationKey.TEXTS)
+    const textsResponse = await configurationService.findOnePublic(PublicConfigurationKey.TEXTS)
     infos.value = textsResponse.value as HackathonTextDTO
 
-    const phasesResponse = await configurationService.findOne(ConfigurationKey.PHASES)
-    phases.value = phasesResponse.value as HackathonPhaseDTO[]
+    const phasesResponse = await configurationService.findOnePublic(PublicConfigurationKey.PHASES)
+    phases.value = phasesResponse.value.phases as HackathonPhaseDTO[]
     const hackathonPhase = phases.value.find(phase => phase.order === HackathonPhaseOrder.Hackathon)
 
     startDate.value = hackathonPhase?.startDate || ''
@@ -56,7 +56,7 @@
         <div class="flex items-center gap-4 mb-10">
           <v-icon size="55">mdi-calendar</v-icon>
           <div>
-            <div class="text-2xl font-semibold">{{ t('hackathon.dateText', { numberOfDays: numberOfDays }) }}</div>
+            <div class="text-2xl font-semibold">{{ t('hackathon.dateText', numberOfDays) }}</div>
             <div class="text-xl text-gray-600">
               {{ formatDate(startDate, locale) }} - {{ formatDate(endDate, locale) }}
             </div>
