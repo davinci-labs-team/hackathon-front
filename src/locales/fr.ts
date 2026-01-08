@@ -828,6 +828,9 @@ export default {
         title: 'Rejoindre ou former une équipe',
         description:
           "Collaborez avec d'autres participants en rejoignant une équipe ou en formant la vôtre.",
+        joinTeam: 'Rejoindre',
+        quitTeam: 'Quitter',
+        myTeam: 'Mon Équipe',
       },
       project_submission: {
         title: 'Soumettre votre projet',

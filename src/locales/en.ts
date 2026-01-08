@@ -787,6 +787,9 @@ export default {
       teams_formed : {
         title: 'Join or create a team',
         description: 'Find teammates or create your own team to participate in the hackathon.',
+        joinTeam: 'Join',
+        quitTeam: 'Quit',
+        myTeam: 'My Team',
       },
       project_submission : {
         title: 'Submit your project',

@@ -82,9 +82,7 @@
     if (!matchmakingSettings.value || !user.value) {
       return []
     }
-
     const reducedUser = user.value as UserReducedDTO
-
     return getEligibleTeamsForUser(teams.value, reducedUser, matchmakingSettings.value)
   })
 
@@ -113,14 +111,18 @@
   }
 
   // --- TEAM ACTIONS ---
-  const assignToTeam = async (teamId: string) => {
+  const joinTeam = async (teamId: string) => {
     const userId = user.value?.id as string
     try {
-      await teamStore.assignUserToTeam(teamId, userId)
+      // Assign user to team
+      await teamStore.assignUserToTeam(teamId, userId, true)
+
+      // Update auth store user fields
+      await authStore.updateUserFields({ teamId })
+
       text.value = t('organizer.teamManagement.userAssignedToTeam')
       error.value = false
       snackbar.value = true
-      await updateUserFields({ teamId })
     } catch (err) {
       console.error('Error assigning user to team:', err)
       text.value = t('organizer.teamManagement.userAssignError')
@@ -129,14 +131,18 @@
     }
   }
 
-  const withdrawFromTeam = async (teamId: string) => {
+  const quitTeam = async (teamId: string) => {
     const userId = user.value?.id as string
     try {
-      await teamStore.withdrawUserFromTeam(teamId, userId)
+      // Withdraw user from team
+      await teamStore.withdrawUserFromTeam(teamId, userId, true)
+
+      // Update auth store user fields
+      await authStore.updateUserFields({ teamId: null })
+
       text.value = t('organizer.teamManagement.userWithdrawnFromTeam')
       error.value = false
       snackbar.value = true
-      await updateUserFields({ teamId })
     } catch (err) {
       console.error('Error withdrawing user from team:', err)
       text.value = t('organizer.teamManagement.userWithdrawError')
@@ -147,18 +153,25 @@
 
   const onSaveTeam = async (teamId: string, team: TeamFormDTO) => {
     try {
+      let finalTeamId = teamId
       if (editMode.value) {
         await teamStore.updateTeam(teamId, team)
         text.value = t('organizer.teamManagement.teamUpdated')
       } else {
         team.memberIds = [authStore.user?.id as string]
-        await teamStore.createTeam(team)
+        const newTeam = await teamStore.createTeam(team)
+        finalTeamId = newTeam.id
         text.value = t('organizer.teamManagement.teamCreated')
       }
+      await updateUserFields({ teamId: finalTeamId })
       error.value = false
       snackbar.value = true
       showTeamForm.value = false
       selectedTeam.value = null
+
+      await teamStore.fetchTeams()
+
+      console.log('Teams after save:', teamStore.teams)
     } catch (err) {
       console.error('Error saving team:', err)
       text.value = t(
@@ -219,7 +232,33 @@
       {{ t('organizer.teamManagement.noTeamsAvailable') }}
     </div>
 
-    <div v-else>{{ filteredTeams.map(team => team.name) }} </div>
+    <div v-else class="grid grid-cols-1 gap-4">
+      <v-card v-for="team in filteredTeams" :key="team.id" variant="elevated" class="pa-4">
+        <div class="d-flex justify-space-between align-center">
+          <div>
+            <div class="flex justify-between items-center gap-2 mb-2">
+              <div class="text-subtitle-1 font-weight-bold">{{ team.name }}</div>
+              <v-chip v-if="user?.teamId == team.id" color="success" size="small">{{
+                t('dashboard.participant.teams_formed.myTeam')
+              }}</v-chip>
+            </div>
+            <div class="text-caption text-grey">{{ team.description }}</div>
+          </div>
+          <v-btn
+            v-if="user?.teamId !== team.id"
+            :disabled="isCompleted"
+            color="primary"
+            size="small"
+            @click="joinTeam(team.id)"
+          >
+            {{ t('dashboard.participant.teams_formed.joinTeam') }}
+          </v-btn>
+          <v-btn v-else color="error" size="small" @click="quitTeam(team.id)">
+            {{ t('dashboard.participant.teams_formed.quitTeam') }}
+          </v-btn>
+        </div>
+      </v-card>
+    </div>
   </div>
 
   <TeamFormParticipant
@@ -228,6 +267,7 @@
     :edit-mode="editMode"
     :team="selectedTeam"
     :themes="themes"
+    :subject-id="user?.favoriteSubjectId || null"
   />
 
   <div v-if="loadingTeams" class="text-center py-12">
