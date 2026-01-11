@@ -18,6 +18,7 @@
   import { filterTeams, filterUsers } from '@/utils/filterUtils'
   import { TeamStatus } from '@/types/team_status'
   import { useTeamStore } from '@/stores/teamStore'
+  import { githubService } from '@/services/githubService'
 
   const { t } = useI18n()
 
@@ -265,6 +266,27 @@
     showAutogenerateResult.value = false
   }
 
+  const isInitializingRepos = ref(false)
+
+  const initializeRepos = async () => {
+    isInitializingRepos.value = true
+    try {
+      const results = await githubService.initializeOrganization()
+      const successCount = results.filter((r: any) => r.status === 'success').length
+      
+      text.value = t('organizer.teamManagement.reposCreated', { count: successCount })
+      error.value = false
+      snackbar.value = true
+    } catch (err: any) {
+      console.error('Error initializing repos:', err)
+      text.value = err.response?.data?.message || t('organizer.teamManagement.reposCreationError') || 'Error creating repositories'
+      error.value = true
+      snackbar.value = true
+    } finally {
+      isInitializingRepos.value = false
+    }
+  }
+
   onMounted(() => {
     fetchUsers()
     fetchThemes()
@@ -314,9 +336,15 @@
           </div>
         </div>
 
-        <v-btn color="secondary" class="mb-4" @click="autogenerateTeams" :disabled="loadingTeams">
-          {{ t('organizer.teamManagement.actions.autogenerate') }}
-        </v-btn>
+        <div class="flex flex-col gap-2 mb-4">
+          <v-btn color="secondary" @click="autogenerateTeams" :disabled="loadingTeams">
+            {{ t('organizer.teamManagement.actions.autogenerate') }}
+          </v-btn>
+          <v-btn color="black" @click="initializeRepos" :loading="isInitializingRepos" :disabled="loadingTeams">
+             <v-icon start>mdi-github</v-icon>
+             Create GitHub Repos
+          </v-btn>
+        </div>
 
         <TeamFilters
           v-model:view-mode="viewMode"

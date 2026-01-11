@@ -302,6 +302,8 @@ export default {
         'Impossible de verrouiller l’équipe avec des violations de contraintes, corrigez-les ou ignorez les contraintes',
       teamAutogenerateSuccess: 'Équipes générées automatiquement avec succès',
       teamAutogenerateError: 'Erreur lors de la génération automatique des équipes',
+      reposCreated: '{count} Repositories créés avec succès',
+      reposCreationError: 'Erreur lors de la création du repository',
     },
     submissionManagement: {
       title: 'Gestion des Dépôts',
