@@ -70,7 +70,7 @@
     try {
         await teamService.leaveTeam() // New self-service endpoint
          // Add a small delay or refetch logic if needed, but router push essentially resets view
-        router.push('/user/find-team')
+        router.push('/user/dashboard')
     } catch (e) {
         console.error("Error leaving team", e)
     }
@@ -106,9 +106,6 @@
     <v-card v-else-if="!team" class="pa-8 text-center" variant="outlined">
       <v-icon size="64" color="grey" class="mb-4">mdi-account-group-outline</v-icon>
       <h2 class="text-h5 text-grey-darken-1">{{ t('participant.team.noTeam') }}</h2>
-      <v-btn color="primary" class="mt-4" to="/user/dashboard">
-        {{ t('participant.team.searchTeam') }}
-      </v-btn>
     </v-card>
 
     <!-- Team Content -->

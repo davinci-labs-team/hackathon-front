@@ -79,13 +79,13 @@
         :key="item.path"
         :to="
           item.path === '/user/team' && !userTeamId
-            ? '/user/find-team'
+            ? '/user/team'
             : item.path
         "
         :class="
           getLinkClasses(
             item.path === '/user/team' && !userTeamId
-              ? '/user/find-team'
+              ? '/user/team'
               : item.path
           )
         "

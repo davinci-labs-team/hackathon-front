@@ -21,12 +21,6 @@ export default [
         meta: { requiresAuth: true },
       },
       {
-        path: 'find-team',
-        name: 'TeamList',
-        component: () => import('@/pages/user/TeamList.vue'),
-        meta: { requiresAuth: true },
-      },
-      {
         path: 'team',
         name: 'TeamPage',
         component: Team,
