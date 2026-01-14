@@ -37,6 +37,9 @@
     <v-row justify="center" class="mt-8">
       <div class="w-full md:w-8/12 lg:w-9/12 px-4">
         <h1 class="text-3xl font-bold mb-6">{{ t(`${tPrefix}.nav.faq`) }}</h1>
+        <p class="text-lg text-grey-darken-1 mb-6">
+          {{ t(`faq.subtitle`) }}
+        </p>
         <div class="flex mb-4 gap-4 items-center">
           <v-text-field
             v-model="searchQuery"

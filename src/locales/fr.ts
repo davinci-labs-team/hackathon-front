@@ -682,6 +682,7 @@ export default {
   // FAQ Section
   faq: {
     title: 'Foire Aux Questions',
+    subtitle: 'Trouvez des réponses aux questions fréquemment posées',
     noQuestions: 'Aucune question disponible pour le moment.',
     question: 'Question',
     answer: 'Réponse',
