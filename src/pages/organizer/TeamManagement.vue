@@ -80,7 +80,9 @@
       error.value = false
       snackbar.value = true
 
+      await teamStore.fetchTeams()
       await fetchUsers()
+      
       showTeamForm.value = false
       selectedTeam.value = null
     } catch (err) {
