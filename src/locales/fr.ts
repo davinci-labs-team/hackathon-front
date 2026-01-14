@@ -838,6 +838,7 @@ export default {
         title: 'Soumettre votre projet',
         hackathonEndsIn: 'Le hackathon se termine dans : ',
         description: 'Partagez votre travail en soumettant votre projet avant la date limite.',
+        submit: 'Soumettre le projet',
       },
     },
   },

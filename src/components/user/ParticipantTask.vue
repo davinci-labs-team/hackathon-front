@@ -30,11 +30,18 @@
         ? (newConfig.value.phases as HackathonPhaseDTO[])
         : []
 
-      currentPhase.value =
-        rawPhases.find((phase) => phase.status == 'IN_PROGRESS') || null
+      currentPhase.value = rawPhases.find((phase) => phase.status == 'IN_PROGRESS') || null
     },
     { immediate: true }
   )
+
+  const submissionDeadline = computed(() => {
+    const rawPhases = phasesConfig.value?.value?.phases as HackathonPhaseDTO[] | undefined
+    if (!rawPhases) return null
+
+    const phase4 = rawPhases.find((p) => p.order === PhaseOrder.DEVELOPMENT)
+    return phase4 ? phase4.endDate : null
+  })
 
   const currentParticipantTaskKey = computed<TaskKey | null>(() => {
     if (!currentPhase.value) return null
@@ -43,7 +50,7 @@
     return taskKeys && taskKeys.length > 0 ? taskKeys[0] : null
   })
 
-  const TaskComponentMap: Record<TaskKey , any> = {
+  const TaskComponentMap: Record<TaskKey, any> = {
     [TaskKey.PROFILE_COMPLETION]: ParticipantTaskProfile,
     [TaskKey.TOPIC_SELECTION]: ParticipantTaskTopic,
     [TaskKey.TEAMS_FORMED]: ParticipantTaskTeam,
@@ -71,12 +78,13 @@
         :is="currentTaskComponent"
         v-if="currentTaskComponent"
         :key="currentParticipantTaskKey"
+        :deadline="submissionDeadline"
       />
 
       <v-alert v-else type="info" variant="tonal">
         <h4 class="text-h6">{{ t('common.information') }}</h4>
         <p class="mt-2">
-            {{ t('dashboard.nothing_todo') }}
+          {{ t('dashboard.nothing_todo') }}
         </p>
       </v-alert>
     </v-card-text>

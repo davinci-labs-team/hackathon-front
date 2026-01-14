@@ -797,6 +797,7 @@ export default {
         title: 'Submit your project',
         hackathonEndsIn: 'The hackathon ends in ',
         description: 'Upload your project before the submission deadline.',
+        submit: 'Submit Project'
       },
     },
   },
