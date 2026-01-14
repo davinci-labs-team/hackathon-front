@@ -801,4 +801,12 @@ export default {
       },
     },
   },
+
+  countdown: {
+    days: 'Days',
+    hours: 'Hours',
+    minutes: 'Min',
+    seconds: 'Sec',
+    expired: 'Time\'s up!'
+  },
 }

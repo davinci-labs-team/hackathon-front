@@ -1,5 +1,8 @@
 <script setup lang="ts">
   import { ref, onMounted, onUnmounted, computed } from 'vue'
+  import { useI18n } from 'vue-i18n' // Import de i18n
+
+  const { t } = useI18n()
 
   const props = defineProps<{
     deadline: string | null | undefined
@@ -8,7 +11,6 @@
   const now = ref(new Date().getTime())
   let timer: any = null
 
-  // Calcul des unités de temps
   const timeLeft = computed(() => {
     if (!props.deadline) return null
 
@@ -26,6 +28,14 @@
     }
   })
 
+  // Création d'un tableau pour itérer proprement avec les traductions
+  const timeUnits = computed(() => [
+    { label: t('countdown.days'), value: timeLeft.value?.days },
+    { label: t('countdown.hours'), value: timeLeft.value?.hours },
+    { label: t('countdown.minutes'), value: timeLeft.value?.minutes },
+    { label: t('countdown.seconds'), value: timeLeft.value?.seconds },
+  ])
+
   onMounted(() => {
     timer = setInterval(() => {
       now.value = new Date().getTime()
@@ -38,28 +48,20 @@
 </script>
 
 <template>
-  <div v-if="timeLeft && timeLeft.total > 0" class="d-flex gap-4 text-center">
-    <div
-      v-for="(val, unit) in {
-        Jours: timeLeft.days,
-        Heures: timeLeft.hours,
-        Min: timeLeft.minutes,
-        Sec: timeLeft.seconds,
-      }"
-      :key="unit"
-    >
-      <div class="text-h4 font-weight-bold">{{ val }}</div>
-      <div class="text-caption text-uppercase">{{ unit }}</div>
+  <div v-if="timeLeft && timeLeft.total > 0" class="d-flex gap-4 text-center justify-center">
+    <div v-for="unit in timeUnits" :key="unit.label">
+      <div class="text-h4 font-weight-bold">{{ unit.value }}</div>
+      <div class="text-caption text-uppercase text-grey-darken-1">{{ unit.label }}</div>
     </div>
   </div>
-  <v-chip v-else-if="timeLeft && timeLeft.total <= 0" color="error" variant="flat">
-    Temps écoulé !
+  <v-chip v-else-if="timeLeft && timeLeft.total <= 0" color="error" variant="tonal">
+    {{ t('countdown.expired') }}
   </v-chip>
 </template>
 
 <style scoped>
   .gap-4 {
     display: flex;
-    gap: 16px;
+    gap: 20px;
   }
 </style>

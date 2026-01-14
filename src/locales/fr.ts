@@ -229,11 +229,11 @@ export default {
       noTeamAvailable:
         'Aucune équipe disponible éligible pour cet utilisateur. Créez une autre équipe ou modifiez les contraintes.',
       noTeamAssigned: 'Aucune équipe assignée',
-      userWithdrawnFromTeam: 'L\'utilisateur a été retiré de l’équipe avec succès',
+      userWithdrawnFromTeam: "L'utilisateur a été retiré de l’équipe avec succès",
       userWithdrawError: "Erreur lors du retrait de l'utilisateur de l'équipe",
-      userAssignedToTeam: 'L\'utilisateur a été assigné à l’équipe avec succès',
+      userAssignedToTeam: "L'utilisateur a été assigné à l’équipe avec succès",
       userAssignError: "Erreur lors de l'assignation de l'utilisateur à l'équipe",
-      noTeamsAvailable: "Aucune équipe disponible",
+      noTeamsAvailable: 'Aucune équipe disponible',
       team: 'Équipe',
       members: 'Membres',
       name: 'Nom',
@@ -488,7 +488,7 @@ export default {
     privacyPolicy: 'Politique de confidentialité',
     terms: 'Conditions générales',
     cookies: 'Cookies',
-    credits: 'EPITA - MTI 2026'
+    credits: 'EPITA - MTI 2026',
   },
 
   // Settings
@@ -841,5 +841,13 @@ export default {
         submit: 'Soumettre le projet',
       },
     },
+  },
+
+  countdown: {
+    days: 'Jours',
+    hours: 'Heures',
+    minutes: 'Min',
+    seconds: 'Sec',
+    expired: 'Temps écoulé !',
   },
 }

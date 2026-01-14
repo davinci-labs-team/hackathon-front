@@ -1,8 +1,17 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
   import { TaskKey } from '@/types/hackathon_phase'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
   import AppCountdown from '../common/AppCountdown.vue'
+  import { SubmissionDTO } from '@/types/submission'
+  import { UserDTO } from '@/types/user'
+  import { SubmissionStatus } from '@/types/submission_status'
+  import { userService } from '@/services/userService'
+  import { submissionService } from '@/services/submissionService'
+  import { useAuthStore } from '@/stores/auth'
+
+  const authStore = useAuthStore()
+  const userInfo = ref<UserDTO | null>(null)
 
   const { t, tm } = useI18n()
 
@@ -16,7 +25,37 @@
       | undefined
   })
 
+  const submissionInfo = ref<SubmissionDTO | null>(null)
   const isCompleted = ref<boolean>(false)
+
+  watch(
+    () => authStore.user?.id,
+    async (newUserId) => {
+      if (newUserId) {
+        try {
+          const userResponse = await userService.getById(newUserId)
+          userInfo.value = userResponse
+
+          if (!userResponse.teamId) return
+
+          const submissionResponse = (await submissionService.getbyTeamId(
+            userResponse.teamId
+          )) as SubmissionDTO | null
+          submissionInfo.value = submissionResponse
+
+          if (!submissionInfo.value) {
+            isCompleted.value = false
+          } else {
+            isCompleted.value = submissionInfo.value.status === SubmissionStatus.PENDING
+          }
+        } catch (err) {
+          console.error('Error fetching user data:', err)
+        } finally {
+        }
+      }
+    },
+    { immediate: true }
+  )
 </script>
 
 <template>
@@ -49,7 +88,7 @@
 
     <v-divider class="my-4"></v-divider>
 
-    <v-btn color="primary" block size="large" to="/user/project">
+    <v-btn color="primary" block size="large" to="/user/project" v-if="!isCompleted">
       {{ t('dashboard.participant.project_submission.submit') }}
     </v-btn>
   </v-sheet>
