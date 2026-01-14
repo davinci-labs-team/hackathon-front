@@ -98,6 +98,7 @@
 
   const emit = defineEmits(['update:actionDisabled'])
   const discordAutoroleCommandExecuted = ref<boolean>(false)
+  const createGitHubReposCommandExecuted = ref<boolean>(false)
 
   const organizerActionsRaw = computed(() => {
     return tm('hackathonManagement.organizerActions') as {
@@ -133,6 +134,8 @@
         return props.teamsFormed
       case TaskKey.DISCORD_AUTOROLE:
         return discordAutoroleCommandExecuted.value
+      case TaskKey.CREATE_GITHUB_REPO:
+        return createGitHubReposCommandExecuted.value
       case TaskKey.DEFINE_SUBMISSION_DEADLINE:
         return submissionDeadlineDefined.value
       case TaskKey.UPLOAD_EVALUATION_GRID:
@@ -175,9 +178,12 @@
     { immediate: true }
   )
 
-  // DISCORD AUTOROLE COMMAND CHECKBOX HANDLER
   const isDiscordAutoroleTask = (taskKey: TaskKey) => {
     return taskKey === TaskKey.DISCORD_AUTOROLE
+  }
+
+  const isGitHubRepoTask = (taskKey: TaskKey) => {
+    return taskKey === TaskKey.CREATE_GITHUB_REPO
   }
 </script>
 
@@ -218,6 +224,16 @@
           <template v-slot:append v-if="isDiscordAutoroleTask(task.key)">
             <v-checkbox
               v-model="discordAutoroleCommandExecuted"
+              hide-details
+              class="ma-0 pa-0"
+              color="success"
+              density="compact"
+            ></v-checkbox>
+          </template>
+
+          <template v-slot:append v-else-if="isGitHubRepoTask(task.key)">
+            <v-checkbox
+              v-model="createGitHubReposCommandExecuted"
               hide-details
               class="ma-0 pa-0"
               color="success"

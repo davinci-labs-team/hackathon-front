@@ -23,6 +23,7 @@ export enum TaskKey {
 
   // PHASE 4
   DISCORD_AUTOROLE = 'discord_autorole',
+  CREATE_GITHUB_REPO = 'create_github_repos',
   DEFINE_SUBMISSION_DEADLINE = 'define_submission_deadline',
   PROJECT_SUBMISSION = 'project_submission',
 
@@ -88,7 +89,7 @@ export const TaskMapByPhase: {
 
   // PHASE 4
   [PhaseOrder.DEVELOPMENT]: {
-    PENDING: [TaskKey.DISCORD_AUTOROLE, TaskKey.DEFINE_SUBMISSION_DEADLINE],
+    PENDING: [TaskKey.DISCORD_AUTOROLE, TaskKey.CREATE_GITHUB_REPO, TaskKey.DEFINE_SUBMISSION_DEADLINE],
     IN_PROGRESS: [],
   },
 

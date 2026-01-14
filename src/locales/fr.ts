@@ -488,6 +488,7 @@ export default {
     privacyPolicy: 'Politique de confidentialité',
     terms: 'Conditions générales',
     cookies: 'Cookies',
+    credits: 'EPITA - MTI 2026'
   },
 
   // Settings
@@ -793,6 +794,7 @@ export default {
       teams_formed:
         'Tous les participants sont dans une équipe et chaque jury et mentor est assigné à au moins une équipe',
       discord_autorole: 'Exécuter la commande /team_autorole sur le serveur Discord du hackathon',
+      create_github_repos: 'Créer les dépôts GitHub pour chaque équipe (Page Gestion des Équipes)',
       define_submission_deadline:
         'Définir la date limite de dépôt des projets (Onglet Dates & Planning dans les Paramètres)',
       upload_evaluation_grid:

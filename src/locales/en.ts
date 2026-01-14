@@ -338,8 +338,8 @@ export default {
       hackathon: 'Hackathon Management',
       announcements: 'Announcements',
       faq: 'FAQ',
-      users: 'User Management',
-      teams: 'Team Management',
+      users: 'Users Management',
+      teams: 'Teams Management',
       projects: 'Projects Management',
       settings: 'Settings',
       themes: 'Themes & Subjects',
@@ -480,6 +480,7 @@ export default {
     privacyPolicy: 'Privacy Policy',
     terms: 'Terms and Conditions',
     cookies: 'Cookies',
+    credits: 'EPITA - MTI 2026'
   },
 
   // Settings
@@ -754,6 +755,7 @@ export default {
       teams_formed:
         'All participants are in a team, and every judge and mentor is assigned to at least one team',
       discord_autorole: 'Execute the /team_autorole command on the hackathon Discord server',
+      create_github_repos: 'Create GitHub repositories for all teams (Teams Management Tab)',
       define_submission_deadline:
         'Define the project submission deadline (Dates & Planning Tab in Settings)',
       upload_evaluation_grid: 'Upload the evaluation grid (Media & Files Tab in Settings)',
