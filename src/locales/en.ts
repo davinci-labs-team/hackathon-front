@@ -676,6 +676,7 @@ export default {
   // FAQ Section
   faq: {
     title: 'Frequently Asked Questions',
+    subtitle: 'Find answers to common questions about the hackathon',
     noQuestions: 'No questions available at the moment.',
     question: 'Question',
     answer: 'Answer',
