@@ -1,5 +1,5 @@
 import UserLayout from '@/layouts/UserLayout.vue'
-import Dashboard from '@/pages/user/Dashboard.vue'
+import Dashboard from '@/pages/common/Dashboard.vue'
 import Team from '@/pages/user/Team.vue'
 import Project from '@/pages/user/Project.vue'
 import FAQ from '@/pages/common/FAQ.vue'
