@@ -1,17 +1,13 @@
 import { UserRole } from '@/types/roles'
+import { UserDTO } from './user'
 
 declare global {
-  interface SupabaseDecodedUser {
-    id: string
+  interface SupabaseDecodedUser extends UserDTO {
     supabaseUserId: string
     sub: string
-    email: string
-    name: string
-    role: UserRole
     session_id: string
     is_anonymous: boolean
     accessToken: string
-    profilePicturePath?: string
   }
 }
 

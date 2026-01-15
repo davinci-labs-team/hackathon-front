@@ -48,17 +48,17 @@ export const teamService = {
     return res.data
   },
 
-  async assignUserToTeam(teamId: string, userId: string): Promise<TeamDTO> {
+  async assignUserToTeam(teamId: string, userId: string, isParticipant = false): Promise<TeamDTO> {
     const res = await axios.post(
-      `${API_URL}/${teamId}/users/${userId}`,
+      `${API_URL}/${teamId}/users/${userId}?participant=${isParticipant}`,
       {},
       { headers: getAuthHeaders() }
     )
     return res.data
   },
 
-  async withdrawUserFromTeam(teamId: string, userId: string): Promise<TeamDTO> {
-    const res = await axios.delete(`${API_URL}/${teamId}/users/${userId}`, {
+  async withdrawUserFromTeam(teamId: string, userId: string, isParticipant = false): Promise<TeamDTO> {
+    const res = await axios.delete(`${API_URL}/${teamId}/users/${userId}?participant=${isParticipant}`, {
       headers: getAuthHeaders(),
     })
     return res.data

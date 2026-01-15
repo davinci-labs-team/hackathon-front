@@ -7,7 +7,7 @@
   import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
   import { S3BucketService } from '@/services/s3BucketService'
   import { useConfiguration } from '@/composables/useConfiguration'
-import { getOrCreateConfiguration } from '@/services/configurationService'
+  import { getOrCreateConfiguration } from '@/services/configurationService'
 
   const { t } = useI18n()
 
@@ -50,7 +50,10 @@ import { getOrCreateConfiguration } from '@/services/configurationService'
   const fetchMediaUrls = async () => {
     if (mediaSettings.value?.bannerPictureId) {
       try {
-        const response = await S3BucketService.getFileUrlPublic('public_files', mediaSettings.value.bannerPictureId)
+        const response = await S3BucketService.getFileUrlPublic(
+          'public_files',
+          mediaSettings.value.bannerPictureId
+        )
         bannerPicture.value = response.url
       } catch (err) {
         console.error('Error fetching banner picture:', err)
@@ -58,7 +61,10 @@ import { getOrCreateConfiguration } from '@/services/configurationService'
     }
     if (mediaSettings.value?.hackathonLogoId) {
       try {
-        const response = await S3BucketService.getFileUrlPublic('public_files', mediaSettings.value.hackathonLogoId)
+        const response = await S3BucketService.getFileUrlPublic(
+          'public_files',
+          mediaSettings.value.hackathonLogoId
+        )
         logoPicture.value = response.url
       } catch (err) {
         console.error('Error fetching logo picture:', err)
@@ -104,7 +110,10 @@ import { getOrCreateConfiguration } from '@/services/configurationService'
   const downloadEvaluationGridFile = async () => {
     if (!mediaSettings.value?.evaluationGridPath) return
     try {
-      const { url } = await S3BucketService.getFileUrl('public_files', mediaSettings.value.evaluationGridPath)
+      const { url } = await S3BucketService.getFileUrl(
+        'public_files',
+        mediaSettings.value.evaluationGridPath
+      )
       window.open(url, '_blank')
     } catch (error) {
       console.error('Error downloading file:', error)

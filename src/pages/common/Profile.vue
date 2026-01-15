@@ -6,7 +6,6 @@ import { useAuthStore } from '@/stores/auth'
 import { logout } from '@/services/authService'
 import { userService } from '@/services/userService'
 import { S3BucketService } from '@/services/s3BucketService'
-import { getRole } from '@/utils/user'
 import type { UserDTO } from '@/types/user'
 
 import ProfileCard from '@/components/common/profile/ProfileCard.vue'
@@ -28,7 +27,6 @@ const error = ref(false)
 const showConfirmLogoutDialog = ref(false)
 const showConfirmDeleteAccountDialog = ref(false)
 
-const role = getRole()
 const isAdminPlatform = computed(() => route.path.startsWith('/organizer'))
 
 const editMode = ref(false)
@@ -74,6 +72,8 @@ const handleSave = async (updatedUser: UserDTO) => {
   try {
     const savedUser = await userService.update(updatedUser.id, updatedUser)
     userInfo.value = savedUser
+
+    authStore.updateUserFields(savedUser)
     getProfilePictureUrl()
     editMode.value = false
     text.value = t('common.changesSaved')

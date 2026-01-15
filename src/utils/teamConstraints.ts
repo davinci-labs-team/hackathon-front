@@ -30,7 +30,13 @@ export function getEligibleTeamsForUser(teams: TeamDTO[], user: UserReducedDTO, 
     school: user.school || '',
     role: user.role,
   }
-  return teams.filter((team: TeamDTO) => {
+  if (config.isActive === false) {
+    return teams
+  }
+  const filteredTeams = teams.filter(team => {
+    return team.subjectId === user.favoriteSubjectId
+  })
+  return filteredTeams.filter((team: TeamDTO) => {
     const simulatedTeam : TeamDTO = { ...team, members: [...team.members, simulatedMember] }
     const violations = calculateTeamConstraints(simulatedTeam, config)
 

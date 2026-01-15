@@ -33,7 +33,7 @@
         <h2 class="text-3xl font-semibold mt-2 mb-3">
           {{ t('announcements.lastAnnouncements') }}
         </h2>
-        <Announcements :items-per-page="5" />
+        <Announcements :items-per-page="5" :is-public="true"/>
       </div>
     </div>
   </v-container>
