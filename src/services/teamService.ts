@@ -64,6 +64,15 @@ export const teamService = {
     return res.data
   },
 
+  async leaveTeam(): Promise<void> {
+    await axios.post(`${API_URL}/leave`, {}, { headers: getAuthHeaders() })
+  },
+
+  async joinTeam(teamId: string): Promise<TeamDTO> {
+    const res = await axios.post(`${API_URL}/${teamId}/join`, {}, { headers: getAuthHeaders() })
+    return res.data
+  },
+
   async autogenerateTeams(): Promise<number> {
     const res = await axios.post(`${API_URL}/autogenerate`, {}, { headers: getAuthHeaders() })
     return res.data.count
