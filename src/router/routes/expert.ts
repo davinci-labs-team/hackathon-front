@@ -2,7 +2,7 @@ import { UserRole } from '@/types/roles'
 import Dashboard from '@/pages/expert/Dashboard.vue'
 import Teams from '@/pages/expert/Teams.vue'
 import Project from '@/pages/expert/Project.vue'
-import FAQ from '@/pages/expert/FAQ.vue'
+import FAQ from '@/pages/common/FAQ.vue'
 import Profile from '@/pages/common/Profile.vue'
 import ExpertLayout from '@/layouts/ExpertLayout.vue'
 

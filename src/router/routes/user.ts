@@ -2,7 +2,7 @@ import UserLayout from '@/layouts/UserLayout.vue'
 import Dashboard from '@/pages/user/Dashboard.vue'
 import Team from '@/pages/user/Team.vue'
 import Project from '@/pages/user/Project.vue'
-import FAQ from '@/pages/user/FAQ.vue'
+import FAQ from '@/pages/common/FAQ.vue'
 import Profile from '@/pages/common/Profile.vue'
 import Announcements from '@/pages/common/Announcements.vue'
 

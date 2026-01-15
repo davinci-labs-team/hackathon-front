@@ -1,11 +1,13 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
-  import { ref, watch, computed } from 'vue'
+  import { ref, onMounted, computed } from 'vue'
   import { getRole, getTPrefix } from '@/utils/user'
   import { faqService } from '@/services/faqService'
   import type { FAQItemDTO } from '@/types/faq'
 
   const { t } = useI18n()
+
+  console.log('Composant FAQ chargé')
 
   const role = getRole()
   const tPrefix = getTPrefix(role, true)
@@ -29,7 +31,9 @@
     }
   }
 
-  watch(() => role, fetchFAQ, { immediate: true })
+  onMounted(() => {
+    fetchFAQ()
+  })
 </script>
 
 <template>
