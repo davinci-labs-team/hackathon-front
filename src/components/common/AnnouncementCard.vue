@@ -26,7 +26,7 @@ const signedUrls = ref<string[]>([])
 
 const loadImages = async () => {
   if (props.announcement.files && props.announcement.files.length > 0) {
-    signedUrls.value = await generateSignedUrls('public_files', props.announcement.files, true)
+    signedUrls.value = await generateSignedUrls('annonces', props.announcement.files, !props.announcement.isPrivate)
   }
   else {
     signedUrls.value = []

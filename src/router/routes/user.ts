@@ -4,6 +4,7 @@ import Team from '@/pages/user/Team.vue'
 import Project from '@/pages/user/Project.vue'
 import FAQ from '@/pages/user/FAQ.vue'
 import Profile from '@/pages/common/Profile.vue'
+import Announcements from '@/pages/common/Announcements.vue'
 
 export default [
   {
@@ -18,6 +19,12 @@ export default [
         path: 'dashboard',
         name: 'UserDashboard',
         component: Dashboard,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'announcements',
+        name: 'UserAnnouncements',
+        component: Announcements,
         meta: { requiresAuth: true },
       },
       {

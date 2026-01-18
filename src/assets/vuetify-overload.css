@@ -61,9 +61,9 @@ body,
 
 /* Alertes : bordure colorée à gauche */
 .v-alert {
-  border-left: 4px solid #1976d2 !important; 
-  background-color: #e3f2fd !important; 
-  color: #0d47a1 !important; 
+  border-left: 4px solid #1976d2 !important;
+  background-color: #e3f2fd !important;
+  color: #0d47a1 !important;
   font-weight: 600;
 }
 
@@ -71,4 +71,30 @@ body,
 .v-list-item,
 .v-chip {
   border-radius: 6px !important;
+}
+
+.v-expansion-panel-title,
+.v-expansion-panel-text {
+  font-family: 'Poppins', sans-serif !important;
+}
+.v-expansion-panel-title * {
+  font-family: 'Poppins', sans-serif !important;
+}
+.v-expansion-panel-title {
+
+  font-size: 18px !important;
+  font-weight: 500 !important;
+}
+
+.v-expansion-panel {
+  border-radius: 6px !important;
+}
+
+.v-expansion-panel:not(:first-child)::after,
+.v-expansion-panel:not(:last-child)::after {
+  display: none !important;
+}
+
+.v-expansion-panel-title {
+  padding: 16px !important;
 }

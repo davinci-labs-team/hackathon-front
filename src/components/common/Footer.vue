@@ -4,13 +4,14 @@
   import { configurationService } from '@/services/configurationService'
   import { HackathonMediaDTO } from '@/types/config'
   import { onMounted, ref } from 'vue'
-import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+  import { ConfigurationKey } from '@/utils/configuration/configurationKey'
 
   const { t } = useI18n()
 
   const mediaSettings = ref<HackathonMediaDTO>({
     bannerPictureId: null,
     hackathonLogoId: null,
+    evaluationGridPath: null,
     facebook: null,
     instagram: null,
     x: null,
@@ -102,6 +103,7 @@ import { ConfigurationKey } from '@/utils/configuration/configurationKey'
         <!-- Colonne gauche -->
         <div class="text-caption text-grey-darken-1">
           {{ t('footer.copyright') }}
+          — {{ t('footer.credits') }}
         </div>
 
         <!-- Colonne droite -->

@@ -35,6 +35,10 @@ export default {
     noDataText: 'No data available',
     fetchError: 'Error fetching data, please try again later.',
     download: 'Download',
+    showMore: 'Show More',
+    details: 'Details',
+    information: 'Information',
+    search: 'Search',
   },
   profile: {
     mainTitle: 'My Profile',
@@ -169,7 +173,6 @@ export default {
   organizer: {
     dashboard: 'Organizer Dashboard',
     announcements: {
-      searchPlaceholder: 'Search',
       addButton: 'Create Announcement',
       addClicked: 'Add button clicked',
     },
@@ -221,6 +224,11 @@ export default {
       noTeamAvailable:
         'No teams available eligible for this user. Create another team or modify the constraints.',
       noTeamAssigned: 'No team assigned',
+      userAssignedToTeam: 'User assigned to team successfully',
+      userAssignError: 'Error assigning user to team',
+      userWithdrawnFromTeam: 'User withdrawn from team successfully',
+      userWithdrawError: 'Error withdrawing user from team',
+      noTeamsAvailable: 'No teams available',
       team: 'Team',
       members: 'Members',
       name: 'Name',
@@ -264,6 +272,7 @@ export default {
         addJury: 'Add Jury',
         addMentors: 'Add Mentors',
         membersPlaceholder: 'Search by name',
+        addDescription: 'Add a description',
         selectTheme: 'Select a theme',
         selectSubject: 'Select a subject',
       },
@@ -331,8 +340,8 @@ export default {
       hackathon: 'Hackathon Management',
       announcements: 'Announcements',
       faq: 'FAQ',
-      users: 'User Management',
-      teams: 'Team Management',
+      users: 'Users Management',
+      teams: 'Teams Management',
       projects: 'Projects Management',
       settings: 'Settings',
       themes: 'Themes & Subjects',
@@ -409,6 +418,7 @@ export default {
     dashboard: 'Participant Dashboard',
     nav: {
       dashboard: 'Dashboard',
+      announcements: 'Announcements',
       teams: 'My Team',
       projects: 'Project Submission',
       faq: 'FAQ',
@@ -499,6 +509,7 @@ export default {
     privacyPolicy: 'Privacy Policy',
     terms: 'Terms and Conditions',
     cookies: 'Cookies',
+    credits: 'EPITA - MTI 2026'
   },
 
   // Settings
@@ -665,6 +676,7 @@ export default {
   // FAQ Section
   faq: {
     title: 'Frequently Asked Questions',
+    subtitle: 'Find answers to common questions about the hackathon',
     noQuestions: 'No questions available at the moment.',
     question: 'Question',
     answer: 'Answer',
@@ -773,10 +785,58 @@ export default {
       teams_formed:
         'All participants are in a team, and every judge and mentor is assigned to at least one team',
       discord_autorole: 'Execute the /team_autorole command on the hackathon Discord server',
+      create_github_repos: 'Create GitHub repositories for all teams (Teams Management Tab)',
       define_submission_deadline:
         'Define the project submission deadline (Dates & Planning Tab in Settings)',
       upload_evaluation_grid: 'Upload the evaluation grid (Media & Files Tab in Settings)',
       evaluations_completed: 'All teams have been evaluated by at least one judge',
     },
+  },
+  dashboard: {
+    welcome: 'Welcome to your dashboard {firstname}!',
+    currentPhase: 'Current Phase: {phaseName}',
+    nothing_todo: 'There are **no mandatory actions** for you as a participant during the current phase ({currentPhase}).',
+    participant: {
+      tasks: 'Your Tasks',
+      profile_completion : {
+        title: 'Complete your profile',
+        description: 'Please complete your profile to get the best experience during the hackathon.',
+        addBio: 'Add a bio',
+        addInterests: 'Add your interests',
+        addDiscord: 'Connect your Discord',
+        addGithub: 'Connect your GitHub',
+        addPicture: 'Add a profile picture',
+      },
+      topic_selection : {
+        title: 'Select your favorite topics',
+        description: 'Choose the topics that interest you the most for the hackathon.',
+        selectedTopic: 'Selected Topic: ',
+        actionTitle: 'Select a Topic',
+        confirmationTitle: 'Confirm Topic Selection',
+        confirmationText: 'Are you sure you want to select this topic?',
+        selectedTopicLabel: 'Selected Topic: ',
+      },
+      teams_formed : {
+        title: 'Join or create a team',
+        description: 'Find teammates or create your own team to participate in the hackathon.',
+        joinTeam: 'Join',
+        quitTeam: 'Quit',
+        myTeam: 'My Team',
+      },
+      project_submission : {
+        title: 'Submit your project',
+        hackathonEndsIn: 'The hackathon ends in ',
+        description: 'Upload your project before the submission deadline.',
+        submit: 'Submit Project'
+      },
+    },
+  },
+
+  countdown: {
+    days: 'Days',
+    hours: 'Hours',
+    minutes: 'Min',
+    seconds: 'Sec',
+    expired: 'Time\'s up!'
   },
 }

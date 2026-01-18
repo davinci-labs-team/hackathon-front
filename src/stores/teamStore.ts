@@ -77,16 +77,16 @@ export const useTeamStore = defineStore('team', {
     /**
      * Assign a user to a team.
      */
-    async assignUserToTeam(teamId: string, userId: string): Promise<void> {
-      await teamService.assignUserToTeam(teamId, userId)
+    async assignUserToTeam(teamId: string, userId: string, isParticipant = false): Promise<void> {
+      await teamService.assignUserToTeam(teamId, userId, isParticipant)
       await this.fetchUpdatedTeam(teamId)
     },
 
     /**
      * Withdraw a user from a team.
      */
-    async withdrawUserFromTeam(teamId: string, userId: string): Promise<void> {
-      await teamService.withdrawUserFromTeam(teamId, userId)
+    async withdrawUserFromTeam(teamId: string, userId: string, isParticipant = false): Promise<void> {
+      await teamService.withdrawUserFromTeam(teamId, userId, isParticipant)
       await this.fetchUpdatedTeam(teamId)
     },
 

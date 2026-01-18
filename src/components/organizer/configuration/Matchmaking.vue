@@ -109,7 +109,7 @@
       snackbar.value = true
     } catch (e) {
       console.error('Error saving matchmaking settings:', e)
-      text.value = t('common.errorOccurred')
+      text.value = t('common.error')
       error.value = true
       snackbar.value = true
     } finally {

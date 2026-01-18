@@ -32,6 +32,10 @@ export default {
     noDataText: 'Aucune donnée disponible',
     fetchError: 'Erreur lors de la récupération des données, veuillez réessayer plus tard.',
     download: 'Télécharger',
+    showMore: 'Afficher plus',
+    details: 'Détails',
+    information: 'Informations',
+    search: 'Rechercher',
   },
   profile: {
     mainTitle: 'Mon Profil',
@@ -85,7 +89,8 @@ export default {
       "Bienvenue ! Pour rejoindre l'événement, veuillez vous inscrire ci-dessous.",
     firstLoginBtn: 'Première connexion',
     locationText: 'Inscrivez-vous pour connaître le lieu exact',
-    dateText: '{count} jour intensif de code | {count} jour intensif de code | {count} jours intensifs de code',
+    dateText:
+      '{count} jour intensif de code | {count} jour intensif de code | {count} jours intensifs de code',
     phases: {
       1: {
         defaultName: 'Complétion de Profil',
@@ -173,7 +178,6 @@ export default {
   organizer: {
     dashboard: 'Tableau de bord Organisateur',
     announcements: {
-      searchPlaceholder: 'Rechercher',
       addButton: 'Créer une annonce',
       addClicked: 'Bouton d’ajout cliqué',
     },
@@ -225,6 +229,11 @@ export default {
       noTeamAvailable:
         'Aucune équipe disponible éligible pour cet utilisateur. Créez une autre équipe ou modifiez les contraintes.',
       noTeamAssigned: 'Aucune équipe assignée',
+      userWithdrawnFromTeam: "L'utilisateur a été retiré de l’équipe avec succès",
+      userWithdrawError: "Erreur lors du retrait de l'utilisateur de l'équipe",
+      userAssignedToTeam: "L'utilisateur a été assigné à l’équipe avec succès",
+      userAssignError: "Erreur lors de l'assignation de l'utilisateur à l'équipe",
+      noTeamsAvailable: 'Aucune équipe disponible',
       team: 'Équipe',
       members: 'Membres',
       name: 'Nom',
@@ -236,7 +245,8 @@ export default {
       namePlaceholder: 'Rechercher par nom, équipe',
       autogenerate: {
         inProgressTitle: 'Génération Automatique des Équipes',
-        inProgressText: "Veuillez patienter pendant que les équipes sont générées automatiquement...",
+        inProgressText:
+          'Veuillez patienter pendant que les équipes sont générées automatiquement...',
         resultTitle: 'Résultat de la Génération Automatique des Équipes',
         resultSuccess: '{count} équipe(s) créée(s) avec succès',
         resultNoChange: 'Aucune équipe n’a été créée',
@@ -267,6 +277,7 @@ export default {
         addMembers: 'Ajouter des participants',
         addJury: 'Ajouter des jury',
         addMentors: 'Ajouter des mentors',
+        addDescription: 'Ajouter une description',
         membersPlaceholder: 'Rechercher par nom',
         selectTheme: 'Sélectionner un thème',
         selectSubject: 'Sélectionner un sujet',
@@ -357,7 +368,7 @@ export default {
       noGithubLink: 'Aucun lien GitHub fourni',
       fileUploaded: 'Fichier rendu',
       download: 'Télécharger',
-      downloadGrid: 'Télécharger la grille d\'évaluation',
+      downloadGrid: "Télécharger la grille d'évaluation",
       grade: 'Note (/20)',
       uploadGrid: 'Uploader la grille remplie',
       comment: 'Commentaire',
@@ -414,6 +425,7 @@ export default {
     dashboard: 'Tableau de bord Participant',
     nav: {
       dashboard: 'Dashboard',
+      announcements: 'Annonces',
       teams: 'Mon Équipe',
       projects: 'Dépôt de Projet',
       faq: 'FAQ',
@@ -447,12 +459,10 @@ export default {
     },
     submission: {
       title: 'Dépôt de projet',
-
       team: {
         title: 'Équipe',
         noGithubLink: 'Aucun lien GitHub fourni',
       },
-
       upload: {
         title: 'Fichiers du projet (.zip)',
         chooseFile: 'Choisir un fichier ZIP',
@@ -464,7 +474,6 @@ export default {
         fileUploaded: 'Fichier uploadé',
         download: 'Télécharger',
       },
-
       status: {
         title: 'Statut de remise',
         team: 'Équipe',
@@ -479,7 +488,6 @@ export default {
         pending: "En attente d'évaluation",
         graded: 'Évalué',
       },
-
       evaluations: {
         title: 'Évaluations',
         noEvaluations: 'Aucune évaluation disponible pour le moment',
@@ -489,7 +497,6 @@ export default {
         comment: 'Commentaire',
         downloadFile: "Télécharger le fichier d'évaluation",
       },
-
       comments: {
         title: 'Commentaires des mentors',
         noComments: 'Aucun commentaire pour le moment',
@@ -510,6 +517,7 @@ export default {
     privacyPolicy: 'Politique de confidentialité',
     terms: 'Conditions générales',
     cookies: 'Cookies',
+    credits: 'EPITA - MTI 2026',
   },
 
   // Settings
@@ -703,6 +711,7 @@ export default {
   // FAQ Section
   faq: {
     title: 'Foire Aux Questions',
+    subtitle: 'Trouvez des réponses aux questions fréquemment posées',
     noQuestions: 'Aucune question disponible pour le moment.',
     question: 'Question',
     answer: 'Réponse',
@@ -764,7 +773,8 @@ export default {
       begin: 'Commencer',
       end: 'Terminer',
       skip: 'Passer',
-      disabledReason: "Assurez-vous que toutes les actions organisateur sont complétées avant de continuer.",
+      disabledReason:
+        'Assurez-vous que toutes les actions organisateur sont complétées avant de continuer.',
     },
     errors: {
       phaseSkipError: 'Impossible de passer la phase actuelle.',
@@ -790,7 +800,7 @@ export default {
         mentors: 'Mentors assignés à une équipe',
         teamsCreated: 'Équipe(s) créée(s)',
       },
-      submissions: "Projets soumis",
+      submissions: 'Projets soumis',
       evaluations: 'Projets évalués',
       total: 'Total',
       teamsFormed: 'Équipes formées',
@@ -798,7 +808,7 @@ export default {
       projectsEvaluated: 'Projets évalués',
     },
     organizerActions: {
-      noActions: "Aucune action requise pour le moment.",
+      noActions: 'Aucune action requise pour le moment.',
       title: 'Actions Organisateur',
       alertPending:
         'Préparation avant le lancement : Ces étapes sont nécessaires pour commencer la phase.',
@@ -814,11 +824,60 @@ export default {
       teams_formed:
         'Tous les participants sont dans une équipe et chaque jury et mentor est assigné à au moins une équipe',
       discord_autorole: 'Exécuter la commande /team_autorole sur le serveur Discord du hackathon',
+      create_github_repos: 'Créer les dépôts GitHub pour chaque équipe (Page Gestion des Équipes)',
       define_submission_deadline:
         'Définir la date limite de dépôt des projets (Onglet Dates & Planning dans les Paramètres)',
       upload_evaluation_grid:
         "Télécharger la grille d'évaluation (Onglet Médias & Fichiers dans les Paramètres)",
       evaluations_completed: 'Toutes les équipes ont été évaluées par au moins un membre du jury',
     },
+  },
+  dashboard: {
+    welcome: 'Bienvenue sur votre tableau de bord, {firstname} !',
+    currentPhase: 'Phase Actuelle : {phaseName}',
+    nothing_todo: "Il n'y a rien à faire pour le moment. Revenez plus tard !",
+    participant: {
+      tasks: 'Vos Tâches',
+      profile_completion: {
+        title: 'Compléter votre profil',
+        description: 'Ajoutez des informations personnelles pour mieux vous connaître.',
+        addBio: 'Ajouter une bio',
+        addInterests: 'Ajouter des centres d’intérêt',
+        addDiscord: 'Connecter votre Discord',
+        addGithub: 'Connecter votre GitHub',
+        addPicture: 'Ajouter une photo de profil',
+      },
+      topic_selection: {
+        title: 'Sélectionner votre sujet préféré pour le hackathon',
+        description: 'Choisissez un sujet qui vous passionne parmi les options disponibles.',
+        selectedTopic: 'Sujet sélectionné : {topicName}',
+        actionTitle: 'Sélectionner un sujet',
+        confirmationTitle: 'Confirmer la sélection du sujet',
+        confirmationText: 'Êtes-vous sûr de vouloir sélectionner ce sujet ?',
+        selectedTopicLabel: 'Sujet sélectionné :',
+      },
+      teams_formed: {
+        title: 'Rejoindre ou former une équipe',
+        description:
+          "Collaborez avec d'autres participants en rejoignant une équipe ou en formant la vôtre.",
+        joinTeam: 'Rejoindre',
+        quitTeam: 'Quitter',
+        myTeam: 'Mon Équipe',
+      },
+      project_submission: {
+        title: 'Soumettre votre projet',
+        hackathonEndsIn: 'Le hackathon se termine dans : ',
+        description: 'Partagez votre travail en soumettant votre projet avant la date limite.',
+        submit: 'Soumettre le projet',
+      },
+    },
+  },
+
+  countdown: {
+    days: 'Jours',
+    hours: 'Heures',
+    minutes: 'Min',
+    seconds: 'Sec',
+    expired: 'Temps écoulé !',
   },
 }
