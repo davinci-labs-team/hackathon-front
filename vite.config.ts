@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
       port: 5173,
       strictPort: true,
       host: '0.0.0.0',
-      allowedHosts: env.ALLOWED_HOSTS.split(',').map(h => h.trim()),
+      allowedHosts: (env.ALLOWED_HOSTS || '').split(',').map(h => h.trim()),
     },
   }
 })
