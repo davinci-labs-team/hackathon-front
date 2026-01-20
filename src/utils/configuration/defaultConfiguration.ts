@@ -13,12 +13,12 @@ function getDefaultPhases() {
 
   const phases = phaseNames.map((name, index) => {
     const order = index + 1;
-    
+
     const status = (order === 1) ? 'PENDING' : 'NOT_STARTED';
 
     const optional = [3, 5, 6].includes(order);
 
-    const phase : HackathonPhaseDTO = {
+    const phase: HackathonPhaseDTO = {
       order: order,
       name: name,
       status: status,
@@ -30,7 +30,7 @@ function getDefaultPhases() {
     if (order === 4) {
       const today = new Date();
       const defaultDeadline = new Date(today.getFullYear() + 1, 11, 1).toISOString();
-      phase.endDate = defaultDeadline; 
+      phase.endDate = defaultDeadline;
     }
     return phase;
   });
@@ -213,7 +213,7 @@ export const defaultConfigurations = {
       introParagraph: 'You are invited to participate in {{hackathonName}}. We are excited to have you on board!',
       actionPrompt: 'To confirm your participation and access your account, please click the button below:',
       buttonText: 'Access to my account',
-      closingNote: 'If you have any questions, our team is here to help you.',
+      closingNote: 'If you did not request a new connection to your account, please ignore this email.',
       signatureSalutation: 'Best regards,',
       signatureName: 'The {{hackathonName}} Team',
     },
@@ -222,7 +222,7 @@ export const defaultConfigurations = {
       title: 'Password Reset Request',
       introParagraph: 'We received a request to reset your password for your account at {{hackathonName}}.',
       actionPrompt: 'To reset your password, please click the button below:',
-      buttonText: 'Reset My Password',  
+      buttonText: 'Reset My Password',
       closingNote: 'If you did not request a password reset, please ignore this email.',
       signatureSalutation: 'Best regards,',
       signatureName: 'The {{hackathonName}} Team',

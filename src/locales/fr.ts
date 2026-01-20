@@ -190,7 +190,7 @@ export default {
       name: 'Nom',
       namePlaceholder: 'Rechercher par nom',
       email: 'Email',
-      emailPlaceholder: 'john@example.com',
+      emailPlaceholder: "john{'@'}example.com",
       firstnamePlaceholder: 'John',
       lastnamePlaceholder: 'Doe',
       actions: 'Actions',
@@ -206,8 +206,7 @@ export default {
       dropCsvOrSelect: 'Déposez votre fichier CSV ici ou sélectionnez-le',
       selectFile: 'Sélectionner un fichier',
       exampleCsvText: 'Exemple de CSV :',
-      exampleCsv:
-        'firstname,lastname,email,role,school\nJohn,Doe,john@example.com,PARTICIPANT,EPITA\nJane,Smith,jane@example.com,MENTOR,',
+
       selectAllPending: 'Sélectionner tous les utilisateurs non invités',
       inviteSelected: 'Inviter la sélection ({count})',
       deleteSelected: 'Supprimer la sélection ({count})',
