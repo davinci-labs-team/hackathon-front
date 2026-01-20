@@ -226,6 +226,7 @@
           max-height="150"
           max-width="200"
           contain
+          class="bg-black rounded p-2"
         />
       </div>
 
@@ -247,6 +248,7 @@
           max-height="150"
           max-width="200"
           contain
+          class="bg-black rounded p-2"
         />
       </div>
 
