@@ -20,9 +20,8 @@ const showAssign = computed(() => {
       case UserRole.PARTICIPANT:
         return !hasTeam.value
       case UserRole.MENTOR:
-        return !props.user.mentorTeams || props.user.mentorTeams.length === 0
       case UserRole.JURY:
-        return !props.user.juryTeams || props.user.juryTeams.length === 0
+        return true
       default:
         return false
 }})
