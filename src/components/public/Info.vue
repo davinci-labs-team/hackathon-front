@@ -26,8 +26,6 @@
     const textsResponse = await configurationService.findOnePublic(PublicConfigurationKey.TEXTS)
     infos.value = textsResponse.value as HackathonTextDTO
 
-    console.log('Fetched infos:', infos.value)
-
     startDate.value = infos.value.startDate || ''
     endDate.value = infos.value.endDate || ''
     numberOfDays.value = getDaysBetween(startDate.value, endDate.value) || 0
