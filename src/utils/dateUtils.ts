@@ -87,7 +87,10 @@ export function formatDate(date: Date | string | null, locale: string): string {
   return `${dateStr} at ${timeStr}`
 }
 
-export function getDaysBetween(start: string | Date | null, end: string | Date | null): number | null {
+export function getDaysBetween(
+  start: string | Date | null,
+  end: string | Date | null
+): number | null {
   if (!start || !end) return null // gérer les cas où une date est nulle
 
   const startD = typeof start === 'string' ? new Date(start) : start
@@ -99,3 +102,20 @@ export function getDaysBetween(start: string | Date | null, end: string | Date |
   return Math.ceil(diffDays)
 }
 
+export function getDetailedDuration(start: string | Date | null, end: string | Date | null) {
+  if (!start || !end) return null
+
+  const startD = new Date(start).getTime()
+  const endD = new Date(end).getTime()
+
+  const diffMs = endD - startD
+  if (diffMs < 0) return 'Date de fin invalide'
+
+  const totalHours = diffMs / (1000 * 60 * 60)
+  const days = Math.floor(totalHours / 24)
+  const hours = Math.round(totalHours % 24)
+
+  if (days === 0) return `${hours}h`
+  if (hours === 0) return `${days}j`
+  return `${days}j et ${hours}h`
+}

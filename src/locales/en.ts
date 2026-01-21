@@ -529,10 +529,18 @@ export default {
     slogan: 'Slogan',
     hackathonDescription: 'Hackathon Description',
     hackathonName: 'Hackathon Name',
+    location: 'Location',
+    startDate: 'Start Date',
+    endDate: 'End Date',
+    totalDuration: 'Total Duration',
+    days: '{count} day(s)',
+    hours: ' and {count} hour(s)',
     errors: {
       requiredField: 'This field is required',
       maxLength: 'Maximum length reached',
       fixErrors: 'Please fix the errors before saving.',
+      requiredFields: 'Please fill in all required fields.',
+      invalidDates: 'End date must be after start date.',
     },
   },
   mediaSettings: {
