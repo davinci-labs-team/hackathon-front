@@ -320,7 +320,7 @@ export default {
       noJuryAssigned: 'Aucun jury assigné',
       noGrade: '-',
       pendingJury: 'Membre(s) du jury en attente :',
-      noSubmissions: 'Aucun dépôt correspondant aux critères',
+      noSubmissions: 'Vous n\'avez pas d\'équipe assignée',
       noComments: 'Aucun commentaire disponible',
       namePlaceholder: 'Rechercher par nom, équipe',
       team: 'Équipe',

@@ -311,7 +311,7 @@ export default {
     submissionManagement: {
       title: 'Project Submissions',
       noJuryAssigned: 'No jury assigned',
-      noSubmissions: 'No submissions matching the criteria',
+      noSubmissions: 'You have no team assigned',
       noComments: 'No comments available',
       noGrade: '-',
       pendingJury: 'Pending jury member(s):',
