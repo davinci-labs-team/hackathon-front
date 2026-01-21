@@ -581,8 +581,8 @@ export default {
   mediaSettings: {
     title: 'Médias & Fichiers',
     subtitle: "Gérez les images et fichiers utilisés dans l'application",
-    logo: 'Logo',
-    banner: 'Bannière',
+    logo: 'Logo (dans l’en-tête)',
+    poster: 'Poster du Hackathon',
     socialMediaLinks: 'Liens des Réseaux Sociaux',
     platformImages: 'Images de la Plateforme',
     uploadEvaluationGrid: 'Envoyer la grille d’évaluation',

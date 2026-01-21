@@ -546,8 +546,8 @@ export default {
   mediaSettings: {
     title: 'Media & Files',
     subtitle: 'Manage images and files used in the application',
-    logo: 'Logo',
-    banner: 'Banner',
+    logo: 'Logo (in the header)',
+    poster: 'Hackathon Poster',
     socialMediaLinks: 'Social Media Links',
     platformImages: 'Platform Images',
     uploadEvaluationGrid: 'Upload Evaluation Grid',
