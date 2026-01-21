@@ -859,6 +859,21 @@ export default {
         submit: 'Soumettre le projet',
       },
     },
+    expert: {
+      tasks: 'Vos Tâches',
+      provide_feedback: {
+        title: 'Fournir des feedbacks aux équipes assignées',
+        description: "Rendez vos feedbacks aux équipes qui vous ont été assignées.",
+        giveFeedback: 'Voire les feedbacks',
+        count: 'équipe(s) à commenter',
+      },
+      evaluate_projects: {
+        title: "Évaluer les projets des équipes assignées",
+        description: "Notez les projets des équipes qui vous ont été assignées.",
+        evaluateNow: "Évaluer les projets",
+        count: 'projet(s) à évaluer',
+      },
+    },
   },
 
   countdown: {

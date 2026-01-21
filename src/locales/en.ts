@@ -818,6 +818,21 @@ export default {
         submit: 'Submit Project'
       },
     },
+    expert: {
+      tasks: 'Your Tasks',
+      provide_feedback: {
+        title: 'Provide feedback to your assigned teams',
+        description: 'Review the projects of your assigned teams and provide valuable feedback.',
+        viewTeams: 'View Feedback Teams',
+        count: 'team(s) awaiting feedback',
+      },
+      evaluate_projects: {
+        title: 'Evaluate submitted projects',
+        description: 'Assess the projects submitted by participants and provide your evaluations.',
+        viewSubmissions: 'View Project Submissions',
+        count: 'evaluated project(s)',
+      },
+    }
   },
 
   countdown: {

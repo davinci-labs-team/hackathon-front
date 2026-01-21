@@ -11,6 +11,7 @@
   import LatestAnnouncementsPreview from '@/components/common/LatestAnnouncementsPreview.vue'
   import ParticipantTask from '@/components/user/ParticipantTask.vue'
   import { UserRole } from '@/types/roles'
+import ExpertTask from '@/components/expert/ExpertTask.vue'
 
   const { t } = useI18n()
 
@@ -88,7 +89,7 @@
         class="w-3/4 flex flex-col gap-6"
         style="height: 100%"
       >
-        Here will be a component indicating tasks to do for the jury or mentor base on the current phase
+        <ExpertTask />
       </div>
     </div>
   </v-container>
