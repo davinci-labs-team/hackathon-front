@@ -713,6 +713,14 @@ export default {
     title: 'Hackathon Management',
     subtitle: 'Control and monitor the progress of your hackathon',
     currentPhase: 'Current Phase',
+    resetComplete: 'Hackathon has been reset to initial state.',
+    resetPhases: 'Reset Phases',
+    resetDialog: {
+      title: 'Confirm Hackathon Reset',
+      text: 'You are about to reset the hackathon to its initial state. This action is irreversible. Are you sure you want to proceed?',
+      reset: 'Yes, reset hackathon',
+      cancel: 'Cancel',
+    },
     actions: {
       begin: 'Begin',
       end: 'End',
@@ -723,6 +731,7 @@ export default {
       phaseSkipError: 'Error skipping phase, please try again later.',
       phaseBeginError: 'Error beginning phase, please try again later.',
       phaseCompleteError: 'Error completing phase, please try again later.',
+      resetError: 'Error resetting hackathon, please try again later.',
     },
     progress: {
       title: 'Progress',

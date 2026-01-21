@@ -748,6 +748,14 @@ export default {
     title: 'Gestion du Hackathon',
     subtitle: "Contrôlez et suivez l'avancement de votre hackathon",
     currentPhase: 'Phase Actuelle',
+    resetComplete: 'Le hackathon a été réinitialisé avec succès.',
+    resetPhases: 'Réinitialiser les Phases',
+    resetDialog : {
+      title: 'Confirmer la réinitialisation',
+      text: 'Êtes-vous sûr de vouloir réinitialiser le hackathon ? Cette action est irréversible.',
+      reset: 'Oui, réinitialiser le hackathon',
+      cancel: 'Annuler',
+    },
     actions: {
       begin: 'Commencer',
       end: 'Terminer',
@@ -759,6 +767,7 @@ export default {
       phaseSkipError: 'Impossible de passer la phase actuelle.',
       phaseBeginError: 'Impossible de commencer la phase sélectionnée.',
       phaseCompleteError: 'Impossible de terminer la phase actuelle.',
+      resetError: 'Erreur lors de la réinitialisation du hackathon.',
     },
     progress: {
       title: 'Avancement',
