@@ -134,7 +134,7 @@ export default {
     email: 'Email',
     password: 'Mot de passe',
     confirmPassword: 'Confirmer le mot de passe',
-    invalidCredentials: 'Email ou mot de passe invalide',
+    invalidCredentials: 'Votre email n\'a pas été invité à ce hackathon',
     passwordsDoNotMatch: 'Les mots de passe ne correspondent pas',
     passwordComplexity:
       'Le mot de passe doit contenir au moins 8 caractères, incluant une majuscule, une minuscule, un chiffre et un caractère spécial.',
@@ -190,7 +190,7 @@ export default {
       name: 'Nom',
       namePlaceholder: 'Rechercher par nom',
       email: 'Email',
-      emailPlaceholder: 'john@example.com',
+      emailPlaceholder: "john{'@'}example.com",
       firstnamePlaceholder: 'John',
       lastnamePlaceholder: 'Doe',
       actions: 'Actions',
@@ -206,8 +206,7 @@ export default {
       dropCsvOrSelect: 'Déposez votre fichier CSV ici ou sélectionnez-le',
       selectFile: 'Sélectionner un fichier',
       exampleCsvText: 'Exemple de CSV :',
-      exampleCsv:
-        'firstname,lastname,email,role,school\nJohn,Doe,john@example.com,PARTICIPANT,EPITA\nJane,Smith,jane@example.com,MENTOR,',
+
       selectAllPending: 'Sélectionner tous les utilisateurs non invités',
       inviteSelected: 'Inviter la sélection ({count})',
       deleteSelected: 'Supprimer la sélection ({count})',
@@ -321,7 +320,7 @@ export default {
       noJuryAssigned: 'Aucun jury assigné',
       noGrade: '-',
       pendingJury: 'Membre(s) du jury en attente :',
-      noSubmissions: 'Aucun dépôt correspondant aux critères',
+      noSubmissions: 'Vous n\'avez pas d\'équipe assignée',
       noComments: 'Aucun commentaire disponible',
       namePlaceholder: 'Rechercher par nom, équipe',
       team: 'Équipe',

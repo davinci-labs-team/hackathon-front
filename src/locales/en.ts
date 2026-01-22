@@ -133,7 +133,7 @@ export default {
     email: 'Email',
     password: 'Password',
     confirmPassword: 'Confirm Password',
-    invalidCredentials: 'Invalid email or password',
+    invalidCredentials: 'Your email is not invited to this hackathon',
     accessDenied: 'Access denied. Organizer area only.',
     resetFailed: 'Password reset failed. Please try again.',
     firstLoginEmailSent: 'The email has been sent. Please check your inbox.',
@@ -185,7 +185,7 @@ export default {
       name: 'Name',
       namePlaceholder: 'Search by name',
       email: 'Email',
-      emailPlaceholder: 'john@example.com',
+      emailPlaceholder: "john{'@'}example.com",
       firstnamePlaceholder: 'John',
       lastnamePlaceholder: 'Doe',
       actions: 'Actions',
@@ -201,8 +201,7 @@ export default {
       dropCsvOrSelect: 'Drop your CSV file here or select it',
       selectFile: 'Select a file',
       exampleCsvText: 'Example CSV:',
-      exampleCsv:
-        'firstname,lastname,email,role,school\nJohn,Doe,john@example.com,PARTICIPANT,EPITA\nJane,Smith,jane@example.com,MENTOR,',
+
       selectAllPending: 'Select all non-invited users',
       inviteSelected: 'Invite selected ({count})',
       deleteSelected: 'Delete selected ({count})',
@@ -312,7 +311,7 @@ export default {
     submissionManagement: {
       title: 'Project Submissions',
       noJuryAssigned: 'No jury assigned',
-      noSubmissions: 'No submissions matching the criteria',
+      noSubmissions: 'You have no team assigned',
       noComments: 'No comments available',
       noGrade: '-',
       pendingJury: 'Pending jury member(s):',
@@ -815,7 +814,7 @@ export default {
     nothing_todo: 'There are **no mandatory actions** for you as a participant during the current phase ({currentPhase}).',
     participant: {
       tasks: 'Your Tasks',
-      profile_completion : {
+      profile_completion: {
         title: 'Complete your profile',
         description: 'Please complete your profile to get the best experience during the hackathon.',
         addBio: 'Add a bio',
@@ -824,7 +823,7 @@ export default {
         addGithub: 'Connect your GitHub',
         addPicture: 'Add a profile picture',
       },
-      topic_selection : {
+      topic_selection: {
         title: 'Select your favorite topics',
         description: 'Choose the topics that interest you the most for the hackathon.',
         selectedTopic: 'Selected Topic: ',
@@ -833,14 +832,14 @@ export default {
         confirmationText: 'Are you sure you want to select this topic?',
         selectedTopicLabel: 'Selected Topic: ',
       },
-      teams_formed : {
+      teams_formed: {
         title: 'Join or create a team',
         description: 'Find teammates or create your own team to participate in the hackathon.',
         joinTeam: 'Join',
         quitTeam: 'Quit',
         myTeam: 'My Team',
       },
-      project_submission : {
+      project_submission: {
         title: 'Submit your project',
         hackathonEndsIn: 'The hackathon ends in ',
         description: 'Upload your project before the submission deadline.',

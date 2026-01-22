@@ -177,6 +177,9 @@
     csvLoaded.value = false
     emit('close')
   }
+  const exampleCsv = `firstname,lastname,email,role,school
+John,Doe,john@example.com,PARTICIPANT,EPITA
+Jane,Smith,jane@example.com,MENTOR,`
 </script>
 
 <template>
@@ -202,7 +205,7 @@
 
           <div class="mb-4 text-sm text-gray-600">
             <strong>{{ t('organizer.userManagement.exampleCsvText') }}</strong>
-            <pre class="bg-gray-100 p-2 rounded">{{ t('organizer.userManagement.exampleCsv') }}</pre>
+            <pre class="bg-gray-100 p-2 rounded">{{ exampleCsv }}</pre>
           </div>
         </div>
 
