@@ -19,47 +19,29 @@
   const preview = ref(props.profilePicture)
   const fileInput = ref<HTMLInputElement>()
   const fileInputRef = ref<File | null>(null)
-  const oldProfilePicturePath = ref(props.user.profilePicturePath || '')
 
   // Watch for prop changes to update local state
   watch(
     () => props,
     (val) => {
       localUser.value = { ...val.user }
-      preview.value = val.profilePicture
-      oldProfilePicturePath.value = val.user.profilePicturePath || ''
+
+      if (!props.editMode) {
+        preview.value = val.profilePicture
+      }
     },
     { deep: true }
   )
 
-  // TODO: handle delete and upload with backend calls
   const saveChanges = async () => {
     let path = localUser.value.profilePicturePath
 
     if (fileInputRef.value) {
-      if (oldProfilePicturePath.value) {
-        try {
-          //await S3BucketService.deleteFile(oldProfilePicturePath.value)
-        } catch (err) {
-          console.error('Erreur lors de la suppression de l’ancienne image :', err)
-        }
-      }
-
       // Upload de la nouvelle photo
       const uploadResult = await S3BucketService.uploadFile(fileInputRef.value, 'users')
       path = uploadResult.path
-
-      useAuthStore().updateProfilePicture(path)
     }
-
-    if (!fileInputRef.value && !preview.value && oldProfilePicturePath.value) {
-      try {
-        //await S3BucketService.deleteFile(oldProfilePicturePath.value)
-      } catch (err) {
-        console.error('Erreur lors de la suppression de la photo :', err)
-      }
-      path = ''
-    }
+    useAuthStore().updateProfilePicture(path)
 
     emit('update:user', {
       id: localUser.value.id,
@@ -71,8 +53,6 @@
       profilePicturePath: path,
       teamId: localUser.value.teamId,
     })
-
-    oldProfilePicturePath.value = path || ''
   }
 
   const resetLocalUser = () => {

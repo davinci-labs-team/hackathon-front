@@ -29,7 +29,7 @@ export const useAuthStore = defineStore('auth', {
         localStorage.setItem('authUser', JSON.stringify(this.user))
       }
     },
-    updateProfilePicture(newProfilePicturePath: string) {
+    updateProfilePicture(newProfilePicturePath: string | undefined) {
       if (this.user) {
         this.user.profilePicturePath = newProfilePicturePath
         localStorage.setItem('authUser', JSON.stringify(this.user))
