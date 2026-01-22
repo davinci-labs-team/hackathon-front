@@ -52,6 +52,8 @@ export interface HackathonTextDTO {
   slogan?: string
   hackathonDescription: string
   location?: string
+  startDate?: string
+  endDate?: string
 }
 
 export interface HackathonMediaDTO {

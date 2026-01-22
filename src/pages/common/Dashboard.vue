@@ -10,10 +10,13 @@
   import { useAuthStore } from '@/stores/auth'
   import LatestAnnouncementsPreview from '@/components/common/LatestAnnouncementsPreview.vue'
   import ParticipantTask from '@/components/user/ParticipantTask.vue'
+  import { UserRole } from '@/types/roles'
+import ExpertTask from '@/components/expert/ExpertTask.vue'
 
   const { t } = useI18n()
 
   const { user } = useAuthStore()
+  const userRole = user?.role
 
   const mediaSettings = ref<HackathonMediaDTO>({ ...defaultConfigurations[ConfigurationKey.MEDIA] })
 
@@ -73,8 +76,20 @@
       <div class="w-1/4" style="height: 100%">
         <Partners />
       </div>
-      <div class="w-3/4 flex flex-col gap-6" style="height: 100%">
+      <div
+        v-if="userRole === UserRole.PARTICIPANT"
+        class="w-3/4 flex flex-col gap-6"
+        style="height: 100%"
+      >
         <ParticipantTask />
+      </div>
+
+      <div
+        v-if="userRole === UserRole.JURY || userRole === UserRole.MENTOR"
+        class="w-3/4 flex flex-col gap-6"
+        style="height: 100%"
+      >
+        <ExpertTask />
       </div>
     </div>
   </v-container>

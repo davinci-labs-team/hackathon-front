@@ -4,12 +4,14 @@
   import { HackathonPhaseDTO } from '@/types/config'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
   import { useConfiguration } from '@/composables/useConfiguration'
+  import { configurationService } from '@/services/configurationService'
 
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import CurrentPhase from '@/components/organizer/hackathon/CurrentPhase.vue'
   import PhaseProgress from '@/components/organizer/hackathon/PhaseProgress.vue'
   import OrganizerActions from '@/components/organizer/hackathon/OrganizerActions.vue'
   import PhaseStats from '@/components/organizer/hackathon/stats/PhaseStats.vue'
+  import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
   const { t } = useI18n()
   const isActionDisabled = ref(false)
@@ -17,6 +19,8 @@
   const topicSelection = ref(false)
   const teamsFormed = ref(false)
   const evaluationsCompleted = ref(false)
+
+  const showResetDialog = ref(false)
 
   // --- Hooks ---
 
@@ -42,6 +46,23 @@
 
   const hackathonPhases = ref<HackathonPhaseDTO[]>([])
   const currentPhase = ref<HackathonPhaseDTO>(null!)
+
+  const handleResetHackathon = async () => {
+    try {
+      await configurationService.resetHackathon()
+
+      await fetchPhases()
+      text.value = t('hackathonManagement.resetComplete')
+      error.value = false
+      snackbar.value = true
+    } catch (e) {
+      text.value = t('hackathonManagement.errors.resetError')
+      error.value = true
+      snackbar.value = true
+    } finally {
+      showResetDialog.value = false
+    }
+  }
 
   watch(
     phasesConfig,
@@ -103,6 +124,18 @@
 
 <template>
   <v-container class="py-10 max-w-7xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">{{ t('hackathonManagement.title') }}</h1>
+      <v-btn
+        color="red-darken-2"
+        size="large"
+        prepend-icon="mdi-refresh"
+        @click="showResetDialog = true"
+      >
+        {{ t('hackathonManagement.resetPhases') }}
+      </v-btn>
+    </div>
+
     <CurrentPhase
       v-if="hackathonPhases.length > 0"
       :currentPhase="currentPhase"
@@ -135,6 +168,15 @@
       @update:teamsFormed="teamsFormed = $event"
       :evaluationsCompleted="evaluationsCompleted"
       @update:evaluationsCompleted="evaluationsCompleted = $event"
+    />
+
+    <ConfirmDialog
+      v-model="showResetDialog"
+      :title="t('hackathonManagement.resetDialog.title')"
+      :text="t('hackathonManagement.resetDialog.text')"
+      :confirmLabel="t('hackathonManagement.resetDialog.reset')"
+      :cancelLabel="t('common.cancel')"
+      @confirm="handleResetHackathon"
     />
 
     <AppSnackbar v-model="snackbar" :message="snackbarMessage" :timeout="timeout" :error="error" />

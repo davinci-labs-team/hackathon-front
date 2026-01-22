@@ -56,7 +56,7 @@
         )
         bannerPicture.value = response.url
       } catch (err) {
-        console.error('Error fetching banner picture:', err)
+        console.error('Error fetching hackathon poster:', err)
       }
     }
     if (mediaSettings.value?.hackathonLogoId) {
@@ -97,16 +97,6 @@
 
   const getPreviewUrl = (file: File) => URL.createObjectURL(file)
 
-  // TODO: wait for backend support to delete files
-  /*const deleteOldFileIfNeeded = async (oldFileId?: string) => {
-      if (!oldFileId) return
-      try {
-        await S3BucketService.deleteFile(oldFileId)
-      } catch (err) {
-        console.warn(`Erreur lors de la suppression du fichier ${oldFileId} :`, err)
-      }
-    }*/
-
   const downloadEvaluationGridFile = async () => {
     if (!mediaSettings.value?.evaluationGridPath) return
     try {
@@ -125,7 +115,6 @@
     oldFileId?: string | null
   ): Promise<string | null> => {
     if (!file) return oldFileId ?? null
-    //await deleteOldFileIfNeeded(oldFileId ?? undefined)
     const uploaded = await S3BucketService.uploadFile(file, 'public_files')
     return uploaded.path
   }
@@ -212,7 +201,7 @@
         <!-- File input -->
         <v-file-input
           v-model="bannerFileInput"
-          :label="t('mediaSettings.banner')"
+          :label="t('mediaSettings.poster')"
           prepend-icon="mdi-image"
           accept="image/*"
           class="flex-1"
@@ -226,6 +215,7 @@
           max-height="150"
           max-width="200"
           contain
+          class="bg-black rounded p-2"
         />
       </div>
 
@@ -247,6 +237,7 @@
           max-height="150"
           max-width="200"
           contain
+          class="bg-black rounded p-2"
         />
       </div>
 

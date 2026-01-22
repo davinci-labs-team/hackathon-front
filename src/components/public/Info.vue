@@ -2,19 +2,18 @@
   import { useI18n } from 'vue-i18n'
   import { ref, onMounted } from 'vue'
   import { formatDate, getDaysBetween } from '@/utils/dateUtils'
-  import { HackathonPhaseDTO, HackathonTextDTO } from '@/types/config'
+  import { HackathonTextDTO } from '@/types/config'
   import { configurationService } from '@/services/configurationService'
   import { PublicConfigurationKey } from '@/utils/configuration/configurationKey'
-  import { HackathonPhaseOrder } from '@/utils/phases'
 
   const infos = ref<HackathonTextDTO>({
     hackathonName: '',
     slogan: '',
     hackathonDescription: '',
-    location: ''
+    location: '',
+    startDate: '',
+    endDate: ''
   })
-
-  const phases = ref<HackathonPhaseDTO[]>([])
 
   const startDate = ref('')
   const endDate = ref('')
@@ -27,12 +26,8 @@
     const textsResponse = await configurationService.findOnePublic(PublicConfigurationKey.TEXTS)
     infos.value = textsResponse.value as HackathonTextDTO
 
-    const phasesResponse = await configurationService.findOnePublic(PublicConfigurationKey.PHASES)
-    phases.value = phasesResponse.value.phases as HackathonPhaseDTO[]
-    const hackathonPhase = phases.value.find(phase => phase.order === HackathonPhaseOrder.Hackathon)
-
-    startDate.value = hackathonPhase?.startDate || ''
-    endDate.value = hackathonPhase?.endDate || ''
+    startDate.value = infos.value.startDate || ''
+    endDate.value = infos.value.endDate || ''
     numberOfDays.value = getDaysBetween(startDate.value, endDate.value) || 0
     
   } catch (error) {
@@ -43,7 +38,7 @@
 
 <template>
   <div class="flex flex-col h-full">
-    <h1 class="text-5xl font-bold mb-1">{{ t('hackathon.title') }}</h1>
+    <h1 class="text-5xl font-bold">{{ infos.hackathonName}}</h1>
     <p class="text-2xl italic text-gray-600 mb-8">
       {{ infos.slogan }}
     </p>

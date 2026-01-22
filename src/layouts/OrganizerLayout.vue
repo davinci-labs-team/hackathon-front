@@ -5,12 +5,12 @@
 
 <template>
   <div class="min-h-screen flex flex-col bg-white">
-    <NavBarOrganizer />
+    <NavBarOrganizer class="flex-none" />
 
     <main class="p-4 flex-grow">
       <router-view />
     </main>
 
-    <Footer />
+    <Footer class="flex-none h-[10vh]" />
   </div>
 </template>
