@@ -1,10 +1,11 @@
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { ref, watch, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { HackathonTextDTO, UpdateConfigurationDTO } from '@/types/config'
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
   import { useConfiguration } from '@/composables/useConfiguration'
+  import { getDetailedDuration } from '@/utils/dateUtils'
 
   const { t } = useI18n()
 
@@ -21,6 +22,8 @@
     slogan: '',
     hackathonDescription: '',
     location: '',
+    startDate: '',
+    endDate: '',
   })
 
   const saveAttempted = ref(false)
@@ -46,17 +49,56 @@
   const sloganMaxLength = 60
   const hackathonDescriptionMaxLength = 500
 
+  const areFieldsMissing = computed(() => {
+    const texts = hackathonTexts.value
+    return (
+      !texts.hackathonName ||
+      !texts.hackathonDescription ||
+      !texts.location ||
+      !texts.startDate ||
+      !texts.endDate
+    )
+  })
+
   const validateTexts = () => {
     const texts = hackathonTexts.value
-    if (!texts.hackathonName || texts.hackathonName.length > hackathonNameMaxLength) return false
-    if (texts.slogan && texts.slogan.length > sloganMaxLength) return false
-    if (
-      !texts.hackathonDescription ||
-      texts.hackathonDescription.length > hackathonDescriptionMaxLength
-    )
+
+    if (areFieldsMissing.value) {
+      snackbarText.value = t('textsSettings.errors.requiredFields')
       return false
+    }
+
+    if (isDateError.value) {
+      snackbarText.value = t('textsSettings.errors.fixErrors')
+      return false
+    }
+
+    if (
+      texts.hackathonName.length > hackathonNameMaxLength ||
+      (texts.slogan && texts.slogan.length > sloganMaxLength) ||
+      texts.hackathonDescription.length > hackathonDescriptionMaxLength
+    ) {
+      snackbarText.value = t('textsSettings.errors.fixErrors')
+      return false
+    }
+
     return true
   }
+
+  const durationDisplay = computed(() => {
+    if (!hackathonTexts.value.startDate || !hackathonTexts.value.endDate) return null
+
+    return getDetailedDuration(hackathonTexts.value.startDate, hackathonTexts.value.endDate)
+  })
+
+  const isDateError = computed(() => {
+    if (!hackathonTexts.value.startDate || !hackathonTexts.value.endDate) return false
+
+    const start = new Date(hackathonTexts.value.startDate).getTime()
+    const end = new Date(hackathonTexts.value.endDate).getTime()
+
+    return end < start
+  })
 
   // --- Snackbar ---
   const snackbar = ref(false)
@@ -68,19 +110,13 @@
     saveAttempted.value = true
 
     if (!validateTexts()) {
-      snackbarText.value = t('textsSettings.errors.fixErrors')
       snackbarError.value = true
       snackbar.value = true
       return
     }
 
     const updateDto: UpdateConfigurationDTO = {
-      value: {
-        hackathonName: hackathonTexts.value.hackathonName,
-        slogan: hackathonTexts.value.slogan,
-        hackathonDescription: hackathonTexts.value.hackathonDescription,
-        location: hackathonTexts.value.location,
-      },
+      value: { ...hackathonTexts.value },
     }
 
     isSaving.value = true
@@ -171,6 +207,52 @@
       >
         {{ t('textsSettings.errors.maxLength', { max: hackathonDescriptionMaxLength }) }}
       </p>
+
+      <!-- Location -->
+      <p class="mb-2 text-lg font-medium">
+        {{ t('textsSettings.location') }} <span class="text-red-500">*</span>
+      </p>
+      <v-text-field v-model="hackathonTexts.location" variant="outlined" dense class="mb-2" />
+
+      <v-row>
+        <v-col cols="12" md="6">
+          <p class="mb-2 text-lg font-medium">
+            {{ t('textsSettings.startDate') }} <span class="text-red-500">*</span>
+          </p>
+          <v-text-field
+            v-model="hackathonTexts.startDate"
+            type="datetime-local"
+            variant="outlined"
+            density="compact"
+          />
+        </v-col>
+
+        <v-col cols="12" md="6">
+          <p class="mb-2 text-lg font-medium">
+            {{ t('textsSettings.endDate') }} <span class="text-red-500">*</span>
+          </p>
+          <v-text-field
+            v-model="hackathonTexts.endDate"
+            type="datetime-local"
+            variant="outlined"
+            density="compact"
+          />
+        </v-col>
+      </v-row>
+
+      <div v-if="isDateError" class="mb-5">
+        <p class="text-red-500 flex items-center gap-2">
+          <v-icon color="red">mdi-alert-circle</v-icon>
+          {{ t('textsSettings.errors.invalidDates') }}
+        </p>
+      </div>
+
+      <div v-else-if="durationDisplay" class="mb-6">
+        <v-chip color="primary" variant="tonal">
+          <v-icon start icon="mdi-clock-outline"></v-icon>
+          {{ t('textsSettings.totalDuration') }}: {{ durationDisplay }}
+        </v-chip>
+      </div>
 
       <AppSnackbar
         v-model="snackbar"

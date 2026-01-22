@@ -69,6 +69,7 @@
       role: localUser.value.role,
       school: localUser.value.school,
       profilePicturePath: path,
+      teamId: localUser.value.teamId,
     })
 
     oldProfilePicturePath.value = path || ''
@@ -148,7 +149,9 @@
             auto-grow
             variant="solo"
           />
-          <div v-else class="user-school">{{ localUser.school || 'No info yet' }}</div>
+          <div v-else class="user-school">
+            {{ localUser.school }}
+          </div>
         </div>
       </v-col>
     </v-row>
