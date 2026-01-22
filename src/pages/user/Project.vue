@@ -109,6 +109,11 @@ const hasComments = computed(() => {
   return submissionInfo.value?.comments && submissionInfo.value.comments.length > 0
 })
 
+const isDeadlineExceeded = computed(() => {
+  if (!dueDate.value) return false
+  return new Date(dueDate.value).getTime() < Date.now()
+})
+
 // Gestion de l'upload
 const handleUpload = async () => {
   if (!selectedFile.value) {
@@ -210,7 +215,7 @@ const downloadSubmissionFile = async () => {
             prepend-icon="mdi-paperclip"
             :hide-details="!uploadError"
             :error-messages="uploadError"
-            :disabled="uploading"
+            :disabled="uploading || isDeadlineExceeded"
           />
         </v-col>
         <v-col cols="12" md="4">
@@ -219,7 +224,7 @@ const downloadSubmissionFile = async () => {
             block
             @click="handleUpload"
             :loading="uploading"
-            :disabled="!selectedFile || uploading"
+            :disabled="!selectedFile || uploading || isDeadlineExceeded"
           >
             <v-icon left>mdi-upload</v-icon>
             {{ t(`${tPrefix}.submission.upload.uploadButton`) }}
