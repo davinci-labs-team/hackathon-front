@@ -1,19 +1,18 @@
 <script setup lang="ts">
-  import { useI18n } from 'vue-i18n'
   import Footer from '@/components/common/Footer.vue'
   import NavBarUser from '@/components/user/NavBarUser.vue'
-
-  const { t } = useI18n()
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-white">
-    <NavBarUser />
+  <div class="min-h-screen flex flex-col bg-gray-50">
+    <NavBarUser class="flex-none" />
 
-    <main class="p-4 flex-grow">
-      <router-view />
+    <main class="flex-grow p-4">
+      <v-container>
+        <router-view />
+      </v-container>
     </main>
 
-    <Footer />
+    <Footer class="flex-none h-[10vh]" />
   </div>
 </template>

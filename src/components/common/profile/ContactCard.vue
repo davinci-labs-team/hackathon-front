@@ -4,7 +4,6 @@ import type { UserDTO } from '@/types/user'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useI18n } from 'vue-i18n';
 import { loginDiscord, loginGitHub } from '@/services/oauthService';
-import { useAuthStore } from '@/stores/auth';
 
 const { t } = useI18n()
 
@@ -34,7 +33,8 @@ const saveChanges = () => {
       role: localUser.value.role, 
       github: localUser.value.github,
       discord: localUser.value.discord,
-      linkedin: localUser.value.linkedin
+      linkedin: localUser.value.linkedin,
+      teamId: localUser.value.teamId,
     })
 }
 const resetLocalUser = () => {

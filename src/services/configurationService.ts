@@ -50,7 +50,12 @@ export const configurationService = {
     const url = `${API_URL}/${key}/public`
     const res = await axios.get(url)
     return res.data
-  }
+  },
+
+  async resetHackathon(): Promise<void> {
+    const url = `${API_URL}/phases/reset`
+    await axios.post(url, {}, { headers: getAuthHeaders() })
+  },
 }
 
 export async function getOrCreateConfiguration(key: ConfigurationKey) {

@@ -28,6 +28,8 @@ export enum TaskKey {
   PROJECT_SUBMISSION = 'project_submission',
 
   // PHASE 5
+  PROVIDE_FEEDBACK = 'provide_feedback',
+  EVALUATE_PROJECTS = 'evaluate_projects',
   UPLOAD_EVALUATION_GRID = 'upload_evaluation_grid',
   EVALUATIONS_COMPLETED = 'evaluations_completed',
 }
@@ -35,30 +37,66 @@ export enum TaskKey {
 export type PhaseStatus = 'PENDING' | 'IN_PROGRESS'
 
 export const ParticipantTaskMapByPhase: {
-  [key in PhaseOrder]:  TaskKey[]
+  [key in PhaseOrder]: TaskKey[]
 } = {
   // PHASE 1
-  [PhaseOrder.REGISTRATION]: [
-    TaskKey.PROFILE_COMPLETION,
-  ],
+  [PhaseOrder.REGISTRATION]: [TaskKey.PROFILE_COMPLETION],
 
   // PHASE 2
-  [PhaseOrder.TOPIC_SELECTION]: [
-    TaskKey.TOPIC_SELECTION,
-  ],
+  [PhaseOrder.TOPIC_SELECTION]: [TaskKey.TOPIC_SELECTION],
 
   // PHASE 3
-  [PhaseOrder.TEAM_FORMATION]: [
-    TaskKey.TEAMS_FORMED,
-  ],
+  [PhaseOrder.TEAM_FORMATION]: [TaskKey.TEAMS_FORMED],
 
   // PHASE 4
-  [PhaseOrder.DEVELOPMENT]: [
-    TaskKey.PROJECT_SUBMISSION,
-  ],
+  [PhaseOrder.DEVELOPMENT]: [TaskKey.PROJECT_SUBMISSION],
 
   // PHASE 5
   [PhaseOrder.EVALUATION]: [],
+
+  // PHASE 6
+  [PhaseOrder.CLOSING]: [],
+}
+
+export const MentorTaskMapByPhase: {
+  [key in PhaseOrder]: TaskKey[]
+} = {
+  // PHASE 1
+  [PhaseOrder.REGISTRATION]: [TaskKey.PROFILE_COMPLETION],
+
+  // PHASE 2
+  [PhaseOrder.TOPIC_SELECTION]: [],
+
+  // PHASE 3
+  [PhaseOrder.TEAM_FORMATION]: [],
+
+  // PHASE 4
+  [PhaseOrder.DEVELOPMENT]: [],
+
+  // PHASE 5
+  [PhaseOrder.EVALUATION]: [TaskKey.PROVIDE_FEEDBACK],
+
+  // PHASE 6
+  [PhaseOrder.CLOSING]: [],
+}
+
+export const JuryTaskMapByPhase: {
+  [key in PhaseOrder]: TaskKey[]
+} = {
+  // PHASE 1
+  [PhaseOrder.REGISTRATION]: [TaskKey.PROFILE_COMPLETION],
+
+  // PHASE 2
+  [PhaseOrder.TOPIC_SELECTION]: [],
+
+  // PHASE 3
+  [PhaseOrder.TEAM_FORMATION]: [],
+
+  // PHASE 4
+  [PhaseOrder.DEVELOPMENT]: [],
+
+  // PHASE 5
+  [PhaseOrder.EVALUATION]: [TaskKey.EVALUATE_PROJECTS],
 
   // PHASE 6
   [PhaseOrder.CLOSING]: [],
@@ -89,7 +127,11 @@ export const TaskMapByPhase: {
 
   // PHASE 4
   [PhaseOrder.DEVELOPMENT]: {
-    PENDING: [TaskKey.DISCORD_AUTOROLE, TaskKey.CREATE_GITHUB_REPO, TaskKey.DEFINE_SUBMISSION_DEADLINE],
+    PENDING: [
+      TaskKey.DISCORD_AUTOROLE,
+      TaskKey.CREATE_GITHUB_REPO,
+      TaskKey.DEFINE_SUBMISSION_DEADLINE,
+    ],
     IN_PROGRESS: [],
   },
 

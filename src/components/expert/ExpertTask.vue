@@ -5,13 +5,20 @@
   import { useI18n } from 'vue-i18n'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
   import { HackathonPhaseDTO } from '@/types/config'
-  import { ParticipantTaskMapByPhase, PhaseOrder, TaskKey } from '@/types/hackathon_phase'
+  import {
+    JuryTaskMapByPhase,
+    MentorTaskMapByPhase,
+    PhaseOrder,
+    TaskKey,
+  } from '@/types/hackathon_phase'
+  import { useAuthStore } from '@/stores/auth'
+  import { UserRole } from '@/types/roles'
+  import ExpertTaskFeedback from './ExpertTaskFeedback.vue'
+  import ExpertTaskEvaluation from './ExpertTaskEvaluation.vue'
   import UserTaskProfile from '../common/UserTaskProfile.vue'
-  import ParticipantTaskTopic from '@/components/user/ParticipantTaskTopic.vue'
-  import ParticipantTaskTeam from '@/components/user/ParticipantTaskTeam.vue'
-  import ParticipantTaskSubmission from '@/components/user/ParticipantTaskSubmission.vue'
 
   const { t } = useI18n()
+  const { user } = useAuthStore()
 
   // Snackbar
   const snackbar = ref(false)
@@ -43,22 +50,26 @@
     return phase4 ? phase4.endDate : null
   })
 
-  const currentParticipantTaskKey = computed<TaskKey | null>(() => {
+  const currentExpertTask = computed<TaskKey | null>(() => {
     if (!currentPhase.value) return null
     const orderKey = currentPhase.value.order as PhaseOrder
-    const taskKeys = ParticipantTaskMapByPhase[orderKey]
+    let taskKeys = null
+    if (user?.role === UserRole.JURY) {
+      taskKeys = JuryTaskMapByPhase[orderKey]
+    } else {
+      taskKeys = MentorTaskMapByPhase[orderKey]
+    }
     return taskKeys && taskKeys.length > 0 ? taskKeys[0] : null
   })
 
   const TaskComponentMap: Record<TaskKey, any> = {
     [TaskKey.PROFILE_COMPLETION]: UserTaskProfile,
-    [TaskKey.TOPIC_SELECTION]: ParticipantTaskTopic,
-    [TaskKey.TEAMS_FORMED]: ParticipantTaskTeam,
-    [TaskKey.PROJECT_SUBMISSION]: ParticipantTaskSubmission,
+    [TaskKey.PROVIDE_FEEDBACK]: ExpertTaskFeedback,
+    [TaskKey.EVALUATE_PROJECTS]: ExpertTaskEvaluation,
   } as any
 
   const currentTaskComponent = computed<any | null>(() => {
-    const taskKey = currentParticipantTaskKey.value
+    const taskKey = currentExpertTask.value
     if (taskKey && TaskComponentMap[taskKey]) {
       return TaskComponentMap[taskKey]
     }
@@ -70,14 +81,14 @@
   <v-card class="pa-4 rounded-lg elevation-1">
     <v-card-title class="text-h5 font-weight-bold mb-4">
       <v-icon class="mr-2">mdi-clipboard-list-outline</v-icon>
-      {{ t('dashboard.participant.tasks') }}
+      {{ t('dashboard.expert.tasks') }}
     </v-card-title>
 
     <v-card-text>
       <component
         :is="currentTaskComponent"
         v-if="currentTaskComponent"
-        :key="currentParticipantTaskKey"
+        :key="currentExpertTask"
         :deadline="submissionDeadline"
       />
 

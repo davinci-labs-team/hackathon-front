@@ -558,17 +558,25 @@ export default {
     slogan: 'Slogan',
     hackathonDescription: 'Hackathon Description',
     hackathonName: 'Hackathon Name',
+    location: 'Location',
+    startDate: 'Start Date',
+    endDate: 'End Date',
+    totalDuration: 'Total Duration',
+    days: '{count} day(s)',
+    hours: ' and {count} hour(s)',
     errors: {
       requiredField: 'This field is required',
       maxLength: 'Maximum length reached',
       fixErrors: 'Please fix the errors before saving.',
+      requiredFields: 'Please fill in all required fields.',
+      invalidDates: 'End date must be after start date.',
     },
   },
   mediaSettings: {
     title: 'Media & Files',
     subtitle: 'Manage images and files used in the application',
-    logo: 'Logo',
-    banner: 'Banner',
+    logo: 'Logo (in the header)',
+    poster: 'Hackathon Poster',
     socialMediaLinks: 'Social Media Links',
     platformImages: 'Platform Images',
     uploadEvaluationGrid: 'Upload Evaluation Grid',
@@ -734,6 +742,14 @@ export default {
     title: 'Hackathon Management',
     subtitle: 'Control and monitor the progress of your hackathon',
     currentPhase: 'Current Phase',
+    resetComplete: 'Hackathon has been reset to initial state.',
+    resetPhases: 'Reset Phases',
+    resetDialog: {
+      title: 'Confirm Hackathon Reset',
+      text: 'You are about to reset the hackathon to its initial state. This action is irreversible. Are you sure you want to proceed?',
+      reset: 'Yes, reset hackathon',
+      cancel: 'Cancel',
+    },
     actions: {
       begin: 'Begin',
       end: 'End',
@@ -744,6 +760,7 @@ export default {
       phaseSkipError: 'Error skipping phase, please try again later.',
       phaseBeginError: 'Error beginning phase, please try again later.',
       phaseCompleteError: 'Error completing phase, please try again later.',
+      resetError: 'Error resetting hackathon, please try again later.',
     },
     progress: {
       title: 'Progress',
@@ -830,6 +847,21 @@ export default {
         submit: 'Submit Project'
       },
     },
+    expert: {
+      tasks: 'Your Tasks',
+      provide_feedback: {
+        title: 'Provide feedback to your assigned teams',
+        description: 'Review the projects of your assigned teams and provide valuable feedback.',
+        viewTeams: 'View Feedback Teams',
+        count: 'team(s) awaiting feedback',
+      },
+      evaluate_projects: {
+        title: 'Evaluate submitted projects',
+        description: 'Assess the projects submitted by participants and provide your evaluations.',
+        viewSubmissions: 'View Project Submissions',
+        count: 'evaluated project(s)',
+      },
+    }
   },
 
   countdown: {
