@@ -295,6 +295,7 @@ export default {
         withdrawTeamFrom: 'Withdraw team from {name}',
         selectTeam: 'Select a team',
         autogenerate: 'Autogenerate Teams',
+        createGitHubRepos: 'Create GitHub Repos',
       },
       selectedTeam: 'Selected Team:',
       teamDeleted: 'Team deleted successfully',
@@ -307,6 +308,8 @@ export default {
       teamAutogenerateError: 'Error during teams autogeneration',
       reposCreated: '{count} Repositories created successfully',
       reposCreationError: 'Error creating repository',
+      githubPermissionsError: 'Insufficient rights on the GitHub organization. Please verify that you granted access rights to the organization during your GitHub login.',
+      githubOrgNotFoundError: "Organization '{orgName}' does not exist on GitHub. Please create it manually first.",
     },
     submissionManagement: {
       title: 'Project Submissions',

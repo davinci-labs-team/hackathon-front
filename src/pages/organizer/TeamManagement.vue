@@ -281,7 +281,17 @@
       snackbar.value = true
     } catch (err: any) {
       console.error('Error initializing repos:', err)
-      text.value = err.response?.data?.message || t('organizer.teamManagement.reposCreationError') || 'Error creating repositories'
+      const errorMessage = err.response?.data?.message || ''
+      
+      const orgNotFoundMatch = errorMessage.match(/Organization '(.+?)' does not exist on GitHub/)
+      
+      if (err.response?.status === 403) {
+        text.value = t('organizer.teamManagement.githubPermissionsError')
+      } else if (orgNotFoundMatch) {
+        text.value = t('organizer.teamManagement.githubOrgNotFoundError', { orgName: orgNotFoundMatch[1] })
+      } else {
+        text.value = errorMessage || t('organizer.teamManagement.reposCreationError') || 'Error creating repositories'
+      }
       error.value = true
       snackbar.value = true
     } finally {
@@ -344,7 +354,7 @@
           </v-btn>
           <v-btn color="black" @click="initializeRepos" :loading="isInitializingRepos" :disabled="loadingTeams">
              <v-icon start>mdi-github</v-icon>
-             Create GitHub Repos
+             {{ t('organizer.teamManagement.actions.createGitHubRepos') }}
           </v-btn>
         </div>
 

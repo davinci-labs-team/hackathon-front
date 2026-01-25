@@ -298,6 +298,7 @@ export default {
         withdrawTeamFrom: 'Retirer {name} de l’équipe',
         selectTeam: 'Sélectionner une équipe',
         autogenerate: 'Générer automatiquement des équipes',
+        createGitHubRepos: 'Créer les dépôts GitHub',
       },
       dialog: {
         deleteConfirmTitle: 'Confirmer la suppression',
@@ -314,6 +315,8 @@ export default {
       teamAutogenerateError: 'Erreur lors de la génération automatique des équipes',
       reposCreated: '{count} Repositories créés avec succès',
       reposCreationError: 'Erreur lors de la création du repository',
+      githubPermissionsError: "Droits insuffisants sur l'organisation GitHub. Veuillez vérifier que vous avez donné les droits d'accès à l'organisation lors de votre connexion GitHub.",
+      githubOrgNotFoundError: "L'organisation '{orgName}' n'existe pas sur GitHub. Veuillez l'y créer manuellement d'abord.",
     },
     submissionManagement: {
       title: 'Gestion des Dépôts',

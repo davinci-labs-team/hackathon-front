@@ -4,7 +4,7 @@
   import { useI18n } from 'vue-i18n'
   import { getRole, getTPrefix } from '@/utils/user'
   import { useHackathonLogo } from '@/composables/useHackathonLogo'
-  import { ref, onMounted} from 'vue'
+  import { ref, onMounted, watch} from 'vue'
   import { S3BucketService } from '@/services/s3BucketService'
   import { useAuthStore } from '@/stores/auth'
 
@@ -54,12 +54,23 @@
              // Fallback to auth store path if not updated or different
              const response = await S3BucketService.getFileUrl('users', authStore.user.profilePicturePath)
              profilePicture.value = response.url
+        } else {
+             profilePicture.value = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'
         }
        } catch (e) {
         console.error("Error loading user data in navbar", e)
        }
     }
   }
+
+  // Watch for profile picture changes in the store
+  watch(
+    () => authStore.user?.profilePicturePath,
+    () => {
+      loadData()
+    }
+  )
+
 
   onMounted(() => {
     loadData()

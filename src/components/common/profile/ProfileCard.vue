@@ -50,7 +50,7 @@
       email: localUser.value.email,
       role: localUser.value.role,
       school: localUser.value.school,
-      profilePicturePath: path,
+      profilePicturePath: path === undefined ? null : path,
       teamId: localUser.value.teamId,
     }
   }
@@ -76,7 +76,7 @@
   const deleteProfilePicture = () => {
     preview.value = ''
     fileInputRef.value = null
-    localUser.value.profilePicturePath = undefined
+    localUser.value.profilePicturePath = null
   }
 
   const role = props.user.role ? props.user.role.toLowerCase() : 'participant'
