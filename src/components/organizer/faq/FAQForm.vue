@@ -102,7 +102,9 @@
 
       <v-card-text>
         <v-form @submit.prevent="save">
-          <label class="block mb-1 text-m">{{ t('faq.question') }}</label>
+          <label class="block mb-1 text-m"
+            >{{ t('faq.question') }} <span class="text-red-500">*</span></label
+          >
           <v-text-field
             v-model="question"
             :placeholder="t('faq.question')"
@@ -112,7 +114,9 @@
             class="mb-4"
           />
 
-          <label class="block mb-1 text-m">{{ t('faq.answer') }}</label>
+          <label class="block mb-1 text-m"
+            >{{ t('faq.answer') }} <span class="text-red-500">*</span></label
+          >
           <v-textarea
             v-model="answer"
             :placeholder="t('faq.answer')"

@@ -70,6 +70,13 @@
       return
     }
 
+    if (hackathonPhases.value.some(phase => phase.order === 4 && !phase.endDateObj)) {
+      text.value = t('planningSettings.deadlineRequired')
+      error.value = true
+      snackbar.value = true
+      return
+    }
+
     const payload = {
       phases: hackathonPhases.value.map((phase) => ({
         order: phase.order,
@@ -118,8 +125,7 @@
           class="w-full text-2xl font-semibold mb-1 resize-none border-b border-gray-300 focus:outline-none focus:border-blue-500"
           :placeholder="t(`hackathon.phases.${phase.order}.defaultName`)"
           rows="1"
-        ></input>
-        <span v-if="!phase.optionalPhase" class="text-red-500">*</span>
+        ><span class="text-red-500">*</span></input>
       </h2>
       <p class="text-gray-600 mb-3">{{ t(`hackathon.phases.${phase.order}.description`) }}</p>
 
@@ -137,6 +143,7 @@
               :format-locale="locale === 'fr' ? fr : enUS"
               format="PPp"
               time-format="24"
+              :min-date="new Date()"
               :placeholder="t('planningSettings.selectDateAndTime')"
             />
           </div>

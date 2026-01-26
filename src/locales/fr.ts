@@ -699,6 +699,7 @@ export default {
     selectDateAndTime: "Sélectionner la date & l'heure",
     deadline: 'Deadline de rendu le ',
     phaseNameRequired: 'Le nom de chaque phase est obligatoire.',
+    deadlineRequired: 'La deadline de rendu est obligatoire.',
   },
   mailingSettings: {
     title: "Modèles d'Emails",

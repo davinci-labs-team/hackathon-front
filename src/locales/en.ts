@@ -664,6 +664,7 @@ export default {
     selectDateAndTime: 'Select date & time',
     deadline: 'Submission deadline on ',
     phaseNameRequired: 'Please provide names for all phases.',
+    deadlineRequired: 'Please provide a submission deadline.',
   },
   mailingSettings: {
     title: 'Emails Templates',
