@@ -74,7 +74,6 @@
       const newPartners = partners.value.map((partner) =>
         partner.id === selectedPartner.value?.id ? { ...partner, ...data } : partner
       )
-
       try {
         await savePartnersList(newPartners)
 
