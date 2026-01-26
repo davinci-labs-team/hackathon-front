@@ -117,6 +117,24 @@
 
     return true
   }
+
+  const getValidationErrorMessage = (): string => {
+    if (themes.value.length === 0) return t('themes.validation.atLeastOneTheme')
+
+    if (themes.value.some((theme) => !theme.name || !theme.name.trim())) {
+      return t('themes.validation.themeNameRequired')
+    }
+
+    if (themes.value.some((theme) => !theme.subjects || theme.subjects.length === 0)) {
+      return t('themes.validation.subjectRequired')
+    }
+
+    if (themes.value.some((theme) => theme.subjects.some((s) => !s.name || !s.name.trim()))) {
+      return t('themes.validation.subjectNameRequired')
+    }
+
+    return ''
+  }
 </script>
 
 <template>
@@ -128,13 +146,20 @@
         <div class="flex items-center justify-between mb-5">
           <p class="text-gray-600 text-lg mb-0">{{ t('themes.subtitle') }}</p>
           <div class="flex items-center justify-end mb-5">
-            <v-btn
-              color="primary"
-              @click="saveThemes"
-              :disabled="!validThemes() || themesLoading || isSaving"
-            >
-              {{ t('common.saveChanges') }}
-            </v-btn>
+            <v-tooltip location="bottom" :disabled="validThemes() && !themesLoading && !isSaving">
+              <template v-slot:activator="{ props }">
+                <span v-bind="props">
+                  <v-btn
+                    color="primary"
+                    @click="saveThemes"
+                    :disabled="!validThemes() || themesLoading || isSaving"
+                  >
+                    {{ t('common.saveChanges') }}
+                  </v-btn>
+                </span>
+              </template>
+              <span>{{ getValidationErrorMessage() }}</span>
+            </v-tooltip>
           </div>
         </div>
 

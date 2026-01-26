@@ -11,6 +11,7 @@
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
   import TeamTable from '@/components/organizer/team_management/TeamTable.vue'
   import UsersTable from '@/components/organizer/team_management/UsersTable.vue'
+  import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
   import { calculateAllTeamsConstraints } from '@/utils/teamConstraints'
   import { TeamConstraintViolation } from '@/types/config'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
@@ -25,6 +26,49 @@
   // ---- PINIA STORE ----
   const teamStore = useTeamStore()
   const loadingTeams = computed(() => teamStore.loading)
+
+  // ----- MODALS -----
+  const showRepoConfirmModal = ref(false)
+
+  const unassignedUsersCount = computed(
+    () =>
+      members.value.filter(
+        (member) => !teamStore.teams.some((team) => team.members.some((m) => m.id === member.id))
+      ).length
+  )
+
+  const teamsWithViolationsCount = computed(
+    () => teams.value.filter((team) => teamConstraintsMap.value[team.id]?.length > 0).length
+  )
+
+  const confirmInitializeRepos = () => {
+    showRepoConfirmModal.value = true
+  }
+
+  const handleConfirmRepos = () => {
+    showRepoConfirmModal.value = false
+    initializeRepos()
+  }
+
+  const repoWarningMessage = computed(() => {
+    const warnings: string[] = []
+
+    if (unassignedUsersCount.value > 0) {
+      warnings.push(
+        t('organizer.teamManagement.confirmRepoDialog.unassignedWarning', {
+          count: unassignedUsersCount.value,
+        })
+      )
+    }
+    if (teamsWithViolationsCount.value > 0) {
+      warnings.push(
+        t('organizer.teamManagement.confirmRepoDialog.violationsWarning', {
+          count: teamsWithViolationsCount.value,
+        })
+      )
+    }
+    return warnings
+  })
 
   // Snackbar
   const snackbar = ref(false)
@@ -342,7 +386,7 @@
           </v-btn>
           <v-btn
             color="black"
-            @click="initializeRepos"
+            @click="confirmInitializeRepos"
             :loading="isInitializingRepos"
             :disabled="loadingTeams"
           >
@@ -350,6 +394,16 @@
             Create GitHub Repos
           </v-btn>
         </div>
+
+        <ConfirmDialog
+          v-model="showRepoConfirmModal"
+          :title="t('organizer.teamManagement.confirmRepoDialog.title')"
+          :text="t('organizer.teamManagement.confirmRepoDialog.message')"
+          :secondary-text="repoWarningMessage"
+          :confirm-label="t('organizer.teamManagement.confirmRepoDialog.confirm')"
+          :cancel-label="t('common.cancel')"
+          @confirm="handleConfirmRepos"
+        />
 
         <TeamFilters
           v-model:view-mode="viewMode"
