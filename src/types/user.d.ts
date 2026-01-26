@@ -14,7 +14,7 @@ export interface UserDTO {
   linkedin?: string
   github?: SocialMediaDTO
   discord?: SocialMediaDTO 
-  profilePicturePath?: string
+  profilePicturePath?: string | null
   teamId: string | null
   favoriteSubjectId?: string
 }

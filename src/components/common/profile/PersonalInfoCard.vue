@@ -15,8 +15,8 @@ const newInterest = ref('')
 watch(() => props.user, val => localUser.value = { ...val }, { deep: true })
 
 // Expose méthode save
-const saveChanges = () => {
-  emit('update:user', {
+const getChanges = () => {
+  return {
     id: localUser.value.id,
     firstname: localUser.value.firstname,
     lastname: localUser.value.lastname,
@@ -24,7 +24,7 @@ const saveChanges = () => {
     role: localUser.value.role,
     bio: localUser.value.bio,
     interests: localUser.value.interests
-  })
+  }
 }
 
 const resetLocalUser = () => {
@@ -36,7 +36,7 @@ const removeInterest = (index: number) => {
 }
 
 const addInterest = () => {
-  if (newInterest.value.trim()) {
+  if (newInterest.value.trim() && newInterest.value.length <= 30) {
     if (!localUser.value.interests) {
       localUser.value.interests = []
     }
@@ -45,7 +45,7 @@ const addInterest = () => {
   }
 }
 
-defineExpose({ saveChanges, resetLocalUser })
+defineExpose({ getChanges, resetLocalUser })
 </script>
 
 <template>
@@ -62,6 +62,8 @@ defineExpose({ saveChanges, resetLocalUser })
         rows="4"
         v-if="props.editMode"
         auto-grow
+        counter
+        maxlength="200"
         variant="solo"/>
       <div v-else-if="!!localUser.bio">{{ localUser.bio}}</div>
       <div v-else class="text-medium-emphasis">{{ t('profile.noPersonalInfo')}}</div>
@@ -87,14 +89,16 @@ defineExpose({ saveChanges, resetLocalUser })
           {{ t('profile.noInterests') }}
         </div>
 
-        <div v-if="props.editMode" class="d-flex align-center mt-2" style="max-width: 350px;">
+        <div v-if="props.editMode" class="d-flex align-start mt-2" style="max-width: 350px;">
           <v-text-field
             v-model="newInterest"
             placeholder="Nouvel intérêt"
             density="compact"
             variant="outlined"
             @keyup.enter="addInterest"
-            hide-details
+            counter
+            maxlength="30"
+            hide-details="auto"
           />
           <v-btn
             icon

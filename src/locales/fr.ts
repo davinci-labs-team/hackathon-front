@@ -134,7 +134,8 @@ export default {
     email: 'Email',
     password: 'Mot de passe',
     confirmPassword: 'Confirmer le mot de passe',
-    invalidCredentials: 'Votre email n\'a pas été invité à ce hackathon',
+    invalidCredentials: 'Email ou mot de passe incorrect',
+    userNotInvited: 'Votre email n\'a pas été invité à ce hackathon',
     passwordsDoNotMatch: 'Les mots de passe ne correspondent pas',
     passwordComplexity:
       'Le mot de passe doit contenir au moins 8 caractères, incluant une majuscule, une minuscule, un chiffre et un caractère spécial.',
@@ -298,6 +299,7 @@ export default {
         withdrawTeamFrom: 'Retirer {name} de l’équipe',
         selectTeam: 'Sélectionner une équipe',
         autogenerate: 'Générer automatiquement des équipes',
+        createGitHubRepos: 'Créer les dépôts GitHub',
       },
       dialog: {
         deleteConfirmTitle: 'Confirmer la suppression',
@@ -323,6 +325,8 @@ export default {
           'Avertissement : {count} équipe(s) ne respectent pas les contraintes de matchmaking.',
         confirm: 'Créer les Repositories',
       },
+      githubPermissionsError: "Droits insuffisants sur l'organisation GitHub. Veuillez vérifier que vous avez donné les droits d'accès à l'organisation lors de votre connexion GitHub.",
+      githubOrgNotFoundError: "L'organisation '{orgName}' n'existe pas sur GitHub. Veuillez l'y créer manuellement d'abord.",
     },
     submissionManagement: {
       title: 'Gestion des Dépôts',

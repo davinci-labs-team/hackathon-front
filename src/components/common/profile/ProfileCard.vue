@@ -33,33 +33,33 @@
     { deep: true }
   )
 
-  const saveChanges = async () => {
+  const getChanges = async () => {
     let path = localUser.value.profilePicturePath
 
     if (fileInputRef.value) {
       // Upload de la nouvelle photo
       const uploadResult = await S3BucketService.uploadFile(fileInputRef.value, 'users')
       path = uploadResult.path
+      useAuthStore().updateProfilePicture(path)
     }
-    useAuthStore().updateProfilePicture(path)
 
-    emit('update:user', {
+    return {
       id: localUser.value.id,
       firstname: localUser.value.firstname,
       lastname: localUser.value.lastname,
       email: localUser.value.email,
       role: localUser.value.role,
       school: localUser.value.school,
-      profilePicturePath: path,
+      profilePicturePath: path === undefined ? null : path,
       teamId: localUser.value.teamId,
-    })
+    }
   }
 
   const resetLocalUser = () => {
     localUser.value = { ...props.user }
   }
 
-  defineExpose({ saveChanges, resetLocalUser })
+  defineExpose({ getChanges, resetLocalUser })
 
   const onFileChange = async (e: Event) => {
     console.log('File input changed')
@@ -76,7 +76,7 @@
   const deleteProfilePicture = () => {
     preview.value = ''
     fileInputRef.value = null
-    localUser.value.profilePicturePath = undefined
+    localUser.value.profilePicturePath = null
   }
 
   const role = props.user.role ? props.user.role.toLowerCase() : 'participant'

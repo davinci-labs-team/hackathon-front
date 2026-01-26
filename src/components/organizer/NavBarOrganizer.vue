@@ -49,8 +49,17 @@
       } catch (err) {
         console.error('Error fetching profile picture:', err)
       }
+    } else {
+      profilePicture.value = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'
     }
   }
+
+  watch(
+    () => authStore.user?.profilePicturePath,
+    () => {
+      loadProfilePicture()
+    }
+  )
 
   onMounted(() => {
     loadProfilePicture()
