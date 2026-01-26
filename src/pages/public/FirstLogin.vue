@@ -55,7 +55,7 @@ import { userService } from '@/services/userService'
         />
 
         <v-alert v-if="error" type="error" dense class="mb-4">
-          {{ t('login.invalidCredentials') }}
+          {{ t('login.userNotInvited') }}
         </v-alert>
         <v-alert v-if="success" type="success" dense class="mb-4">
           {{ t('login.firstLoginEmailSent') }}
