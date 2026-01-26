@@ -83,7 +83,7 @@
 
       await teamStore.fetchTeams()
       await fetchUsers()
-      
+
       showTeamForm.value = false
       selectedTeam.value = null
     } catch (err) {
@@ -275,13 +275,16 @@
     try {
       const results = await githubService.initializeOrganization()
       const successCount = results.filter((r: any) => r.status === 'success').length
-      
+
       text.value = t('organizer.teamManagement.reposCreated', { count: successCount })
       error.value = false
       snackbar.value = true
     } catch (err: any) {
       console.error('Error initializing repos:', err)
-      text.value = err.response?.data?.message || t('organizer.teamManagement.reposCreationError') || 'Error creating repositories'
+      text.value =
+        err.response?.data?.message ||
+        t('organizer.teamManagement.reposCreationError') ||
+        'Error creating repositories'
       error.value = true
       snackbar.value = true
     } finally {
@@ -328,23 +331,23 @@
       <div class="w-full md:w-8/12 lg:w-9/12 px-4">
         <div class="flex w-full justify-between items-center mb-6">
           <h1 class="text-3xl font-bold">{{ t('organizer.teamManagement.title') }}</h1>
-          <div class="flex gap-4">
-            <v-btn color="green" class="h-full">
-              {{ t('common.validate') }}
-            </v-btn>
-            <v-btn color="primary" class="h-full" @click="onAddTeam">
-              {{ t('organizer.teamManagement.actions.add') }}
-            </v-btn>
-          </div>
+          <v-btn color="primary" class="h-full" @click="onAddTeam">
+            {{ t('organizer.teamManagement.actions.add') }}
+          </v-btn>
         </div>
 
         <div class="flex flex-col gap-2 mb-4">
           <v-btn color="secondary" @click="autogenerateTeams" :disabled="loadingTeams">
             {{ t('organizer.teamManagement.actions.autogenerate') }}
           </v-btn>
-          <v-btn color="black" @click="initializeRepos" :loading="isInitializingRepos" :disabled="loadingTeams">
-             <v-icon start>mdi-github</v-icon>
-             Create GitHub Repos
+          <v-btn
+            color="black"
+            @click="initializeRepos"
+            :loading="isInitializingRepos"
+            :disabled="loadingTeams"
+          >
+            <v-icon start>mdi-github</v-icon>
+            Create GitHub Repos
           </v-btn>
         </div>
 
@@ -413,21 +416,21 @@
     <!-- AUTOGENERATE DIALOGS -->
     <v-dialog v-model="autogenerating" persistent width="auto">
       <v-card>
-        <v-card-title class="text-h6">{{ t('organizer.teamManagement.autogenerate.inProgressTitle') }}</v-card-title>
+        <v-card-title class="text-h6">{{
+          t('organizer.teamManagement.autogenerate.inProgressTitle')
+        }}</v-card-title>
         <v-card-text>
           {{ t('organizer.teamManagement.autogenerate.inProgressText') }}
-          <v-progress-linear
-            color="blue-darken-2"
-            indeterminate
-            class="mt-3"
-          ></v-progress-linear>
+          <v-progress-linear color="blue-darken-2" indeterminate class="mt-3"></v-progress-linear>
         </v-card-text>
       </v-card>
     </v-dialog>
 
     <v-dialog v-model="showAutogenerateResult" persistent width="auto">
       <v-card>
-        <v-card-title class="text-h6">{{ t('organizer.teamManagement.autogenerate.resultTitle') }}</v-card-title>
+        <v-card-title class="text-h6">{{
+          t('organizer.teamManagement.autogenerate.resultTitle')
+        }}</v-card-title>
         <v-card-text>
           <p v-if="teamsCreated > 0">
             {{ t('organizer.teamManagement.autogenerate.resultSuccess', { count: teamsCreated }) }}

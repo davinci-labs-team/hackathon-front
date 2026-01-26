@@ -695,6 +695,8 @@ export default {
   themes: {
     title: 'Themes & Subjects',
     subtitle: 'Manage the themes and subjects for the hackathon',
+    namePlaceholder: 'Name',
+    descriptionPlaceholder: 'Description',
     theme: 'Theme',
     topic: 'Subject',
     newTheme: 'New Theme',
