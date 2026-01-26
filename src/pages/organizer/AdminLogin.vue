@@ -14,6 +14,7 @@
   const password = ref('')
   const error = ref(false)
   const accessDenied = ref(false)
+  const errorMessage = ref('')
   const formRef = ref()
 
   const required = (v: string) => !!v || t('common.fieldRequired')
@@ -38,8 +39,17 @@
     } catch (err: any) {
       if (err.message.includes('Access denied')) {
         accessDenied.value = true
+        error.value = false
       } else {
         error.value = true
+        accessDenied.value = false
+        if (err.message === 'Invalid credentials' || err.message?.includes('Invalid login credentials')) {
+          errorMessage.value = t('login.invalidCredentials')
+        } else if (err.response?.status === 404) {
+          errorMessage.value = t('login.userNotInvited')
+        } else {
+          errorMessage.value = t('common.error')
+        }
       }
     }
   }
@@ -87,7 +97,7 @@
           class="mb-6"
           :style="{ borderRadius: '0' }"
         >
-          {{ t('login.invalidCredentials') }}
+          {{ errorMessage }}
         </v-alert>
 
         <v-alert

@@ -68,23 +68,34 @@ const cancelEdit = () => {
   profileCard.value?.resetLocalUser()
 }
 
-const handleSave = async (updatedUser: UserDTO) => {
-  try {
-    const savedUser = await userService.update(updatedUser.id, updatedUser)
-    userInfo.value = savedUser
+const onSaveClick = async () => {
+    try {
+        const profileChanges = await profileCard.value?.getChanges() || {}
+        const personalInfoChanges = personalInfoCard.value?.getChanges() || {}
+        const contactChanges = contactCard.value?.getChanges() || {}
 
-    authStore.updateUserFields(savedUser)
-    getProfilePictureUrl()
-    editMode.value = false
-    text.value = t('common.changesSaved')
-    error.value = false
-    snackbar.value = true
-  } catch (err) {
-    console.error('Error saving user:', err)
-    text.value = t('errors.loadUserFailed')
-    error.value = true
-    snackbar.value = true
-  }
+        const updatedUser: UserDTO = {
+            ...userInfo.value,
+            ...profileChanges,
+            ...personalInfoChanges,
+            ...contactChanges
+        }
+
+        const savedUser = await userService.update(updatedUser.id, updatedUser)
+        userInfo.value = savedUser
+
+        authStore.updateUserFields(savedUser)
+        getProfilePictureUrl()
+        editMode.value = false
+        text.value = t('common.changesSaved')
+        error.value = false
+        snackbar.value = true
+    } catch (err) {
+        console.error('Error saving user:', err)
+        text.value = t('errors.loadUserFailed')
+        error.value = true
+        snackbar.value = true
+    }
 }
 
 const handleLogout = async () => {
@@ -123,7 +134,7 @@ const confirmDeleteAccount = () => showConfirmDeleteAccountDialog.value = true
       </div>
       <div v-else>
         <v-btn color="grey" class="mr-2" @click="cancelEdit">{{ t('common.cancel') }}</v-btn>
-        <v-btn color="primary" class="ml-2" @click="profileCard?.saveChanges(); personalInfoCard?.saveChanges(); contactCard?.saveChanges()">
+        <v-btn color="primary" class="ml-2" @click="onSaveClick">
           {{ t('common.saveChanges') }}
         </v-btn>
       </div>
@@ -134,7 +145,6 @@ const confirmDeleteAccount = () => showConfirmDeleteAccountDialog.value = true
       :user="userInfo" 
       :profile-picture="profilePicture" 
       :edit-mode="editMode"
-      @update:user="handleSave"
     />
 
     <v-row class="equal-height-row">
@@ -143,7 +153,6 @@ const confirmDeleteAccount = () => showConfirmDeleteAccountDialog.value = true
           ref="personalInfoCard"
           :user="userInfo"
           :edit-mode="editMode"
-          @update:user="handleSave"
         />
       </v-col>
       <v-col cols="12" md="4">
@@ -152,7 +161,6 @@ const confirmDeleteAccount = () => showConfirmDeleteAccountDialog.value = true
           :user="userInfo"
           :edit-mode="editMode"
           :adminPlatform="isAdminPlatform"
-          @update:user="handleSave"
         />
       </v-col>
     </v-row>

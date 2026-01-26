@@ -24,8 +24,8 @@ const loginWithGithub = async () => {
 watch(() => props.user, val => localUser.value = { ...val }, { deep: true })
 
 // Expose méthode save
-const saveChanges = () => {
-  emit('update:user', { 
+const getChanges = () => {
+  return { 
       id: localUser.value.id, 
       firstname: localUser.value.firstname, 
       lastname: localUser.value.lastname, 
@@ -35,12 +35,12 @@ const saveChanges = () => {
       discord: localUser.value.discord,
       linkedin: localUser.value.linkedin,
       teamId: localUser.value.teamId,
-    })
+    }
 }
 const resetLocalUser = () => {
   localUser.value = { ...props.user }
 }
-defineExpose({ saveChanges, resetLocalUser })
+defineExpose({ getChanges, resetLocalUser })
 </script>
 
 <template>
