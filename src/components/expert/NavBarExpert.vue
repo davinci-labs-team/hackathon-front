@@ -4,7 +4,7 @@
   import { useI18n } from 'vue-i18n'
   import { getRole, getTPrefix } from '@/utils/user'
   import { useHackathonLogo } from '@/composables/useHackathonLogo'
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, watch } from 'vue'
   import { S3BucketService } from '@/services/s3BucketService'
   import { useAuthStore } from '@/stores/auth'
 
@@ -42,8 +42,18 @@
       } catch (err) {
         console.error('Error fetching profile picture:', err)
       }
+    } else {
+      profilePicture.value = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'
     }
   }
+
+  watch(
+    () => authStore.user?.profilePicturePath,
+    () => {
+      loadProfilePicture()
+    }
+  )
+
 
   onMounted(() => {
     loadProfilePicture()

@@ -15,12 +15,13 @@ import { UserRole } from '@/types/roles'
   const email = ref(route.query.email?.toString() || '')
   const password = ref('')
   const error = ref(false)
+  const errorMessage = ref('')
   const formRef = ref()
 
   // Règles de validation Vuetify
   const required = (v: string) => !!v || t('common.fieldRequired')
   const emailRule = (v: string) => /.+@.+\..+/.test(v) || t('common.invalidEmail')
-
+  
   const handleLogin = async () => {
     if (!formRef.value?.isValid) return
 
@@ -38,9 +39,17 @@ import { UserRole } from '@/types/roles'
       } else {
         router.push('/user/dashboard')
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Login error:', err)
       error.value = true
+      
+      if (err.message === 'Invalid credentials' || err.message?.includes('Invalid login credentials')) {
+        errorMessage.value = t('login.invalidCredentials')
+      } else if (err.response?.status === 404) {
+        errorMessage.value = t('login.userNotInvited')
+      } else {
+        errorMessage.value = t('common.error')
+      }
     }
   }
 </script>
@@ -77,7 +86,7 @@ import { UserRole } from '@/types/roles'
         />
 
         <v-alert v-if="error" type="error" dense class="mb-4">
-          {{ t('login.invalidCredentials') }}
+          {{ errorMessage }}
         </v-alert>
 
         <v-btn type="submit" block color="primary" class="text-white">
