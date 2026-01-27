@@ -134,11 +134,10 @@ export default {
     email: 'Email',
     password: 'Mot de passe',
     confirmPassword: 'Confirmer le mot de passe',
-    invalidCredentials: 'Email ou mot de passe incorrect',
-    userNotInvited: 'Votre email n\'a pas été invité à ce hackathon',
+    invalidCredentials: 'Votre email n\'a pas été invité à ce hackathon',
     passwordsDoNotMatch: 'Les mots de passe ne correspondent pas',
     passwordComplexity:
-      'Le mot de passe doit contenir au moins 8 caractères, incluant une majuscule, une minuscule, un chiffre et un caractère spécial.',
+      'Le mot de passe doit contenir au moins 8 caractères, incluant une majuscule, une minuscule, un chiffre et un caractère spécial parmi @$!%*?&.',
     accessDenied: 'Accès refusé. Espace organisateur uniquement.',
     resetFailed: 'Échec de la réinitialisation du mot de passe. Veuillez réessayer.',
     firstLoginEmailSent: "L'email a été envoyé. Veuillez vérifier votre boîte de réception.",
@@ -299,7 +298,6 @@ export default {
         withdrawTeamFrom: 'Retirer {name} de l’équipe',
         selectTeam: 'Sélectionner une équipe',
         autogenerate: 'Générer automatiquement des équipes',
-        createGitHubRepos: 'Créer les dépôts GitHub',
       },
       dialog: {
         deleteConfirmTitle: 'Confirmer la suppression',
@@ -316,17 +314,6 @@ export default {
       teamAutogenerateError: 'Erreur lors de la génération automatique des équipes',
       reposCreated: '{count} Repositories créés avec succès',
       reposCreationError: 'Erreur lors de la création du repository',
-      confirmRepoDialog: {
-        title: 'Initialiser les Repositories GitHub',
-        message:
-          'Êtes-vous sûr de vouloir créer des repositories pour toutes les équipes ? Cette action va générer les espaces de travail distants sur l’organisation.',
-        unassignedWarning: 'Avertissement : {count} participant(s) ne sont pas encore assignés à une équipe.',
-        violationsWarning:
-          'Avertissement : {count} équipe(s) ne respectent pas les contraintes de matchmaking.',
-        confirm: 'Créer les Repositories',
-      },
-      githubPermissionsError: "Droits insuffisants sur l'organisation GitHub. Veuillez vérifier que vous avez donné les droits d'accès à l'organisation lors de votre connexion GitHub.",
-      githubOrgNotFoundError: "L'organisation '{orgName}' n'existe pas sur GitHub. Veuillez l'y créer manuellement d'abord.",
     },
     submissionManagement: {
       title: 'Gestion des Dépôts',
@@ -471,6 +458,7 @@ export default {
     },
     submission: {
       title: 'Dépôt de projet',
+      phaseClosed: 'Phase de dépôt non disponible',
       team: {
         title: 'Équipe',
         noGithubLink: 'Aucun lien GitHub fourni',
@@ -708,7 +696,6 @@ export default {
     selectDateAndTime: "Sélectionner la date & l'heure",
     deadline: 'Deadline de rendu le ',
     phaseNameRequired: 'Le nom de chaque phase est obligatoire.',
-    deadlineRequired: 'La deadline de rendu est obligatoire.',
   },
   mailingSettings: {
     title: "Modèles d'Emails",
@@ -743,8 +730,6 @@ export default {
   themes: {
     title: 'Thèmes & Sujets',
     subtitle: 'Gérez les thèmes et sujets pour le hackathon',
-    namePlaceholder: 'Nom',
-    descriptionPlaceholder: 'Description',
     theme: 'Thème',
     topic: 'Sujet',
     newTheme: 'Nouveau Thème',
@@ -767,12 +752,6 @@ export default {
       requiredField: 'Ce champ est requis',
       maxLength: 'Longueur maximale atteinte',
       fixErrors: 'Veuillez corriger les erreurs avant de sauvegarder.',
-    },
-    validation: {
-      themeNameRequired: 'Le nom du thème est requis',
-      subjectRequired: 'Un sujet minimum par thème est requis',
-      subjectNameRequired: 'Le nom du sujet est requis',
-
     },
     noName: 'Nom non renseigné',
     noDescription: 'Description non renseignée',
