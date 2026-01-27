@@ -15,6 +15,7 @@
 
   const menuItems = [
     { path: '/expert/dashboard', label: `${tPrefix}.nav.dashboard` },
+    { path: '/expert/announcements', label: `${tPrefix}.nav.announcements` },
     { path: '/expert/teams', label: `${tPrefix}.nav.teams` },
     { path: '/expert/project', label: `${tPrefix}.nav.projects` },
     { path: '/expert/faq', label: `${tPrefix}.nav.faq` },
@@ -37,7 +38,10 @@
   const loadProfilePicture = async () => {
     if (authStore.user?.profilePicturePath) {
       try {
-        const response = await S3BucketService.getFileUrl('users', authStore.user.profilePicturePath)
+        const response = await S3BucketService.getFileUrl(
+          'users',
+          authStore.user.profilePicturePath
+        )
         profilePicture.value = response.url
       } catch (err) {
         console.error('Error fetching profile picture:', err)
@@ -53,7 +57,6 @@
       loadProfilePicture()
     }
   )
-
 
   onMounted(() => {
     loadProfilePicture()
