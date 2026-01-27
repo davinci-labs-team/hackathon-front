@@ -3,7 +3,7 @@
     modelValue: boolean
     title: string
     text: string
-    secondaryText?: string
+    secondaryText?: string | string[]
     confirmLabel?: string
     cancelLabel?: string
   }>()
@@ -33,8 +33,15 @@
       </v-card-title>
       <v-card-text>
         {{ text }}
-        <div v-if="secondaryText" class="mt-4 font-medium">
-          {{ secondaryText }}
+        <div v-if="secondaryText" class="mt-4 font-medium text-error">
+          <template v-if="Array.isArray(secondaryText)">
+            <div v-for="(line, index) in secondaryText" :key="index">
+              {{ line }}
+            </div>
+          </template>
+          <template v-else>
+            {{ secondaryText }}
+          </template>
         </div>
       </v-card-text>
       <v-card-actions class="justify-end">

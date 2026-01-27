@@ -11,6 +11,7 @@
   import { ConfigurationKey } from '@/utils/configuration/configurationKey'
   import TeamTable from '@/components/organizer/team_management/TeamTable.vue'
   import UsersTable from '@/components/organizer/team_management/UsersTable.vue'
+  import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
   import { calculateAllTeamsConstraints } from '@/utils/teamConstraints'
   import { TeamConstraintViolation } from '@/types/config'
   import AppSnackbar from '@/components/common/AppSnackbar.vue'
@@ -25,6 +26,49 @@
   // ---- PINIA STORE ----
   const teamStore = useTeamStore()
   const loadingTeams = computed(() => teamStore.loading)
+
+  // ----- MODALS -----
+  const showRepoConfirmModal = ref(false)
+
+  const unassignedUsersCount = computed(
+    () =>
+      members.value.filter(
+        (member) => !teamStore.teams.some((team) => team.members.some((m) => m.id === member.id))
+      ).length
+  )
+
+  const teamsWithViolationsCount = computed(
+    () => teams.value.filter((team) => teamConstraintsMap.value[team.id]?.length > 0).length
+  )
+
+  const confirmInitializeRepos = () => {
+    showRepoConfirmModal.value = true
+  }
+
+  const handleConfirmRepos = () => {
+    showRepoConfirmModal.value = false
+    initializeRepos()
+  }
+
+  const repoWarningMessage = computed(() => {
+    const warnings: string[] = []
+
+    if (unassignedUsersCount.value > 0) {
+      warnings.push(
+        t('organizer.teamManagement.confirmRepoDialog.unassignedWarning', {
+          count: unassignedUsersCount.value,
+        })
+      )
+    }
+    if (teamsWithViolationsCount.value > 0) {
+      warnings.push(
+        t('organizer.teamManagement.confirmRepoDialog.violationsWarning', {
+          count: teamsWithViolationsCount.value,
+        })
+      )
+    }
+    return warnings
+  })
 
   // Snackbar
   const snackbar = ref(false)
@@ -83,7 +127,7 @@
 
       await teamStore.fetchTeams()
       await fetchUsers()
-      
+
       showTeamForm.value = false
       selectedTeam.value = null
     } catch (err) {
@@ -275,7 +319,7 @@
     try {
       const results = await githubService.initializeOrganization()
       const successCount = results.filter((r: any) => r.status === 'success').length
-      
+
       text.value = t('organizer.teamManagement.reposCreated', { count: successCount })
       error.value = false
       snackbar.value = true
@@ -338,25 +382,30 @@
       <div class="w-full md:w-8/12 lg:w-9/12 px-4">
         <div class="flex w-full justify-between items-center mb-6">
           <h1 class="text-3xl font-bold">{{ t('organizer.teamManagement.title') }}</h1>
-          <div class="flex gap-4">
-            <v-btn color="green" class="h-full">
-              {{ t('common.validate') }}
-            </v-btn>
-            <v-btn color="primary" class="h-full" @click="onAddTeam">
-              {{ t('organizer.teamManagement.actions.add') }}
-            </v-btn>
-          </div>
+          <v-btn color="primary" class="h-full" @click="onAddTeam">
+            {{ t('organizer.teamManagement.actions.add') }}
+          </v-btn>
         </div>
 
         <div class="flex flex-col gap-2 mb-4">
           <v-btn color="secondary" @click="autogenerateTeams" :disabled="loadingTeams">
             {{ t('organizer.teamManagement.actions.autogenerate') }}
           </v-btn>
-          <v-btn color="black" @click="initializeRepos" :loading="isInitializingRepos" :disabled="loadingTeams">
+          <v-btn color="black" @click="confirmInitializeRepos" :loading="isInitializingRepos" :disabled="loadingTeams">
              <v-icon start>mdi-github</v-icon>
              {{ t('organizer.teamManagement.actions.createGitHubRepos') }}
           </v-btn>
         </div>
+
+        <ConfirmDialog
+          v-model="showRepoConfirmModal"
+          :title="t('organizer.teamManagement.confirmRepoDialog.title')"
+          :text="t('organizer.teamManagement.confirmRepoDialog.message')"
+          :secondary-text="repoWarningMessage"
+          :confirm-label="t('organizer.teamManagement.confirmRepoDialog.confirm')"
+          :cancel-label="t('common.cancel')"
+          @confirm="handleConfirmRepos"
+        />
 
         <TeamFilters
           v-model:view-mode="viewMode"
@@ -423,21 +472,21 @@
     <!-- AUTOGENERATE DIALOGS -->
     <v-dialog v-model="autogenerating" persistent width="auto">
       <v-card>
-        <v-card-title class="text-h6">{{ t('organizer.teamManagement.autogenerate.inProgressTitle') }}</v-card-title>
+        <v-card-title class="text-h6">{{
+          t('organizer.teamManagement.autogenerate.inProgressTitle')
+        }}</v-card-title>
         <v-card-text>
           {{ t('organizer.teamManagement.autogenerate.inProgressText') }}
-          <v-progress-linear
-            color="blue-darken-2"
-            indeterminate
-            class="mt-3"
-          ></v-progress-linear>
+          <v-progress-linear color="blue-darken-2" indeterminate class="mt-3"></v-progress-linear>
         </v-card-text>
       </v-card>
     </v-dialog>
 
     <v-dialog v-model="showAutogenerateResult" persistent width="auto">
       <v-card>
-        <v-card-title class="text-h6">{{ t('organizer.teamManagement.autogenerate.resultTitle') }}</v-card-title>
+        <v-card-title class="text-h6">{{
+          t('organizer.teamManagement.autogenerate.resultTitle')
+        }}</v-card-title>
         <v-card-text>
           <p v-if="teamsCreated > 0">
             {{ t('organizer.teamManagement.autogenerate.resultSuccess', { count: teamsCreated }) }}

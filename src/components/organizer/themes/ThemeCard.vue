@@ -96,7 +96,7 @@ const cancelEditSubject = (sIndex: number) => {
               density="compact"
               variant="underlined"
               hide-details
-              placeholder="Name"
+              :placeholder="t('themes.namePlaceholder')"
               class="w-full"
             />
             <v-textarea
@@ -105,7 +105,7 @@ const cancelEditSubject = (sIndex: number) => {
               variant="underlined"
               auto-grow
               hide-details
-              placeholder="Description"
+              :placeholder="t('themes.descriptionPlaceholder')"
               class="w-full"
             />
 
