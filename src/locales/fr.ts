@@ -138,7 +138,7 @@ export default {
     userNotInvited: 'Votre email n\'a pas été invité à ce hackathon',
     passwordsDoNotMatch: 'Les mots de passe ne correspondent pas',
     passwordComplexity:
-      'Le mot de passe doit contenir au moins 8 caractères, incluant une majuscule, une minuscule, un chiffre et un caractère spécial.',
+      'Le mot de passe doit contenir au moins 8 caractères, incluant une majuscule, une minuscule, un chiffre et un caractère spécial parmi @$!%*?&.',
     accessDenied: 'Accès refusé. Espace organisateur uniquement.',
     resetFailed: 'Échec de la réinitialisation du mot de passe. Veuillez réessayer.',
     firstLoginEmailSent: "L'email a été envoyé. Veuillez vérifier votre boîte de réception.",
