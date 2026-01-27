@@ -133,7 +133,8 @@ export default {
     email: 'Email',
     password: 'Password',
     confirmPassword: 'Confirm Password',
-    invalidCredentials: 'Your email is not invited to this hackathon',
+    invalidCredentials: 'Incorrect email or password',
+    userNotInvited: 'Your email is not invited to this hackathon',
     accessDenied: 'Access denied. Organizer area only.',
     resetFailed: 'Password reset failed. Please try again.',
     firstLoginEmailSent: 'The email has been sent. Please check your inbox.',
@@ -295,6 +296,7 @@ export default {
         withdrawTeamFrom: 'Withdraw team from {name}',
         selectTeam: 'Select a team',
         autogenerate: 'Autogenerate Teams',
+        createGitHubRepos: 'Create GitHub Repos',
       },
       selectedTeam: 'Selected Team:',
       teamDeleted: 'Team deleted successfully',
@@ -307,6 +309,17 @@ export default {
       teamAutogenerateError: 'Error during teams autogeneration',
       reposCreated: '{count} Repositories created successfully',
       reposCreationError: 'Error creating repository',
+      confirmRepoDialog: {
+        title: 'Initialize GitHub Repositories',
+        message:
+          'Are you sure you want to create repositories for all teams? This action will generate the remote workspaces on the organization.',
+        unassignedWarning: 'Warning: {count} participant(s) are not yet assigned to any team.',
+        violationsWarning:
+          'Warning: {count} team(s) do not respect the matchmaking constraints.',
+        confirm: 'Create Repositories',
+      },
+      githubPermissionsError: 'Insufficient rights on the GitHub organization. Please verify that you granted access rights to the organization during your GitHub login.',
+      githubOrgNotFoundError: "Organization '{orgName}' does not exist on GitHub. Please create it manually first.",
     },
     submissionManagement: {
       title: 'Project Submissions',
@@ -424,34 +437,33 @@ export default {
     },
     team: {
       myTeam: 'My Team',
-      leaveTeam: "Leave Team",
+      leaveTeam: 'Leave Team',
       noTeam: "You haven't joined a team yet.",
-      searchTeam: "Search for a team",
-      teamName: "Team {name}",
-      subject: "Subject",
-      unknownSubject: "Unknown Subject",
-      noDescription: "No description for this team.",
-      members: "Members",
-      mentors: "Mentors",
-      jury: "Jury",
-      mentor: "Mentor",
-      confirmLeaveTitle: "Leave Team",
-      confirmLeaveText: "Are you sure you want to leave this team? This action is irreversible.",
-      confirmLeaveButton: "Leave",
+      searchTeam: 'Search for a team',
+      teamName: 'Team {name}',
+      subject: 'Subject',
+      unknownSubject: 'Unknown Subject',
+      noDescription: 'No description for this team.',
+      members: 'Members',
+      mentors: 'Mentors',
+      jury: 'Jury',
+      mentor: 'Mentor',
+      confirmLeaveTitle: 'Leave Team',
+      confirmLeaveText: 'Are you sure you want to leave this team? This action is irreversible.',
+      confirmLeaveButton: 'Leave',
       // Team Search
-      title: "Team Selection",
-      searchPlaceholder: "Search for teams by subject, skills",
-      createTeam: "Create a Team",
-      activeFilters: "Active Filters",
-      all: "All",
-      searchResults: "Search Results ({count} teams)",
-      join: "Join",
-      placesRemaining: "{count} places remaining",
-      placesRemainingSingular: "{count} place remaining",
+      title: 'Team Selection',
+      searchPlaceholder: 'Search for teams by subject, skills',
+      createTeam: 'Create a Team',
+      activeFilters: 'Active Filters',
+      all: 'All',
+      searchResults: 'Search Results ({count} teams)',
+      join: 'Join',
+      placesRemaining: '{count} places remaining',
+      placesRemainingSingular: '{count} place remaining',
     },
     submission: {
       title: 'Project Submission',
-      phaseClosed: 'Project submission phase is not active',
       team: {
         title: 'Team',
         noGithubLink: 'No GitHub link provided',
@@ -509,7 +521,7 @@ export default {
     privacyPolicy: 'Privacy Policy',
     terms: 'Terms and Conditions',
     cookies: 'Cookies',
-    credits: 'EPITA - MTI 2026'
+    credits: 'EPITA - MTI 2026',
   },
 
   // Settings
@@ -661,6 +673,7 @@ export default {
     selectDateAndTime: 'Select date & time',
     deadline: 'Submission deadline on ',
     phaseNameRequired: 'Please provide names for all phases.',
+    deadlineRequired: 'Please provide a submission deadline.',
   },
   mailingSettings: {
     title: 'Emails Templates',
@@ -695,6 +708,8 @@ export default {
   themes: {
     title: 'Themes & Subjects',
     subtitle: 'Manage the themes and subjects for the hackathon',
+    namePlaceholder: 'Name',
+    descriptionPlaceholder: 'Description',
     theme: 'Theme',
     topic: 'Subject',
     newTheme: 'New Theme',
@@ -717,6 +732,11 @@ export default {
       requiredField: 'This field is required',
       maxLength: 'Maximum length reached',
       fixErrors: 'Please fix the errors before saving.',
+    },
+    validation: {
+      themeNameRequired: 'Theme name is required',
+      subjectRequired: 'At least one subject by theme is required',
+      subjectNameRequired: 'Subject name is required',
     },
     noName: 'No name provided',
     noDescription: 'No description provided',
@@ -754,7 +774,7 @@ export default {
       begin: 'Begin',
       end: 'End',
       skip: 'Skip',
-      disabledReason: "Make sure all organizer actions are completed before proceeding.",
+      disabledReason: 'Make sure all organizer actions are completed before proceeding.',
     },
     errors: {
       phaseSkipError: 'Error skipping phase, please try again later.',
@@ -781,7 +801,7 @@ export default {
         juries: 'juries assigned to teams',
         teamsCreated: 'Team(s) created',
       },
-      submission: "Submitted Projects",
+      submission: 'Submitted Projects',
       evaluation: 'Evaluated Projects',
       total: 'Total',
       teamsFormed: '{count} teams formed',
@@ -812,12 +832,14 @@ export default {
   dashboard: {
     welcome: 'Welcome to your dashboard {firstname}!',
     currentPhase: 'Current Phase: {phaseName}',
-    nothing_todo: 'There are **no mandatory actions** for you as a participant during the current phase ({currentPhase}).',
+    nothing_todo:
+      'There are **no mandatory actions** for you as a participant during the current phase ({currentPhase}).',
     participant: {
       tasks: 'Your Tasks',
       profile_completion: {
         title: 'Complete your profile',
-        description: 'Please complete your profile to get the best experience during the hackathon.',
+        description:
+          'Please complete your profile to get the best experience during the hackathon.',
         addBio: 'Add a bio',
         addInterests: 'Add your interests',
         addDiscord: 'Connect your Discord',
@@ -844,7 +866,7 @@ export default {
         title: 'Submit your project',
         hackathonEndsIn: 'The hackathon ends in ',
         description: 'Upload your project before the submission deadline.',
-        submit: 'Submit Project'
+        submit: 'Submit Project',
       },
     },
     expert: {
@@ -861,7 +883,7 @@ export default {
         viewSubmissions: 'View Project Submissions',
         count: 'evaluated project(s)',
       },
-    }
+    },
   },
 
   countdown: {
@@ -869,6 +891,6 @@ export default {
     hours: 'Hours',
     minutes: 'Min',
     seconds: 'Sec',
-    expired: 'Time\'s up!'
+    expired: "Time's up!",
   },
 }
