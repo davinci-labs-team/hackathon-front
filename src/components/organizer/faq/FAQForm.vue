@@ -34,7 +34,6 @@
   // -----------------------------
   const question = ref('')
   const answer = ref('')
-  const isPrivate = ref(false)
 
   // -----------------------------
   // Validation
@@ -47,7 +46,6 @@
   const resetForm = () => {
     question.value = ''
     answer.value = ''
-    isPrivate.value = false
   }
 
   const close = () => {
@@ -65,7 +63,6 @@
     const faqItem: FAQItemDTO = {
       question: question.value,
       answer: answer.value,
-      isPrivate: isPrivate.value,
     }
     emit('save', faqItem)
     close()
@@ -81,7 +78,6 @@
       if (props.editMode && props.faqItem) {
         question.value = props.faqItem.question
         answer.value = props.faqItem.answer
-        isPrivate.value = props.faqItem.isPrivate
       } else {
         resetForm()
       }
@@ -125,13 +121,6 @@
             auto-grow
             rows="3"
             class="mb-4"
-          />
-
-          <v-switch
-            v-model="isPrivate"
-            :label="isPrivate ? t('faq.private') : t('faq.public')"
-            :hint="isPrivate ? t('faq.privateHint') : t('faq.publicHint')"
-            color="blue"
           />
 
           <v-card-actions class="justify-center">

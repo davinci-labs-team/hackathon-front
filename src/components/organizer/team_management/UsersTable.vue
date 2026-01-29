@@ -9,6 +9,7 @@
   import { getEligibleTeamsForUser } from '@/utils/teamConstraints'
   import { UserRole } from '@/types/roles'
   import { usePagination } from '@/composables/usePagination'
+import { TeamStatus } from '@/types/team_status'
 
   const { t } = useI18n()
 
@@ -73,9 +74,9 @@
         case UserRole.PARTICIPANT:
           return getEligibleTeamsForUser(props.teams, user, props.config)
         case UserRole.MENTOR:
-          return props.teams.filter((t) => !user.mentorTeams?.some((ut) => ut.id === t.id))
+          return props.teams.filter((t) => !user.mentorTeams?.some((ut) => ut.id === t.id) && t.status === TeamStatus.UNLOCKED)
         case UserRole.JURY:
-          return props.teams.filter((t) => !user.juryTeams?.some((ut) => ut.id === t.id))
+          return props.teams.filter((t) => !user.juryTeams?.some((ut) => ut.id === t.id) && t.status === TeamStatus.UNLOCKED)
         default:
           return []
       }

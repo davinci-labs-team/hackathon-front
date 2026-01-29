@@ -1,21 +1,21 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { UserReducedDTO } from '@/types/user'
-import { UserRole } from '@/types/roles'
-import { useI18n } from 'vue-i18n'
+  import { computed } from 'vue'
+  import { UserReducedDTO } from '@/types/user'
+  import { UserRole } from '@/types/roles'
+  import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+  const { t } = useI18n()
 
-const props = defineProps<{
-  user: UserReducedDTO
-  teamAvailable: boolean
-}>()
+  const props = defineProps<{
+    user: UserReducedDTO
+    teamAvailable: boolean
+  }>()
 
-const emit = defineEmits(['assign', 'withdraw'])
+  const emit = defineEmits(['assign', 'withdraw'])
 
-const hasTeam = computed(() => !!props.user.teamId)
+  const hasTeam = computed(() => !!props.user.teamId)
 
-const showAssign = computed(() => {
+  const showAssign = computed(() => {
     switch (props.user.role) {
       case UserRole.PARTICIPANT:
         return !hasTeam.value
@@ -24,9 +24,10 @@ const showAssign = computed(() => {
         return true
       default:
         return false
-}})
+    }
+  })
 
-const showWithdraw = computed(() => {
+  const showWithdraw = computed(() => {
     switch (props.user.role) {
       case UserRole.PARTICIPANT:
         return hasTeam.value
@@ -36,21 +37,28 @@ const showWithdraw = computed(() => {
         return props.user.juryTeams?.length! > 0
       default:
         return false
-}})
+    }
+  })
 </script>
 
 <template>
   <div class="flex flex-col justify-center items-center gap-2">
-    <v-btn
-      v-if="showAssign"
-      color="primary"
-      variant="outlined"
-      :disabled="!teamAvailable"
-      small
-      @click="$emit('assign', user)"
-    >
-      {{ t('organizer.teamManagement.actions.assignTeam') }}
-    </v-btn>
+    <v-tooltip v-if="showAssign" :disabled="teamAvailable" location="top">
+      <template v-slot:activator="{ props: tooltipProps }">
+        <div v-bind="tooltipProps" class="inline-block">
+          <v-btn
+            color="primary"
+            variant="outlined"
+            :disabled="!teamAvailable"
+            small
+            @click="$emit('assign', user)"
+          >
+            {{ t('organizer.teamManagement.actions.assignTeam') }}
+          </v-btn>
+        </div>
+      </template>
+      <span>{{ t('organizer.teamManagement.noTeams') }}</span>
+    </v-tooltip>
 
     <v-btn
       v-if="showWithdraw"

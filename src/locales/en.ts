@@ -1,3 +1,5 @@
+import { announcements } from "@/tests/data/announcements";
+
 export default {
   common: {
     close: 'Close',
@@ -363,6 +365,7 @@ export default {
     dashboard: 'Jury Dashboard',
     nav: {
       dashboard: 'Dashboard',
+      announcements: 'Announcements',
       teams: 'My Teams',
       projects: 'Projects Evaluation',
       faq: 'FAQ',
@@ -397,6 +400,7 @@ export default {
     dashboard: 'Mentor Dashboard',
     nav: {
       dashboard: 'Dashboard',
+      announcements: 'Announcements',
       teams: 'My Teams',
       projects: 'Projects Feedback',
       faq: 'FAQ',

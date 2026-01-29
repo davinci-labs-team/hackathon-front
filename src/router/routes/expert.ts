@@ -5,6 +5,7 @@ import Project from '@/pages/expert/Project.vue'
 import FAQ from '@/pages/common/FAQ.vue'
 import Profile from '@/pages/common/Profile.vue'
 import ExpertLayout from '@/layouts/ExpertLayout.vue'
+import Announcements from '@/pages/common/Announcements.vue'
 
 export default [
   {
@@ -13,13 +14,19 @@ export default [
     children: [
       {
         path: '',
-        redirect: { name: 'ExpertDashboard' }
+        redirect: { name: 'ExpertDashboard' },
       },
       {
         path: 'dashboard',
         name: 'ExpertDashboard',
         component: Dashboard,
         meta: { requiresAuth: true, roles: [UserRole.JURY, UserRole.ORGANIZER, UserRole.MENTOR] },
+      },
+      {
+        path: 'announcements',
+        name: 'ExpertAnnouncements',
+        component: Announcements,
+        meta: { requiresAuth: true },
       },
       {
         path: 'teams',
