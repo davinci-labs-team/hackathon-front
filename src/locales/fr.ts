@@ -1,5 +1,3 @@
-import { announcements } from "@/tests/data/announcements";
-
 export default {
   common: {
     close: 'Fermer',
@@ -236,6 +234,8 @@ export default {
       userAssignedToTeam: "L'utilisateur a été assigné à l’équipe avec succès",
       userAssignError: "Erreur lors de l'assignation de l'utilisateur à l'équipe",
       noTeamsAvailable: 'Aucune équipe disponible',
+      teamUpdateError: "Erreur lors de la mise à jour de l'équipe",
+      teamLockStatusUpdateError: "Erreur lors de la mise à jour du statut de verrouillage de l'équipe",
       team: 'Équipe',
       members: 'Membres',
       name: 'Nom',

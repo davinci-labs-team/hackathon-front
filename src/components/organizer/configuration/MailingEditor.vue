@@ -59,7 +59,7 @@
       showSnackbar(t('common.changesSaved'), false)
     } catch (e) {
       console.error('Error saving mailing configuration:', mailingError.value || e)
-      showSnackbar(t('common.errorOccurred'), true)
+      showSnackbar(t('common.error'), true)
     }
   }
 

@@ -1,5 +1,3 @@
-import { announcements } from "@/tests/data/announcements";
-
 export default {
   common: {
     close: 'Close',
@@ -148,6 +146,7 @@ export default {
     lastAnnouncements: 'Last Announcements',
     title: "Announcement's title",
     addTitle: 'Create Announcement',
+    content: 'Content',
     editTitle: 'Edit Announcement',
     tags: 'Tags',
     tagsHint: 'Comma separated',
@@ -231,6 +230,8 @@ export default {
       userWithdrawnFromTeam: 'User withdrawn from team successfully',
       userWithdrawError: 'Error withdrawing user from team',
       noTeamsAvailable: 'No teams available',
+      teamUpdateError: 'Error updating team',
+      teamLockStatusUpdateError: 'Error updating team lock status',
       team: 'Team',
       members: 'Members',
       name: 'Name',

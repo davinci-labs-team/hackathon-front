@@ -197,7 +197,7 @@
       await teamStore.toggleIgnoreConstraints(teamId, ignoreConstraints)
     } catch (err) {
       console.error('Error toggling team constraints:', err)
-      text.value = t('organizer.teamManagement.teamConstraintsToggleError')
+      text.value = t('common.error')
       error.value = true
       snackbar.value = true
     }
