@@ -34,7 +34,7 @@ import { UserRole } from '@/types/roles'
       phaseStore.scheduleNextRefresh()
       
       error.value = false
-      if (user?.role === UserRole.JURY || user?.role === UserRole.MENTOR) {
+      if (user.role && !(user.role === UserRole.PARTICIPANT)) {
         router.push('/expert/dashboard')
       } else {
         router.push('/user/dashboard')
