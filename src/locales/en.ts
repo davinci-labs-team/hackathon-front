@@ -394,6 +394,7 @@ export default {
         confirm: 'Confirm',
         cancel: 'Cancel',
       },
+      phaseClosed: "The feedback phase is currently closed.",
     },
   },
   mentor: {
@@ -414,6 +415,7 @@ export default {
       comment: 'Comment',
       submit: 'Submit Feedback',
       yourComment: 'Your comment',
+      phaseClosed: "The feedback phase is currently closed.",
     },
   },
   expert: {
@@ -511,6 +513,7 @@ export default {
         mentor: 'Mentor',
         noContent: 'No content',
       },
+      phaseClosed: "The project submission is closed at this time.",
     },
   },
 
