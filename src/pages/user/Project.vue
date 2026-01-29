@@ -10,8 +10,10 @@ import { submissionService } from '@/services/submissionService'
 import { teamService } from '@/services/teamService'
 import { TeamDTO } from '@/types/team'
 import { S3BucketService } from '@/services/s3BucketService'
+import { usePhaseStore } from '@/stores/phase'
 
 const authStore = useAuthStore()
+const phaseStore = usePhaseStore()
 
 const userInfo = ref<UserDTO | null>(null)
 const teamInfo = ref<TeamDTO | null>(null)
@@ -26,6 +28,7 @@ const uploadError = ref('')
 const uploadSuccess = ref(false)
 
 onMounted(async () => {
+  await phaseStore.fetchPhases()
   if (authStore.user?.id) {
     try {
       loading.value = true
@@ -114,6 +117,8 @@ const isDeadlineExceeded = computed(() => {
   return new Date(dueDate.value).getTime() < Date.now()
 })
 
+const isSubmissionPhase = computed(() => phaseStore.currentPhase?.order === 4)
+
 // Gestion de l'upload
 const handleUpload = async () => {
   if (!selectedFile.value) {
@@ -181,6 +186,15 @@ const downloadSubmissionFile = async () => {
 
     <v-progress-linear v-if="loading" indeterminate color="primary" class="mb-4" />
 
+    <v-alert
+      v-if="!isDeadlineExceeded && !isSubmissionPhase"
+      type="warning"
+      variant="tonal"
+      class="mb-4"
+    >
+      {{ t(`${tPrefix}.submission.phaseClosed`) }}
+    </v-alert>
+
     <!-- Bloc principal - Soumission -->
     <v-card class="pa-6 mb-6">
       <h2 class="text-xl font-semibold mb-4">{{ t(`${tPrefix}.submission.team.title`) }} {{ teamInfo?.name || '-' }}</h2>
@@ -215,7 +229,7 @@ const downloadSubmissionFile = async () => {
             prepend-icon="mdi-paperclip"
             :hide-details="!uploadError"
             :error-messages="uploadError"
-            :disabled="uploading || isDeadlineExceeded"
+            :disabled="uploading || isDeadlineExceeded || !isSubmissionPhase"
           />
         </v-col>
         <v-col cols="12" md="4">
@@ -224,7 +238,7 @@ const downloadSubmissionFile = async () => {
             block
             @click="handleUpload"
             :loading="uploading"
-            :disabled="!selectedFile || uploading || isDeadlineExceeded"
+            :disabled="!selectedFile || uploading || isDeadlineExceeded || !isSubmissionPhase"
           >
             <v-icon left>mdi-upload</v-icon>
             {{ t(`${tPrefix}.submission.upload.uploadButton`) }}
