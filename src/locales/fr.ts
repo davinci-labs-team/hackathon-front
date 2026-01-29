@@ -5,7 +5,6 @@ export default {
     pending: 'En attente',
     completed: 'Terminé',
     error: 'Une erreur est survenue, veuillez réessayer plus tard.',
-    success: 'Opération réussie avec succès.',
     fieldRequired: 'Ce champ est obligatoire',
     invalidEmail: 'Veuillez saisir une adresse email valide',
     actions: 'Actions',
@@ -18,10 +17,6 @@ export default {
     logout: 'Se déconnecter',
     saveChanges: 'Enregistrer les Modifications',
     changesSaved: 'Modifications enregistrées avec succès',
-    from: 'De',
-    to: 'À',
-    toBis: 'au',
-    done: 'Fait',
     fullname: '{firstname} {lastname}',
     minimum: 'Minimum',
     maximum: 'Maximum',
@@ -39,7 +34,6 @@ export default {
   },
   profile: {
     mainTitle: 'Mon Profil',
-    otherUserTitle: 'Profil de',
     contacts: 'Contacts',
     connectDiscord: 'Connectez votre Discord',
     connectGithub: 'Connectez votre GitHub',
@@ -48,22 +42,10 @@ export default {
     personalInfo: {
       title: 'Informations Personnelles',
       editButton: 'Modifier les Informations',
-      saveButton: 'Enregistrer les Modifications',
-      cancelButton: 'Annuler',
-      name: 'Nom ',
-      email: 'Email ',
-      role: 'Rôle ',
       school: 'École ',
       interests: 'Centres d’intérêt ',
       bio: 'Bio ',
-      linkedin: 'LinkedIn ',
-      github: 'GitHub ',
-      discord: 'Discord ',
-      website: 'Site Web ',
-      noInfo: 'Aucune information supplémentaire fournie.',
-      addInterest: 'Ajouter un centre d’intérêt',
     },
-    otherUserInfoTitle: "Informations de l'Utilisateur",
     deleteAccount: 'Supprimer le Compte',
     deleteAccountText:
       'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
@@ -80,10 +62,6 @@ export default {
     participant: 'Participant',
   },
   hackathon: {
-    title: 'Qubit or Not Qubit',
-    subtitle: 'Le Hackathon Quantique',
-    description:
-      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veritatis saepe nulla commodi totam necessitatibus expedita autem ipsum, deserunt repudiandae porro itaque, consectetur ipsa dolorum ex, nisi eveniet voluptas ut adipisci?',
     inscriptionTitle: 'Inscription',
     inscriptionMessage:
       "Bienvenue ! Pour rejoindre l'événement, veuillez vous inscrire ci-dessous.",
@@ -177,10 +155,8 @@ export default {
   },
   // Roles sections
   organizer: {
-    dashboard: 'Tableau de bord Organisateur',
     announcements: {
       addButton: 'Créer une annonce',
-      addClicked: 'Bouton d’ajout cliqué',
     },
     userManagement: {
       addButton: 'Ajouter nouvel utilisateur',
@@ -243,7 +219,6 @@ export default {
       theme: 'Thème',
       subject: 'Sujet',
       school: 'École',
-      mail: 'Email',
       namePlaceholder: 'Rechercher par nom, équipe',
       autogenerate: {
         inProgressTitle: 'Génération Automatique des Équipes',
@@ -274,15 +249,12 @@ export default {
         LOCKED: 'Verrouillée',
         UNLOCKED: 'Non Verrouillée',
       },
-      viewTeam: 'Voir l’Équipe',
       modale: {
         addMembers: 'Ajouter des participants',
         addJury: 'Ajouter des jury',
         addMentors: 'Ajouter des mentors',
         addDescription: 'Ajouter une description',
         membersPlaceholder: 'Rechercher par nom',
-        selectTheme: 'Sélectionner un thème',
-        selectSubject: 'Sélectionner un sujet',
       },
       actions: {
         label: 'Actions',
@@ -332,7 +304,6 @@ export default {
     },
     submissionManagement: {
       title: 'Gestion des Dépôts',
-      noJuryAssigned: 'Aucun jury assigné',
       noGrade: '-',
       pendingJury: 'Membre(s) du jury en attente :',
       noSubmissions: 'Vous n\'avez pas d\'équipe assignée',

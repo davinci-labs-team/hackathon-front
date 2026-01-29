@@ -5,7 +5,6 @@ export default {
     pending: 'Pending',
     completed: 'Completed',
     error: 'An error occurred, please try again later.',
-    success: 'Operation completed successfully.',
     fieldRequired: 'This field is required',
     invalidEmail: 'Please enter a valid email address',
     passwordsDoNotMatch: 'Passwords do not match',
@@ -21,10 +20,6 @@ export default {
     logout: 'Logout',
     saveChanges: 'Save Changes',
     changesSaved: 'Changes saved successfully',
-    from: 'From',
-    to: 'To',
-    toBis: 'to',
-    done: 'Done',
     fullname: '{firstname} {lastname}',
     minimum: 'Minimum',
     maximum: 'Maximum',
@@ -42,7 +37,6 @@ export default {
   },
   profile: {
     mainTitle: 'My Profile',
-    otherUserTitle: 'Profile of',
     contacts: 'Contacts',
     connectDiscord: 'Connect your Discord',
     connectGithub: 'Connect your GitHub',
@@ -51,22 +45,10 @@ export default {
     personalInfo: {
       title: 'Personal Information',
       editButton: 'Edit Information',
-      saveButton: 'Save Changes',
-      cancelButton: 'Cancel',
-      name: 'Name',
-      email: 'Email',
-      role: 'Role',
       bio: 'Bio',
-      linkedin: 'LinkedIn',
-      github: 'GitHub',
-      discord: 'Discord',
       school: 'School',
       interests: 'Interests',
-      website: 'Website',
-      noInfo: 'No additional information provided.',
-      addInterest: 'Add an interest',
     },
-    otherUserInfoTitle: 'User Information',
     deleteAccount: 'Delete Account',
     deleteAccountText: 'Are you sure you want to delete your account? This action is irreversible.',
     deleteAccountConfirm: 'Yes, delete my account',
@@ -82,10 +64,6 @@ export default {
     participant: 'Participant',
   },
   hackathon: {
-    title: 'Qubit or Not Qubit',
-    subtitle: 'The Quantum Hackathon',
-    description:
-      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veritatis saepe nulla commodi totam necessitatibus expedita autem ipsum, deserunt repudiandae porro itaque, consectetur ipsa dolorum ex, nisi eveniet voluptas ut adipisci?',
     inscriptionTitle: 'Registration',
     inscriptionMessage: 'Welcome! To join the event, please register below.',
     firstLoginBtn: 'First login',
@@ -173,10 +151,8 @@ export default {
   },
   // Roles sections
   organizer: {
-    dashboard: 'Organizer Dashboard',
     announcements: {
       addButton: 'Create Announcement',
-      addClicked: 'Add button clicked',
     },
     userManagement: {
       addButton: 'Add new user',
@@ -239,7 +215,6 @@ export default {
       theme: 'Theme',
       subject: 'Subject',
       school: 'School',
-      mail: 'Email',
       namePlaceholder: 'Search by name, team',
       autogenerate: {
         inProgressTitle: 'Autogenerating Teams',
@@ -254,7 +229,6 @@ export default {
         invalid: 'Invalid',
         ignored: 'Ignored',
       },
-      viewTeam: 'View Team',
       withoutTeam: 'Without Team',
       withTeam: 'With Team',
       role: 'Role',
@@ -276,8 +250,6 @@ export default {
         addMentors: 'Add Mentors',
         membersPlaceholder: 'Search by name',
         addDescription: 'Add a description',
-        selectTheme: 'Select a theme',
-        selectSubject: 'Select a subject',
       },
       dialog: {
         deleteConfirmTitle: 'Confirm Deletion',
@@ -326,7 +298,6 @@ export default {
     },
     submissionManagement: {
       title: 'Project Submissions',
-      noJuryAssigned: 'No jury assigned',
       noSubmissions: 'You have no team assigned',
       noComments: 'No comments available',
       noGrade: '-',
@@ -879,7 +850,6 @@ export default {
       provide_feedback: {
         title: 'Provide feedback to your assigned teams',
         description: 'Review the projects of your assigned teams and provide valuable feedback.',
-        viewTeams: 'View Feedback Teams',
         count: 'team(s) awaiting feedback',
       },
       evaluate_projects: {
