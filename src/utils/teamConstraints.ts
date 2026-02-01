@@ -3,6 +3,7 @@ import { MatchmakingSettingsDTO, TeamConstraintViolation } from '@/types/config'
 import { checkTeamConstraints as originalCheckTeamConstraints } from '@/services/matchmakingService'
 import { UserReducedDTO } from '@/types/user'
 import { TeamConstraintType } from '@/types/constraintType'
+import { TeamStatus } from '@/types/team_status'
 
 export function calculateTeamConstraints(
   team: TeamDTO,
@@ -40,13 +41,16 @@ export function getEligibleTeamsForUser(
     role: user.role,
   }
 
+  const filteredTeams = teams.filter((team) => team.status === TeamStatus.UNLOCKED)
+  console.log(`Filtered teams to ${filteredTeams.length} unlocked teams.`)
+
   if (config.isActive === false) {
-    return teams
+    return filteredTeams
   }
 
   const teamsBySubject = user.favoriteSubjectId
-    ? teams.filter((team) => team.subjectId === user.favoriteSubjectId)
-    : teams
+    ? filteredTeams.filter((team) => team.subjectId === user.favoriteSubjectId)
+    : filteredTeams
 
   return teamsBySubject.filter((team: TeamDTO) => {
     const simulatedTeam: TeamDTO = {

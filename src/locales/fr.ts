@@ -1,3 +1,5 @@
+import { announcements } from "@/tests/data/announcements";
+
 export default {
   common: {
     close: 'Fermer',
@@ -5,7 +7,6 @@ export default {
     pending: 'En attente',
     completed: 'Terminé',
     error: 'Une erreur est survenue, veuillez réessayer plus tard.',
-    success: 'Opération réussie avec succès.',
     fieldRequired: 'Ce champ est obligatoire',
     invalidEmail: 'Veuillez saisir une adresse email valide',
     actions: 'Actions',
@@ -18,10 +19,6 @@ export default {
     logout: 'Se déconnecter',
     saveChanges: 'Enregistrer les Modifications',
     changesSaved: 'Modifications enregistrées avec succès',
-    from: 'De',
-    to: 'À',
-    toBis: 'au',
-    done: 'Fait',
     fullname: '{firstname} {lastname}',
     minimum: 'Minimum',
     maximum: 'Maximum',
@@ -39,7 +36,6 @@ export default {
   },
   profile: {
     mainTitle: 'Mon Profil',
-    otherUserTitle: 'Profil de',
     contacts: 'Contacts',
     connectDiscord: 'Connectez votre Discord',
     connectGithub: 'Connectez votre GitHub',
@@ -48,22 +44,10 @@ export default {
     personalInfo: {
       title: 'Informations Personnelles',
       editButton: 'Modifier les Informations',
-      saveButton: 'Enregistrer les Modifications',
-      cancelButton: 'Annuler',
-      name: 'Nom ',
-      email: 'Email ',
-      role: 'Rôle ',
       school: 'École ',
       interests: 'Centres d’intérêt ',
       bio: 'Bio ',
-      linkedin: 'LinkedIn ',
-      github: 'GitHub ',
-      discord: 'Discord ',
-      website: 'Site Web ',
-      noInfo: 'Aucune information supplémentaire fournie.',
-      addInterest: 'Ajouter un centre d’intérêt',
     },
-    otherUserInfoTitle: "Informations de l'Utilisateur",
     deleteAccount: 'Supprimer le Compte',
     deleteAccountText:
       'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
@@ -80,10 +64,6 @@ export default {
     participant: 'Participant',
   },
   hackathon: {
-    title: 'Qubit or Not Qubit',
-    subtitle: 'Le Hackathon Quantique',
-    description:
-      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veritatis saepe nulla commodi totam necessitatibus expedita autem ipsum, deserunt repudiandae porro itaque, consectetur ipsa dolorum ex, nisi eveniet voluptas ut adipisci?',
     inscriptionTitle: 'Inscription',
     inscriptionMessage:
       "Bienvenue ! Pour rejoindre l'événement, veuillez vous inscrire ci-dessous.",
@@ -136,9 +116,11 @@ export default {
     confirmPassword: 'Confirmer le mot de passe',
     invalidCredentials: 'Email ou mot de passe incorrect',
     userNotInvited: 'Votre email n\'a pas été invité à ce hackathon',
+    invalidCredentials: 'Email ou mot de passe incorrect',
+    userNotInvited: 'Votre email n\'a pas été invité à ce hackathon',
     passwordsDoNotMatch: 'Les mots de passe ne correspondent pas',
     passwordComplexity:
-      'Le mot de passe doit contenir au moins 8 caractères, incluant une majuscule, une minuscule, un chiffre et un caractère spécial.',
+      'Le mot de passe doit contenir au moins 8 caractères, incluant une majuscule, une minuscule, un chiffre et un caractère spécial parmi @$!%*?&.',
     accessDenied: 'Accès refusé. Espace organisateur uniquement.',
     resetFailed: 'Échec de la réinitialisation du mot de passe. Veuillez réessayer.',
     firstLoginEmailSent: "L'email a été envoyé. Veuillez vérifier votre boîte de réception.",
@@ -177,10 +159,8 @@ export default {
   },
   // Roles sections
   organizer: {
-    dashboard: 'Tableau de bord Organisateur',
     announcements: {
       addButton: 'Créer une annonce',
-      addClicked: 'Bouton d’ajout cliqué',
     },
     userManagement: {
       addButton: 'Ajouter nouvel utilisateur',
@@ -234,6 +214,8 @@ export default {
       userAssignedToTeam: "L'utilisateur a été assigné à l’équipe avec succès",
       userAssignError: "Erreur lors de l'assignation de l'utilisateur à l'équipe",
       noTeamsAvailable: 'Aucune équipe disponible',
+      teamUpdateError: "Erreur lors de la mise à jour de l'équipe",
+      teamLockStatusUpdateError: "Erreur lors de la mise à jour du statut de verrouillage de l'équipe",
       team: 'Équipe',
       members: 'Membres',
       name: 'Nom',
@@ -241,7 +223,6 @@ export default {
       theme: 'Thème',
       subject: 'Sujet',
       school: 'École',
-      mail: 'Email',
       namePlaceholder: 'Rechercher par nom, équipe',
       autogenerate: {
         inProgressTitle: 'Génération Automatique des Équipes',
@@ -272,15 +253,12 @@ export default {
         LOCKED: 'Verrouillée',
         UNLOCKED: 'Non Verrouillée',
       },
-      viewTeam: 'Voir l’Équipe',
       modale: {
         addMembers: 'Ajouter des participants',
         addJury: 'Ajouter des jury',
         addMentors: 'Ajouter des mentors',
         addDescription: 'Ajouter une description',
         membersPlaceholder: 'Rechercher par nom',
-        selectTheme: 'Sélectionner un thème',
-        selectSubject: 'Sélectionner un sujet',
       },
       actions: {
         label: 'Actions',
@@ -316,12 +294,20 @@ export default {
       teamAutogenerateError: 'Erreur lors de la génération automatique des équipes',
       reposCreated: '{count} Repositories créés avec succès',
       reposCreationError: 'Erreur lors de la création du repository',
+      confirmRepoDialog: {
+        title: 'Initialiser les Repositories GitHub',
+        message:
+          'Êtes-vous sûr de vouloir créer des repositories pour toutes les équipes ? Cette action va générer les espaces de travail distants sur l’organisation.',
+        unassignedWarning: 'Avertissement : {count} participant(s) ne sont pas encore assignés à une équipe.',
+        violationsWarning:
+          'Avertissement : {count} équipe(s) ne respectent pas les contraintes de matchmaking.',
+        confirm: 'Créer les Repositories',
+      },
       githubPermissionsError: "Droits insuffisants sur l'organisation GitHub. Veuillez vérifier que vous avez donné les droits d'accès à l'organisation lors de votre connexion GitHub.",
       githubOrgNotFoundError: "L'organisation '{orgName}' n'existe pas sur GitHub. Veuillez l'y créer manuellement d'abord.",
     },
     submissionManagement: {
       title: 'Gestion des Dépôts',
-      noJuryAssigned: 'Aucun jury assigné',
       noGrade: '-',
       pendingJury: 'Membre(s) du jury en attente :',
       noSubmissions: 'Vous n\'avez pas d\'équipe assignée',
@@ -361,6 +347,7 @@ export default {
     dashboard: 'Tableau de bord Jury',
     nav: {
       dashboard: 'Dashboard',
+      announcements: 'Annonces',
       teams: 'Mes Équipes',
       projects: 'Évaluation des Projets',
       faq: 'FAQ',
@@ -395,6 +382,7 @@ export default {
     dashboard: 'Tableau de bord Mentor',
     nav: {
       dashboard: 'Dashboard',
+      announcements: 'Annonces',
       teams: 'Mes Équipes',
       projects: 'Feedback des Projets',
       faq: 'FAQ',
@@ -734,6 +722,8 @@ export default {
   themes: {
     title: 'Thèmes & Sujets',
     subtitle: 'Gérez les thèmes et sujets pour le hackathon',
+    namePlaceholder: 'Nom',
+    descriptionPlaceholder: 'Description',
     theme: 'Thème',
     topic: 'Sujet',
     newTheme: 'Nouveau Thème',
@@ -756,6 +746,12 @@ export default {
       requiredField: 'Ce champ est requis',
       maxLength: 'Longueur maximale atteinte',
       fixErrors: 'Veuillez corriger les erreurs avant de sauvegarder.',
+    },
+    validation: {
+      themeNameRequired: 'Le nom du thème est requis',
+      subjectRequired: 'Un sujet minimum par thème est requis',
+      subjectNameRequired: 'Le nom du sujet est requis',
+
     },
     noName: 'Nom non renseigné',
     noDescription: 'Description non renseignée',

@@ -1,3 +1,5 @@
+import { announcements } from "@/tests/data/announcements";
+
 export default {
   common: {
     close: 'Close',
@@ -5,12 +7,11 @@ export default {
     pending: 'Pending',
     completed: 'Completed',
     error: 'An error occurred, please try again later.',
-    success: 'Operation completed successfully.',
     fieldRequired: 'This field is required',
     invalidEmail: 'Please enter a valid email address',
     passwordsDoNotMatch: 'Passwords do not match',
     passwordComplexity:
-      'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.',
+      'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character among @$!%*?&.',
     actions: 'Actions',
     save: 'Save',
     validate: 'Validate',
@@ -21,10 +22,6 @@ export default {
     logout: 'Logout',
     saveChanges: 'Save Changes',
     changesSaved: 'Changes saved successfully',
-    from: 'From',
-    to: 'To',
-    toBis: 'to',
-    done: 'Done',
     fullname: '{firstname} {lastname}',
     minimum: 'Minimum',
     maximum: 'Maximum',
@@ -42,7 +39,6 @@ export default {
   },
   profile: {
     mainTitle: 'My Profile',
-    otherUserTitle: 'Profile of',
     contacts: 'Contacts',
     connectDiscord: 'Connect your Discord',
     connectGithub: 'Connect your GitHub',
@@ -51,22 +47,10 @@ export default {
     personalInfo: {
       title: 'Personal Information',
       editButton: 'Edit Information',
-      saveButton: 'Save Changes',
-      cancelButton: 'Cancel',
-      name: 'Name',
-      email: 'Email',
-      role: 'Role',
       bio: 'Bio',
-      linkedin: 'LinkedIn',
-      github: 'GitHub',
-      discord: 'Discord',
       school: 'School',
       interests: 'Interests',
-      website: 'Website',
-      noInfo: 'No additional information provided.',
-      addInterest: 'Add an interest',
     },
-    otherUserInfoTitle: 'User Information',
     deleteAccount: 'Delete Account',
     deleteAccountText: 'Are you sure you want to delete your account? This action is irreversible.',
     deleteAccountConfirm: 'Yes, delete my account',
@@ -82,10 +66,6 @@ export default {
     participant: 'Participant',
   },
   hackathon: {
-    title: 'Qubit or Not Qubit',
-    subtitle: 'The Quantum Hackathon',
-    description:
-      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veritatis saepe nulla commodi totam necessitatibus expedita autem ipsum, deserunt repudiandae porro itaque, consectetur ipsa dolorum ex, nisi eveniet voluptas ut adipisci?',
     inscriptionTitle: 'Registration',
     inscriptionMessage: 'Welcome! To join the event, please register below.',
     firstLoginBtn: 'First login',
@@ -135,6 +115,8 @@ export default {
     confirmPassword: 'Confirm Password',
     invalidCredentials: 'Incorrect email or password',
     userNotInvited: 'Your email is not invited to this hackathon',
+    invalidCredentials: 'Incorrect email or password',
+    userNotInvited: 'Your email is not invited to this hackathon',
     accessDenied: 'Access denied. Organizer area only.',
     resetFailed: 'Password reset failed. Please try again.',
     firstLoginEmailSent: 'The email has been sent. Please check your inbox.',
@@ -146,6 +128,7 @@ export default {
     lastAnnouncements: 'Last Announcements',
     title: "Announcement's title",
     addTitle: 'Create Announcement',
+    content: 'Content',
     editTitle: 'Edit Announcement',
     tags: 'Tags',
     tagsHint: 'Comma separated',
@@ -172,10 +155,8 @@ export default {
   },
   // Roles sections
   organizer: {
-    dashboard: 'Organizer Dashboard',
     announcements: {
       addButton: 'Create Announcement',
-      addClicked: 'Add button clicked',
     },
     userManagement: {
       addButton: 'Add new user',
@@ -229,6 +210,8 @@ export default {
       userWithdrawnFromTeam: 'User withdrawn from team successfully',
       userWithdrawError: 'Error withdrawing user from team',
       noTeamsAvailable: 'No teams available',
+      teamUpdateError: 'Error updating team',
+      teamLockStatusUpdateError: 'Error updating team lock status',
       team: 'Team',
       members: 'Members',
       name: 'Name',
@@ -236,7 +219,6 @@ export default {
       theme: 'Theme',
       subject: 'Subject',
       school: 'School',
-      mail: 'Email',
       namePlaceholder: 'Search by name, team',
       autogenerate: {
         inProgressTitle: 'Autogenerating Teams',
@@ -251,7 +233,6 @@ export default {
         invalid: 'Invalid',
         ignored: 'Ignored',
       },
-      viewTeam: 'View Team',
       withoutTeam: 'Without Team',
       withTeam: 'With Team',
       role: 'Role',
@@ -273,8 +254,6 @@ export default {
         addMentors: 'Add Mentors',
         membersPlaceholder: 'Search by name',
         addDescription: 'Add a description',
-        selectTheme: 'Select a theme',
-        selectSubject: 'Select a subject',
       },
       dialog: {
         deleteConfirmTitle: 'Confirm Deletion',
@@ -309,12 +288,20 @@ export default {
       teamAutogenerateError: 'Error during teams autogeneration',
       reposCreated: '{count} Repositories created successfully',
       reposCreationError: 'Error creating repository',
+      confirmRepoDialog: {
+        title: 'Initialize GitHub Repositories',
+        message:
+          'Are you sure you want to create repositories for all teams? This action will generate the remote workspaces on the organization.',
+        unassignedWarning: 'Warning: {count} participant(s) are not yet assigned to any team.',
+        violationsWarning:
+          'Warning: {count} team(s) do not respect the matchmaking constraints.',
+        confirm: 'Create Repositories',
+      },
       githubPermissionsError: 'Insufficient rights on the GitHub organization. Please verify that you granted access rights to the organization during your GitHub login.',
       githubOrgNotFoundError: "Organization '{orgName}' does not exist on GitHub. Please create it manually first.",
     },
     submissionManagement: {
       title: 'Project Submissions',
-      noJuryAssigned: 'No jury assigned',
       noSubmissions: 'You have no team assigned',
       noComments: 'No comments available',
       noGrade: '-',
@@ -354,6 +341,7 @@ export default {
     dashboard: 'Jury Dashboard',
     nav: {
       dashboard: 'Dashboard',
+      announcements: 'Announcements',
       teams: 'My Teams',
       projects: 'Projects Evaluation',
       faq: 'FAQ',
@@ -388,6 +376,7 @@ export default {
     dashboard: 'Mentor Dashboard',
     nav: {
       dashboard: 'Dashboard',
+      announcements: 'Announcements',
       teams: 'My Teams',
       projects: 'Projects Feedback',
       faq: 'FAQ',
@@ -428,30 +417,30 @@ export default {
     },
     team: {
       myTeam: 'My Team',
-      leaveTeam: "Leave Team",
+      leaveTeam: 'Leave Team',
       noTeam: "You haven't joined a team yet.",
-      searchTeam: "Search for a team",
-      teamName: "Team {name}",
-      subject: "Subject",
-      unknownSubject: "Unknown Subject",
-      noDescription: "No description for this team.",
-      members: "Members",
-      mentors: "Mentors",
-      jury: "Jury",
-      mentor: "Mentor",
-      confirmLeaveTitle: "Leave Team",
-      confirmLeaveText: "Are you sure you want to leave this team? This action is irreversible.",
-      confirmLeaveButton: "Leave",
+      searchTeam: 'Search for a team',
+      teamName: 'Team {name}',
+      subject: 'Subject',
+      unknownSubject: 'Unknown Subject',
+      noDescription: 'No description for this team.',
+      members: 'Members',
+      mentors: 'Mentors',
+      jury: 'Jury',
+      mentor: 'Mentor',
+      confirmLeaveTitle: 'Leave Team',
+      confirmLeaveText: 'Are you sure you want to leave this team? This action is irreversible.',
+      confirmLeaveButton: 'Leave',
       // Team Search
-      title: "Team Selection",
-      searchPlaceholder: "Search for teams by subject, skills",
-      createTeam: "Create a Team",
-      activeFilters: "Active Filters",
-      all: "All",
-      searchResults: "Search Results ({count} teams)",
-      join: "Join",
-      placesRemaining: "{count} places remaining",
-      placesRemainingSingular: "{count} place remaining",
+      title: 'Team Selection',
+      searchPlaceholder: 'Search for teams by subject, skills',
+      createTeam: 'Create a Team',
+      activeFilters: 'Active Filters',
+      all: 'All',
+      searchResults: 'Search Results ({count} teams)',
+      join: 'Join',
+      placesRemaining: '{count} places remaining',
+      placesRemainingSingular: '{count} place remaining',
     },
     submission: {
       title: 'Project Submission',
@@ -512,7 +501,7 @@ export default {
     privacyPolicy: 'Privacy Policy',
     terms: 'Terms and Conditions',
     cookies: 'Cookies',
-    credits: 'EPITA - MTI 2026'
+    credits: 'EPITA - MTI 2026',
   },
 
   // Settings
@@ -699,6 +688,8 @@ export default {
   themes: {
     title: 'Themes & Subjects',
     subtitle: 'Manage the themes and subjects for the hackathon',
+    namePlaceholder: 'Name',
+    descriptionPlaceholder: 'Description',
     theme: 'Theme',
     topic: 'Subject',
     newTheme: 'New Theme',
@@ -721,6 +712,11 @@ export default {
       requiredField: 'This field is required',
       maxLength: 'Maximum length reached',
       fixErrors: 'Please fix the errors before saving.',
+    },
+    validation: {
+      themeNameRequired: 'Theme name is required',
+      subjectRequired: 'At least one subject by theme is required',
+      subjectNameRequired: 'Subject name is required',
     },
     noName: 'No name provided',
     noDescription: 'No description provided',
@@ -758,7 +754,7 @@ export default {
       begin: 'Begin',
       end: 'End',
       skip: 'Skip',
-      disabledReason: "Make sure all organizer actions are completed before proceeding.",
+      disabledReason: 'Make sure all organizer actions are completed before proceeding.',
     },
     errors: {
       phaseSkipError: 'Error skipping phase, please try again later.',
@@ -785,7 +781,7 @@ export default {
         juries: 'juries assigned to teams',
         teamsCreated: 'Team(s) created',
       },
-      submission: "Submitted Projects",
+      submission: 'Submitted Projects',
       evaluation: 'Evaluated Projects',
       total: 'Total',
       teamsFormed: '{count} teams formed',
@@ -816,12 +812,14 @@ export default {
   dashboard: {
     welcome: 'Welcome to your dashboard {firstname}!',
     currentPhase: 'Current Phase: {phaseName}',
-    nothing_todo: 'There are **no mandatory actions** for you as a participant during the current phase ({currentPhase}).',
+    nothing_todo:
+      'There are **no mandatory actions** for you as a participant during the current phase ({currentPhase}).',
     participant: {
       tasks: 'Your Tasks',
       profile_completion: {
         title: 'Complete your profile',
-        description: 'Please complete your profile to get the best experience during the hackathon.',
+        description:
+          'Please complete your profile to get the best experience during the hackathon.',
         addBio: 'Add a bio',
         addInterests: 'Add your interests',
         addDiscord: 'Connect your Discord',
@@ -848,7 +846,7 @@ export default {
         title: 'Submit your project',
         hackathonEndsIn: 'The hackathon ends in ',
         description: 'Upload your project before the submission deadline.',
-        submit: 'Submit Project'
+        submit: 'Submit Project',
       },
     },
     expert: {
@@ -856,7 +854,6 @@ export default {
       provide_feedback: {
         title: 'Provide feedback to your assigned teams',
         description: 'Review the projects of your assigned teams and provide valuable feedback.',
-        viewTeams: 'View Feedback Teams',
         count: 'team(s) awaiting feedback',
       },
       evaluate_projects: {
@@ -865,7 +862,7 @@ export default {
         viewSubmissions: 'View Project Submissions',
         count: 'evaluated project(s)',
       },
-    }
+    },
   },
 
   countdown: {
@@ -873,6 +870,6 @@ export default {
     hours: 'Hours',
     minutes: 'Min',
     seconds: 'Sec',
-    expired: 'Time\'s up!'
+    expired: "Time's up!",
   },
 }

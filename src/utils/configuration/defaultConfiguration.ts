@@ -194,6 +194,9 @@ export const defaultConfigurations = {
     hackathonName: '',
     slogan: '',
     hackathonDescription: '',
+    location: '',
+    startDate: '',
+    endDate: '',
   },
   [ConfigurationKey.PHASES]: {
     phases: getDefaultPhases(),

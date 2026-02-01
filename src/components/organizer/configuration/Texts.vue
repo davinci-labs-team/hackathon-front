@@ -234,6 +234,7 @@
           <v-text-field
             v-model="hackathonTexts.endDate"
             type="datetime-local"
+            :min="hackathonTexts.startDate"
             variant="outlined"
             density="compact"
           />

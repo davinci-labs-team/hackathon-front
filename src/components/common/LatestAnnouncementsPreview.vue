@@ -6,9 +6,12 @@
   import type { AnnouncementDTO } from '@/types/announcement'
   import PreviewAnnouncementCard from '@/components/common/PreviewAnnouncementCard.vue'
   import AnnouncementPopup from '@/components/common/AnnouncementPopup.vue'
+  import { useAuthStore } from '@/stores/auth'
+  import { UserRole } from '@/types/roles'
 
   const { t } = useI18n()
   const router = useRouter()
+  const { user } = useAuthStore()
 
   const allAnnouncements = ref<AnnouncementDTO[]>([])
   const isLoading = ref(true)
@@ -38,7 +41,11 @@
   })
 
   const goToAnnouncements = () => {
-    router.push('/user/announcements')
+    if (user?.role === UserRole.PARTICIPANT) {
+      router.push('/user/announcements')
+    } else {
+      router.push('/expert/announcements')
+    }
   }
 </script>
 

@@ -175,7 +175,7 @@
         matchmakingSettings.value = newConfig.value as MatchmakingSettingsDTO
 
         if (matchmakingError.value) {
-          text.value = t('common.errorOccurred')
+          text.value = t('common.error')
           error.value = true
           snackbar.value = true
         }

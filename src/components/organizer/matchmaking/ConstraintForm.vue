@@ -50,6 +50,7 @@
       value: 1,
       multiple: false,
     }
+    error.value = null
   }
 
   const schoolsProxy = computed({
