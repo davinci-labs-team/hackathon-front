@@ -115,8 +115,6 @@ export default {
     confirmPassword: 'Confirm Password',
     invalidCredentials: 'Incorrect email or password',
     userNotInvited: 'Your email is not invited to this hackathon',
-    invalidCredentials: 'Incorrect email or password',
-    userNotInvited: 'Your email is not invited to this hackathon',
     accessDenied: 'Access denied. Organizer area only.',
     resetFailed: 'Password reset failed. Please try again.',
     firstLoginEmailSent: 'The email has been sent. Please check your inbox.',
