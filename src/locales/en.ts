@@ -460,7 +460,7 @@ export default {
         noGithubLink: 'No GitHub link provided',
       },
       upload: {
-        title: 'Project Files (.zip)',
+        title: 'Project Files (.zip) 50MB max',
         chooseFile: 'Choose a ZIP file',
         uploadButton: 'Upload',
         selectFileError: 'Please select a file',

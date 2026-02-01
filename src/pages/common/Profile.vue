@@ -45,6 +45,8 @@ const getProfilePictureUrl = async () => {
     } catch (err) {
       console.error('Error fetching profile picture:', err)
     }
+  } else {
+    profilePicture.value = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'
   }
 }
 
@@ -74,6 +76,9 @@ const onSaveClick = async () => {
         const personalInfoChanges = personalInfoCard.value?.getChanges() || {}
         const contactChanges = contactCard.value?.getChanges() || {}
 
+        // Check if profile picture is being deleted (it exists currently but change is null)
+        const isDeletingProfilePicture = userInfo.value?.profilePicturePath && profileChanges.profilePicturePath === null
+
         const updatedUser: UserDTO = {
             ...userInfo.value,
             ...profileChanges,
@@ -90,6 +95,12 @@ const onSaveClick = async () => {
         text.value = t('common.changesSaved')
         error.value = false
         snackbar.value = true
+
+        if (isDeletingProfilePicture) {
+           setTimeout(() => {
+             window.location.reload()
+           }, 1000)
+        }
     } catch (err) {
         console.error('Error saving user:', err)
         text.value = t('errors.loadUserFailed')
