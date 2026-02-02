@@ -12,10 +12,13 @@ export const usePhaseStore = defineStore('phase', () => {
   const fetchPhases = async () => {
     try {
       const response = await getConfiguration(ConfigurationKey.PHASES)
-      const rawPhases: HackathonPhaseDTO[] = Array.isArray(response?.value) ? response.value : []
+      const rawPhases: HackathonPhaseDTO[] = Array.isArray(response?.value.phases) ? response.value.phases : []
 
       phases.value = rawPhases.map(p => ({
         order: p.order,
+        name: p.name,
+        status: p.status,
+        optionalPhase: p.optionalPhase,
         startDate: p.startDate ?? null,
         endDate: p.endDate ?? null,
         startDateObj: p.startDate ? new Date(p.startDate) : null,
@@ -31,13 +34,13 @@ export const usePhaseStore = defineStore('phase', () => {
   }
 
   const currentPhase = computed(() => {
-    const now = new Date()
-    return phases.value.find(p => p.startDateObj && p.endDateObj && now >= p.startDateObj && now <= p.endDateObj) ?? null
+    return phases.value.find(p => p.status === 'IN_PROGRESS') ?? null
   })
 
   const nextPhase = computed(() => {
-    const now = new Date()
-    return phases.value.find(p => p.startDateObj && p.startDateObj > now) ?? null
+    const current = currentPhase.value
+    if (!current) return phases.value.find(p => p.status === 'PENDING') ?? null
+    return phases.value.find(p => p.order === current.order + 1) ?? null
   })
   
   const scheduleNextRefresh = () => {

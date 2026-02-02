@@ -29,67 +29,82 @@
 </script>
 
 <template>
-  <v-card
-    class="preview-announcement-card flex flex-col h-full"
-    min-width="300"
-    @click="handleClick"
-  >
-    <div class="flex-grow-1 pa-3 flex flex-col justify-start" style="min-height: 150px">
-      <div class="d-flex justify-space-between items-center mb-2">
-        <v-card-title class="text-base font-bold line-clamp-2 leading-tight pr-2 pa-0">
-          {{ announcement.title }}
-        </v-card-title>
-
-        <div v-if="hasFiles" class="d-flex align-center gap-1">
-          <span class="text-caption text-grey-darken-1">{{ fileCount }}</span>
-          <v-icon color="grey-darken-1" size="small">mdi-image-multiple</v-icon>
-        </div>
-      </div>
-
-      <v-card-text class="text-sm text-gray-700 pa-0 line-clamp-3 mb-3">
-        {{ announcement.content }}
-      </v-card-text>
-
-      <div class="flex-grow"></div>
+  <v-card class="preview-announcement-card custom-size pa-4" @click="handleClick" elevation="1">
+    <div class="header-container mb-2">
+      <h3 class="title-text">{{ announcement.title }}</h3>
+      <v-icon v-if="hasFiles" size="16" color="grey-darken-1" class="ml-2">mdi-paperclip</v-icon>
     </div>
 
-    <v-card-actions class="pa-3 pt-0 justify-space-between items-end mt-auto">
-      <p class="text-xs text-gray-500">
-        {{ timeAgo(announcement.createdAt, locale) }}
-      </p>
+    <p class="body-text">{{ announcement.content }}</p>
 
-      <div class="d-flex flex-column align-end">
-        <div class="flex flex-wrap justify-end">
-          <v-chip
-            v-for="(tag, i) in announcement.tags?.slice(0, 2)"
-            :key="i"
-            color="orange lighten-3"
-            class="text-xs ml-1 mt-1"
-            size="x-small"
-          >
-            {{ tag }}
-          </v-chip>
-        </div>
+    <v-spacer></v-spacer>
+
+    <div class="d-flex justify-space-between align-center mt-2">
+      <span class="text-caption text-grey-darken-1">{{
+        timeAgo(announcement.createdAt, locale)
+      }}</span>
+      <div class="d-flex gap-1">
+        <v-chip
+          v-for="(tag, i) in announcement.tags?.slice(0, 2)"
+          :key="i"
+          size="x-small"
+          color="orange-lighten-4"
+          variant="flat"
+          class="text-orange-darken-4 font-weight-bold"
+        >
+          {{ tag }}
+        </v-chip>
       </div>
-    </v-card-actions>
+    </div>
   </v-card>
 </template>
 
 <style scoped>
-  .preview-announcement-card:hover {
-    box-shadow: 0 6px 18px rgb(0 0 0 / 0.15);
-    cursor: pointer;
+  .custom-size {
+    width: 300px;
+    aspect-ratio: 1.2 / 1;
+    display: flex;
+    flex-direction: column;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
   }
-  .line-clamp-2 {
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  /* Ellipsis Titre : 2 lignes */
+  .title-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #1a1a1a;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
   }
-  .line-clamp-3 {
+
+  .body-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #4a4a4a;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+
+  .preview-announcement-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+    transform: translateY(-2px);
+    cursor: pointer;
   }
 </style>

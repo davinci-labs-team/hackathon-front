@@ -34,10 +34,11 @@
     if (response?.value?.partners && Array.isArray(response.value.partners)) {
       const partners: PartnersDTO[] = response.value.partners
       schools.value.push(
-        ...partners.map((partner) => ({
-          title: partner.name,
-          value: partner.name,
-        }))
+        ...partners.filter((partner) => partner.isParticipatingSchool)
+          .map((partner) => ({
+            title: partner.name,
+            value: partner.name,
+          }))
       )
     }
   }

@@ -26,7 +26,7 @@ export default [
         path: 'announcements',
         name: 'ExpertAnnouncements',
         component: Announcements,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, roles: [UserRole.JURY, UserRole.ORGANIZER, UserRole.MENTOR] },
       },
       {
         path: 'teams',
@@ -50,7 +50,7 @@ export default [
         path: 'profile',
         name: 'ExpertProfilePage',
         component: Profile,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, roles: [UserRole.JURY, UserRole.ORGANIZER, UserRole.MENTOR] },
       },
     ],
   },
