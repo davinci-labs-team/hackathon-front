@@ -5,6 +5,7 @@ import Project from '@/pages/user/Project.vue'
 import FAQ from '@/pages/common/FAQ.vue'
 import Profile from '@/pages/common/Profile.vue'
 import Announcements from '@/pages/common/Announcements.vue'
+import { UserRole } from '@/types/roles'
 
 export default [
   {
@@ -19,37 +20,37 @@ export default [
         path: 'dashboard',
         name: 'UserDashboard',
         component: Dashboard,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, role: UserRole.PARTICIPANT },
       },
       {
         path: 'announcements',
         name: 'UserAnnouncements',
         component: Announcements,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, role: UserRole.PARTICIPANT },
       },
       {
         path: 'team',
         name: 'TeamPage',
         component: Team,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, role: UserRole.PARTICIPANT },
       },
       {
         path: 'project',
         name: 'ProjectPage',
         component: Project,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, role: UserRole.PARTICIPANT },
       },
       {
         path: 'faq',
         name: 'FaqPage',
         component: FAQ,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, role: UserRole.PARTICIPANT },
       },
       {
         path: 'profile',
         name: 'ProfilePage',
         component: Profile,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, role: UserRole.PARTICIPANT },
       },
     ],
   },

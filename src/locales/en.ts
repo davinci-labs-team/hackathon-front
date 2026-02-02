@@ -1,3 +1,5 @@
+import { announcements } from "@/tests/data/announcements";
+
 export default {
   common: {
     close: 'Close',
@@ -9,7 +11,7 @@ export default {
     invalidEmail: 'Please enter a valid email address',
     passwordsDoNotMatch: 'Passwords do not match',
     passwordComplexity:
-      'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.',
+      'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character among @$!%*?&.',
     actions: 'Actions',
     save: 'Save',
     validate: 'Validate',
@@ -367,6 +369,7 @@ export default {
         confirm: 'Confirm',
         cancel: 'Cancel',
       },
+      phaseClosed: "The feedback phase is currently closed.",
     },
   },
   mentor: {
@@ -387,6 +390,7 @@ export default {
       comment: 'Comment',
       submit: 'Submit Feedback',
       yourComment: 'Your comment',
+      phaseClosed: "The feedback phase is currently closed.",
     },
   },
   expert: {
@@ -446,7 +450,7 @@ export default {
         noGithubLink: 'No GitHub link provided',
       },
       upload: {
-        title: 'Project Files (.zip)',
+        title: 'Project Files (.zip) 50MB max',
         chooseFile: 'Choose a ZIP file',
         uploadButton: 'Upload',
         selectFileError: 'Please select a file',
@@ -484,6 +488,7 @@ export default {
         mentor: 'Mentor',
         noContent: 'No content',
       },
+      phaseClosed: "The project submission is closed at this time.",
     },
   },
 

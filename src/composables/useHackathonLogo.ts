@@ -18,10 +18,7 @@ export function useHackathonLogo(defaultLogoUrl: string = DEFAULT_LOGO, isPublic
   const fetchLogoPicture = async () => {
     if (mediaSettings.value?.hackathonLogoId) {
       try {
-        const logoId = mediaSettings.value.hackathonLogoId
-        const response = isPublic 
-        ? await S3BucketService.getFileUrlPublic('public_files', logoId)
-        : await S3BucketService.getFileUrl('public_files', logoId)
+        const response = await S3BucketService.getFileUrlPublic('public_files', mediaSettings.value.hackathonLogoId)
         logoPicture.value = response.url
       } catch (err) {
         console.error('Error fetching logo picture:', err)

@@ -8,11 +8,11 @@ const { t } = useI18n()
 const props = defineProps<{ user: UserDTO; editMode: boolean }>()
 const emit = defineEmits<{ (e: 'update:user', value: UserDTO): void }>()
 
-const localUser = ref<UserDTO>({ ...props.user })
+const localUser = ref<UserDTO>(JSON.parse(JSON.stringify(props.user)))
 const newInterest = ref('')
 
 // Re initialize localUser when props.user changes
-watch(() => props.user, val => localUser.value = { ...val }, { deep: true })
+watch(() => props.user, val => localUser.value = JSON.parse(JSON.stringify(val)), { deep: true })
 
 // Expose méthode save
 const getChanges = () => {
@@ -28,7 +28,7 @@ const getChanges = () => {
 }
 
 const resetLocalUser = () => {
-  localUser.value = { ...props.user }
+  localUser.value = JSON.parse(JSON.stringify(props.user))
 }
 
 const removeInterest = (index: number) => {

@@ -1,3 +1,5 @@
+import { announcements } from "@/tests/data/announcements";
+
 export default {
   common: {
     close: 'Fermer',
@@ -116,7 +118,7 @@ export default {
     userNotInvited: 'Votre email n\'a pas été invité à ce hackathon',
     passwordsDoNotMatch: 'Les mots de passe ne correspondent pas',
     passwordComplexity:
-      'Le mot de passe doit contenir au moins 8 caractères, incluant une majuscule, une minuscule, un chiffre et un caractère spécial.',
+      'Le mot de passe doit contenir au moins 8 caractères, incluant une majuscule, une minuscule, un chiffre et un caractère spécial parmi @$!%*?&.',
     accessDenied: 'Accès refusé. Espace organisateur uniquement.',
     resetFailed: 'Échec de la réinitialisation du mot de passe. Veuillez réessayer.',
     firstLoginEmailSent: "L'email a été envoyé. Veuillez vérifier votre boîte de réception.",
@@ -373,6 +375,7 @@ export default {
         confirm: 'Confirmer',
         cancel: 'Annuler',
       },
+      phaseClosed: 'La phase de feedback est actuellement fermée.',
     },
   },
   mentor: {
@@ -393,6 +396,7 @@ export default {
       comment: 'Commentaire',
       submit: 'Soumettre le feedback',
       yourComment: 'Votre commentaire',
+      phaseClosed: 'La phase de feedback est actuellement fermée.',
     },
   },
   expert: {
@@ -452,7 +456,7 @@ export default {
         noGithubLink: 'Aucun lien GitHub fourni',
       },
       upload: {
-        title: 'Fichiers du projet (.zip)',
+        title: 'Fichiers du projet (.zip) 50MB max',
         chooseFile: 'Choisir un fichier ZIP',
         uploadButton: 'Envoyer',
         selectFileError: 'Veuillez sélectionner un fichier',
@@ -491,6 +495,7 @@ export default {
         mentor: 'Mentor',
         noContent: 'Aucun contenu',
       },
+      phaseClosed: "Le dépôt de projet est fermé pour le moment.",
     },
   },
 
