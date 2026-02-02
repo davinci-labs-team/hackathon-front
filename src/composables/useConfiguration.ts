@@ -1,10 +1,10 @@
 import { ref, onMounted } from 'vue'
 import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
 import type { ConfigurationResponse, UpdateConfigurationDTO } from '@/types/config'
-import type { ConfigurationKey } from '@/utils/configuration/configurationKey'
+import type { ConfigurationKey, PublicConfigurationKey } from '@/utils/configuration/configurationKey'
 import axios from 'axios'
 
-export function useConfiguration(key: ConfigurationKey) {
+export function useConfiguration(key: ConfigurationKey, isPublic: boolean = false) {
   const configuration = ref<ConfigurationResponse | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
@@ -16,7 +16,12 @@ export function useConfiguration(key: ConfigurationKey) {
     loading.value = true
     error.value = null
     try {
-      configuration.value = await getOrCreateConfiguration(key)
+      if (isPublic) {
+        const publicKey = key as unknown as PublicConfigurationKey
+        configuration.value = await configurationService.findOnePublic(publicKey)
+      } else {
+        configuration.value = await getOrCreateConfiguration(key)
+      }
     } catch (e: any) {
       error.value =
         (axios.isAxiosError(e) ? e.message : e.message) ||

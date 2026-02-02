@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
   import LanguageSelector from '@/components/common/LanguageSelector.vue'
-  import { useHackathonLogo } from '@/composables/useHackathonLogo'
+  import { DEFAULT_LOGO, useHackathonLogo } from '@/composables/useHackathonLogo'
 
   const { t } = useI18n()
-
-  const { logoPicture } = useHackathonLogo()
+  const defaultLogo = DEFAULT_LOGO
+  const { logoPicture, isLoading } = useHackathonLogo(defaultLogo, true)
 </script>
 
 <template>

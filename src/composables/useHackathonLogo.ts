@@ -1,15 +1,15 @@
 import { ref, onMounted } from 'vue'
 import { HackathonMediaDTO } from '@/types/config'
-import { ConfigurationKey } from '@/utils/configuration/configurationKey'
+import { ConfigurationKey, PublicConfigurationKey } from '@/utils/configuration/configurationKey'
 import { defaultConfigurations } from '@/utils/configuration/defaultConfiguration'
-import { getOrCreateConfiguration } from '@/services/configurationService'
+import { configurationService, getOrCreateConfiguration } from '@/services/configurationService'
 import { S3BucketService } from '@/services/s3BucketService'
 
-const DEFAULT_LOGO = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'
+export const DEFAULT_LOGO = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'
 
-export function useHackathonLogo(defaultLogoUrl: string = DEFAULT_LOGO) {
+export function useHackathonLogo(defaultLogoUrl: string = DEFAULT_LOGO, isPublic: boolean = false) {
   const mediaSettings = ref<HackathonMediaDTO>({
-    ...defaultConfigurations[ConfigurationKey.MEDIA]
+    ...defaultConfigurations[ConfigurationKey.MEDIA],
   })
   const logoPicture = ref(defaultLogoUrl)
   const isLoading = ref(false)
@@ -32,10 +32,15 @@ export function useHackathonLogo(defaultLogoUrl: string = DEFAULT_LOGO) {
     error.value = null
 
     try {
-      const response = await getOrCreateConfiguration(ConfigurationKey.MEDIA)
+      const response = isPublic
+        ? await configurationService.findOnePublic(PublicConfigurationKey.MEDIA)
+        : await getOrCreateConfiguration(ConfigurationKey.MEDIA)
 
-      if (response && response.value) {
-        mediaSettings.value = response.value as HackathonMediaDTO
+      if (response?.value) {
+        mediaSettings.value = {
+          ...defaultConfigurations[ConfigurationKey.MEDIA],
+          ...(response.value as HackathonMediaDTO),
+        }
         await fetchLogoPicture()
       }
     } catch (err) {
@@ -55,6 +60,6 @@ export function useHackathonLogo(defaultLogoUrl: string = DEFAULT_LOGO) {
     mediaSettings,
     isLoading,
     error,
-    loadLogo
+    loadLogo,
   }
 }

@@ -96,7 +96,7 @@
       snackbar.value = true
     } catch (e) {
       console.error('Error saving phases:', e)
-      text.value = t('planningSettings.saveError')
+      text.value = t('common.error')
       error.value = true
       snackbar.value = true
     } finally {
