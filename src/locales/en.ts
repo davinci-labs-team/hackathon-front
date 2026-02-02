@@ -202,6 +202,7 @@ export default {
       noTeams: 'No teams matching the criteria.',
       noTeamAvailable:
         'No teams available eligible for this user. Create another team or modify the constraints.',
+      nameValidation: 'No spaces, accents, or special characters allowed.',
       noTeamAssigned: 'No team assigned',
       userAssignedToTeam: 'User assigned to team successfully',
       userAssignError: 'Error assigning user to team',
