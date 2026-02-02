@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { SubmissionDTO } from '@/types/submission'
 import { HackathonMediaDTO } from '@/types/config'
 import { S3BucketService } from '@/services/s3BucketService'
 import { submissionService } from '@/services/submissionService'
+import { usePhaseStore } from '@/stores/phase'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
+const phaseStore = usePhaseStore()
 
 const props = defineProps<{
   submissionInfo: SubmissionDTO | null
@@ -19,6 +21,12 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'refresh'): void
 }>()
+
+onMounted(() => {
+  phaseStore.fetchPhases()
+})
+
+const isEvaluationPhase = computed(() => phaseStore.currentPhase?.order === 5)
 
 const grade = ref<number | null>(null)
 const comment = ref('')
@@ -51,7 +59,7 @@ watch(() => props.submissionInfo, loadExistingEvaluation, { immediate: true })
 const downloadEvaluationGrid = async () => {
   try {
     if (!props.mediaSettings.evaluationGridPath) return
-    const { url } = await S3BucketService.getFileUrl('public_files', props.mediaSettings.evaluationGridPath)
+    const { url } = await S3BucketService.getFileUrlPublic('public_files', props.mediaSettings.evaluationGridPath)
     window.open(url, '_blank')
   } catch (error) {
     console.error('Error downloading evaluation grid:', error)
@@ -165,7 +173,7 @@ const confirmSubmission = async () => {
             step="0.5"
             variant="outlined"
             required
-            :disabled="evaluating"
+            :disabled="evaluating || !isEvaluationPhase"
           />
         </v-col>
 
@@ -176,7 +184,7 @@ const confirmSubmission = async () => {
             variant="outlined"
             prepend-icon="mdi-paperclip"
             accept=".pdf,.doc,.docx"
-            :disabled="uploading || evaluating"
+            :disabled="uploading || evaluating || !isEvaluationPhase"
             @change="handleFileUpload"
           >
             <template v-if="evaluationFile" #append>
@@ -192,7 +200,7 @@ const confirmSubmission = async () => {
             :label="t(`${tPrefix}.submission.comment`)"
             variant="outlined"
             rows="4"
-            :disabled="evaluating"
+            :disabled="evaluating || !isEvaluationPhase"
           />
         </v-col>
 
@@ -203,13 +211,22 @@ const confirmSubmission = async () => {
             color="primary"
             size="large"
             :loading="evaluating || uploading"
-            :disabled="grade === null"
+            :disabled="grade === null || !isEvaluationPhase"
           >
             {{ t(`${tPrefix}.submission.submit`) }}
           </v-btn>
         </v-col>
       </v-row>
     </v-form>
+
+    <v-alert
+      v-if="!isEvaluationPhase && !currentJuryEvaluation"
+      type="warning"
+      variant="tonal"
+      class="mt-6"
+    >
+      {{ t(`${tPrefix}.submission.phaseClosed`) }}
+    </v-alert>
 
     <!-- Modal de confirmation -->
     <v-dialog v-model="showConfirmationDialog" max-width="500">

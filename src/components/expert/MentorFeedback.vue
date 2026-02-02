@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { SubmissionDTO } from '@/types/submission'
 import { submissionService } from '@/services/submissionService'
+import { usePhaseStore } from '@/stores/phase'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
+const phaseStore = usePhaseStore()
 
 const props = defineProps<{
   submissionInfo: SubmissionDTO | null
@@ -16,6 +18,12 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'refresh'): void
 }>()
+
+onMounted(() => {
+  phaseStore.fetchPhases()
+})
+
+const isEvaluationPhase = computed(() => phaseStore.currentPhase?.order === 5)
 
 const comment = ref('')
 const evaluating = ref(false)
@@ -71,7 +79,7 @@ const submitComment = async () => {
             :label="t(`${tPrefix}.submission.comment`)"
             variant="outlined"
             rows="4"
-            :disabled="evaluating"
+            :disabled="evaluating || !isEvaluationPhase"
           />
         </v-col>
 
@@ -82,13 +90,22 @@ const submitComment = async () => {
             color="primary"
             size="large"
             :loading="evaluating"
-            :disabled="comment === null"
+            :disabled="comment === null || !isEvaluationPhase"
           >
             {{ t(`${tPrefix}.submission.submit`) }}
           </v-btn>
         </v-col>
       </v-row>
     </v-form>
+
+    <v-alert
+      v-if="!isEvaluationPhase && !currentMentorEvaluation"
+      type="warning"
+      variant="tonal"
+      class="mt-6"
+    >
+      {{ t(`${tPrefix}.submission.phaseClosed`) }}
+    </v-alert>
 
     <v-divider v-if="currentMentorEvaluation" class="my-6" />
     
