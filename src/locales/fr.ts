@@ -204,6 +204,7 @@ export default {
       noTeams: 'Aucune équipe correspondant aux critères.',
       noTeamAvailable:
         'Aucune équipe disponible éligible pour cet utilisateur. Créez une autre équipe ou modifiez les contraintes.',
+      nameValidation: 'Pas d’espaces, ni d’accents ou caractères spéciaux.',
       noTeamAssigned: 'Aucune équipe assignée',
       userWithdrawnFromTeam: "L'utilisateur a été retiré de l’équipe avec succès",
       userWithdrawError: "Erreur lors du retrait de l'utilisateur de l'équipe",

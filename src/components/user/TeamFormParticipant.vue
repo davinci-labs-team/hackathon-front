@@ -56,7 +56,7 @@
           description: props.team?.description || '',
           subjectId: sId,
           themeId: tId,
-          memberIds: []
+          memberIds: [],
         }
       }
     }
@@ -68,6 +68,9 @@
   // Validation
   // -----------------------------
   const required = (v: any) => !!v || t('common.fieldRequired')
+
+  const noAccentsNoSpaces = (v: string) =>
+    /^[a-zA-Z0-9_-]*$/.test(v) || t('organizer.teamManagement.nameValidation')
 
   // -----------------------------
   // Form actions
@@ -136,7 +139,7 @@
           </label>
           <v-text-field
             v-model="teamForm.name"
-            :rules="[required]"
+            :rules="[required, noAccentsNoSpaces]"
             required
             variant="solo"
             density="comfortable"
