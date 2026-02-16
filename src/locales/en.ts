@@ -11,7 +11,7 @@ export default {
     invalidEmail: 'Please enter a valid email address',
     passwordsDoNotMatch: 'Passwords do not match',
     passwordComplexity:
-      'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character among @$!%*?&.',
+      'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character among {\'@\'}$!%*?&.',
     actions: 'Actions',
     save: 'Save',
     validate: 'Validate',
